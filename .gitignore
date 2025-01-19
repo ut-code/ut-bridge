@@ -1,0 +1,5 @@
+
+# Nix + Direnv
+/.direnv
+/.envrc
+/shell.nix
