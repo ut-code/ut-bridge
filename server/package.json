@@ -1,7 +1,7 @@
 {
   "name": "server",
   "scripts": {
-    "dev": "bun run --hot src/index.ts"
+    "dev": "bun run --hot index.ts"
   },
   "dependencies": {
     "hono": "^4.7.1"
