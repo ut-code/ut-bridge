@@ -9,7 +9,8 @@
     "prepare": "lefthook install",
     "dev": "bun --env-file=./.env :dev",
     ":dev": "trap 'kill 0' EXIT; (cd web && bun dev) & (cd server && bun dev) & wait",
-    "check:fix": "bun biome check . --fix --unsafe && bun run build",
+    "fix": "# only format \nbun biome check . --fix --unsafe",
+    "check:fix": "bun fix && bun run build",
     "check": "bun biome check . && bun run build",
     "build": "(cd web && bun run build) && (cd server && bun run build)",
     "clean": "rm -r node_modules; rm -r **/node_modules; rm web/dist -r; true"
