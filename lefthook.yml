@@ -4,5 +4,5 @@ pre-commit:
   parallel: true
   jobs:
     - run: bun biome check --fix {staged_files}
-      glob: "*"
+      glob: "*.{js,ts,jsx,tsx,json,jsonc,css}"
       stage_fixed: true
