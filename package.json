@@ -1,0 +1,7 @@
+{
+  "name": "ut-bridge",
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "lefthook": "^1.10.10"
+  }
+}
