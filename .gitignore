@@ -1,4 +1,5 @@
 node_modules
+/.env
 
 # Nix + Direnv
 /.direnv
