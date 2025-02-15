@@ -5,7 +5,7 @@ import "./App.css";
 import { hc } from "hono/client";
 import type { App as Server } from "server";
 
-const client = hc<Server>("http://localhost:3000");
+const client = hc<Server>(import.meta.env.VITE_API_ENDPOINT);
 
 function App() {
   const [count, setCount] = useState(0);
