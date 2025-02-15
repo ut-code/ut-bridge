@@ -1,4 +1,4 @@
-import { Context, Hono, Next } from "hono";
+import { Hono } from "hono";
 import cors from "./middlewares/cors";
 import hello from "./routes/hello";
 

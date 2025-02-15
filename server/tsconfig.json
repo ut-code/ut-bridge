@@ -1,7 +1,17 @@
 {
   "compilerOptions": {
-    "strict": true,
+    "target": "es2015",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx"
+    "jsxImportSource": "hono/jsx",
+    "noEmit": true,
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true
   }
 }
