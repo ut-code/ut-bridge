@@ -1,6 +1,6 @@
 node_modules
 
 # Nix + Direnv
-/.direnv
-/.envrc
-/shell.nix
+.direnv
+.envrc
+shell.nix
