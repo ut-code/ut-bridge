@@ -3,5 +3,8 @@
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "lefthook": "^1.10.10"
+  },
+  "scripts": {
+    "prepare": "lefthook install"
   }
 }
