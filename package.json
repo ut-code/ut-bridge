@@ -5,6 +5,8 @@
     "lefthook": "^1.10.10"
   },
   "scripts": {
-    "prepare": "lefthook install"
+    "prepare": "lefthook install",
+    "dev": "bun --env-file=./.env :dev",
+    ":dev": "trap 'kill 0' EXIT; (cd web && bun dev) & (cd server && bun dev) & wait"
   }
 }
