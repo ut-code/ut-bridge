@@ -2,12 +2,12 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
-import type { App } from "server";
+import type { App as Server } from "server";
 import { hc } from "hono/client";
 
-const client = hc<App>("http://localhost:3000");
+const client = hc<Server>("http://localhost:3000");
 
-function Page() {
+function App() {
 	const [count, setCount] = useState(0);
 	client.index
 		.$get()
@@ -40,4 +40,4 @@ function Page() {
 	);
 }
 
-export default Page;
+export default App;
