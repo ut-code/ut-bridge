@@ -1,6 +1,6 @@
 import { Hono } from "hono";
-import cors from "./middlewares/cors";
-import hello from "./routes/hello";
+import cors from "./middlewares/cors.ts";
+import hello from "./routes/hello.ts";
 
 const app = new Hono().use(cors("CORS_ALLOW_ORIGINS")).route("/", hello);
 

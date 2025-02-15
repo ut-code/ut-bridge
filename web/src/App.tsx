@@ -4,8 +4,9 @@ import reactLogo from "./assets/react.svg";
 import "./App.css";
 import { hc } from "hono/client";
 import type { App as Server } from "server";
+import { env } from "../lib/env";
 
-const client = hc<Server>(import.meta.env.VITE_API_ENDPOINT);
+const client = hc<Server>(env("VITE_API_ENDPOINT"));
 
 function App() {
   const [count, setCount] = useState(0);

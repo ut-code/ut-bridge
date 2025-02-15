@@ -4,6 +4,7 @@
     "@biomejs/biome": "^1.9.4",
     "lefthook": "^1.10.10"
   },
+  "workspaces": ["common", "server", "web"],
   "scripts": {
     "prepare": "lefthook install",
     "dev": "bun --env-file=./.env :dev",

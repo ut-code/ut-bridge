@@ -13,7 +13,8 @@
     "hono": "^4.7.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "server": "file:../server"
+    "common": "workspace:common",
+    "server": "workspace:server"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",

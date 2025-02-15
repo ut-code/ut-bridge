@@ -1,6 +1,6 @@
 import type { Context, Next } from "hono";
 import { cors as hono_cors } from "hono/cors";
-import { env } from "../lib/env";
+import { env } from "../lib/env.ts";
 
 const cors = (env_var: string) => (c: Context, next: Next) =>
   hono_cors({
