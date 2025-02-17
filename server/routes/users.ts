@@ -20,7 +20,7 @@ const router = new Hono()
         id: userId,
       },
     });
-    const result = UserSchema.safeParse(user)
+    const result = UserSchema.safeParse(user);
     return c.json(result.data);
   })
 
@@ -29,7 +29,7 @@ const router = new Hono()
     const newUser = await prisma.user.create({
       data: body,
     });
-    const result = UserSchema.safeParse(newUser)
+    const result = UserSchema.safeParse(newUser);
     return c.json(result.data);
   })
 
@@ -42,7 +42,7 @@ const router = new Hono()
       },
       data: updateContent,
     });
-    const result = UserSchema.safeParse(updatedUser)
+    const result = UserSchema.safeParse(updatedUser);
     return c.json(result.data);
   })
 
@@ -51,7 +51,7 @@ const router = new Hono()
     const deletedUser = await prisma.user.delete({
       where: { id: userId },
     });
-    const result = UserSchema.safeParse(deletedUser)
+    const result = UserSchema.safeParse(deletedUser);
     return c.json(result.data);
   });
 
