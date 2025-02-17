@@ -11,6 +11,7 @@
     "hono": "^4.7.1"
   },
   "devDependencies": {
+    "prisma": "^6.3.1",
     "typescript": "^5.7.3"
   }
 }
