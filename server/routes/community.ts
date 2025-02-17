@@ -2,9 +2,9 @@ import { PrismaClient } from "@prisma/client";
 import { Hono } from "hono";
 
 const prisma = new PrismaClient();
-const communityRouter = new Hono();
+const router = new Hono();
 
-communityRouter.get("/community", async (c) => {
+router.get("/", async (c) => {
   try {
     const users = await prisma.user.findMany({
       select: {
@@ -63,4 +63,4 @@ communityRouter.get("/community", async (c) => {
   }
 });
 
-export default communityRouter;
+export default router;
