@@ -1,5 +1,8 @@
+import { zValidator } from "@hono/zod-validator";
 import { PrismaClient } from "@prisma/client";
 import { Hono } from "hono";
+import { z } from "zod";
+import { UserSchema } from "../zod/schema";
 
 const prisma = new PrismaClient();
 
@@ -11,8 +14,8 @@ const router = new Hono()
     return c.json(users);
   })
 
-  .get("/:id", async (c) => {
-    const userId = c.req.param("id");
+  .get("/:id", zValidator("param", z.object({ id: z.string() })), async (c) => {
+    const userId = c.req.valid("param").id;
     const user = await prisma.user.findUnique({
       where: {
         id: userId,
@@ -21,16 +24,16 @@ const router = new Hono()
     return c.json(user);
   })
 
-  .post("/", async (c) => {
-    const body = await c.req.json();
+  .post("/", zValidator("json", UserSchema), async (c) => {
+    const body = c.req.valid("json");
     const newUser = await prisma.user.create({
       data: body,
     });
     return c.json(newUser);
   })
 
-  .put("/:id", async (c) => {
-    const userId = c.req.param("id");
+  .put("/:id", zValidator("param", z.object({ id: z.string() })), async (c) => {
+    const userId = c.req.valid("param").id;
     const updateContent = await c.req.json();
     const updatedUser = await prisma.user.update({
       where: {
@@ -41,12 +44,16 @@ const router = new Hono()
     return c.json(updatedUser);
   })
 
-  .delete("/:id", async (c) => {
-    const userId = c.req.param("id");
-    const deletedUser = await prisma.user.delete({
-      where: { id: userId },
-    });
-    return c.json(deletedUser);
-  });
+  .delete(
+    "/:id",
+    zValidator("param", z.object({ id: z.string() })),
+    async (c) => {
+      const userId = c.req.valid("param").id;
+      const deletedUser = await prisma.user.delete({
+        where: { id: userId },
+      });
+      return c.json(deletedUser);
+    },
+  );
 
 export default router;
