@@ -1,7 +1,7 @@
-import { Hono } from "hono";
 import { PrismaClient } from "@prisma/client";
 import { zValidator } from "@hono/zod-validator";
 import { UserSchema } from "../zod/schema";
+import { Hono } from "hono";
 
 const prisma = new PrismaClient();
 

@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "bun --env-file=../.env run next dev --port 5173",
+    "build": "bun --env-file=../.env run next build",
+    "start": "next start --port $PORT",
     "lint": "next lint"
   },
   "dependencies": {
