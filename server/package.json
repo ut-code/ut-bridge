@@ -2,7 +2,8 @@
   "name": "server",
   "scripts": {
     "dev": "bun run --env-file=../.env --hot index.ts",
-    "build": "bun tsc"
+    "build": "bun tsc",
+    "db": "bun run  --env-file=../.env prisma db push"
   },
   "dependencies": {
     "hono": "^4.7.1"
