@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "bun --env-file=../.env run next dev --port 5173",
-    "build": "next build",
+    "build": "bun --env-file=../.env run next build",
     "start": "next start --port $PORT",
     "lint": "next lint"
   },
