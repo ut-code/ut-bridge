@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { client } from "../../../client";
 
-export default function Community() {
+export default function Page() {
   const [users, setUsers] = useState<
     {
       id: string;
