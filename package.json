@@ -13,6 +13,7 @@
     "check:fix": "bun fix && bun run build",
     "check": "bun biome check . && bun run build",
     "build": "(cd web && bun run build) && (cd server && bun run build)",
-    "clean": "rm -r node_modules; rm -r **/node_modules; rm -r web/.next web/dist; true"
+    "clean": "rm -r node_modules; rm -r **/node_modules; rm -r web/.next web/dist; true",
+    "dev-db": "./scripts/devdb.sh"
   }
 }
