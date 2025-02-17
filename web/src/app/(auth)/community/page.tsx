@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { client } from "../../../client";
 
@@ -40,9 +41,11 @@ export default function Community() {
             <div className="flex items-center gap-4">
               {/* 画像の表示（URLがあれば） */}
               {user.imageUrl ? (
-                <img
+                <Image
                   src={user.imageUrl}
                   alt={user.name ?? "User"}
+                  width={48}
+                  height={48}
                   className="w-12 h-12 rounded-full"
                 />
               ) : (
