@@ -1,10 +1,12 @@
+import { clerkMiddleware } from "@hono/clerk-auth";
 import { Hono } from "hono";
 import cors from "./middlewares/cors";
 import usersRoutes from "./routes/users";
 
 const app = new Hono()
+  // Clerk middleware. https://github.com/honojs/middleware/tree/main/packages/clerk-auth
+  .use(clerkMiddleware())
   .use(cors("CORS_ALLOW_ORIGINS"))
-
   .get("/", (c) => c.text("Hello from Hono 🔥"))
 
   .route("/users", usersRoutes);

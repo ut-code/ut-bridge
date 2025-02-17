@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.22.13",
+    "@clerk/nextjs": "^6.11.3",
     "hono": "^4.7.1",
     "next": "15.1.7",
     "react": "^19.0.0",
