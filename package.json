@@ -5,13 +5,15 @@
     "lefthook": "^1.10.10"
   },
   "scripts": {
-    "prepare": "bun run :prepare && (cd web; bun install --frozen-lockfile) && (cd server && bun install --frozen-lockfile)",
-    ":prepare": "lefthook install",
+    "postinstall": "(cd server && bun install --frozen-lockfile); (cd web && bun install --frozen-lockfile)",
+    "prepare": "lefthook install",
     "dev": "bun --env-file=./.env :dev",
     ":dev": "trap 'kill 0' EXIT; (cd web && bun dev) & (cd server && bun dev) & wait",
-    "check:fix": "bun biome check . --fix --unsafe && bun run build",
+    "fix": "# only format \nbun biome check . --fix --unsafe",
+    "check:fix": "bun fix && bun run build",
     "check": "bun biome check . && bun run build",
     "build": "(cd web && bun run build) && (cd server && bun run build)",
-    "clean": "rm -r node_modules && rm -r **/node_modules && rm web/dist -r"
+    "clean": "rm -r node_modules; rm -r **/node_modules; rm -r web/.next web/dist; true",
+    "dev-db": "./scripts/devdb.sh"
   }
 }
