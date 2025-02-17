@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import router from "next/router";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { client } from "../../../client";
 
@@ -33,17 +33,13 @@ export default function Community() {
     fetchUsers();
   }, []);
 
-  const handleUserClick = (id: string) => {
-    router.push(`/users/${id}`);
-  };
-
   return (
     <div>
       <h1>Community Page</h1>
       <ul>
         {users.map((user) => (
           <li key={user.id} className="p-4 border-b border-gray-200">
-            <button type="button" onClick={() => handleUserClick(user.id)}>
+            <Link type="button" href={`/users/${user.id}`}>
               <div className="flex items-center gap-4">
                 {user.imageUrl ? (
                   <Image
@@ -82,7 +78,7 @@ export default function Community() {
                   </p>
                 </div>
               </div>
-            </button>
+            </Link>
           </li>
         ))}
       </ul>
