@@ -13,5 +13,8 @@
     "check": "bun biome check . && bun run build",
     "build": "(cd web && bun run build) && (cd server && bun run build)",
     "clean": "rm -r node_modules && rm -r **/node_modules && rm web/dist -r"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.3.1"
   }
 }
