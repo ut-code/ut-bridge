@@ -17,3 +17,117 @@ model Todo {
   id   Int    @id @default(autoincrement())
   name String
 }
+
+model User { // ユーザー
+	id               String @id @default(uuid())
+	guid             String  // guid
+	isDeleted        Boolean @default(false) // 削除されたユーザーか
+	imageUrl         String? // 画像URL
+	name             String? // 名前
+	gender           Gender? // 性別
+	isForeignStudent Boolean @default(false) // 留学生かどうか
+	displayLanguage  DisplayLanguage // 表示言語
+	courseId         String? // 学科
+	campusId         String? // キャンパス
+	grade            Int?    // 学年
+	motherTongueId   String? // 母国語
+	hobby            String? // 趣味・好きなこと
+	introduction     String? // 自己紹介
+
+	course           Course?   @relation(fields: [courseId], references: [id])
+	campus           Campus?   @relation(fields: [campusId], references: [id])
+	motherTongue     Language? @relation(name: "motherTongue", fields: [motherTongueId], references: [id])
+	fluentLanguage   Language[] // 流暢に話せる言語
+	learningLanguage Language[] // 学びたい言語
+	favoriteUser     User[]     // お気に入りユーザー
+	blockUser        User[]     // ブロックしたユーザー
+}
+
+model UserFavoriteUser { // お気に入りユーザーの中間テーブル
+  id             String @id @default(uuid())
+  userId         String
+  favoriteUserId String
+  user           User @relation(fields: [userId], references: [id])
+  favoriteUser   User @relation(fields: [favoriteUserId], references: [id])
+}
+
+model UserBlockUser { // ブロックしたユーザーの中間テーブル
+  id             String @id @default(uuid())
+  userId         String
+  blockUserId    String
+  user           User @relation(fields: [userId], references: [id])
+  blockUser      User @relation(fields: [blockUserId], references: [id])
+}
+
+model Campus { // キャンパス
+  id           String @id @default(uuid())
+  name         String
+  universityId String
+  university   University @relation(fields: [universityId], references: [id])
+}
+
+model University { // 大学
+  id           String @id @default(uuid())
+  name         String
+  departments  Department[]
+}
+
+model Department { // 学部・大学院
+  id         String @id @default(uuid())
+  name       String
+  universityId String
+  university University @relation(fields: [universityId], references: [id])
+  courses    Course[]
+}
+
+model Course { // 学科
+  id             String @id @default(uuid())
+  name           String
+  departmentId   String
+  department     Department @relation(fields: [departmentId], references: [id])
+  users          User[]
+}
+
+model Language { // 言語
+	id   String @id @default(uuid())
+	name String
+}
+
+model UserFluentLanguage { // 流暢に話せる言語の中間テーブル
+	id               String @id @default(uuid())
+	userId           String
+	fluentLanguageId String
+	user             User     @relation(fields: [userId], references: [id])
+	fluentLanguage   Language @relation(fields: [fluentLanguageId], references: [id])
+}
+
+model UserLeaningLanguage { // 学びたい言語の中間テーブル
+	id                 String @id @default(uuid())
+	userId             String
+	learningLanguageId String
+	user               User     @relation(fields: [userId], references: [id])
+	learningLanguage   Language @relation(fields: [learningLanguageId], references: [id])
+}
+
+model Message { // チャットのメッセージ
+  id         String   @id @default(uuid()) // メッセージID
+  isPhoto    Boolean  @default(false) // 画像のときは content が その画像の URL になる
+  content    String
+  createdAt  DateTime @default(now())
+  isEdited   Boolean  @default(false)
+  senderId   String
+  receiverId String
+  sender     User     @relation(fields: [senderId], references: [id])
+  receiver   User     @relation(fields: [receiverId], references: [id])
+}
+
+enum Gender {
+	male
+	female
+	other
+}
+
+enum DisplayLanguage {
+	japanese
+	english
+}
