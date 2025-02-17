@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "bun run --env-file=../.env --hot index.ts",
     "build": "bun tsc",
-    "db": "bun run  --env-file=../.env prisma db push"
+    "db": "bun run  --env-file=../.env prisma db push",
+    "prepare": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^6.3.1",
