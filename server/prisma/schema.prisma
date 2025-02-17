@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,7 +7,147 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Todo {
-  id   Int    @id @default(autoincrement())
-  name String
+model User {
+  id               String          @id @default(uuid())
+  guid             String // GUID
+  isDeleted        Boolean         @default(false)
+  imageUrl         String?
+  name             String?
+  gender           Gender?
+  isForeignStudent Boolean         @default(false)
+  displayLanguage  DisplayLanguage
+  campusId         String?
+  grade            Int?
+  hobby            String?
+  introduction     String?
+  enrollments      Enrollment[]
+  campus           Campus?         @relation(fields: [campusId], references: [id])
+
+  motherTongues     MotherTongueOnUser[]
+  fluentLanguages   FluentLanguageOnUser[]
+  learningLanguages LearningLanguageOnUser[]
+
+  favoriteUsers    FavoriteOnUser[] @relation("FavoriteUsers")
+  blockedUsers     BlockOnUser[]    @relation("BlockedUsers")
+  favoriteBy       FavoriteOnUser[] @relation("FavoriteByUser")
+  blockedBy        BlockOnUser[]    @relation("BlockedByUser")
+  sentMessages     Message[]        @relation("SentMessages")
+  receivedMessages Message[]        @relation("ReceivedMessages")
+}
+
+model FavoriteOnUser {
+  myId     String
+  favoriteId String
+  user       User   @relation("FavoriteByUser", fields: [myId], references: [id], onDelete: Cascade)
+  favorite   User   @relation("FavoriteUsers", fields: [favoriteId], references: [id], onDelete: Cascade)
+
+  @@id([myId, favoriteId])
+}
+
+model BlockOnUser {
+  myId    String
+  blockedId String
+  user      User   @relation("BlockedByUser", fields: [myId], references: [id], onDelete: Cascade)
+  blocked   User   @relation("BlockedUsers", fields: [blockedId], references: [id], onDelete: Cascade)
+
+  @@id([myId, blockedId])
+}
+
+model Campus {
+  id           String     @id @default(uuid())
+  name         String
+  universityId String
+  university   University @relation(fields: [universityId], references: [id])
+  users        User[]
+}
+
+model University {
+  id          String       @id @default(uuid())
+  name        String
+  departments Department[]
+  campus      Campus[]
+}
+
+model Department {
+  id           String     @id @default(uuid())
+  name         String
+  universityId String
+  university   University @relation(fields: [universityId], references: [id])
+  courses      Course[]
+}
+
+model Enrollment {
+  id       Int    @id @default(autoincrement())
+  userId   String
+  courseId String
+  user     User   @relation(fields: [userId], references: [id])
+  course   Course @relation(fields: [courseId], references: [id])
+
+  @@unique([userId, courseId])
+}
+
+model Course {
+  id           String       @id @default(uuid())
+  name         String
+  departmentId String
+  department   Department   @relation(fields: [departmentId], references: [id])
+  enrollments  Enrollment[]
+}
+
+model Language {
+  id                String                   @id @default(uuid())
+  name              String                   @unique()
+  motherTongueUsers MotherTongueOnUser[]
+  fluentUsers       FluentLanguageOnUser[]
+  learningUsers     LearningLanguageOnUser[]
+}
+
+model MotherTongueOnUser {
+  userId     String
+  languageId String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  language   Language @relation(fields: [languageId], references: [id], onDelete: Cascade)
+
+  @@id([userId, languageId])
+}
+
+model FluentLanguageOnUser {
+  userId     String
+  languageId String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  language   Language @relation(fields: [languageId], references: [id], onDelete: Cascade)
+
+  @@id([userId, languageId])
+}
+
+model LearningLanguageOnUser {
+  userId     String
+  languageId String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  language   Language @relation(fields: [languageId], references: [id], onDelete: Cascade)
+
+  @@id([userId, languageId])
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  isPhoto    Boolean  @default(false)
+  content    String
+  createdAt  DateTime @default(now())
+  isEdited   Boolean  @default(false)
+  senderId   String
+  receiverId String
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id])
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+}
+
+enum Gender {
+  male
+  female
+  other
+}
+
+enum DisplayLanguage {
+  japanese
+  english
 }
