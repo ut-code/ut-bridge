@@ -29,8 +29,7 @@ const router = new Hono()
     const newUser = await prisma.user.create({
       data: body,
     });
-    const result = UserSchema.safeParse(newUser);
-    return c.json(result.data);
+    return c.json(newUser);
   })
 
   .put("/:id", zValidator("param", z.object({ id: z.string() })), async (c) => {
