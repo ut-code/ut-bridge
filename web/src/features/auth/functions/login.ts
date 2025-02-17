@@ -16,7 +16,6 @@ export function login() {
       const token = await result.user.getIdToken();
       store.set(fbIdTokenAtom, token);
       store.set(fbUserAtom, result.user);
-      fbUserAtom;
 
       sessionStorage.setItem(
         FB_SESSION_STORAGE_USER_KEY,

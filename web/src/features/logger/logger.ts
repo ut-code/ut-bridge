@@ -5,7 +5,8 @@ export function error(...err: unknown[]) {
   console.error(...err);
 }
 
-export default {
+const logger = {
   log,
   error,
 };
+export default logger;

@@ -11,7 +11,7 @@ import {
 
 export function AuthBoundary({ children }: { children: React.ReactNode }) {
   const [idToken, setIdToken] = useAtom(fbIdTokenAtom);
-  const [user, setUser] = useAtom(fbUserAtom);
+  const [_, setUser] = useAtom(fbUserAtom);
 
   // biome-ignore lint: i don't think its necessary
   useEffect(() => {
