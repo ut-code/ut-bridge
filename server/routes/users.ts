@@ -12,10 +12,10 @@ router.get("/", async (c) => {
 })
 
 router.get("/:id", async(c) => {
-  const id = c.req.param('id')
+  const userId = c.req.param("id")
   const user = await prisma.user.findUnique({
     where: {
-      id: id
+      id: userId
     }
   })
   return c.json(user)
@@ -29,21 +29,22 @@ router.post("/", async (c) => {
   return c.json(newUser)
 });
 
-router.put("/", async (c) => {
+router.put("/:id", async (c) => {
+  const userId = c.req.param("id")
   const updateContent = await c.req.json()
   const updatedUser = await prisma.user.update({
     where: {
-      id: updateContent.id
+      id: userId
     },
     data: updateContent
   })
   return c.json(updatedUser)
 });
 
-router.delete("/", async (c) => {
-  const body = await c.req.json()
+router.delete("/:id", async (c) => {
+  const userId = c.req.param("id")
   const deletedUser = await prisma.user.delete({
-    where: { id: body.id }
+    where: { id: userId }
   })
   return c.json(deletedUser)
 });
