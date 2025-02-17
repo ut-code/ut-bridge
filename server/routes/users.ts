@@ -1,5 +1,5 @@
-import { Hono } from "hono";
 import { PrismaClient } from "@prisma/client";
+import { Hono } from "hono";
 
 const prisma = new PrismaClient();
 
@@ -22,7 +22,7 @@ const router = new Hono()
   })
 
   .post("/", async (c) => {
-    const body = await c.req.json;
+    const body = await c.req.json();
     const newUser = await prisma.user.create({
       data: body,
     });
