@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,121 +7,147 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Todo {
-  id   Int    @id @default(autoincrement())
-  name String
+model User {
+  id               String          @id @default(uuid())
+  guid             String // GUID
+  isDeleted        Boolean         @default(false)
+  imageUrl         String?
+  name             String?
+  gender           Gender?
+  isForeignStudent Boolean         @default(false)
+  displayLanguage  DisplayLanguage
+  campusId         String?
+  grade            Int?
+  hobby            String?
+  introduction     String?
+  enrollments      Enrollment[]
+  campus           Campus?         @relation(fields: [campusId], references: [id])
+
+  motherTongues     MotherTongueOnUser[]
+  fluentLanguages   FluentLanguageOnUser[]
+  learningLanguages LearningLanguageOnUser[]
+
+  favoriteUsers    FavoriteOnUser[] @relation("FavoriteUsers")
+  blockedUsers     BlockOnUser[]    @relation("BlockedUsers")
+  favoriteBy       FavoriteOnUser[] @relation("FavoriteByUser")
+  blockedBy        BlockOnUser[]    @relation("BlockedByUser")
+  sentMessages     Message[]        @relation("SentMessages")
+  receivedMessages Message[]        @relation("ReceivedMessages")
 }
 
-model User { // ユーザー
-	id               String @id @default(uuid())
-	guid             String  // guid
-	isDeleted        Boolean @default(false) // 削除されたユーザーか
-	imageUrl         String? // 画像URL
-	name             String? // 名前
-	gender           Gender? // 性別
-	isForeignStudent Boolean @default(false) // 留学生かどうか
-	displayLanguage  DisplayLanguage // 表示言語
-	courseId         String? // 学科
-	campusId         String? // キャンパス
-	grade            Int?    // 学年
-	motherTongueId   String? // 母国語
-	hobby            String? // 趣味・好きなこと
-	introduction     String? // 自己紹介
+model FavoriteOnUser {
+  userId     String
+  favoriteId String
+  user       User   @relation("FavoriteByUser", fields: [userId], references: [id], onDelete: Cascade)
+  favorite   User   @relation("FavoriteUsers", fields: [favoriteId], references: [id], onDelete: Cascade)
 
-	course           Course?   @relation(fields: [courseId], references: [id])
-	campus           Campus?   @relation(fields: [campusId], references: [id])
-	motherTongue     Language? @relation(name: "motherTongue", fields: [motherTongueId], references: [id])
-	fluentLanguage   Language[] // 流暢に話せる言語
-	learningLanguage Language[] // 学びたい言語
-	favoriteUser     User[]     // お気に入りユーザー
-	blockUser        User[]     // ブロックしたユーザー
+  @@id([userId, favoriteId])
 }
 
-model UserFavoriteUser { // お気に入りユーザーの中間テーブル
-  id             String @id @default(uuid())
-  userId         String
-  favoriteUserId String
-  user           User @relation(fields: [userId], references: [id])
-  favoriteUser   User @relation(fields: [favoriteUserId], references: [id])
+model BlockOnUser {
+  userId    String
+  blockedId String
+  user      User   @relation("BlockedByUser", fields: [userId], references: [id], onDelete: Cascade)
+  blocked   User   @relation("BlockedUsers", fields: [blockedId], references: [id], onDelete: Cascade)
+
+  @@id([userId, blockedId])
 }
 
-model UserBlockUser { // ブロックしたユーザーの中間テーブル
-  id             String @id @default(uuid())
-  userId         String
-  blockUserId    String
-  user           User @relation(fields: [userId], references: [id])
-  blockUser      User @relation(fields: [blockUserId], references: [id])
-}
-
-model Campus { // キャンパス
-  id           String @id @default(uuid())
+model Campus {
+  id           String     @id @default(uuid())
   name         String
   universityId String
   university   University @relation(fields: [universityId], references: [id])
+  users        User[]
 }
 
-model University { // 大学
-  id           String @id @default(uuid())
+model University {
+  id          String       @id @default(uuid())
+  name        String
+  departments Department[]
+  campus      Campus[]
+}
+
+model Department {
+  id           String     @id @default(uuid())
   name         String
-  departments  Department[]
-}
-
-model Department { // 学部・大学院
-  id         String @id @default(uuid())
-  name       String
   universityId String
-  university University @relation(fields: [universityId], references: [id])
-  courses    Course[]
+  university   University @relation(fields: [universityId], references: [id])
+  courses      Course[]
 }
 
-model Course { // 学科
-  id             String @id @default(uuid())
-  name           String
-  departmentId   String
-  department     Department @relation(fields: [departmentId], references: [id])
-  users          User[]
+model Enrollment {
+  id       Int    @id @default(autoincrement())
+  userId   String
+  courseId String
+  user     User   @relation(fields: [userId], references: [id])
+  course   Course @relation(fields: [courseId], references: [id])
+
+  @@unique([userId, courseId])
 }
 
-model Language { // 言語
-	id   String @id @default(uuid())
-	name String
+model Course {
+  id           String       @id @default(uuid())
+  name         String
+  departmentId String
+  department   Department   @relation(fields: [departmentId], references: [id])
+  enrollments  Enrollment[]
 }
 
-model UserFluentLanguage { // 流暢に話せる言語の中間テーブル
-	id               String @id @default(uuid())
-	userId           String
-	fluentLanguageId String
-	user             User     @relation(fields: [userId], references: [id])
-	fluentLanguage   Language @relation(fields: [fluentLanguageId], references: [id])
+model Language {
+  id                String                   @id @default(uuid())
+  name              String                   @unique()
+  motherTongueUsers MotherTongueOnUser[]
+  fluentUsers       FluentLanguageOnUser[]
+  learningUsers     LearningLanguageOnUser[]
 }
 
-model UserLeaningLanguage { // 学びたい言語の中間テーブル
-	id                 String @id @default(uuid())
-	userId             String
-	learningLanguageId String
-	user               User     @relation(fields: [userId], references: [id])
-	learningLanguage   Language @relation(fields: [learningLanguageId], references: [id])
+model MotherTongueOnUser {
+  userId     String
+  languageId String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  language   Language @relation(fields: [languageId], references: [id], onDelete: Cascade)
+
+  @@id([userId, languageId])
 }
 
-model Message { // チャットのメッセージ
-  id         String   @id @default(uuid()) // メッセージID
-  isPhoto    Boolean  @default(false) // 画像のときは content が その画像の URL になる
+model FluentLanguageOnUser {
+  userId     String
+  languageId String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  language   Language @relation(fields: [languageId], references: [id], onDelete: Cascade)
+
+  @@id([userId, languageId])
+}
+
+model LearningLanguageOnUser {
+  userId     String
+  languageId String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  language   Language @relation(fields: [languageId], references: [id], onDelete: Cascade)
+
+  @@id([userId, languageId])
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  isPhoto    Boolean  @default(false)
   content    String
   createdAt  DateTime @default(now())
   isEdited   Boolean  @default(false)
   senderId   String
   receiverId String
-  sender     User     @relation(fields: [senderId], references: [id])
-  receiver   User     @relation(fields: [receiverId], references: [id])
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id])
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
 }
 
 enum Gender {
-	male
-	female
-	other
+  male
+  female
+  other
 }
 
 enum DisplayLanguage {
-	japanese
-	english
+  japanese
+  english
 }
