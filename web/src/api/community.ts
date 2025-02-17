@@ -1,4 +1,4 @@
 import { client } from "../client";
 
-const res = client.community.$get();
+const res = await client.community.$get();
 export const data = res.json();
