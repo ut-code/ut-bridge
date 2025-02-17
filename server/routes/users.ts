@@ -24,7 +24,7 @@ const router = new Hono()
     return c.json(result.data);
   })
 
-  .post("/", zValidator("body", UserSchema), async (c) => {
+  .post("/", zValidator("json", UserSchema), async (c) => {
     const body = await c.req.json;
     const newUser = await prisma.user.create({
       data: body,
