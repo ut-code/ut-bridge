@@ -1,5 +1,7 @@
 import { Hono } from "hono";
 import { PrismaClient } from "@prisma/client";
+import { zValidator } from "@hono/zod-validator";
+import { UserSchema } from "../zod/schema";
 
 const prisma = new PrismaClient();
 
@@ -18,15 +20,17 @@ const router = new Hono()
         id: userId,
       },
     });
-    return c.json(user);
+    const result = UserSchema.safeParse(user)
+    return c.json(result.data);
   })
 
-  .post("/", async (c) => {
+  .post("/", zValidator('body', UserSchema), async (c) => {
     const body = await c.req.json;
     const newUser = await prisma.user.create({
       data: body,
     });
-    return c.json(newUser);
+    const result = UserSchema.safeParse(newUser)
+    return c.json(result.data);
   })
 
   .put("/:id", async (c) => {
@@ -38,7 +42,8 @@ const router = new Hono()
       },
       data: updateContent,
     });
-    return c.json(updatedUser);
+    const result = UserSchema.safeParse(updatedUser)
+    return c.json(result.data);
   })
 
   .delete("/:id", async (c) => {
@@ -46,7 +51,8 @@ const router = new Hono()
     const deletedUser = await prisma.user.delete({
       where: { id: userId },
     });
-    return c.json(deletedUser);
+    const result = UserSchema.safeParse(deletedUser)
+    return c.json(result.data);
   });
 
 export default router;
