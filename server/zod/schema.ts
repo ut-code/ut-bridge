@@ -20,7 +20,7 @@ export const UserSchema = z.object({
   name: z.string(),
   gender: GenderEnum.optional(),
   isForeignStudent: z.boolean(),
-  DisplayLanguage: DisplayLanguage.optional(),
+  displayLanguage: DisplayLanguage,
   campusId: z.string(),
   grade: z.number(),
   hobby: HobbySchema,
