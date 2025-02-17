@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { client } from "../../../client";
 
 interface User {
@@ -17,7 +17,8 @@ interface User {
   introduction: string | null;
 }
 
-export default function Page({ params }: { params: { id: string } }) {
+export default function Page(props: { params: Promise<{ id: string }> }) {
+  const params = use(props.params);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
