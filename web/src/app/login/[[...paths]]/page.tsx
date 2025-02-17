@@ -1,5 +1,4 @@
-import { SignedIn } from "@clerk/clerk-react";
-import { SignIn, SignedOut } from "@clerk/nextjs";
+import { SignIn, SignedIn, SignedOut } from "@clerk/nextjs";
 
 export default function Page() {
   return (
