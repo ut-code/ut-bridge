@@ -1,5 +1,8 @@
 import { hc } from "hono/client";
 import type { App } from "server";
-import { env } from "./lib/env";
+import { panic } from "server/lib/env";
 
-export const client = hc<App>(env("NEXT_PUBLIC_API_ENDPOINT"));
+export const client = hc<App>(
+  process.env.NEXT_PUBLIC_API_ENDPOINT ??
+    panic("env NEXT_PUBLIC_API_ENDPOINT not found"),
+);
