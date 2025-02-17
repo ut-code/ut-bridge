@@ -1,5 +1,10 @@
 import { Hono } from "hono";
+import usersRoutes from "./users"
 
-const route = new Hono().get("/", (c) => c.text("Hello from Hono 🔥"));
+const app = new Hono();
 
-export default route;
+app.get("/", (c) => c.text("Hello from Hono 🔥"));
+
+app.route('/users', usersRoutes)
+
+export default app;
