@@ -1,3 +1,13 @@
 export default function Page() {
-  return <div>Chat Page</div>;
+  return (
+    <div>
+      <button
+        onClick={() => {
+          client.samples.login.$get();
+        }}
+      >
+        click me!
+      </button>
+    </div>
+  );
 }
