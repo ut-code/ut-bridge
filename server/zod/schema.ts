@@ -1,8 +1,8 @@
 import { z } from "zod";
 
-const GenderEnum = z.enum(["male", "female", "other"])
+const GenderEnum = z.enum(["male", "female", "other"]);
 
-const DisplayLanguage = z.enum(["japanese", "english"])
+const DisplayLanguage = z.enum(["japanese", "english"]);
 
 export const HobbySchema = z
   .string()
@@ -24,5 +24,5 @@ export const UserSchema = z.object({
   campusId: z.string(),
   grade: z.number(),
   hobby: HobbySchema,
-  introduction: IntroductionSchema
-})
+  introduction: IntroductionSchema,
+});
