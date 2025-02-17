@@ -39,7 +39,7 @@ export default function Community() {
       <ul>
         {users.map((user) => (
           <li key={user.id} className="p-4 border-b border-gray-200">
-            <Link type="button" href={`/users/${user.id}`}>
+            <Link type="button" href={`/users/?id=${user.id}`}>
               <div className="flex items-center gap-4">
                 {user.imageUrl ? (
                   <Image
