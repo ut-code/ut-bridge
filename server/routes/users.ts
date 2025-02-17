@@ -22,7 +22,7 @@ const router = new Hono()
   })
 
   .post("/", async (c) => {
-    const body = await c.req.json;
+    const body = await c.req.json();
     const newUser = await prisma.user.create({
       data: body,
     });
