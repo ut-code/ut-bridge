@@ -6,6 +6,7 @@
     "db": "bun run  --env-file=../.env prisma db push"
   },
   "dependencies": {
+    "@prisma/client": "^6.3.1",
     "hono": "^4.7.1"
   },
   "devDependencies": {
