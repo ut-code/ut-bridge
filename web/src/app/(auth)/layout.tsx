@@ -1,3 +1,10 @@
+import Header from "@/components/Header";
+
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <div className="mt-3">{children}</div>;
+  return (
+    <>
+      <Header />
+      <div className="h-full">{children}</div>
+    </>
+  );
 }
