@@ -1,13 +1,11 @@
 "use client";
 
 import { client } from "@/client";
-import { fbUserAtom } from "@/features/auth/state";
-import { useAtom } from "jotai";
-import { useRouter } from "next/router";
+import { FB_SESSION_STORAGE_USER_KEY } from "@/features/auth/state";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Registration() {
-  const [user] = useAtom(fbUserAtom);
   const router = useRouter();
 
   const [formData, setFormData] = useState<{
@@ -47,25 +45,24 @@ export default function Registration() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("loading");
-
+    const data = sessionStorage.getItem(FB_SESSION_STORAGE_USER_KEY);
+    const user = data ? JSON.parse(data) : null;
+    alert(user.uid);
     try {
-      if (user === null || user === undefined) {
-        router.push("/login");
-        return;
-      }
       const body = {
         id: self.crypto.randomUUID(),
         guid: user.uid,
-        imageUrl: "https://example.com/default-avatar.jpg",
         ...formData,
       };
 
       await client.users.$post({ json: body });
 
       setStatus("success");
+      router.push("/community");
     } catch (error) {
       console.error("ユーザー登録に失敗しました", error);
       setStatus("error");
+      router.push("/login");
     }
   };
 
