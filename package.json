@@ -6,6 +6,9 @@
   },
   "scripts": {
     "postinstall": "(cd server && bun install --frozen-lockfile); (cd web && bun install --frozen-lockfile)",
+    "watch": "bun run watch:web & bun run watch:server",
+    "watch:web": "cd web; bun --env-file=../.env run next dev --port 5173",
+    "watch:server": "cd server; bun run --env-file=../.env --hot index.ts",
     "prepare": "lefthook install",
     "dev": "bun --env-file=./.env :dev",
     ":dev": "trap 'kill 0' EXIT; (cd web && bun dev) & (cd server && bun dev) & wait",
