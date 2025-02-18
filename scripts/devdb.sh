@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 
-CONTAINER="utbridge_postgres"
+CONTAINER="utbridge-postgres"
 
 set -eu
 
 docker stop $CONTAINER 2>/dev/null || true
+docker rm $CONTAINER 2>/dev/null || true
 docker run \
-	--detach \
+	-d \
   --rm \
   --name $CONTAINER \
   -p 5432:5432 \
