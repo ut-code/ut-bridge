@@ -1,4 +1,6 @@
+import { client } from "@/client";
 import logger from "@/features/logger/logger";
+import { createAccount } from "@/features/registration/functions/createAccount";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../config";
 import {
@@ -22,8 +24,18 @@ export function login() {
         JSON.stringify(result.user),
       );
       sessionStorage.setItem(FB_SESSION_STORAGE_IDTOKEN_KEY, token);
+
+      //ここで、guidだけ登録された空のユーザーを作成する or すでに作成されていたら。
+      if (!result.user.uid) throw Error("GUID not found!");
+      const userExists = await client.users.exist[":guid"].$get({
+        param: { guid: result.user.uid },
+      });
+      if (!userExists) {
+        await createAccount(result.user.uid);
+      }
+      window.location.pathname = "/community";
+
       // TODO: ここで GOTO /community
-      window.location.pathname = "/settings";
     })
     .catch((err) => {
       logger.error(err);

@@ -24,6 +24,25 @@ const router = new Hono()
     return c.json(user);
   })
 
+  .get(
+    "/exist/:guid", //guidがあるだけでなく、アカウントもちゃんと作られていることを確認。
+    zValidator("param", z.object({ guid: z.string() })),
+    async (c) => {
+      const { guid } = c.req.valid("param");
+
+      const user = await prisma.user.findUnique({
+        where: { guid: guid },
+        select: { guid: true, name: true },
+      });
+
+      if (!user || !user.name) {
+        return c.json({ exists: false }, 404);
+      }
+
+      return c.json({ exists: true });
+    },
+  )
+
   .post("/", zValidator("json", UserSchema), async (c) => {
     const body = c.req.valid("json");
     const newUser = await prisma.user.create({

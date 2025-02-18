@@ -9,7 +9,7 @@ datasource db {
 
 model User {
   id               String          @id @default(uuid())
-  guid             String // GUID
+  guid             String          @unique
   imageUrl         String?
   name             String?
   gender           Gender?
@@ -35,7 +35,7 @@ model User {
 }
 
 model FavoriteOnUser {
-  myId     String
+  myId       String
   favoriteId String
   user       User   @relation("FavoriteByUser", fields: [myId], references: [id], onDelete: Cascade)
   favorite   User   @relation("FavoriteUsers", fields: [favoriteId], references: [id], onDelete: Cascade)
@@ -44,7 +44,7 @@ model FavoriteOnUser {
 }
 
 model BlockOnUser {
-  myId    String
+  myId      String
   blockedId String
   user      User   @relation("BlockedByUser", fields: [myId], references: [id], onDelete: Cascade)
   blocked   User   @relation("BlockedUsers", fields: [blockedId], references: [id], onDelete: Cascade)
