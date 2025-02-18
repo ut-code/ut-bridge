@@ -3,13 +3,6 @@ const config = {
   plugins: {
     "@tailwindcss/postcss": {},
   },
-  theme: {
-    extend: {
-      colors: {
-        primary: "#0B8BEE",
-      },
-    },
-  },
 };
 
 export default config;
