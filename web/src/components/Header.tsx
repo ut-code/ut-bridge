@@ -11,7 +11,7 @@ export default function Header() {
   return (
     <header className="z-0 h-16 w-full bg-tBlue fixed top-0 flex items-center">
       <Link href="/community" passHref className="px-4">
-        <AppIcon width={35} height={35} />
+        <AppIcon width={36} height={36} />
       </Link>
       <Link
         href="/community"
