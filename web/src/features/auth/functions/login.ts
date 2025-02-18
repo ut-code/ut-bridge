@@ -1,6 +1,5 @@
 import { client } from "@/client";
 import logger from "@/features/logger/logger";
-import { createAccount } from "@/features/registration/functions/createAccount";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../config";
 import {
@@ -30,12 +29,11 @@ export function login() {
       const userExists = await client.users.exist[":guid"].$get({
         param: { guid: result.user.uid },
       });
-      if (!userExists) {
-        await createAccount(result.user.uid);
+      if (userExists) {
+        window.location.pathname = "/community";
+      } else {
+        window.location.pathname = "/registration";
       }
-      window.location.pathname = "/community";
-
-      // TODO: ここで GOTO /community
     })
     .catch((err) => {
       logger.error(err);
