@@ -1,10 +1,8 @@
-import { PrismaClient } from "@prisma/client";
 import { zValidator } from "@hono/zod-validator";
-import { z } from "zod";
-import { UserSchema } from "../zod/schema";
 import { Hono } from "hono";
-
-const prisma = new PrismaClient();
+import { z } from "zod";
+import { prisma } from "../config/prisma";
+import { UserSchema } from "../zod/schema";
 
 const router = new Hono()
 
