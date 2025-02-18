@@ -14,10 +14,12 @@ export default function Header() {
       >
         <AppIcon width={40} height={40} />
       </Link>
-      <p className="text-white text-3xl">UT-Bridge</p>
+      <Link href="/community" className="text-white text-3xl cursor-pointer ">
+        UT-Bridge
+      </Link>
       <button
         type="button"
-        className="text-white text-xl"
+        className="text-white text-xl cursor-pointer hover:text-gray-300 hover:opacity-80 transition-colors duration-200"
         onClick={() => {
           router.push("/community");
         }}
@@ -26,7 +28,7 @@ export default function Header() {
       </button>
       <button
         type="button"
-        className="text-white text-xl"
+        className="text-white text-xl cursor-pointer hover:text-gray-300 hover:opacity-80 transition-colors duration-200"
         onClick={() => {
           router.push("/chat");
         }}
@@ -35,7 +37,7 @@ export default function Header() {
       </button>
       <button
         type="button"
-        className="text-white text-xl"
+        className="text-white text-xl cursor-pointer hover:text-gray-300 hover:opacity-80 transition-colors duration-200"
         onClick={() => {
           router.push("/settings");
         }}
