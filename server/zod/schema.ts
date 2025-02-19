@@ -18,7 +18,7 @@ export const UserSchema = z.object({
   guid: z.string(),
   imageUrl: z.string().optional(),
   name: z.string(),
-  gender: GenderEnum.optional(),
+  gender: GenderEnum,
   isForeignStudent: z.boolean(),
   displayLanguage: DisplayLanguage,
   campusId: z.string(),
