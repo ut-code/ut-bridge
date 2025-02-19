@@ -14,6 +14,10 @@
     "check": "bun biome check . && bun run build",
     "build": "(cd web && bun run build) && (cd server && bun run build)",
     "clean": "rm -r node_modules; rm -r **/node_modules; rm -r web/.next web/dist; true",
-    "dev-db": "./scripts/devdb.sh"
+    "db": "bun db:drop && bun db:up && bun db:push && bun db:seed",
+    "db:drop": "docker stop utbridge-postgres",
+    "db:up": "./scripts/devdb.sh",
+    "db:push": "cd server; bun db push",
+    "db:seed": "bun run --env-file=./.env ./scripts/seed/index.ts"
   }
 }

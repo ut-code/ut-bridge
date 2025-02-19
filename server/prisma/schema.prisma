@@ -11,15 +11,17 @@ model User {
   id               String          @id @default(uuid())
   guid             String          @unique
   imageUrl         String?
-  name             String?
-  gender           Gender?
-  isForeignStudent Boolean         @default(false)
+  name             String
+  gender           Gender
+  isForeignStudent Boolean
   displayLanguage  DisplayLanguage
-  campusId         String?
   grade            Int?
-  hobby            String?
-  introduction     String?
-  enrollments      Enrollment[]
+  hobby            String
+  introduction     String
+  divisionId       Int?
+  division         Division?       @relation(fields: [divisionId], references: [id])
+  department       String? // sub-division: 学科、X科N類、研究室 etc
+  campusId         String?
   campus           Campus?         @relation(fields: [campusId], references: [id])
 
   motherTongues     MotherTongueOnUser[]
@@ -32,6 +34,15 @@ model User {
   blockedBy        BlockOnUser[]    @relation("BlockedByUser")
   sentMessages     Message[]        @relation("SentMessages")
   receivedMessages Message[]        @relation("ReceivedMessages")
+}
+
+model Division {
+  id           Int         @id @default(autoincrement())
+  name         String @unique
+  University   University @relation(fields: [universityId], references: [id])
+  universityId String
+
+  User         User[]
 }
 
 model FavoriteOnUser {
@@ -53,7 +64,7 @@ model BlockOnUser {
 }
 
 model Campus {
-  id           String     @id @default(uuid())
+  id           String     @id @default(uuid(7))
   name         String
   universityId String
   university   University @relation(fields: [universityId], references: [id])
@@ -61,36 +72,10 @@ model Campus {
 }
 
 model University {
-  id          String       @id @default(uuid())
-  name        String
-  departments Department[]
-  campus      Campus[]
-}
-
-model Department {
-  id           String     @id @default(uuid())
-  name         String
-  universityId String
-  university   University @relation(fields: [universityId], references: [id])
-  courses      Course[]
-}
-
-model Enrollment {
-  id       Int    @id @default(autoincrement())
-  userId   String
-  courseId String
-  user     User   @relation(fields: [userId], references: [id])
-  course   Course @relation(fields: [courseId], references: [id])
-
-  @@unique([userId, courseId])
-}
-
-model Course {
-  id           String       @id @default(uuid())
-  name         String
-  departmentId String
-  department   Department   @relation(fields: [departmentId], references: [id])
-  enrollments  Enrollment[]
+  id       String     @id @default(uuid(7))
+  name     String     @unique
+  division Division[]
+  campus   Campus[]
 }
 
 model Language {
@@ -103,8 +88,8 @@ model Language {
 
 model MotherTongueOnUser {
   userId     String
-  languageId String
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  languageId String
   language   Language @relation(fields: [languageId], references: [id], onDelete: Cascade)
 
   @@id([userId, languageId])
@@ -112,8 +97,8 @@ model MotherTongueOnUser {
 
 model FluentLanguageOnUser {
   userId     String
-  languageId String
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  languageId String
   language   Language @relation(fields: [languageId], references: [id], onDelete: Cascade)
 
   @@id([userId, languageId])
@@ -121,22 +106,22 @@ model FluentLanguageOnUser {
 
 model LearningLanguageOnUser {
   userId     String
-  languageId String
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  languageId String
   language   Language @relation(fields: [languageId], references: [id], onDelete: Cascade)
 
   @@id([userId, languageId])
 }
 
 model Message {
-  id         String   @id @default(uuid())
+  id         String   @id @default(uuid(7))
   isPhoto    Boolean  @default(false)
   content    String
   createdAt  DateTime @default(now())
   isEdited   Boolean  @default(false)
   senderId   String
-  receiverId String
   sender     User     @relation("SentMessages", fields: [senderId], references: [id])
+  receiverId String
   receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
 }
 
