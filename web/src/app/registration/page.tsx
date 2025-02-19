@@ -83,25 +83,16 @@ export default function Registration() {
         </label>
 
         <label>
-          外国人留学生ですか？
-          <input
-            type="checkbox"
-            name="isForeignStudent"
-            checked={formData.isForeignStudent}
-            onChange={handleChange}
-          />
-        </label>
-
-        <label>
-          言語設定:
+          性別:
           <select
-            name="displayLanguage"
-            value={formData.displayLanguage}
+            name="gender"
+            value={formData.gender}
             onChange={handleChange}
             className="border p-2 w-full"
           >
-            <option value="japanese">日本語</option>
-            <option value="english">英語</option>
+            <option value="male">男性</option>
+            <option value="female">女性</option>
+            <option value="other">その他</option>
           </select>
         </label>
 
@@ -132,6 +123,29 @@ export default function Registration() {
         </label>
 
         <label>
+          言語設定:
+          <select
+            name="displayLanguage"
+            value={formData.displayLanguage}
+            onChange={handleChange}
+            className="border p-2 w-full"
+          >
+            <option value="japanese">日本語</option>
+            <option value="english">英語</option>
+          </select>
+        </label>
+
+        <label>
+          外国人留学生ですか？
+          <input
+            type="checkbox"
+            name="isForeignStudent"
+            checked={formData.isForeignStudent}
+            onChange={handleChange}
+          />
+        </label>
+
+        <label>
           趣味:
           <input
             type="text"
@@ -153,21 +167,6 @@ export default function Registration() {
             required
             className="border p-2 w-full"
           />
-        </label>
-
-        <label>
-          性別:
-          <select
-            name="gender"
-            value={formData.gender}
-            onChange={handleChange}
-            className="border p-2 w-full"
-          >
-            <option value="male">男性</option>
-            <option value="female">女性</option>
-            <option value="other">その他</option>
-            <option value="secret">秘密</option>
-          </select>
         </label>
 
         <button
