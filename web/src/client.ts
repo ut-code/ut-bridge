@@ -5,4 +5,9 @@ import { panic } from "server/lib/env";
 export const client = hc<App>(
   process.env.NEXT_PUBLIC_API_ENDPOINT ??
     panic("env NEXT_PUBLIC_API_ENDPOINT not found"),
+  {
+    init: {
+      credentials: "include",
+    },
+  },
 );
