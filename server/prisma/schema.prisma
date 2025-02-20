@@ -11,13 +11,13 @@ model User {
   id               String          @id @default(uuid())
   guid             String          @unique
   imageUrl         String?
-  name             String?
-  gender           Gender?
-  isForeignStudent Boolean?
-  displayLanguage  DisplayLanguage?
+  name             String
+  gender           Gender
+  isForeignStudent Boolean
+  displayLanguage  DisplayLanguage
   grade            Int?
-  hobby            String?
-  introduction     String?
+  hobby            String
+  introduction     String
   divisionId       Int?
   division         Division?       @relation(fields: [divisionId], references: [id])
   department       String? // sub-division: 学科、X科N類、研究室 etc
