@@ -3,40 +3,95 @@
 import { client } from "@/client";
 import { FB_SESSION_STORAGE_USER_KEY } from "@/features/auth/state";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Registration() {
   const router = useRouter();
+  const [campuses, setCampuses] = useState<{ id: string; name: string }[]>([]);
+  const [divisions, setDivisions] = useState<{ id: string; name: string }[]>(
+    [],
+  );
+  const [universities, setUniversities] = useState<
+    { id: string; name: string }[]
+  >([]);
+  const [universityId, setUniversityId] = useState<string>("");
+
+  useEffect(() => {
+    const fetchFirstData = async () => {
+      const res = await client.university.$get();
+      const universities = await res.json();
+      setUniversities(universities);
+      if (!res.ok) {
+        console.error(await res.text());
+        throw new Error(`大学データの取得に失敗しました: ${res.status}`);
+      }
+    };
+    fetchFirstData();
+  }, []);
+
+  useEffect(() => {
+    if (!universityId) return;
+
+    const fetchDataAfterSelectUniversity = async () => {
+      try {
+        const [campusRes, divisionRes] = await Promise.all([
+          client.campus.$get({ query: { id: universityId } }),
+          client.division.$get({ query: { id: universityId } }),
+        ]);
+
+        // どちらかが失敗した場合エラーハンドリング
+        if (!campusRes.ok || !divisionRes.ok) {
+          console.error("データ取得に失敗しました", {
+            campus: campusRes.status,
+            division: divisionRes.status,
+          });
+          throw new Error(
+            `データ取得に失敗しました:${{
+              campus: await campusRes.text(),
+              division: await divisionRes.text(),
+            }}`,
+          );
+        }
+
+        const [campuses, divisions] = await Promise.all([
+          campusRes.json(),
+          divisionRes.json(),
+        ]);
+
+        setCampuses(campuses);
+        setDivisions(divisions);
+      } catch (error) {
+        console.error("データ取得中にエラーが発生しました", error);
+        setCampuses([]);
+        setDivisions([]);
+      }
+    };
+
+    fetchDataAfterSelectUniversity();
+  }, [universityId]);
 
   const [formData, setFormData] = useState<{
-    //TODO:型をserverのZodで共有する
-    imageUrl?: string; //TODO
     name: string;
     gender: "male" | "female" | "other";
     isForeignStudent: boolean;
     displayLanguage: "japanese" | "english";
     grade: number;
+    universityId: string;
     divisionId: string;
     campusId: string;
     hobby: string;
     introduction: string;
-    fluentLanguageIds: string[];
-    learningLanguageIds: string[];
-    motherTongueLanguageIds: string[];
   }>({
-    imageUrl: "",
     name: "",
     gender: "male",
     isForeignStudent: false,
     displayLanguage: "japanese",
     grade: 1,
+    universityId: "",
     divisionId: "",
     campusId: "",
     hobby: "",
     introduction: "",
-    fluentLanguageIds: [],
-    learningLanguageIds: [],
-    motherTongueLanguageIds: [],
   });
 
   const [status, setStatus] = useState<
@@ -51,6 +106,16 @@ export default function Registration() {
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
+
+    // 大学選択時に `universityId` を state にセット
+    if (name === "universityId") {
+      setUniversityId(value);
+      setFormData((prev) => ({
+        ...prev,
+        campusId: "",
+        divisionId: "",
+      }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -111,15 +176,56 @@ export default function Registration() {
         </label>
 
         <label>
-          キャンパスID:
-          <input
-            type="text"
+          大学:
+          <select
+            name="universityId"
+            value={formData.universityId}
+            onChange={handleChange}
+            className="border p-2 w-full"
+          >
+            <option value="">大学を選択してください</option>
+            {universities.map((univ) => (
+              <option key={univ.id} value={univ.id}>
+                {univ.name}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label>
+          学部:
+          <select
+            name="campusId"
+            value={formData.divisionId}
+            onChange={handleChange}
+            className="border p-2 w-full"
+            disabled={!campuses.length}
+          >
+            <option value="">学部を選択してください</option>
+            {divisions.map((division) => (
+              <option key={division.id} value={division.id}>
+                {division.name}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label>
+          キャンパス:
+          <select
             name="campusId"
             value={formData.campusId}
             onChange={handleChange}
-            required
             className="border p-2 w-full"
-          />
+            disabled={!campuses.length}
+          >
+            <option value="">キャンパスを選択してください</option>
+            {campuses.map((campus) => (
+              <option key={campus.id} value={campus.id}>
+                {campus.name}
+              </option>
+            ))}
+          </select>
         </label>
 
         <label>
@@ -147,16 +253,6 @@ export default function Registration() {
             <option value="japanese">日本語</option>
             <option value="english">英語</option>
           </select>
-        </label>
-
-        <label>
-          外国人留学生ですか？
-          <input
-            type="checkbox"
-            name="isForeignStudent"
-            checked={formData.isForeignStudent}
-            onChange={handleChange}
-          />
         </label>
 
         <label>
@@ -190,13 +286,6 @@ export default function Registration() {
         >
           {status === "loading" ? "登録中..." : "登録"}
         </button>
-
-        {status === "success" && (
-          <p className="text-green-500">登録が完了しました！</p>
-        )}
-        {status === "error" && (
-          <p className="text-red-500">登録に失敗しました。</p>
-        )}
       </form>
     </div>
   );
