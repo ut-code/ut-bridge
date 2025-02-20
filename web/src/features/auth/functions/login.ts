@@ -26,8 +26,8 @@ export function login() {
 
       //ここで、guidだけ登録された空のユーザーを作成する or すでに作成されていたら。
       if (!result.user.uid) throw Error("GUID not found!");
-      const res = await client.users.exist[":guid"].$get({
-        param: { guid: result.user.uid },
+      const res = await client.users.exist.$get({
+        query: { guid: result.user.uid },
       });
       const userExists = (await res.json()).exists;
       if (userExists) {
