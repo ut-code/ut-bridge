@@ -140,6 +140,7 @@ export default function Registration() {
         const selectedValues = Array.from(options)
           .filter((option) => option.selected)
           .map((option) => option.value);
+
         return {
           ...prev,
           [name]: selectedValues,
@@ -294,7 +295,7 @@ export default function Registration() {
         <label>
           母国語:
           <select
-            name="motherLanguage"
+            name="motherLanguageId"
             value={formData.motherLanguageId}
             onChange={handleChange}
             className="border p-2 w-full"
@@ -311,7 +312,7 @@ export default function Registration() {
         <label>
           流暢に話せる言語:
           <select
-            name="fluentLanguages"
+            name="fluentLanguageIds"
             value={formData.fluentLanguageIds}
             onChange={handleChange}
             className="border p-2 w-full"
@@ -329,7 +330,7 @@ export default function Registration() {
         <label>
           勉強している言語:
           <select
-            name="learningLanguages"
+            name="learningLanguageIds"
             value={formData.learningLanguageIds}
             onChange={handleChange}
             className="border p-2 w-full"
