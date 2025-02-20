@@ -26,4 +26,7 @@ export const UserSchema = z.object({
   campusId: z.string(), //キャンパス
   hobby: HobbySchema,
   introduction: IntroductionSchema,
+  motherLanguageId: z.string(),
+  fluentLanguageIds: z.array(z.string()),
+  learningLanguageIds: z.array(z.string()),
 });

@@ -23,7 +23,6 @@ export default function Page() {
       try {
         const res = await client.community.$get();
         const users = (await res.json()).users;
-        console.log("Hello", users);
         setUsers(users);
       } catch (error) {
         console.error("Failed to fetch users:", error);
