@@ -55,7 +55,11 @@ export default function Registration() {
         ...formData,
       };
 
-      await client.users.$post({ json: body });
+      const res = await client.users.$post({ json: body });
+      if (!res.ok) {
+        console.error(await res.text());
+        throw new Error(`レスポンスステータス: ${res.status}`);
+      }
 
       setStatus("success");
       router.push("/community");
