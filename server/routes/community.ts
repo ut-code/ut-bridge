@@ -1,7 +1,6 @@
-import { PrismaClient } from "@prisma/client";
 import { Hono } from "hono";
+import { prisma } from "../config/prisma";
 
-const prisma = new PrismaClient();
 const router = new Hono().get("/", async (c) => {
   const users = await prisma.user.findMany({
     select: {

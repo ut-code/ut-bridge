@@ -34,7 +34,7 @@ export default function Page() {
   }, []);
 
   return (
-    <div>
+    <>
       <h1>Community Page</h1>
       <ul>
         {users.map((user) => (
@@ -82,6 +82,6 @@ export default function Page() {
           </li>
         ))}
       </ul>
-    </div>
+    </>
   );
 }

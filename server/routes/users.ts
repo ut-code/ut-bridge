@@ -1,28 +1,51 @@
 import { zValidator } from "@hono/zod-validator";
-import { PrismaClient } from "@prisma/client";
 import { Hono } from "hono";
 import { z } from "zod";
+import { prisma } from "../config/prisma";
 import { UserSchema } from "../zod/schema";
-
-const prisma = new PrismaClient();
 
 const router = new Hono()
 
-  .get("/", async (c) => {
-    const users = await prisma.user.findMany();
+  .get(
+    "/", // userId以外にも、nameなどでユーザーのデータを持ってきたい場合は、ここを編集する
+    zValidator("query", z.object({ id: z.string().optional() })),
+    async (c) => {
+      const userId = c.req.valid("query").id;
+      const user = await prisma.user.findMany({
+        where: {
+          id: userId,
+        },
+      });
+      return c.json(user);
+    },
+  )
 
-    return c.json(users);
-  })
+  .get(
+    "/exist",
+    zValidator(
+      "query",
+      z
+        .object({ guid: z.string().optional(), userId: z.string().optional() })
+        .optional(),
+    ),
+    async (c) => {
+      const { guid, userId } = c.req.valid("query") ?? {};
 
-  .get("/:id", zValidator("param", z.object({ id: z.string() })), async (c) => {
-    const userId = c.req.valid("param").id;
-    const user = await prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-    return c.json(user);
-  })
+      const user = await prisma.user.findFirst({
+        where: {
+          guid: guid,
+          id: userId,
+        },
+        select: { guid: true, id: true, name: true },
+      });
+
+      if (!user || !user.name) {
+        return c.json({ exists: false }, 404);
+      }
+
+      return c.json({ exists: true });
+    },
+  )
 
   .post("/", zValidator("json", UserSchema), async (c) => {
     const body = c.req.valid("json");
