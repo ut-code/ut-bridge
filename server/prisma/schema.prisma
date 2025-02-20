@@ -18,7 +18,7 @@ model User {
   grade            Int?
   hobby            String
   introduction     String
-  divisionId       Int?
+  divisionId       String?
   division         Division?       @relation(fields: [divisionId], references: [id])
   campusId         String?
   campus           Campus?         @relation(fields: [campusId], references: [id])
@@ -36,7 +36,7 @@ model User {
 }
 
 model Division {
-  id           Int         @id @default(autoincrement())
+  id           String         @id @default(uuid(7))
   name         String @unique
   University   University @relation(fields: [universityId], references: [id])
   universityId String

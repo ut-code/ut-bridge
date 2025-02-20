@@ -22,7 +22,7 @@ export const UserSchema = z.object({
   isForeignStudent: z.boolean(),
   displayLanguage: DisplayLanguage,
   grade: z.number(),
-  divisionId: z.number(), //学部
+  divisionId: z.string(), //学部
   campusId: z.string(), //キャンパス
   hobby: HobbySchema,
   introduction: IntroductionSchema,
