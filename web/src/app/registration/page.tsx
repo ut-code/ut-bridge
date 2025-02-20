@@ -93,6 +93,7 @@ export default function Registration() {
     hobby: "",
     introduction: "",
   });
+  console.log(formData);
 
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error"
@@ -195,11 +196,11 @@ export default function Registration() {
         <label>
           学部:
           <select
-            name="campusId"
+            name="divisionId"
             value={formData.divisionId}
             onChange={handleChange}
             className="border p-2 w-full"
-            disabled={!campuses.length}
+            disabled={!divisions.length}
           >
             <option value="">学部を選択してください</option>
             {divisions.map((division) => (
