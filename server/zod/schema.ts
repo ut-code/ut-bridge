@@ -18,11 +18,15 @@ export const UserSchema = z.object({
   guid: z.string(),
   imageUrl: z.string().optional(),
   name: z.string(),
-  gender: GenderEnum.optional(),
+  gender: GenderEnum,
   isForeignStudent: z.boolean(),
   displayLanguage: DisplayLanguage,
-  campusId: z.string(),
   grade: z.number(),
+  divisionId: z.string(), //学部
+  campusId: z.string(), //キャンパス
   hobby: HobbySchema,
   introduction: IntroductionSchema,
+  motherLanguageId: z.string(),
+  fluentLanguageIds: z.array(z.string()),
+  learningLanguageIds: z.array(z.string()),
 });

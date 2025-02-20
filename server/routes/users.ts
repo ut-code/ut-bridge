@@ -50,7 +50,36 @@ const router = new Hono()
   .post("/", zValidator("json", UserSchema), async (c) => {
     const body = c.req.valid("json");
     const newUser = await prisma.user.create({
-      data: body,
+      data: {
+        id: body.id,
+        guid: body.guid,
+        imageUrl: body.imageUrl,
+        name: body.name,
+        gender: body.gender,
+        isForeignStudent: body.isForeignStudent,
+        displayLanguage: body.displayLanguage,
+        grade: body.grade,
+        divisionId: body.divisionId,
+        campusId: body.campusId,
+        hobby: body.hobby,
+        introduction: body.introduction,
+
+        motherTongues: {
+          create: {
+            languageId: body.motherLanguageId,
+          },
+        },
+        fluentLanguages: {
+          create: body.fluentLanguageIds.map((langId) => ({
+            languageId: langId,
+          })),
+        },
+        learningLanguages: {
+          create: body.learningLanguageIds.map((langId) => ({
+            languageId: langId,
+          })),
+        },
+      },
     });
     return c.json(newUser);
   })
