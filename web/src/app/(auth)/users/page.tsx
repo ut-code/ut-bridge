@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { use, useEffect, useState } from "react";
 import { client } from "../../../client";
 
@@ -21,15 +22,20 @@ export default function Page(props: { params: Promise<{ id: string }> }) {
   const params = use(props.params);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     async function fetchUser() {
       try {
-        const res = await client.users[":id"].$get({
-          param: { id: params.id },
+        const res = await client.users.$get({
+          query: { id: params.id },
         });
         const data = await res.json();
-        setUser(data);
+        if (data.length !== 1) {
+          console.error("User Not Found!");
+          router.push("/community");
+        }
+        setUser(data[0]);
       } catch (error) {
         console.error("Failed to fetch user:", error);
       } finally {
@@ -38,7 +44,7 @@ export default function Page(props: { params: Promise<{ id: string }> }) {
     }
 
     fetchUser();
-  }, [params.id]);
+  }, [params.id, router]);
 
   if (loading) return <div>Loading...</div>;
   if (!user) return <div>User not found</div>;
