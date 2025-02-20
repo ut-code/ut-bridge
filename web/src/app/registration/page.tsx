@@ -15,16 +15,34 @@ export default function Registration() {
     { id: string; name: string }[]
   >([]);
   const [universityId, setUniversityId] = useState<string>("");
+  const [languages, setLanguages] = useState<{ id: string; name: string }[]>(
+    [],
+  );
 
   useEffect(() => {
     const fetchFirstData = async () => {
-      const res = await client.university.$get();
-      const universities = await res.json();
-      setUniversities(universities);
-      if (!res.ok) {
-        console.error(await res.text());
-        throw new Error(`大学データの取得に失敗しました: ${res.status}`);
+      const [universityRes, languageRes] = await Promise.all([
+        client.university.$get(),
+        client.language.$get(),
+      ]);
+      if (!universityRes.ok || !languageRes.ok) {
+        console.error("データ取得に失敗しました", {
+          university: universityRes.status,
+          language: languageRes.status,
+        });
+        throw new Error(
+          `データ取得に失敗しました:${{
+            university: await universityRes.text(),
+            language: await languageRes.text(),
+          }}`,
+        );
       }
+      const [universities, languages] = await Promise.all([
+        universityRes.json(),
+        languageRes.json(),
+      ]);
+      setUniversities(universities);
+      setLanguages(languages);
     };
     fetchFirstData();
   }, []);
@@ -33,38 +51,32 @@ export default function Registration() {
     if (!universityId) return;
 
     const fetchDataAfterSelectUniversity = async () => {
-      try {
-        const [campusRes, divisionRes] = await Promise.all([
-          client.campus.$get({ query: { id: universityId } }),
-          client.division.$get({ query: { id: universityId } }),
-        ]);
+      const [campusRes, divisionRes] = await Promise.all([
+        client.campus.$get({ query: { id: universityId } }),
+        client.division.$get({ query: { id: universityId } }),
+      ]);
 
-        // どちらかが失敗した場合エラーハンドリング
-        if (!campusRes.ok || !divisionRes.ok) {
-          console.error("データ取得に失敗しました", {
-            campus: campusRes.status,
-            division: divisionRes.status,
-          });
-          throw new Error(
-            `データ取得に失敗しました:${{
-              campus: await campusRes.text(),
-              division: await divisionRes.text(),
-            }}`,
-          );
-        }
-
-        const [campuses, divisions] = await Promise.all([
-          campusRes.json(),
-          divisionRes.json(),
-        ]);
-
-        setCampuses(campuses);
-        setDivisions(divisions);
-      } catch (error) {
-        console.error("データ取得中にエラーが発生しました", error);
-        setCampuses([]);
-        setDivisions([]);
+      // どちらかが失敗した場合エラーハンドリング
+      if (!campusRes.ok || !divisionRes.ok) {
+        console.error("データ取得に失敗しました", {
+          campus: campusRes.status,
+          division: divisionRes.status,
+        });
+        throw new Error(
+          `データ取得に失敗しました:${{
+            campus: await campusRes.text(),
+            division: await divisionRes.text(),
+          }}`,
+        );
       }
+
+      const [campuses, divisions] = await Promise.all([
+        campusRes.json(),
+        divisionRes.json(),
+      ]);
+
+      setCampuses(campuses);
+      setDivisions(divisions);
     };
 
     fetchDataAfterSelectUniversity();
@@ -81,6 +93,9 @@ export default function Registration() {
     campusId: string;
     hobby: string;
     introduction: string;
+    motherLanguageId: string;
+    fluentLanguageIds: string[];
+    leaningLanguageIds: string[];
   }>({
     name: "",
     gender: "male",
@@ -92,8 +107,10 @@ export default function Registration() {
     campusId: "",
     hobby: "",
     introduction: "",
+    motherLanguageId: "",
+    fluentLanguageIds: [],
+    leaningLanguageIds: [],
   });
-  console.log(formData);
 
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error"
@@ -253,6 +270,58 @@ export default function Registration() {
           >
             <option value="japanese">日本語</option>
             <option value="english">英語</option>
+          </select>
+        </label>
+
+        <label>
+          母国語:
+          <select
+            name="motherTongues"
+            value={formData.motherLanguageId}
+            onChange={handleChange}
+            className="border p-2 w-full"
+            disabled={!languages.length}
+          >
+            <option value="">母国語を選択してください</option>
+            {languages.map((language) => (
+              <option key={language.id} value={language.id}>
+                {language.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          流暢に話せる言語:
+          <select
+            name="fluentLanguages"
+            value={formData.fluentLanguageIds}
+            onChange={handleChange}
+            className="border p-2 w-full"
+            disabled={!languages.length}
+          >
+            <option value="">流暢に話せる言語を選択してください</option>
+            {languages.map((language) => (
+              <option key={language.id} value={language.id}>
+                {language.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          勉強している言語:
+          <select
+            name="learningLanguages"
+            value={formData.leaningLanguageIds}
+            onChange={handleChange}
+            className="border p-2 w-full"
+            disabled={!languages.length}
+          >
+            <option value="">勉強している言語を選択してください</option>
+            {languages.map((language) => (
+              <option key={language.id} value={language.id}>
+                {language.name}
+              </option>
+            ))}
           </select>
         </label>
 
