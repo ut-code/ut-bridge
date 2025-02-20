@@ -36,12 +36,26 @@ model User {
 }
 
 model Division {
-  id           String         @id @default(uuid(7))
-  name         String @unique
-  University   University @relation(fields: [universityId], references: [id])
+  id           String     @id @default(uuid(7))
+  name         String     @unique
   universityId String
+  university   University @relation(fields: [universityId], references: [id])
+  users        User[]
+}
 
-  User         User[]
+model Campus {
+  id           String     @id @default(uuid(7))
+  name         String     @unique
+  universityId String
+  university   University @relation(fields: [universityId], references: [id])
+  users        User[]
+}
+
+model University {
+  id       String     @id @default(uuid(7))
+  name     String     @unique
+  division Division[]
+  campus   Campus[]
 }
 
 model FavoriteOnUser {
@@ -60,21 +74,6 @@ model BlockOnUser {
   blocked   User   @relation("BlockedUsers", fields: [blockedId], references: [id], onDelete: Cascade)
 
   @@id([myId, blockedId])
-}
-
-model Campus {
-  id           String     @id @default(uuid(7))
-  name         String
-  universityId String
-  university   University @relation(fields: [universityId], references: [id])
-  users        User[]
-}
-
-model University {
-  id       String     @id @default(uuid(7))
-  name     String     @unique
-  division Division[]
-  campus   Campus[]
 }
 
 model Language {

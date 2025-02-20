@@ -29,7 +29,10 @@ for (const univ of universities) {
   }
   for (const div of univ.divisions) {
     await prisma.division.create({
-      data: { name: div.name, universityId: created.id },
+      data: {
+        name: div.name,
+        universityId: created.id,
+      },
     });
   }
 }
