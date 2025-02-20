@@ -16,10 +16,13 @@ export default function Registration() {
     isForeignStudent: boolean;
     displayLanguage: "japanese" | "english";
     grade: number;
-    divisionId: number;
+    divisionId: string;
     campusId: string;
     hobby: string;
     introduction: string;
+    fluentLanguageIds: string[];
+    learningLanguageIds: string[];
+    motherTongueLanguageIds: string[];
   }>({
     imageUrl: "",
     name: "",
@@ -27,10 +30,13 @@ export default function Registration() {
     isForeignStudent: false,
     displayLanguage: "japanese",
     grade: 1,
-    divisionId: 1,
+    divisionId: "",
     campusId: "",
     hobby: "",
     introduction: "",
+    fluentLanguageIds: [],
+    learningLanguageIds: [],
+    motherTongueLanguageIds: [],
   });
 
   const [status, setStatus] = useState<
