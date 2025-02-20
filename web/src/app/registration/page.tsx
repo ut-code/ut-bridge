@@ -95,7 +95,7 @@ export default function Registration() {
     introduction: string;
     motherLanguageId: string;
     fluentLanguageIds: string[];
-    leaningLanguageIds: string[];
+    learningLanguageIds: string[];
   }>({
     name: "",
     gender: "male",
@@ -109,7 +109,7 @@ export default function Registration() {
     introduction: "",
     motherLanguageId: "",
     fluentLanguageIds: [],
-    leaningLanguageIds: [],
+    learningLanguageIds: [],
   });
 
   const [status, setStatus] = useState<
@@ -119,21 +119,39 @@ export default function Registration() {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
-    const { name, value, type, checked } = e.target as HTMLInputElement;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    const { name, value, type, checked, multiple } =
+      e.target as HTMLInputElement;
+    const { options } = e.target as HTMLSelectElement;
 
-    // 大学選択時に `universityId` を state にセット
-    if (name === "universityId") {
-      setUniversityId(value);
-      setFormData((prev) => ({
+    setFormData((prev) => {
+      // 大学を変更した場合、関連するキャンパスと学部をリセット
+      if (name === "universityId") {
+        setUniversityId(value);
+        return {
+          ...prev,
+          universityId: value,
+          campusId: "",
+          divisionId: "",
+        };
+      }
+
+      // 複数選択の処理（言語選択）
+      if (multiple) {
+        const selectedValues = Array.from(options)
+          .filter((option) => option.selected)
+          .map((option) => option.value);
+        return {
+          ...prev,
+          [name]: selectedValues,
+        };
+      }
+
+      // 通常の入力フォーム（チェックボックス含む）
+      return {
         ...prev,
-        campusId: "",
-        divisionId: "",
-      }));
-    }
+        [name]: type === "checkbox" ? checked : value,
+      };
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -276,7 +294,7 @@ export default function Registration() {
         <label>
           母国語:
           <select
-            name="motherTongues"
+            name="motherLanguage"
             value={formData.motherLanguageId}
             onChange={handleChange}
             className="border p-2 w-full"
@@ -312,7 +330,7 @@ export default function Registration() {
           勉強している言語:
           <select
             name="learningLanguages"
-            value={formData.leaningLanguageIds}
+            value={formData.learningLanguageIds}
             onChange={handleChange}
             className="border p-2 w-full"
             disabled={!languages.length}
