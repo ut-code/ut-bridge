@@ -20,7 +20,6 @@ model User {
   introduction     String
   divisionId       Int?
   division         Division?       @relation(fields: [divisionId], references: [id])
-  department       String? // sub-division: 学科、X科N類、研究室 etc
   campusId         String?
   campus           Campus?         @relation(fields: [campusId], references: [id])
 
