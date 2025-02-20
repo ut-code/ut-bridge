@@ -261,7 +261,7 @@ export default function Registration() {
         </label>
 
         <label>
-          言語設定:
+          表示言語設定:
           <select
             name="displayLanguage"
             value={formData.displayLanguage}
@@ -298,6 +298,7 @@ export default function Registration() {
             onChange={handleChange}
             className="border p-2 w-full"
             disabled={!languages.length}
+            multiple
           >
             <option value="">流暢に話せる言語を選択してください</option>
             {languages.map((language) => (
@@ -315,6 +316,7 @@ export default function Registration() {
             onChange={handleChange}
             className="border p-2 w-full"
             disabled={!languages.length}
+            multiple
           >
             <option value="">勉強している言語を選択してください</option>
             {languages.map((language) => (
