@@ -9,23 +9,28 @@ export default function Registration() {
   const router = useRouter();
 
   const [formData, setFormData] = useState<{
+    //TODO:型をserverのZodで共有する
+    imageUrl?: string; //TODO
     name: string;
+    gender: "male" | "female" | "other";
     isForeignStudent: boolean;
     displayLanguage: "japanese" | "english";
-    campusId: string;
     grade: number;
+    divisionId: number;
+    campusId: string;
     hobby: string;
     introduction: string;
-    gender: "male" | "female" | "other";
   }>({
+    imageUrl: "",
     name: "",
+    gender: "male",
     isForeignStudent: false,
     displayLanguage: "japanese",
-    campusId: "",
     grade: 1,
+    divisionId: 1,
+    campusId: "",
     hobby: "",
     introduction: "",
-    gender: "male",
   });
 
   const [status, setStatus] = useState<
@@ -47,7 +52,6 @@ export default function Registration() {
     setStatus("loading");
     const data = sessionStorage.getItem(FB_SESSION_STORAGE_USER_KEY);
     const user = data ? JSON.parse(data) : null;
-    alert(user.uid);
     try {
       const body = {
         id: self.crypto.randomUUID(),

@@ -21,8 +21,9 @@ export const UserSchema = z.object({
   gender: GenderEnum,
   isForeignStudent: z.boolean(),
   displayLanguage: DisplayLanguage,
-  campusId: z.string(),
   grade: z.number(),
+  divisionId: z.number(), //学部
+  campusId: z.string(), //キャンパス
   hobby: HobbySchema,
   introduction: IntroductionSchema,
 });
