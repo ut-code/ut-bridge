@@ -102,7 +102,6 @@ export default function Page() {
     isForeignStudent: false,
     displayLanguage: "japanese",
     grade: "B1",
-    universityId: "",
     divisionId: "",
     campusId: "",
     hobby: "",
@@ -216,7 +215,6 @@ export default function Page() {
           大学:
           <select
             name="universityId"
-            value={formData.universityId ?? ""}
             onChange={handleChange}
             className="border p-2 w-full"
           >

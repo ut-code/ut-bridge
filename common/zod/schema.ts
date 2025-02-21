@@ -75,7 +75,7 @@ export const SeedUserSchema = z.object({
 });
 
 export const CardUserSchema = BaseUserSchema.extend({
-  imageUrl: z.string(),
+  imageUrl: z.string().nullable(),
   campus: z.string(),
   motherLanguage: z.string(),
   fluentLanguages: z.array(z.string()),
