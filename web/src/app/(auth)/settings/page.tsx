@@ -58,15 +58,49 @@ export default function Page() {
             aaa
           </div>
         )}
-        <p>ID: {user.id}</p>
-        <p>Name: {user.name || "N/A"}</p>
-        <p>Gender: {user.gender || "N/A"}</p>
-        <p>Is Foreign Student: {user.isForeignStudent ? "Yes" : "No"}</p>
-        <p>Display Language: {user.displayLanguage}</p>
-        <p>Campus ID: {user.campusId || "N/A"}</p>
-        <p>Grade: {user.grade ?? "N/A"}</p>
-        <p>Hobby: {user.hobby || "N/A"}</p>
-        <p>Introduction: {user.introduction || "N/A"}</p>
+        <p>
+          <strong>Name:</strong> {user.name || "N/A"}
+        </p>
+        <p>
+          <strong>Gender:</strong> {user.gender || "N/A"}
+        </p>
+        <p>
+          <strong>Is Foreign Student:</strong>{" "}
+          {user.isForeignStudent ? "Yes" : "No"}
+        </p>
+        <p>
+          <strong>Display Language:</strong> {user.displayLanguage}
+        </p>
+        <p>
+          <strong>Campus Name:</strong> {user.campus || "N/A"}
+        </p>
+        <p>
+          <strong>Grade:</strong> {user.grade ?? "N/A"}
+        </p>
+        <p>
+          <strong>Division:</strong> {user.division ?? "N/A"}
+        </p>
+        <p>
+          <strong>Mother Language:</strong> {user.motherLanguage ?? "N/A"}
+        </p>
+        <p>
+          <strong>Fluent Languages:</strong>{" "}
+          {user.fluentLanguages.length > 0
+            ? user.fluentLanguages.join(", ")
+            : "N/A"}
+        </p>
+        <p>
+          <strong>Learning Languages:</strong>{" "}
+          {user.learningLanguages.length > 0
+            ? user.learningLanguages.join(", ")
+            : "N/A"}
+        </p>
+        <p>
+          <strong>Hobby:</strong> {user.hobby || "N/A"}
+        </p>
+        <p>
+          <strong>Introduction:</strong> {user.introduction || "N/A"}
+        </p>
       </div>
     </>
   );
