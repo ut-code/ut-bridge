@@ -12,7 +12,6 @@ export default function Page() {
   const [users, setUsers] = useState<CardUser[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isExchangeEnabled, setIsExchangeEnabled] = useState(true);
-  const [isMyForeignStudent, setIsMyForeignStudent] = useState<boolean>(true);
   const [page, setPage] = useState(1); // 現在のページ
   const [totalUsers, setTotalUsers] = useState(0); // 総ユーザー数
   const usersPerPage = 9; // 1ページあたりのユーザー数
@@ -26,20 +25,16 @@ export default function Page() {
           throw new Error("User ID is not found! Please login again!");
         }
         const res = await client.community.$get({
-          query: { id: myId, page: page.toString() }, // ページ番号をリクエスト
+          query: {
+            id: myId,
+            page: page.toString(),
+            isExchangeEnabled: isExchangeEnabled.toString(), // 言語交換の状態を送る
+          },
         });
         const data = await res.json();
         const formattedUsers = formatCardUsers(data.users);
-        const filteredCardUsers = formattedUsers.filter(
-          (user) => user.id !== myId,
-        );
-        setUsers(filteredCardUsers);
+        setUsers(formattedUsers);
         setTotalUsers(data.totalUsers); // 総ユーザー数を更新
-
-        const myUser = formattedUsers.find((user) => user.id === myId);
-        if (myUser) {
-          setIsMyForeignStudent(myUser.isForeignStudent);
-        }
       } catch (error) {
         console.error("Failed to fetch users:", error);
         router.push("/login");
@@ -47,26 +42,7 @@ export default function Page() {
     };
 
     fetchUsers();
-  }, [router, page]); // ページが変わったら再取得
-
-  // 検索クエリと toggle の状態に基づいてユーザーをフィルタリング
-  const filteredUsers = users.filter((user) => {
-    const query = searchQuery.toLowerCase();
-    const matchesQuery =
-      user.name?.toLowerCase().includes(query) ||
-      user.gender?.toLowerCase().includes(query) ||
-      user.campus?.toLowerCase().includes(query) ||
-      user.motherLanguage?.toLowerCase().includes(query) ||
-      user.fluentLanguages.some((lang) => lang.toLowerCase().includes(query)) ||
-      user.learningLanguages.some((lang) => lang.toLowerCase().includes(query));
-
-    const matchesExchange =
-      !isExchangeEnabled ||
-      (isMyForeignStudent !== null &&
-        user.isForeignStudent !== isMyForeignStudent);
-
-    return matchesQuery && matchesExchange;
-  });
+  }, [router, page, isExchangeEnabled]); // 言語交換の状態が変わったらリクエストを再送
 
   return (
     <>
@@ -88,11 +64,14 @@ export default function Page() {
         type="checkbox"
         className="toggle"
         checked={isExchangeEnabled}
-        onChange={() => setIsExchangeEnabled((prev) => !prev)}
+        onChange={() => {
+          setIsExchangeEnabled((prev) => !prev);
+          setPage(1); // 言語交換の設定を変更したらページをリセット
+        }}
       />
 
       <ul>
-        {filteredUsers.map((user) => (
+        {users.map((user) => (
           <li key={user.id} className="p-4 border-b border-gray-200">
             <Link type="button" href={`/users/?id=${user.id}`}>
               <div className="flex items-center gap-4">
@@ -140,34 +119,36 @@ export default function Page() {
         ))}
       </ul>
 
-      {/* ページ情報の表示 */}
-      {totalUsers > 0 && (
-        <div className="text-center my-4">
-          <span className="text-gray-700">
-            Page {page} of {totalPages}
-          </span>
-        </div>
-      )}
+      <div className="text-center my-4">
+        <span className="text-gray-700">
+          {totalUsers > 0 ? `Page ${page} of ${totalPages}` : "No users found"}
+        </span>
+      </div>
 
-      {/* ページネーションボタン */}
-      {page > 1 && (
-        <button
-          type="button"
-          onClick={() => setPage(page - 1)}
-          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
-        >
-          Previous
-        </button>
-      )}
-      {page < totalPages && (
-        <button
-          type="button"
-          onClick={() => setPage(page + 1)}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        >
-          Next
-        </button>
-      )}
+      <div className="flex justify-between mt-4 mx-20">
+        <div className="w-1/2">
+          {page > 1 && (
+            <button
+              type="button"
+              onClick={() => setPage(page - 1)}
+              className="px-4 py-2 bg-blue-200 rounded hover:bg-blue-300"
+            >
+              Previous
+            </button>
+          )}
+        </div>
+        <div className="w-1/2 flex justify-end">
+          {page < totalPages && (
+            <button
+              type="button"
+              onClick={() => setPage(page + 1)}
+              className="px-4 py-2 bg-blue-200 rounded hover:bg-blue-300"
+            >
+              Next
+            </button>
+          )}
+        </div>
+      </div>
     </>
   );
 }
