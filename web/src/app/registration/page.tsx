@@ -292,6 +292,15 @@ export default function Registration() {
             <option value="english">英語</option>
           </select>
         </label>
+        <label>
+          外国人留学生ですか？
+          <input
+            type="checkbox"
+            name="isForeignStudent"
+            checked={formData.isForeignStudent}
+            onChange={handleChange}
+          />
+        </label>
 
         <label>
           母国語:
