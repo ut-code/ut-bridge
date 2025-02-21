@@ -1,4 +1,6 @@
 "use client";
+import { formatCardUsers } from "@/features/format";
+import type { CardUser } from "common/zod/schema";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -7,18 +9,7 @@ import { client } from "../../../client";
 
 export default function Page() {
   const router = useRouter();
-  const [users, setUsers] = useState<
-    {
-      id: string;
-      name: string | null;
-      gender: string | null;
-      imageUrl: string | null;
-      campus: string | null;
-      motherTongues: string[];
-      fluentLanguages: string[];
-      learningLanguages: string[];
-    }[]
-  >([]);
+  const [users, setUsers] = useState<CardUser[]>([]);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -31,7 +22,8 @@ export default function Page() {
           query: { id: myId },
         });
         const users = (await res.json()).users;
-        setUsers(users);
+        const data = formatCardUsers(users);
+        setUsers(data);
       } catch (error) {
         console.error("Failed to fetch users:", error);
         router.push("/login");
@@ -74,7 +66,7 @@ export default function Page() {
                     Campus: {user.campus ?? "Unknown"}
                   </p>
                   <p className="text-sm text-gray-600">
-                    Mother Tongues: {user.motherTongues.join(", ") || "None"}
+                    Mother language: {user.motherLanguage || "Unknown"}
                   </p>
                   <p className="text-sm text-gray-600">
                     Fluent Languages:{" "}

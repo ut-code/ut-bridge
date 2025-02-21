@@ -1,5 +1,6 @@
 {
   "name": "server",
+  "type": "module",
   "scripts": {
     "dev": "NODE_ENV=development bun run --env-file=../.env --hot index.ts",
     "build": "bun tsc",
@@ -17,6 +18,7 @@
   "devDependencies": {
     "@types/bun": "^1.2.2",
     "prisma": "^6.3.1",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "common": "workspace:common"
   }
 }

@@ -1,16 +1,14 @@
-import { PrismaClient } from "@prisma/client";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
-import { prisma } from "./config/prisma";
-import cors from "./middlewares/cors";
-import campusRouter from "./routes/campus";
-import chatRouter from "./routes/chat";
-import communityRouter from "./routes/community";
-import divisionRouter from "./routes/division";
-import languageRouter from "./routes/language";
-import universityRouter from "./routes/university";
-import usersRouter from "./routes/users";
+import { prisma } from "./config/prisma.ts";
+import cors from "./middlewares/cors.ts";
+import campusRouter from "./routes/campus.ts";
+import communityRouter from "./routes/community.ts";
+import divisionRouter from "./routes/division.ts";
+import languageRouter from "./routes/language.ts";
+import universityRouter from "./routes/university.ts";
+import usersRouter from "./routes/users.ts";
 
 if (process.env.NODE_ENV === "development") {
   prisma.user

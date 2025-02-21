@@ -19,38 +19,92 @@ export default function Page() {
   const [languages, setLanguages] = useState<{ id: string; name: string }[]>(
     [],
   );
+  const [formData, setFormData] = useState<CreateUser>({
+    id: "",
+    imageUrl: null,
+    guid: "",
+    name: "",
+    gender: "male",
+    isForeignStudent: false,
+    displayLanguage: "japanese",
+    grade: "B1",
+    universityId: "",
+    divisionId: "",
+    campusId: "",
+    hobby: "",
+    introduction: "",
+    motherLanguageId: "",
+    fluentLanguageIds: [],
+    learningLanguageIds: [],
+  });
 
   useEffect(() => {
-    const fetchFirstData = async () => {
+    const fetchMyData = async () => {
       try {
-        const [universityRes, languageRes] = await Promise.all([
+        const myId = localStorage.getItem("utBridgeUserId");
+        if (!myId) {
+          throw new Error("User ID is not found! Please login again!");
+        }
+        const [universityRes, languageRes, userRes] = await Promise.all([
           client.university.$get(),
           client.language.$get(),
+          client.users.$get({
+            query: { id: myId },
+          }),
         ]);
-        if (!universityRes.ok || !languageRes.ok) {
+        if (!universityRes.ok || !languageRes.ok || !userRes.ok) {
           console.error("データ取得に失敗しました", {
             university: universityRes.status,
             language: languageRes.status,
+            user: userRes.status,
           });
           throw new Error(
             `データ取得に失敗しました:${{
               university: await universityRes.text(),
               language: await languageRes.text(),
+              user: await userRes.text(),
             }}`,
           );
         }
-        const [universities, languages] = await Promise.all([
+        const [universities, languages, data] = await Promise.all([
           universityRes.json(),
           languageRes.json(),
+          userRes.json(),
         ]);
+
+        const formattedData = {
+          id: data[0].id,
+          imageUrl: data[0].imageUrl,
+          guid: "",
+          name: data[0].name,
+          gender: data[0].gender,
+          isForeignStudent: data[0].isForeignStudent,
+          displayLanguage: data[0].displayLanguage,
+          grade: data[0].grade,
+          universityId: data[0].campus.universityId,
+          divisionId: data[0].divisionId,
+          campusId: data[0].campusId,
+          hobby: data[0].hobby,
+          introduction: data[0].introduction,
+          motherLanguageId: data[0].motherLanguageId,
+          fluentLanguageIds: data[0].fluentLanguages.map(
+            (lang: { language: { id: string } }) => lang.language.id,
+          ),
+          learningLanguageIds: data[0].learningLanguages.map(
+            (lang: { language: { id: string } }) => lang.language.id,
+          ),
+        };
+        console.log(formattedData, "あああ");
         setUniversities(universities);
         setLanguages(languages);
+        setFormData(formattedData);
+        setUniversityId(formattedData.universityId);
       } catch (err) {
         console.error("Failed to fetch university or language Data ", err);
         router.push("/login");
       }
     };
-    fetchFirstData();
+    fetchMyData();
   }, [router]);
 
   useEffect(() => {
@@ -92,25 +146,6 @@ export default function Page() {
 
     fetchDataAfterSelectUniversity();
   }, [universityId, router]);
-
-  const [formData, setFormData] = useState<CreateUser>({
-    id: "",
-    imageUrl: null,
-    guid: "",
-    name: "",
-    gender: "male",
-    isForeignStudent: false,
-    displayLanguage: "japanese",
-    grade: "B1",
-    universityId: "",
-    divisionId: "",
-    campusId: "",
-    hobby: "",
-    introduction: "",
-    motherLanguageId: "",
-    fluentLanguageIds: [],
-    learningLanguageIds: [],
-  });
 
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error"
@@ -163,10 +198,9 @@ export default function Page() {
     try {
       const body = {
         ...formData,
-        id: self.crypto.randomUUID(),
         guid: user.uid,
       };
-      const res = await client.users.$post({ json: body });
+      const res = await client.users.$put({ json: body });
       if (!res.ok) {
         console.error(await res.text());
         throw new Error(`レスポンスステータス: ${res.status}`);
@@ -184,7 +218,7 @@ export default function Page() {
 
   return (
     <div className="p-4 max-w-md mx-auto">
-      <h1 className="text-xl font-bold mb-4">初期登録画面</h1>
+      <h1 className="text-xl font-bold mb-4">編集画面</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <label>
           名前:
