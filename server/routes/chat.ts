@@ -49,7 +49,7 @@ const router = new Hono()
         console.log(err);
         return c.json({ error: "not found" }, 404);
       }
-      return c.json({ ok: true }, 201);
+      return c.json({ id: roomId }, 201);
     },
   )
   .put(
@@ -392,7 +392,6 @@ const router = new Hono()
         const bc = new BroadcastChannel(`chat:${id}`);
 
         bc.onmessage = (_e) => {
-          console.log("received BroadcastEvent", _e.data);
           const ev: BroadcastEvent = _e.data;
           stream.writeSSE(ev);
         };
@@ -453,7 +452,6 @@ type BroadcastEvents =
 
 type UserID = string;
 function broadcast<T extends string>(to: UserID[], event: BroadcastEvent<T>) {
-  console.log("sending broadcast event...");
   for (const id in to) {
     const bc = new BroadcastChannel(`chat:${id}`);
     bc.postMessage(event);

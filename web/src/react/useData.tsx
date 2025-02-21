@@ -1,4 +1,3 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useCallback, useEffect, useState } from "react";
 
 type State<T> =
@@ -40,6 +39,7 @@ export function use<T>(fetcher: () => Promise<T>): State<T> & {
         error: null,
       });
     } catch (err) {
+      console.error(err);
       setState({
         loading: false,
         data: undefined,

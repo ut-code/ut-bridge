@@ -7,11 +7,14 @@ import { use } from "@/react/useData";
 import Link from "next/link";
 
 async function createNewRoom() {
-  await client.chat.rooms.$post({
+  const res = await client.chat.rooms.$post({
     json: {
       members: [myId],
     },
   });
+  if (!res.ok) throw new Error("Failed to create room");
+  const { id } = await res.json();
+  location.pathname = `/chat/${id}`;
 }
 
 export default function Page() {

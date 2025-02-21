@@ -155,7 +155,6 @@ function MessageList({
             <div className="chat-bubble">{m.content}</div>
             {/* <div className="chat-footer opacity-50">Seen</div> */}
           </div>
-          {m.content}
         </li>
       ))}
     </ul>

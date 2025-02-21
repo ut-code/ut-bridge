@@ -12,9 +12,14 @@ export const store = createStore();
 
 export const myId = (() => {
   let id: string;
-  if (typeof window !== "undefined") {
+  if (typeof window !== "undefined" && location.pathname !== "/login") {
     // TODO: validate that it's not null
-    id = z.string().parse(localStorage.getItem("utBridgeUserId"));
+    try {
+      id = z.string().parse(localStorage.getItem("utBridgeUserId"));
+    } catch (err) {
+      window.location.pathname = "/login";
+      return new Error("logging in...") as never;
+    }
   } else {
     id = "";
   }
