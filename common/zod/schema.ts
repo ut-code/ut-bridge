@@ -89,6 +89,9 @@ export const CardUserSchema = z.object({
   isForeignStudent: z.boolean(),
   imageUrl: z.string().nullable(),
   campus: z.string(),
+  motherLanguage: z.string(),
+  fluentLanguages: z.array(z.string()),
+  learningLanguages: z.array(z.string()),
 });
 
 const LanguageSchema = z.object({
@@ -105,8 +108,6 @@ export const FullCardUserSchema = z.object({
     name: z.string(),
   }),
   grade: GradeEnum,
-  hobby: HobbySchema,
-  introduction: IntroductionSchema,
   motherLanguage: LanguageSchema,
   fluentLanguages: z.array(z.object({ language: LanguageSchema })),
   learningLanguages: z.array(z.object({ language: LanguageSchema })),

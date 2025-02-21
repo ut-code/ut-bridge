@@ -28,7 +28,6 @@ export default function Page() {
     isForeignStudent: false,
     displayLanguage: "japanese",
     grade: "B1",
-    universityId: "",
     divisionId: "",
     campusId: "",
     hobby: "",
@@ -81,14 +80,18 @@ export default function Page() {
           isForeignStudent: data[0].isForeignStudent,
           displayLanguage: data[0].displayLanguage,
           grade: data[0].grade,
-          universityId: data[0].campus?.universityId ?? "",
-          divisionId: data[0].divisionId ?? "",
-          campusId: data[0].campusId ?? "",
+          universityId: data[0].campus.universityId,
+          divisionId: data[0].divisionId,
+          campusId: data[0].campusId,
           hobby: data[0].hobby,
           introduction: data[0].introduction,
-          motherLanguageId: data[0].motherLanguageId ?? "",
-          fluentLanguageIds: [],
-          learningLanguageIds: [],
+          motherLanguageId: data[0].motherLanguageId,
+          fluentLanguageIds: data[0].fluentLanguages.map(
+            (lang: { language: { id: string } }) => lang.language.id,
+          ),
+          learningLanguageIds: data[0].learningLanguages.map(
+            (lang: { language: { id: string } }) => lang.language.id,
+          ),
         };
         setUniversities(universities);
         setLanguages(languages);
@@ -212,7 +215,7 @@ export default function Page() {
 
   return (
     <div className="p-4 max-w-md mx-auto">
-      <h1 className="text-xl font-bold mb-4">初期登録画面</h1>
+      <h1 className="text-xl font-bold mb-4">編集画面</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <label>
           名前:
@@ -244,7 +247,6 @@ export default function Page() {
           大学:
           <select
             name="universityId"
-            value={formData.universityId ?? ""}
             onChange={handleChange}
             className="border p-2 w-full"
           >

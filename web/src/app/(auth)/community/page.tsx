@@ -66,7 +66,7 @@ export default function Page() {
                     Campus: {user.campus ?? "Unknown"}
                   </p>
                   <p className="text-sm text-gray-600">
-                    Mother Tongues: {user.motherLanguage || "Unknown"}
+                    Mother language: {user.motherLanguage || "Unknown"}
                   </p>
                   <p className="text-sm text-gray-600">
                     Fluent Languages:{" "}

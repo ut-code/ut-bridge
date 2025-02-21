@@ -17,9 +17,11 @@ const router = new Hono()
           division: true,
           campus: true,
           motherLanguage: true,
-          fluentLanguages: { select: { language: { select: { name: true } } } },
+          fluentLanguages: {
+            select: { language: true },
+          },
           learningLanguages: {
-            select: { language: { select: { name: true } } },
+            select: { language: true },
           },
         },
       });
