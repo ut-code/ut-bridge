@@ -8,3 +8,14 @@ export const FB_SESSION_STORAGE_IDTOKEN_KEY = "firebase:idToken";
 export const fbIdTokenAtom = atom<string | undefined | null>(undefined);
 export const fbUserAtom = atom<FireBaseUser | undefined | null>(undefined);
 export const store = createStore();
+
+export const myId = (() => {
+  let id: string;
+  if (typeof window !== "undefined") {
+    // TODO: validate that it's not null
+    id = localStorage.getItem("utBridgeUserId") as string;
+  } else {
+    id = "";
+  }
+  return id;
+})();

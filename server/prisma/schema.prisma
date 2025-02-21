@@ -27,12 +27,41 @@ model User {
   fluentLanguages   FluentLanguageOnUser[]
   learningLanguages LearningLanguageOnUser[]
 
-  favoriteUsers    FavoriteOnUser[] @relation("FavoriteUsers")
-  blockedUsers     BlockOnUser[]    @relation("BlockedUsers")
-  favoriteBy       FavoriteOnUser[] @relation("FavoriteByUser")
-  blockedBy        BlockOnUser[]    @relation("BlockedByUser")
-  sentMessages     Message[]        @relation("SentMessages")
-  receivedMessages Message[]        @relation("ReceivedMessages")
+  favoriteUsers FavoriteOnUser[] @relation("FavoriteUsers")
+  blockedUsers  BlockOnUser[]    @relation("BlockedUsers")
+  favoriteBy    FavoriteOnUser[] @relation("FavoriteByUser")
+  blockedBy     BlockOnUser[]    @relation("BlockedByUser")
+  joinedRooms   Belongs[]
+  messages      Message[]
+}
+
+model Message {
+  id        String   @id @default(uuid(7))
+  isPhoto   Boolean  @default(false)
+  content   String
+  createdAt DateTime @default(now())
+  isEdited  Boolean  @default(false)
+  senderId  String
+  sender    User     @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  roomId    String
+  room      Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+}
+
+model Room {
+  id      String    @id @default(uuid(7))
+  name    String?   // should default to list of member names if not set
+  imageUrl String?
+  members Belongs[]
+  messages Message[]
+}
+
+model Belongs {
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roomId String
+  room   Room   @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roomId])
 }
 
 model Division {
@@ -109,18 +138,6 @@ model LearningLanguageOnUser {
   language   Language @relation(fields: [languageId], references: [id], onDelete: Cascade)
 
   @@id([userId, languageId])
-}
-
-model Message {
-  id         String   @id @default(uuid(7))
-  isPhoto    Boolean  @default(false)
-  content    String
-  createdAt  DateTime @default(now())
-  isEdited   Boolean  @default(false)
-  senderId   String
-  sender     User     @relation("SentMessages", fields: [senderId], references: [id])
-  receiverId String
-  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
 }
 
 enum Gender {

@@ -24,6 +24,7 @@ export function AuthBoundary({ children }: { children: React.ReactNode }) {
 
       setUser(JSON.parse(user));
       setIdToken(idToken);
+      document.cookie = `ut-bridge-Authorization=${idToken}`;
       console.log("successfully set local firebase user to", idToken);
     } catch (err) {
       setIdToken(null);
