@@ -26,6 +26,7 @@ export const IntroductionSchema = z
   .max(225, { message: "コメントは225文字以下です" });
 
 export const UserSchema = z.object({
+  //データをとってくる際に利用
   id: z.string().uuid(),
   guid: z.string(),
   imageUrl: z.string().nullable(),
@@ -43,6 +44,7 @@ export const UserSchema = z.object({
   learningLanguage: z.array(z.string()),
 });
 export const CreateUserSchema = z.object({
+  //データをpost,putする際に利用
   id: z.string().uuid(),
   guid: z.string(),
   imageUrl: z.string().nullable(),
@@ -53,6 +55,7 @@ export const CreateUserSchema = z.object({
   grade: GradeEnum,
   hobby: HobbySchema,
   introduction: IntroductionSchema,
+  universityId: z.string().nullable(),
   divisionId: z.string(), //学部
   campusId: z.string(),
   motherLanguageId: z.string(),
@@ -88,3 +91,4 @@ export const CardUserSchema = z.object({
 export type User = z.infer<typeof UserSchema>;
 export type SeedUser = z.infer<typeof SeedUserSchema>;
 export type CardUser = z.infer<typeof CardUserSchema>;
+export type CreateUser = z.infer<typeof CreateUserSchema>;

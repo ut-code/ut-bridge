@@ -2,7 +2,7 @@
 
 import { client } from "@/client";
 import { FB_SESSION_STORAGE_USER_KEY } from "@/features/auth/state";
-import type { User } from "common/zod/schema";
+import type { CreateUser } from "common/zod/schema";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -93,7 +93,10 @@ export default function Registration() {
     fetchDataAfterSelectUniversity();
   }, [universityId, router]);
 
-  const [formData, setFormData] = useState<User>({
+  const [formData, setFormData] = useState<CreateUser>({
+    id: "",
+    imageUrl: null,
+    guid: "",
     name: "",
     gender: "male",
     isForeignStudent: false,
@@ -159,11 +162,10 @@ export default function Registration() {
     const user = data ? JSON.parse(data) : null;
     try {
       const body = {
+        ...formData,
         id: self.crypto.randomUUID(),
         guid: user.uid,
-        ...formData,
       };
-
       const res = await client.users.$post({ json: body });
       if (!res.ok) {
         console.error(await res.text());
@@ -214,7 +216,7 @@ export default function Registration() {
           大学:
           <select
             name="universityId"
-            value={formData.universityId}
+            value={formData.universityId ?? ""}
             onChange={handleChange}
             className="border p-2 w-full"
           >
