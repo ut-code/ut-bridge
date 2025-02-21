@@ -46,16 +46,10 @@ const router = new Hono().get(
       },
     });
 
-    const genderMap: Record<string, string> = {
-      male: "男",
-      female: "女",
-      other: "その他",
-    };
-
     const formattedUsers = users.map((user) => ({
       id: user.id,
       name: user.name,
-      gender: user.gender ? genderMap[user.gender] : null,
+      gender: user.gender,
       imageUrl: user.imageUrl,
       campus: user.campus?.name || null,
       motherTongues: user.motherTongues.map((mt) => mt.language.name),
