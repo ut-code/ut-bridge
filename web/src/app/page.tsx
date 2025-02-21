@@ -1,21 +1,17 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Home() {
-  const router = useRouter();
   return (
     <>
-      Hello Next
-      <button
-        type="button"
-        onClick={() => {
-          router.push("/login");
-        }}
-        className="btn btn-primary"
+      Hello ut-bridge！
+      <Link
+        href={"/login"}
+        className="text-primary text-2xl cursor-pointer px-4"
       >
         ログイン画面へ
-      </button>
+      </Link>
     </>
   );
 }
