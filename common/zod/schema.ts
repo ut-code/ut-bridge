@@ -1,9 +1,8 @@
 import { z } from "zod";
 
-const GenderEnum = z.enum(["male", "female", "other"]);
-
-const DisplayLanguage = z.enum(["japanese", "english"]);
-
+// Enums
+export const GenderEnum = z.enum(["male", "female", "other"]);
+export const DisplayLanguageEnum = z.enum(["japanese", "english"]);
 export const GradeEnum = z.enum([
   "B1",
   "B2",
@@ -16,49 +15,40 @@ export const GradeEnum = z.enum([
   "D3",
 ]);
 
+// Common Schemas
 export const HobbySchema = z
   .string()
-  // .min(1, { message: "趣味は1文字以上です" })
-  .max(25, { message: "趣味は25文字以下です" })
-  .nullable();
+  .max(25, { message: "趣味は25文字以下です" });
 export const IntroductionSchema = z
   .string()
-  // .min(2, { message: "コメントは2文字以上です" })
-  .max(225, { message: "コメントは225文字以下です" })
-  .nullable();
+  .max(225, { message: "コメントは225文字以下です" });
 
-export const UserSchema = z.object({
-  //データをとってくる際に利用
+// User Base Schema
+const BaseUserSchema = z.object({
   id: z.string().uuid(),
-  imageUrl: z.string().nullable(),
   name: z.string(),
   gender: GenderEnum,
   isForeignStudent: z.boolean(),
-  displayLanguage: DisplayLanguage,
+  displayLanguage: DisplayLanguageEnum,
   grade: GradeEnum,
   hobby: HobbySchema,
   introduction: IntroductionSchema,
-  division: z.string().nullable(), //学部
-  campus: z.string().nullable(),
-  motherLanguage: z.string().nullable().nullable(),
+});
+
+// Extended User Schemas
+export const UserSchema = BaseUserSchema.extend({
+  imageUrl: z.string().nullable(),
+  division: z.string(),
+  campus: z.string(),
+  motherLanguage: z.string(),
   fluentLanguages: z.array(z.string()),
   learningLanguages: z.array(z.string()),
 });
 
-export const CreateUserSchema = z.object({
-  //データをpost,putする際に利用
-  id: z.string().uuid(),
+export const CreateUserSchema = BaseUserSchema.extend({
   guid: z.string(),
   imageUrl: z.string().nullable(),
-  name: z.string(),
-  gender: GenderEnum,
-  isForeignStudent: z.boolean(),
-  displayLanguage: DisplayLanguage,
-  grade: GradeEnum,
-  hobby: HobbySchema,
-  introduction: IntroductionSchema,
-  universityId: z.string().nullable(),
-  divisionId: z.string(), //学部
+  divisionId: z.string(),
   campusId: z.string(),
   motherLanguageId: z.string(),
   fluentLanguageIds: z.array(z.string()),
@@ -68,29 +58,71 @@ export const CreateUserSchema = z.object({
 export const SeedUserSchema = z.object({
   id: z.string().uuid(),
   guid: z.string(),
-  name: z.string(),
-  gender: GenderEnum,
-  isForeignStudent: z.boolean(),
-  displayLanguage: DisplayLanguage,
-  grade: GradeEnum,
-  hobby: HobbySchema,
-  introduction: IntroductionSchema,
-  imageUrl: z.string().optional(),
-});
-export const CardUserSchema = z.object({
-  id: z.string().uuid(),
   imageUrl: z.string().nullable(),
   name: z.string(),
   gender: GenderEnum,
   isForeignStudent: z.boolean(),
+  displayLanguage: DisplayLanguageEnum,
   grade: GradeEnum,
+  hobby: HobbySchema,
+  introduction: IntroductionSchema,
+  divisionId: z.string().nullable(),
+  campusId: z.string().nullable(),
+  motherLanguageId: z.string().nullable(),
+  fluentLanguageIds: z.array(z.string()).nullable(),
+  learningLanguageIds: z.array(z.string()).nullable(),
+});
+
+export const CardUserSchema = BaseUserSchema.extend({
+  imageUrl: z.string().nullable(),
   campus: z.string().nullable(),
   motherLanguage: z.string().nullable(),
   fluentLanguages: z.array(z.string()),
   learningLanguages: z.array(z.string()),
 });
 
+// Additional Schemas
+const LanguageSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+});
+
+const DivisionSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  universityId: z.string(),
+});
+
+const CampusSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  universityId: z.string(),
+});
+
+const FluentLanguageSchema = z.object({
+  language: LanguageSchema,
+});
+
+const LearningLanguageSchema = z.object({
+  language: LanguageSchema,
+});
+
+export const FullUserSchema = BaseUserSchema.extend({
+  guid: z.string(),
+  imageUrl: z.string().nullable(),
+  divisionId: z.string().nullable(),
+  division: DivisionSchema,
+  campusId: z.string().nullable(),
+  campus: CampusSchema,
+  motherLanguageId: z.string().nullable(),
+  motherLanguage: LanguageSchema,
+  fluentLanguages: z.array(FluentLanguageSchema),
+  learningLanguages: z.array(LearningLanguageSchema),
+});
+
+// Types
 export type User = z.infer<typeof UserSchema>;
+export type CreateUser = z.infer<typeof CreateUserSchema>;
 export type SeedUser = z.infer<typeof SeedUserSchema>;
 export type CardUser = z.infer<typeof CardUserSchema>;
-export type CreateUser = z.infer<typeof CreateUserSchema>;
+export type FullUser = z.infer<typeof FullUserSchema>;

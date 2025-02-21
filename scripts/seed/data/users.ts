@@ -10,6 +10,12 @@ export const users: SeedUser[] = [
     grade: "B3",
     hobby: "Soccer",
     introduction: "Nice to meet you!",
+    imageUrl: null,
+    divisionId: null,
+    campusId: null,
+    motherLanguageId: null,
+    fluentLanguageIds: null,
+    learningLanguageIds: null,
   },
   {
     id: self.crypto.randomUUID(),
@@ -21,6 +27,12 @@ export const users: SeedUser[] = [
     grade: "M2",
     hobby: "Soccer",
     introduction: "Hello!",
+    imageUrl: null,
+    divisionId: null,
+    campusId: null,
+    motherLanguageId: null,
+    fluentLanguageIds: null,
+    learningLanguageIds: null,
   },
   {
     id: self.crypto.randomUUID(),
@@ -34,5 +46,11 @@ export const users: SeedUser[] = [
       "アニメでござる。やはりラブライブは最高のエンターテイメントでござるよ。",
     introduction:
       "よろしくでござるよ。それがしは皆様とたくさん交流したいと思っておりまする。ウヒョヒョヒョ",
+    imageUrl: null,
+    divisionId: null,
+    campusId: null,
+    motherLanguageId: null,
+    fluentLanguageIds: null,
+    learningLanguageIds: null,
   },
 ];

@@ -18,13 +18,13 @@ model User {
   grade            Grade
   hobby            String
   introduction     String
-  divisionId       String?
-  division         Division?       @relation(fields: [divisionId], references: [id])
-  campusId         String?
-  campus           Campus?         @relation(fields: [campusId], references: [id])
+  divisionId       String
+  division         Division       @relation(fields: [divisionId], references: [id])
+  campusId         String
+  campus           Campus         @relation(fields: [campusId], references: [id])
 
-  motherLanguageId  String?
-  motherLanguage    Language?                @relation(fields: [motherLanguageId], references: [id])
+  motherLanguageId  String
+  motherLanguage    Language               @relation(fields: [motherLanguageId], references: [id])
   fluentLanguages   FluentLanguageOnUser[]
   learningLanguages LearningLanguageOnUser[]
 
