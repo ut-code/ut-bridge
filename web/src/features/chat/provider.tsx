@@ -19,8 +19,8 @@ DATA FLOW:
 */
 import { useEffect } from "react";
 import type { BroadcastEvent } from "server/routes/chat";
-import { fbIdTokenAtom } from "../auth/state";
-import { handlers } from "./state";
+import { fbIdTokenAtom } from "../auth/state.ts";
+import { handlers } from "./state.ts";
 
 export function ChatProvider({ children }: { children: React.ReactNode }) {
   const [idToken, _] = useAtom(fbIdTokenAtom);

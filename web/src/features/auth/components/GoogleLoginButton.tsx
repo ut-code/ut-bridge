@@ -1,5 +1,5 @@
 "use client";
-import { login } from "../functions/login";
+import { login } from "../functions/login.ts";
 
 export default function GoogleLoginButton() {
   return (

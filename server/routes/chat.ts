@@ -4,7 +4,7 @@ import { stringify } from "devalue";
 import { Hono } from "hono";
 import { streamSSE } from "hono/streaming";
 import z from "zod";
-import { prisma } from "../config/prisma";
+import { prisma } from "../config/prisma.ts";
 
 // TODO: use types from schema
 import type { Message as PrismaMessage } from "@prisma/client";
@@ -16,7 +16,7 @@ export type Message = PrismaMessage & {
 };
 
 import { HTTPException } from "hono/http-exception";
-import { getUserID } from "../auth/func";
+import { getUserID } from "../auth/func.ts";
 const router = new Hono()
   // # general paths
   // ## about room

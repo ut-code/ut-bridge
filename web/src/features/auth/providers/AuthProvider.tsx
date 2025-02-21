@@ -7,7 +7,7 @@ import {
   FB_SESSION_STORAGE_USER_KEY,
   fbIdTokenAtom,
   fbUserAtom,
-} from "../state";
+} from "../state.ts";
 
 export function AuthBoundary({ children }: { children: React.ReactNode }) {
   const [idToken, setIdToken] = useAtom(fbIdTokenAtom);

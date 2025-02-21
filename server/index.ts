@@ -4,6 +4,7 @@ import { HTTPException } from "hono/http-exception";
 import { prisma } from "./config/prisma.ts";
 import cors from "./middlewares/cors.ts";
 import campusRouter from "./routes/campus.ts";
+import chatRouter from "./routes/chat.ts";
 import communityRouter from "./routes/community.ts";
 import divisionRouter from "./routes/division.ts";
 import languageRouter from "./routes/language.ts";

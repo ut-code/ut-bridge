@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { client } from "../../../client";
+import { client } from "../../../client.ts";
 
 export default function Page() {
   const router = useRouter();

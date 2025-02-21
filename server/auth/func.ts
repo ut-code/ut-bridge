@@ -1,9 +1,9 @@
 import type { Context } from "hono";
 import { getCookie, getSignedCookie, setSignedCookie } from "hono/cookie";
 import { HTTPException } from "hono/http-exception";
-import { prisma } from "../config/prisma";
-import { panic } from "../lib/env";
-import { auth } from "./config";
+import { prisma } from "../config/prisma.ts";
+import { panic } from "../lib/env.ts";
+import { auth } from "./config.ts";
 
 const __COOKIE_SIGN_SECRET =
   process.env.COOKIE_SIGN_SECRET ?? panic("env COOKIE_SIGN_SECRET not found");

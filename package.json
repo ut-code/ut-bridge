@@ -5,7 +5,8 @@
     "lefthook": "^1.10.10"
   },
   "scripts": {
-    "prepare": "lefthook install",
+    "postinstall": "echo '[bun] installation complete. running preparation scripts...'",
+    "prepare": "(cd server && bun prepare) && lefthook install",
     "dev": "bun --env-file=./.env :dev",
     ":dev": "trap 'kill 0' EXIT; (cd web && bun dev) & (cd server && bun dev) & wait",
     "fix": "# only format \nbun biome check . --fix --unsafe",

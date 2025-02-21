@@ -4,7 +4,7 @@ import {
   fbIdTokenAtom,
   fbUserAtom,
   store,
-} from "../state";
+} from "../state.ts";
 
 export function logout() {
   sessionStorage.removeItem(FB_SESSION_STORAGE_IDTOKEN_KEY);

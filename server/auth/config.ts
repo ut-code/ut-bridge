@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
-import { panic } from "../lib/env";
+import { panic } from "../lib/env.ts";
 
 const app = initializeApp({
   projectId:
