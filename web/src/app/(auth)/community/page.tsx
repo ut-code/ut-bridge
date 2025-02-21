@@ -13,6 +13,10 @@ export default function Page() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isExchangeEnabled, setIsExchangeEnabled] = useState(true);
   const [isMyForeignStudent, setIsMyForeignStudent] = useState<boolean>(true);
+  const [page, setPage] = useState(1); // 現在のページ
+  const [totalUsers, setTotalUsers] = useState(0); // 総ユーザー数
+  const usersPerPage = 9; // 1ページあたりのユーザー数
+  const totalPages = Math.ceil(totalUsers / usersPerPage); // 総ページ数
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -22,7 +26,7 @@ export default function Page() {
           throw new Error("User ID is not found! Please login again!");
         }
         const res = await client.community.$get({
-          query: { id: myId },
+          query: { id: myId, page: page.toString() }, // ページ番号をリクエスト
         });
         const data = await res.json();
         const formattedUsers = formatCardUsers(data.users);
@@ -30,6 +34,7 @@ export default function Page() {
           (user) => user.id !== myId,
         );
         setUsers(filteredCardUsers);
+        setTotalUsers(data.totalUsers); // 総ユーザー数を更新
 
         const myUser = formattedUsers.find((user) => user.id === myId);
         if (myUser) {
@@ -42,7 +47,7 @@ export default function Page() {
     };
 
     fetchUsers();
-  }, [router]);
+  }, [router, page]); // ページが変わったら再取得
 
   // 検索クエリと toggle の状態に基づいてユーザーをフィルタリング
   const filteredUsers = users.filter((user) => {
@@ -55,7 +60,6 @@ export default function Page() {
       user.fluentLanguages.some((lang) => lang.toLowerCase().includes(query)) ||
       user.learningLanguages.some((lang) => lang.toLowerCase().includes(query));
 
-    // 言語交換 (toggle) がオンのとき、isForeignStudent の違う人のみ表示
     const matchesExchange =
       !isExchangeEnabled ||
       (isMyForeignStudent !== null &&
@@ -135,6 +139,35 @@ export default function Page() {
           </li>
         ))}
       </ul>
+
+      {/* ページ情報の表示 */}
+      {totalUsers > 0 && (
+        <div className="text-center my-4">
+          <span className="text-gray-700">
+            Page {page} of {totalPages}
+          </span>
+        </div>
+      )}
+
+      {/* ページネーションボタン */}
+      {page > 1 && (
+        <button
+          type="button"
+          onClick={() => setPage(page - 1)}
+          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+        >
+          Previous
+        </button>
+      )}
+      {page < totalPages && (
+        <button
+          type="button"
+          onClick={() => setPage(page + 1)}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          Next
+        </button>
+      )}
     </>
   );
 }
