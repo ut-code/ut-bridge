@@ -70,8 +70,8 @@ const router = new Hono()
         grade: body.grade,
         divisionId: body.divisionId,
         campusId: body.campusId,
-        hobby: body.hobby ?? "",
-        introduction: body.introduction ?? "",
+        hobby: body.hobby,
+        introduction: body.introduction,
         motherLanguageId: body.motherLanguageId,
         fluentLanguages: {
           create: body.fluentLanguageIds.map((langId) => ({
@@ -107,8 +107,8 @@ const router = new Hono()
         grade: body.grade,
         divisionId: body.divisionId,
         campusId: body.campusId,
-        hobby: body.hobby ?? "",
-        introduction: body.introduction ?? "",
+        hobby: body.hobby,
+        introduction: body.introduction,
         motherLanguageId: body.motherLanguageId,
         fluentLanguages: {
           create: body.fluentLanguageIds.map((langId) => ({
