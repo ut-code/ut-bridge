@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { use, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { client } from "../../../client";
 
 interface User {
@@ -18,17 +18,18 @@ interface User {
   introduction: string | null;
 }
 
-export default function Page(props: { params: Promise<{ id: string }> }) {
-  const params = use(props.params);
+export default function Page() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
 
   useEffect(() => {
     async function fetchUser() {
       try {
         const res = await client.users.$get({
-          query: { id: params.id },
+          query: { id: id ?? undefined },
         });
         const data = await res.json();
         if (data.length !== 1) {
@@ -44,7 +45,7 @@ export default function Page(props: { params: Promise<{ id: string }> }) {
     }
 
     fetchUser();
-  }, [params.id, router]);
+  }, [router, id]);
 
   if (loading) return <div>Loading...</div>;
   if (!user) return <div>User not found</div>;

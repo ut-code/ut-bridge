@@ -83,6 +83,7 @@ export default function Registration() {
   }, [universityId]);
 
   const [formData, setFormData] = useState<{
+    // TODO://ZodのSchemaと共有する
     name: string;
     gender: "male" | "female" | "other";
     isForeignStudent: boolean;
