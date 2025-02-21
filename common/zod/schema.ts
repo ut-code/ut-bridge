@@ -28,7 +28,6 @@ export const IntroductionSchema = z
 export const UserSchema = z.object({
   //データをとってくる際に利用
   id: z.string().uuid(),
-  guid: z.string(),
   imageUrl: z.string().nullable(),
   name: z.string(),
   gender: GenderEnum,
@@ -37,12 +36,13 @@ export const UserSchema = z.object({
   grade: GradeEnum,
   hobby: HobbySchema,
   introduction: IntroductionSchema,
-  division: z.string(), //学部
+  division: z.string().nullable(), //学部
   campus: z.string(),
-  motherLanguage: z.string(),
-  fluentLanguage: z.array(z.string()),
-  learningLanguage: z.array(z.string()),
+  motherLanguage: z.string().nullable(),
+  fluentLanguages: z.array(z.string()),
+  learningLanguages: z.array(z.string()),
 });
+
 export const CreateUserSchema = z.object({
   //データをpost,putする際に利用
   id: z.string().uuid(),

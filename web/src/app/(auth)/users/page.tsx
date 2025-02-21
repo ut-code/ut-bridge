@@ -61,7 +61,7 @@ export default function Page() {
       <p>Gender: {user.gender || "N/A"}</p>
       <p>Is Foreign Student: {user.isForeignStudent ? "Yes" : "No"}</p>
       <p>Display Language: {user.displayLanguage}</p>
-      <p>Campus ID: {user.campusId || "N/A"}</p>
+      <p>Campus Name: {user.campus || "N/A"}</p>
       <p>Grade: {user.grade ?? "N/A"}</p>
       <p>Hobby: {user.hobby || "N/A"}</p>
       <p>Introduction: {user.introduction || "N/A"}</p>
