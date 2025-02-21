@@ -1,16 +1,5 @@
-type User = {
-  //TODO: ZodのSchemaと共有する
-  id: string;
-  guid: string;
-  name: string;
-  gender: "male" | "female" | "other";
-  isForeignStudent: boolean;
-  displayLanguage: "japanese" | "english";
-  grade: "B1" | "B2" | "B3" | "B4" | "M1" | "M2" | "D1" | "D2" | "D3";
-  hobby: string;
-  introduction: string;
-};
-export const users: User[] = [
+import type { SeedUser } from "common/zod/schema.ts";
+export const users: SeedUser[] = [
   {
     id: self.crypto.randomUUID(),
     guid: self.crypto.randomUUID(),
@@ -21,6 +10,12 @@ export const users: User[] = [
     grade: "B3",
     hobby: "Soccer",
     introduction: "Nice to meet you!",
+    imageUrl: null,
+    divisionId: null,
+    campusId: null,
+    motherLanguageId: null,
+    fluentLanguageIds: null,
+    learningLanguageIds: null,
   },
   {
     id: self.crypto.randomUUID(),
@@ -32,6 +27,12 @@ export const users: User[] = [
     grade: "M2",
     hobby: "Soccer",
     introduction: "Hello!",
+    imageUrl: null,
+    divisionId: null,
+    campusId: null,
+    motherLanguageId: null,
+    fluentLanguageIds: null,
+    learningLanguageIds: null,
   },
   {
     id: self.crypto.randomUUID(),
@@ -45,5 +46,11 @@ export const users: User[] = [
       "アニメでござる。やはりラブライブは最高のエンターテイメントでござるよ。",
     introduction:
       "よろしくでござるよ。それがしは皆様とたくさん交流したいと思っておりまする。ウヒョヒョヒョ",
+    imageUrl: null,
+    divisionId: null,
+    campusId: null,
+    motherLanguageId: null,
+    fluentLanguageIds: null,
+    learningLanguageIds: null,
   },
 ];

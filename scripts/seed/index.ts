@@ -37,9 +37,37 @@ for (const univ of universities) {
     });
   }
 }
+const seedDivisions = await prisma.division.findMany();
+const seedCampuses = await prisma.campus.findMany();
+const seedLanguages = await prisma.language.findMany();
 
 for (const user of users) {
-  await prisma.user.create({
-    data: user,
+  const newUser = await prisma.user.create({
+    data: {
+      id: user.id,
+      name: user.name,
+      gender: user.gender,
+      isForeignStudent: user.isForeignStudent,
+      displayLanguage: user.displayLanguage,
+      grade: user.grade,
+      hobby: user.hobby,
+      introduction: user.introduction,
+      guid: user.guid,
+      imageUrl: user.imageUrl,
+      divisionId: seedDivisions[0].id,
+      campusId: seedCampuses[0].id,
+      motherLanguageId: seedLanguages[0].id,
+      fluentLanguages: {
+        create: seedLanguages.map((lang) => ({
+          language: { connect: { id: lang.id } },
+        })),
+      },
+      learningLanguages: {
+        create: seedLanguages.map((lang) => ({
+          language: { connect: { id: lang.id } },
+        })),
+      },
+    },
   });
+  console.log(newUser);
 }

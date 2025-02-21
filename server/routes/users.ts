@@ -1,8 +1,8 @@
 import { zValidator } from "@hono/zod-validator";
+import { CreateUserSchema } from "common/zod/schema.ts";
 import { Hono } from "hono";
 import { z } from "zod";
-import { prisma } from "../config/prisma";
-import { UserSchema } from "../zod/schema";
+import { prisma } from "../config/prisma.ts";
 
 const router = new Hono()
 
@@ -10,13 +10,22 @@ const router = new Hono()
     "/", // userId以外にも、nameなどでそのユーザーのデータを持ってきたい場合は、ここを編集する
     zValidator("query", z.object({ id: z.string().optional() })),
     async (c) => {
-      const userId = c.req.valid("query").id;
-      const user = await prisma.user.findMany({
-        where: {
-          id: userId,
+      const { id: userId } = c.req.valid("query");
+      const users = await prisma.user.findMany({
+        where: { id: userId },
+        include: {
+          division: true,
+          campus: true,
+          motherLanguage: true,
+          fluentLanguages: {
+            select: { language: true },
+          },
+          learningLanguages: {
+            select: { language: true },
+          },
         },
       });
-      return c.json(user);
+      return c.json(users);
     },
   )
 
@@ -49,7 +58,7 @@ const router = new Hono()
     },
   )
 
-  .post("/", zValidator("json", UserSchema), async (c) => {
+  .post("/", zValidator("json", CreateUserSchema), async (c) => {
     const body = c.req.valid("json");
     const newUser = await prisma.user.create({
       data: {
@@ -65,12 +74,7 @@ const router = new Hono()
         campusId: body.campusId,
         hobby: body.hobby,
         introduction: body.introduction,
-
-        motherTongues: {
-          create: {
-            languageId: body.motherLanguageId,
-          },
-        },
+        motherLanguageId: body.motherLanguageId,
         fluentLanguages: {
           create: body.fluentLanguageIds.map((langId) => ({
             languageId: langId,
@@ -86,15 +90,53 @@ const router = new Hono()
     return c.json(newUser);
   })
 
-  .put("/:id", zValidator("param", z.object({ id: z.string() })), async (c) => {
-    const userId = c.req.valid("param").id;
-    const updateContent = await c.req.json();
+  //TODO://型に合わせてupdateの方法も変化させる
+  .put("/", zValidator("json", CreateUserSchema), async (c) => {
+    const userId = c.req.valid("json").id;
+    const body = c.req.valid("json");
+    console.log("🤩🤩🤩🤩🤩", userId);
+    console.log("⭐️⭐️⭐️⭐️⭐️", body);
+
     const updatedUser = await prisma.user.update({
       where: {
         id: userId,
       },
-      data: updateContent,
+      data: {
+        guid: body.guid,
+        imageUrl: body.imageUrl,
+        name: body.name,
+        gender: body.gender,
+        isForeignStudent: body.isForeignStudent,
+        displayLanguage: body.displayLanguage,
+        grade: body.grade,
+        divisionId: body.divisionId,
+        campusId: body.campusId,
+        hobby: body.hobby,
+        introduction: body.introduction,
+        motherLanguageId: body.motherLanguageId,
+
+        // 既存データを削除して新規追加 (fluentLanguages)
+        fluentLanguages: {
+          deleteMany: { userId }, // 既存データ削除
+          createMany: {
+            data: body.fluentLanguageIds.map((langId) => ({
+              languageId: langId,
+            })),
+          },
+        },
+
+        // 既存データを削除して新規追加 (learningLanguages)
+        learningLanguages: {
+          deleteMany: { userId }, // 既存データ削除
+          createMany: {
+            data: body.learningLanguageIds.map((langId) => ({
+              languageId: langId,
+            })),
+          },
+        },
+      },
     });
+
     return c.json(updatedUser);
   })
 

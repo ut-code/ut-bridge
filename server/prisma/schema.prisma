@@ -18,12 +18,13 @@ model User {
   grade            Grade
   hobby            String
   introduction     String
-  divisionId       String?
-  division         Division?       @relation(fields: [divisionId], references: [id])
-  campusId         String?
-  campus           Campus?         @relation(fields: [campusId], references: [id])
+  divisionId       String
+  division         Division       @relation(fields: [divisionId], references: [id])
+  campusId         String
+  campus           Campus         @relation(fields: [campusId], references: [id])
 
-  motherTongues     MotherTongueOnUser[]
+  motherLanguageId  String
+  motherLanguage    Language               @relation(fields: [motherLanguageId], references: [id])
   fluentLanguages   FluentLanguageOnUser[]
   learningLanguages LearningLanguageOnUser[]
 
@@ -77,20 +78,11 @@ model BlockOnUser {
 }
 
 model Language {
-  id                String                   @id @default(uuid())
-  name              String                   @unique()
-  motherTongueUsers MotherTongueOnUser[]
-  fluentUsers       FluentLanguageOnUser[]
-  learningUsers     LearningLanguageOnUser[]
-}
-
-model MotherTongueOnUser {
-  userId     String
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  languageId String
-  language   Language @relation(fields: [languageId], references: [id], onDelete: Cascade)
-
-  @@id([userId, languageId])
+  id            String                   @id @default(uuid())
+  name          String                   @unique()
+  fluentUsers   FluentLanguageOnUser[]
+  learningUsers LearningLanguageOnUser[]
+  User          User[]
 }
 
 model FluentLanguageOnUser {

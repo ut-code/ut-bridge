@@ -1,11 +1,11 @@
 import { Hono } from "hono";
-import cors from "./middlewares/cors";
-import campusRouter from "./routes/campus";
-import communityRouter from "./routes/community";
-import divisionRouter from "./routes/division";
-import languageRouter from "./routes/language";
-import universityRouter from "./routes/university";
-import usersRoutes from "./routes/users";
+import cors from "./middlewares/cors.ts";
+import campusRouter from "./routes/campus.ts";
+import communityRouter from "./routes/community.ts";
+import divisionRouter from "./routes/division.ts";
+import languageRouter from "./routes/language.ts";
+import universityRouter from "./routes/university.ts";
+import usersRoutes from "./routes/users.ts";
 
 const app = new Hono()
   .use(cors("CORS_ALLOW_ORIGINS"))
