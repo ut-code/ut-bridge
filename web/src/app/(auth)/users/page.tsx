@@ -28,17 +28,20 @@ export default function Page() {
   useEffect(() => {
     async function fetchUser() {
       try {
+        if (!id) {
+          throw new Error("User Id Not Found!");
+        }
         const res = await client.users.$get({
-          query: { id: id ?? undefined },
+          query: { id: id },
         });
         const data = await res.json();
         if (data.length !== 1) {
-          console.error("User Not Found!");
-          router.push("/community");
+          throw new Error("User Not Found!");
         }
         setUser(data[0]);
       } catch (error) {
         console.error("Failed to fetch user:", error);
+        router.push("/community");
       } finally {
         setLoading(false);
       }

@@ -21,66 +21,76 @@ export default function Registration() {
 
   useEffect(() => {
     const fetchFirstData = async () => {
-      const [universityRes, languageRes] = await Promise.all([
-        client.university.$get(),
-        client.language.$get(),
-      ]);
-      if (!universityRes.ok || !languageRes.ok) {
-        console.error("データ取得に失敗しました", {
-          university: universityRes.status,
-          language: languageRes.status,
-        });
-        throw new Error(
-          `データ取得に失敗しました:${{
-            university: await universityRes.text(),
-            language: await languageRes.text(),
-          }}`,
-        );
+      try {
+        const [universityRes, languageRes] = await Promise.all([
+          client.university.$get(),
+          client.language.$get(),
+        ]);
+        if (!universityRes.ok || !languageRes.ok) {
+          console.error("データ取得に失敗しました", {
+            university: universityRes.status,
+            language: languageRes.status,
+          });
+          throw new Error(
+            `データ取得に失敗しました:${{
+              university: await universityRes.text(),
+              language: await languageRes.text(),
+            }}`,
+          );
+        }
+        const [universities, languages] = await Promise.all([
+          universityRes.json(),
+          languageRes.json(),
+        ]);
+        setUniversities(universities);
+        setLanguages(languages);
+      } catch (err) {
+        console.error("Failed to fetch university or language Data ", err);
+        router.push("/login");
       }
-      const [universities, languages] = await Promise.all([
-        universityRes.json(),
-        languageRes.json(),
-      ]);
-      setUniversities(universities);
-      setLanguages(languages);
     };
     fetchFirstData();
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     if (!universityId) return;
 
     const fetchDataAfterSelectUniversity = async () => {
-      const [campusRes, divisionRes] = await Promise.all([
-        client.campus.$get({ query: { id: universityId } }),
-        client.division.$get({ query: { id: universityId } }),
-      ]);
+      try {
+        const [campusRes, divisionRes] = await Promise.all([
+          client.campus.$get({ query: { id: universityId } }),
+          client.division.$get({ query: { id: universityId } }),
+        ]);
 
-      // どちらかが失敗した場合エラーハンドリング
-      if (!campusRes.ok || !divisionRes.ok) {
-        console.error("データ取得に失敗しました", {
-          campus: campusRes.status,
-          division: divisionRes.status,
-        });
-        throw new Error(
-          `データ取得に失敗しました:${{
-            campus: await campusRes.text(),
-            division: await divisionRes.text(),
-          }}`,
-        );
+        // どちらかが失敗した場合エラーハンドリング
+        if (!campusRes.ok || !divisionRes.ok) {
+          console.error("データ取得に失敗しました", {
+            campus: campusRes.status,
+            division: divisionRes.status,
+          });
+          throw new Error(
+            `データ取得に失敗しました:${{
+              campus: await campusRes.text(),
+              division: await divisionRes.text(),
+            }}`,
+          );
+        }
+
+        const [campuses, divisions] = await Promise.all([
+          campusRes.json(),
+          divisionRes.json(),
+        ]);
+
+        setCampuses(campuses);
+        setDivisions(divisions);
+      } catch (err) {
+        console.error("Failed to fetch campus or division Data ", err);
+        router.push("/login");
       }
-
-      const [campuses, divisions] = await Promise.all([
-        campusRes.json(),
-        divisionRes.json(),
-      ]);
-
-      setCampuses(campuses);
-      setDivisions(divisions);
     };
 
     fetchDataAfterSelectUniversity();
-  }, [universityId]);
+  }, [universityId, router]);
 
   const [formData, setFormData] = useState<{
     // TODO://ZodのSchemaと共有する

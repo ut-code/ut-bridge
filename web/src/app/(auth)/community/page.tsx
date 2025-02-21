@@ -1,10 +1,12 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { client } from "../../../client";
 
 export default function Page() {
+  const router = useRouter();
   const [users, setUsers] = useState<
     {
       id: string;
@@ -23,9 +25,7 @@ export default function Page() {
       try {
         const myId = localStorage.getItem("localStorageUserId");
         if (!myId) {
-          throw new Error(
-            "User ID is not available in session storage. Please login again!",
-          );
+          throw new Error("User ID is not found! Please login again!");
         }
         const res = await client.community.$get({
           query: { id: myId },
@@ -34,11 +34,12 @@ export default function Page() {
         setUsers(users);
       } catch (error) {
         console.error("Failed to fetch users:", error);
+        router.push("/login");
       }
     };
 
     fetchUsers();
-  }, []);
+  }, [router]);
 
   return (
     <>
