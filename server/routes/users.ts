@@ -1,5 +1,5 @@
 import { zValidator } from "@hono/zod-validator";
-import { CreateUserSchema, type User } from "common/zod/schema.ts";
+import { CreateUserSchema } from "common/zod/schema.ts";
 import { Hono } from "hono";
 import { z } from "zod";
 import { prisma } from "../config/prisma.ts";
@@ -8,9 +8,12 @@ const router = new Hono()
 
   .get(
     "/", // userId以外にも、nameなどでそのユーザーのデータを持ってきたい場合は、ここを編集する
-    zValidator("query", z.object({ id: z.string().optional() })),
+    zValidator(
+      "query",
+      z.object({ id: z.string().optional(), iNeedId: z.string().optional() }),
+    ),
     async (c) => {
-      const userId = c.req.valid("query").id;
+      const { id: userId } = c.req.valid("query");
       const users = await prisma.user.findMany({
         where: { id: userId },
         include: {
@@ -23,32 +26,32 @@ const router = new Hono()
           },
         },
       });
-      const formattedUsers: User[] = users.map((user) => ({
-        id: user.id,
-        imageUrl: user.imageUrl,
-        name: user.name,
-        gender: user.gender as "male" | "female" | "other", //TODO:prismaのenumと定義したenumが大文字とかで違うため、このようにした
-        isForeignStudent: user.isForeignStudent,
-        displayLanguage: user.displayLanguage as "japanese" | "english",
-        grade: user.grade as
-          | "B1"
-          | "B2"
-          | "B3"
-          | "B4"
-          | "M1"
-          | "M2"
-          | "D1"
-          | "D2"
-          | "D3",
-        hobby: user.hobby,
-        introduction: user.introduction,
-        division: user.division?.name || null,
-        campus: user.campus?.name || "",
-        motherLanguage: user.motherLanguage?.name || "",
-        fluentLanguages: user.fluentLanguages.map((fl) => fl.language.name),
-        learningLanguages: user.learningLanguages.map((ll) => ll.language.name),
-      }));
-      return c.json(formattedUsers);
+      // const formattedUsers: User[] = users.map((user) => ({
+      //   id: user.id,
+      //   imageUrl: user.imageUrl,
+      //   name: user.name,
+      //   gender: user.gender as "male" | "female" | "other", //TODO:prismaのenumと定義したenumが大文字とかで違うため、このようにした
+      //   isForeignStudent: user.isForeignStudent,
+      //   displayLanguage: user.displayLanguage as "japanese" | "english",
+      //   grade: user.grade as
+      //     | "B1"
+      //     | "B2"
+      //     | "B3"
+      //     | "B4"
+      //     | "M1"
+      //     | "M2"
+      //     | "D1"
+      //     | "D2"
+      //     | "D3",
+      //   hobby: user.hobby,
+      //   introduction: user.introduction,
+      //   division: user.division?.name || null,
+      //   campus: user.campus?.name || "",
+      //   motherLanguage: user.motherLanguage?.name || "",
+      //   fluentLanguages: user.fluentLanguages.map((fl) => fl.language.name),
+      //   learningLanguages: user.learningLanguages.map((ll) => ll.language.name),
+      // }));
+      return c.json(users);
     },
   )
 
@@ -95,8 +98,8 @@ const router = new Hono()
         grade: body.grade,
         divisionId: body.divisionId,
         campusId: body.campusId,
-        hobby: body.hobby,
-        introduction: body.introduction,
+        hobby: body.hobby ?? "",
+        introduction: body.introduction ?? "",
         motherLanguageId: body.motherLanguageId,
         fluentLanguages: {
           create: body.fluentLanguageIds.map((langId) => ({

@@ -19,11 +19,13 @@ export const GradeEnum = z.enum([
 export const HobbySchema = z
   .string()
   // .min(1, { message: "趣味は1文字以上です" })
-  .max(25, { message: "趣味は25文字以下です" });
+  .max(25, { message: "趣味は25文字以下です" })
+  .nullable();
 export const IntroductionSchema = z
   .string()
   // .min(2, { message: "コメントは2文字以上です" })
-  .max(225, { message: "コメントは225文字以下です" });
+  .max(225, { message: "コメントは225文字以下です" })
+  .nullable();
 
 export const UserSchema = z.object({
   //データをとってくる際に利用
@@ -37,8 +39,8 @@ export const UserSchema = z.object({
   hobby: HobbySchema,
   introduction: IntroductionSchema,
   division: z.string().nullable(), //学部
-  campus: z.string(),
-  motherLanguage: z.string().nullable(),
+  campus: z.string().nullable(),
+  motherLanguage: z.string().nullable().nullable(),
   fluentLanguages: z.array(z.string()),
   learningLanguages: z.array(z.string()),
 });

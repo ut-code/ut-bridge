@@ -6,9 +6,10 @@ import type { User } from "common/zod/schema";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { formatUsers } from "../../../features/format";
 
 export default function Page() {
-  const [user, setUser] = useState<User | null>(null); //TODO: zoと合わせるt
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -26,7 +27,8 @@ export default function Page() {
         if (data.length !== 1) {
           throw new Error("My Data Not Found!");
         }
-        setUser(data[0]);
+        const users = formatUsers(data);
+        setUser(users[0]);
       } catch (error) {
         console.error("Failed to fetch user:", error);
         router.push("./community");

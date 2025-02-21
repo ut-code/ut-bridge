@@ -1,4 +1,5 @@
 "use client";
+import { formatCardUsers } from "@/features/format";
 import type { CardUser } from "common/zod/schema";
 import Image from "next/image";
 import Link from "next/link";
@@ -21,7 +22,8 @@ export default function Page() {
           query: { id: myId },
         });
         const users = (await res.json()).users;
-        setUsers(users);
+        const data = formatCardUsers(users);
+        setUsers(data);
       } catch (error) {
         console.error("Failed to fetch users:", error);
         router.push("/login");

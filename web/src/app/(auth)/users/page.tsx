@@ -1,4 +1,5 @@
 "use client";
+import { formatUsers } from "@/features/format";
 import type { User } from "common/zod/schema";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -25,7 +26,8 @@ export default function Page() {
         if (data.length !== 1) {
           throw new Error("User Not Found!");
         }
-        setUser(data[0]);
+        const formattedUsers = formatUsers(data);
+        setUser(formattedUsers[0]);
       } catch (error) {
         console.error("Failed to fetch user:", error);
         router.push("/community");
