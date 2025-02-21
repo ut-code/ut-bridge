@@ -94,12 +94,14 @@ const router = new Hono()
   .put("/", zValidator("json", CreateUserSchema), async (c) => {
     const userId = c.req.valid("json").id;
     const body = c.req.valid("json");
+    console.log("🤩🤩🤩🤩🤩", userId);
+    console.log("⭐️⭐️⭐️⭐️⭐️", body);
+
     const updatedUser = await prisma.user.update({
       where: {
         id: userId,
       },
       data: {
-        id: body.id,
         guid: body.guid,
         imageUrl: body.imageUrl,
         name: body.name,
@@ -112,18 +114,29 @@ const router = new Hono()
         hobby: body.hobby,
         introduction: body.introduction,
         motherLanguageId: body.motherLanguageId,
+
+        // 既存データを削除して新規追加 (fluentLanguages)
         fluentLanguages: {
-          create: body.fluentLanguageIds.map((langId) => ({
-            languageId: langId,
-          })),
+          deleteMany: { userId }, // 既存データ削除
+          createMany: {
+            data: body.fluentLanguageIds.map((langId) => ({
+              languageId: langId,
+            })),
+          },
         },
+
+        // 既存データを削除して新規追加 (learningLanguages)
         learningLanguages: {
-          create: body.learningLanguageIds.map((langId) => ({
-            languageId: langId,
-          })),
+          deleteMany: { userId }, // 既存データ削除
+          createMany: {
+            data: body.learningLanguageIds.map((langId) => ({
+              languageId: langId,
+            })),
+          },
         },
       },
     });
+
     return c.json(updatedUser);
   })
 

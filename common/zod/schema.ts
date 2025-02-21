@@ -48,6 +48,7 @@ export const UserSchema = BaseUserSchema.extend({
 export const CreateUserSchema = BaseUserSchema.extend({
   guid: z.string(),
   imageUrl: z.string().nullable(),
+  universityId: z.string(),
   divisionId: z.string(),
   campusId: z.string(),
   motherLanguageId: z.string(),

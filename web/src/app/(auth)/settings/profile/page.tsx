@@ -28,6 +28,7 @@ export default function Page() {
     isForeignStudent: false,
     displayLanguage: "japanese",
     grade: "B1",
+    universityId: "",
     divisionId: "",
     campusId: "",
     hobby: "",
@@ -93,9 +94,11 @@ export default function Page() {
             (lang: { language: { id: string } }) => lang.language.id,
           ),
         };
+        console.log(formattedData, "あああ");
         setUniversities(universities);
         setLanguages(languages);
         setFormData(formattedData);
+        setUniversityId(formattedData.universityId);
       } catch (err) {
         console.error("Failed to fetch university or language Data ", err);
         router.push("/login");
@@ -248,6 +251,7 @@ export default function Page() {
           <select
             name="universityId"
             onChange={handleChange}
+            value={formData.universityId}
             className="border p-2 w-full"
           >
             <option value="">大学を選択してください</option>
