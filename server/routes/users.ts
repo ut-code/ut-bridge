@@ -8,10 +8,7 @@ const router = new Hono()
 
   .get(
     "/", // userId以外にも、nameなどでそのユーザーのデータを持ってきたい場合は、ここを編集する
-    zValidator(
-      "query",
-      z.object({ id: z.string().optional(), iNeedId: z.string().optional() }),
-    ),
+    zValidator("query", z.object({ id: z.string().optional() })),
     async (c) => {
       const { id: userId } = c.req.valid("query");
       const users = await prisma.user.findMany({
@@ -26,31 +23,6 @@ const router = new Hono()
           },
         },
       });
-      // const formattedUsers: User[] = users.map((user) => ({
-      //   id: user.id,
-      //   imageUrl: user.imageUrl,
-      //   name: user.name,
-      //   gender: user.gender as "male" | "female" | "other", //TODO:prismaのenumと定義したenumが大文字とかで違うため、このようにした
-      //   isForeignStudent: user.isForeignStudent,
-      //   displayLanguage: user.displayLanguage as "japanese" | "english",
-      //   grade: user.grade as
-      //     | "B1"
-      //     | "B2"
-      //     | "B3"
-      //     | "B4"
-      //     | "M1"
-      //     | "M2"
-      //     | "D1"
-      //     | "D2"
-      //     | "D3",
-      //   hobby: user.hobby,
-      //   introduction: user.introduction,
-      //   division: user.division?.name || null,
-      //   campus: user.campus?.name || "",
-      //   motherLanguage: user.motherLanguage?.name || "",
-      //   fluentLanguages: user.fluentLanguages.map((fl) => fl.language.name),
-      //   learningLanguages: user.learningLanguages.map((ll) => ll.language.name),
-      // }));
       return c.json(users);
     },
   )
@@ -117,14 +89,38 @@ const router = new Hono()
   })
 
   //TODO://型に合わせてupdateの方法も変化させる
-  .put("/:id", zValidator("param", z.object({ id: z.string() })), async (c) => {
-    const userId = c.req.valid("param").id;
-    const updateContent = await c.req.json();
+  .put("/", zValidator("json", CreateUserSchema), async (c) => {
+    const userId = c.req.valid("json").id;
+    const body = c.req.valid("json");
     const updatedUser = await prisma.user.update({
       where: {
         id: userId,
       },
-      data: updateContent,
+      data: {
+        id: body.id,
+        guid: body.guid,
+        imageUrl: body.imageUrl,
+        name: body.name,
+        gender: body.gender,
+        isForeignStudent: body.isForeignStudent,
+        displayLanguage: body.displayLanguage,
+        grade: body.grade,
+        divisionId: body.divisionId,
+        campusId: body.campusId,
+        hobby: body.hobby ?? "",
+        introduction: body.introduction ?? "",
+        motherLanguageId: body.motherLanguageId,
+        fluentLanguages: {
+          create: body.fluentLanguageIds.map((langId) => ({
+            languageId: langId,
+          })),
+        },
+        learningLanguages: {
+          create: body.learningLanguageIds.map((langId) => ({
+            languageId: langId,
+          })),
+        },
+      },
     });
     return c.json(updatedUser);
   })
