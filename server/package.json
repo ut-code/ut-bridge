@@ -1,7 +1,7 @@
 {
   "name": "server",
   "scripts": {
-    "dev": "bun run --env-file=../.env --hot index.ts",
+    "dev": "NODE_ENV=development bun run --env-file=../.env --hot index.ts",
     "build": "bun tsc",
     "prisma": "bun run --env-file=../.env bunx prisma",
     "prepare": "prisma generate"

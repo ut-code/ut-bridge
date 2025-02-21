@@ -1,4 +1,8 @@
+import { PrismaClient } from "@prisma/client";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { Hono } from "hono";
+import { HTTPException } from "hono/http-exception";
+import { prisma } from "./config/prisma";
 import cors from "./middlewares/cors";
 import campusRouter from "./routes/campus";
 import chatRouter from "./routes/chat";
@@ -8,10 +12,29 @@ import languageRouter from "./routes/language";
 import universityRouter from "./routes/university";
 import usersRouter from "./routes/users";
 
+if (process.env.NODE_ENV === "development") {
+  prisma.user
+    .findFirst({})
+    .then(() => {
+      console.log("server: database connection OK");
+    })
+    .catch(() => {
+      console.error("server: Could not connect to database");
+      process.exit(1);
+    });
+}
 const app = new Hono()
   .use(cors("CORS_ALLOW_ORIGINS"))
   .onError((err) => {
     console.log(err);
+    if (err instanceof PrismaClientKnownRequestError) {
+      if (err.code === "P2003") {
+        console.log(err);
+        throw new HTTPException(409, {
+          message: "database constraint violated",
+        });
+      }
+    }
     throw err;
   })
 

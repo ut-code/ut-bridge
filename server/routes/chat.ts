@@ -38,17 +38,12 @@ const router = new Hono()
         },
         select: { id: true },
       });
-      try {
-        await prisma.belongs.createMany({
-          data: members.map((member) => ({
-            roomId,
-            userId: member,
-          })),
-        });
-      } catch (err) {
-        console.log(err);
-        return c.json({ error: "not found" }, 404);
-      }
+      await prisma.belongs.createMany({
+        data: members.map((member) => ({
+          roomId,
+          userId: member,
+        })),
+      });
       return c.json({ id: roomId }, 201);
     },
   )
