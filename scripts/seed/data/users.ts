@@ -6,7 +6,7 @@ type User = {
   gender: "male" | "female" | "other";
   isForeignStudent: boolean;
   displayLanguage: "japanese" | "english";
-  grade: number;
+  grade: "B1" | "B2" | "B3" | "B4" | "M1" | "M2" | "D1" | "D2" | "D3";
   hobby: string;
   introduction: string;
 };
@@ -18,7 +18,7 @@ export const users: User[] = [
     gender: "male",
     isForeignStudent: false,
     displayLanguage: "japanese",
-    grade: 3,
+    grade: "B3",
     hobby: "Soccer",
     introduction: "Nice to meet you!",
   },
@@ -29,7 +29,7 @@ export const users: User[] = [
     gender: "male",
     isForeignStudent: true,
     displayLanguage: "english",
-    grade: 4,
+    grade: "M2",
     hobby: "Soccer",
     introduction: "Hello!",
   },
@@ -40,7 +40,7 @@ export const users: User[] = [
     gender: "male",
     isForeignStudent: false,
     displayLanguage: "japanese",
-    grade: 6,
+    grade: "D3",
     hobby:
       "アニメでござる。やはりラブライブは最高のエンターテイメントでござるよ。",
     introduction:

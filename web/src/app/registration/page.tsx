@@ -98,7 +98,7 @@ export default function Registration() {
     gender: "male" | "female" | "other";
     isForeignStudent: boolean;
     displayLanguage: "japanese" | "english";
-    grade: number;
+    grade: "B1" | "B2" | "B3" | "B4" | "M1" | "M2" | "D1" | "D2" | "D3";
     universityId: string;
     divisionId: string;
     campusId: string;
@@ -112,7 +112,7 @@ export default function Registration() {
     gender: "male",
     isForeignStudent: false,
     displayLanguage: "japanese",
-    grade: 1,
+    grade: "B1",
     universityId: "",
     divisionId: "",
     campusId: "",
@@ -279,16 +279,23 @@ export default function Registration() {
 
         <label>
           学年:
-          <input
-            type="number"
+          <select
             name="grade"
             value={formData.grade}
             onChange={handleChange}
-            min={1}
-            max={6}
-            required
             className="border p-2 w-full"
-          />
+          >
+            <option value="">学年を選択してください</option>
+            <option value="B1">学部1年</option>
+            <option value="B2">学部2年</option>
+            <option value="B3">学部3年</option>
+            <option value="B4">学部4年</option>
+            <option value="M1">修士1年</option>
+            <option value="M2">修士2年</option>
+            <option value="D1">博士1年</option>
+            <option value="D2">博士2年</option>
+            <option value="D3">博士3年</option>
+          </select>
         </label>
 
         <label>

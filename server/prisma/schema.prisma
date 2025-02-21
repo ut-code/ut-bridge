@@ -15,7 +15,7 @@ model User {
   gender           Gender
   isForeignStudent Boolean
   displayLanguage  DisplayLanguage
-  grade            Int?
+  grade            Grade
   hobby            String
   introduction     String
   divisionId       String?
@@ -132,4 +132,16 @@ enum Gender {
 enum DisplayLanguage {
   japanese
   english
+}
+
+enum Grade {
+  B1
+  B2
+  B3
+  B4
+  M1
+  M2
+  D1
+  D2
+  D3
 }

@@ -13,7 +13,7 @@ export type User = {
   isForeignStudent: boolean;
   displayLanguage: string;
   campusId: string | null;
-  grade: number | null;
+  grade: string | null;
   hobby: string | null;
   introduction: string | null;
 };
