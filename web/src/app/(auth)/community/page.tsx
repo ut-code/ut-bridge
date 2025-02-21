@@ -23,7 +23,7 @@ export default function Page() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const myId = localStorage.getItem("localStorageUserId");
+        const myId = localStorage.getItem("utBridgeUserId");
         if (!myId) {
           throw new Error("User ID is not found! Please login again!");
         }

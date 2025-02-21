@@ -31,7 +31,7 @@ export function login() {
       });
       const user = await res.json();
       if (user.exists) {
-        localStorage.setItem("localStorageUserId", user.id);
+        localStorage.setItem("utBridgeUserId", user.id);
         window.location.pathname = "/community";
       } else {
         window.location.pathname = "/registration";

@@ -13,7 +13,7 @@ export default function Page() {
   const router = useRouter();
 
   useEffect(() => {
-    const id = localStorage.getItem("localStorageUserId");
+    const id = localStorage.getItem("utBridgeUserId");
     async function fetchUser() {
       try {
         if (!id) {
