@@ -1,7 +1,7 @@
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import z from "zod";
-import { prisma } from "../config/prisma";
+import { prisma } from "../config/prisma.ts";
 
 const router = new Hono().get(
   "/",

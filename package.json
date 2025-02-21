@@ -19,5 +19,5 @@
     "db:push": "cd server; bun prisma db push",
     "db:seed": "bun run --env-file=./.env ./scripts/seed/index.ts"
   },
-  "workspaces": ["common", "web", "server"]
+  "workspaces": ["common", "web", "server", "scripts"]
 }

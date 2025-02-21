@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { prisma } from "../config/prisma";
+import { prisma } from "../config/prisma.ts";
 
 const router = new Hono().get("/", async (c) => {
   const divisions = await prisma.language.findMany({

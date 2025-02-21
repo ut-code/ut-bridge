@@ -1,7 +1,8 @@
 import { zValidator } from "@hono/zod-validator";
+import type { CardUser } from "common/zod/schema.ts";
 import { Hono } from "hono";
 import z from "zod";
-import { prisma } from "../config/prisma";
+import { prisma } from "../config/prisma.ts";
 
 const router = new Hono().get(
   "/",
@@ -16,17 +17,17 @@ const router = new Hono().get(
         id: true,
         name: true,
         gender: true,
+        isForeignStudent: true,
         imageUrl: true,
         campus: {
           select: {
             name: true,
           },
         },
-        motherTongues: {
+        grade: true,
+        motherLanguage: {
           select: {
-            language: {
-              select: { name: true },
-            },
+            name: true,
           },
         },
         fluentLanguages: {
@@ -46,13 +47,24 @@ const router = new Hono().get(
       },
     });
 
-    const formattedUsers = users.map((user) => ({
+    const formattedUsers: CardUser[] = users.map((user) => ({
       id: user.id,
-      name: user.name,
-      gender: user.gender,
       imageUrl: user.imageUrl,
+      name: user.name,
+      gender: user.gender as "male" | "female" | "other", //TODO:prismaのenumと定義したenumが大文字とかで違うため、このようにした
+      isForeignStudent: user.isForeignStudent,
+      grade: user.grade as
+        | "B1"
+        | "B2"
+        | "B3"
+        | "B4"
+        | "M1"
+        | "M2"
+        | "D1"
+        | "D2"
+        | "D3",
       campus: user.campus?.name || null,
-      motherTongues: user.motherTongues.map((mt) => mt.language.name),
+      motherLanguage: user.motherLanguage?.name || null,
       fluentLanguages: user.fluentLanguages.map((fl) => fl.language.name),
       learningLanguages: user.learningLanguages.map((ll) => ll.language.name),
     }));

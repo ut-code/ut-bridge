@@ -2,6 +2,7 @@
 
 import { client } from "@/client";
 import { FB_SESSION_STORAGE_USER_KEY } from "@/features/auth/state";
+import type { User } from "common/zod/schema";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -92,22 +93,7 @@ export default function Registration() {
     fetchDataAfterSelectUniversity();
   }, [universityId, router]);
 
-  const [formData, setFormData] = useState<{
-    // TODO://ZodのSchemaと共有する
-    name: string;
-    gender: "male" | "female" | "other";
-    isForeignStudent: boolean;
-    displayLanguage: "japanese" | "english";
-    grade: "B1" | "B2" | "B3" | "B4" | "M1" | "M2" | "D1" | "D2" | "D3";
-    universityId: string;
-    divisionId: string;
-    campusId: string;
-    hobby: string;
-    introduction: string;
-    motherLanguageId: string;
-    fluentLanguageIds: string[];
-    learningLanguageIds: string[];
-  }>({
+  const [formData, setFormData] = useState<User>({
     name: "",
     gender: "male",
     isForeignStudent: false,

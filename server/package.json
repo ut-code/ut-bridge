@@ -1,5 +1,6 @@
 {
   "name": "server",
+  "type": "module",
   "scripts": {
     "dev": "bun run --env-file=../.env --hot index.ts",
     "build": "bun tsc",

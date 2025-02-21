@@ -1,16 +1,5 @@
-type User = {
-  //TODO: ZodのSchemaと共有する
-  id: string;
-  guid: string;
-  name: string;
-  gender: "male" | "female" | "other";
-  isForeignStudent: boolean;
-  displayLanguage: "japanese" | "english";
-  grade: "B1" | "B2" | "B3" | "B4" | "M1" | "M2" | "D1" | "D2" | "D3";
-  hobby: string;
-  introduction: string;
-};
-export const users: User[] = [
+import type { SeedUser } from "common/zod/schema.ts";
+export const users: SeedUser[] = [
   {
     id: self.crypto.randomUUID(),
     guid: self.crypto.randomUUID(),

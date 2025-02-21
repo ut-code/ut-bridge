@@ -1,22 +1,9 @@
 "use client";
+import type { User } from "common/zod/schema";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { client } from "../../../client";
-
-export type User = {
-  id: string;
-  guid: string;
-  imageUrl: string | null;
-  name: string | null;
-  gender: string | null;
-  isForeignStudent: boolean;
-  displayLanguage: string;
-  campusId: string | null;
-  grade: string | null;
-  hobby: string | null;
-  introduction: string | null;
-};
 
 export default function Page() {
   const [user, setUser] = useState<User | null>(null);

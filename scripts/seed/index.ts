@@ -39,7 +39,18 @@ for (const univ of universities) {
 }
 
 for (const user of users) {
-  await prisma.user.create({
-    data: user,
+  const newUser = await prisma.user.create({
+    data: {
+      id: user.id,
+      guid: user.guid,
+      imageUrl: user.imageUrl,
+      name: user.name,
+      gender: user.gender,
+      isForeignStudent: user.isForeignStudent,
+      displayLanguage: user.displayLanguage,
+      grade: user.grade,
+      hobby: user.hobby,
+      introduction: user.introduction,
+    },
   });
 }

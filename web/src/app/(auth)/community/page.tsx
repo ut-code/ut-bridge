@@ -1,4 +1,5 @@
 "use client";
+import type { CardUser } from "common/zod/schema";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -7,18 +8,7 @@ import { client } from "../../../client";
 
 export default function Page() {
   const router = useRouter();
-  const [users, setUsers] = useState<
-    {
-      id: string;
-      name: string | null;
-      gender: string | null;
-      imageUrl: string | null;
-      campus: string | null;
-      motherTongues: string[];
-      fluentLanguages: string[];
-      learningLanguages: string[];
-    }[]
-  >([]);
+  const [users, setUsers] = useState<CardUser[]>([]);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -74,7 +64,7 @@ export default function Page() {
                     Campus: {user.campus ?? "Unknown"}
                   </p>
                   <p className="text-sm text-gray-600">
-                    Mother Tongues: {user.motherTongues.join(", ") || "None"}
+                    Mother Tongues: {user.motherLanguage || "Unknown"}
                   </p>
                   <p className="text-sm text-gray-600">
                     Fluent Languages:{" "}

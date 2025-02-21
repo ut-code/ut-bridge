@@ -2,10 +2,10 @@
 
 import { client } from "@/client";
 import LoginBadge from "@/features/auth/components/LoginBadge";
+import type { User } from "common/zod/schema";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import type { User } from "../users/page";
 
 export default function Page() {
   const [user, setUser] = useState<User | null>(null); //TODO: zoと合わせるt
