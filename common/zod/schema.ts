@@ -56,6 +56,7 @@ export const CreateUserSchema = BaseUserSchema.extend({
 });
 
 export const SeedUserSchema = z.object({
+  //nullがいっぱいなのはこれだけ
   id: z.string().uuid(),
   guid: z.string(),
   imageUrl: z.string().nullable(),
@@ -74,9 +75,9 @@ export const SeedUserSchema = z.object({
 });
 
 export const CardUserSchema = BaseUserSchema.extend({
-  imageUrl: z.string().nullable(),
-  campus: z.string().nullable(),
-  motherLanguage: z.string().nullable(),
+  imageUrl: z.string(),
+  campus: z.string(),
+  motherLanguage: z.string(),
   fluentLanguages: z.array(z.string()),
   learningLanguages: z.array(z.string()),
 });
@@ -110,11 +111,11 @@ const LearningLanguageSchema = z.object({
 export const FullUserSchema = BaseUserSchema.extend({
   guid: z.string(),
   imageUrl: z.string().nullable(),
-  divisionId: z.string().nullable(),
+  divisionId: z.string(),
   division: DivisionSchema,
-  campusId: z.string().nullable(),
+  campusId: z.string(),
   campus: CampusSchema,
-  motherLanguageId: z.string().nullable(),
+  motherLanguageId: z.string(),
   motherLanguage: LanguageSchema,
   fluentLanguages: z.array(FluentLanguageSchema),
   learningLanguages: z.array(LearningLanguageSchema),
