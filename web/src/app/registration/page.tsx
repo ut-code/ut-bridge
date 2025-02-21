@@ -21,73 +21,84 @@ export default function Registration() {
 
   useEffect(() => {
     const fetchFirstData = async () => {
-      const [universityRes, languageRes] = await Promise.all([
-        client.university.$get(),
-        client.language.$get(),
-      ]);
-      if (!universityRes.ok || !languageRes.ok) {
-        console.error("データ取得に失敗しました", {
-          university: universityRes.status,
-          language: languageRes.status,
-        });
-        throw new Error(
-          `データ取得に失敗しました:${{
-            university: await universityRes.text(),
-            language: await languageRes.text(),
-          }}`,
-        );
+      try {
+        const [universityRes, languageRes] = await Promise.all([
+          client.university.$get(),
+          client.language.$get(),
+        ]);
+        if (!universityRes.ok || !languageRes.ok) {
+          console.error("データ取得に失敗しました", {
+            university: universityRes.status,
+            language: languageRes.status,
+          });
+          throw new Error(
+            `データ取得に失敗しました:${{
+              university: await universityRes.text(),
+              language: await languageRes.text(),
+            }}`,
+          );
+        }
+        const [universities, languages] = await Promise.all([
+          universityRes.json(),
+          languageRes.json(),
+        ]);
+        setUniversities(universities);
+        setLanguages(languages);
+      } catch (err) {
+        console.error("Failed to fetch university or language Data ", err);
+        router.push("/login");
       }
-      const [universities, languages] = await Promise.all([
-        universityRes.json(),
-        languageRes.json(),
-      ]);
-      setUniversities(universities);
-      setLanguages(languages);
     };
     fetchFirstData();
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     if (!universityId) return;
 
     const fetchDataAfterSelectUniversity = async () => {
-      const [campusRes, divisionRes] = await Promise.all([
-        client.campus.$get({ query: { id: universityId } }),
-        client.division.$get({ query: { id: universityId } }),
-      ]);
+      try {
+        const [campusRes, divisionRes] = await Promise.all([
+          client.campus.$get({ query: { id: universityId } }),
+          client.division.$get({ query: { id: universityId } }),
+        ]);
 
-      // どちらかが失敗した場合エラーハンドリング
-      if (!campusRes.ok || !divisionRes.ok) {
-        console.error("データ取得に失敗しました", {
-          campus: campusRes.status,
-          division: divisionRes.status,
-        });
-        throw new Error(
-          `データ取得に失敗しました:${{
-            campus: await campusRes.text(),
-            division: await divisionRes.text(),
-          }}`,
-        );
+        // どちらかが失敗した場合エラーハンドリング
+        if (!campusRes.ok || !divisionRes.ok) {
+          console.error("データ取得に失敗しました", {
+            campus: campusRes.status,
+            division: divisionRes.status,
+          });
+          throw new Error(
+            `データ取得に失敗しました:${{
+              campus: await campusRes.text(),
+              division: await divisionRes.text(),
+            }}`,
+          );
+        }
+
+        const [campuses, divisions] = await Promise.all([
+          campusRes.json(),
+          divisionRes.json(),
+        ]);
+
+        setCampuses(campuses);
+        setDivisions(divisions);
+      } catch (err) {
+        console.error("Failed to fetch campus or division Data ", err);
+        router.push("/login");
       }
-
-      const [campuses, divisions] = await Promise.all([
-        campusRes.json(),
-        divisionRes.json(),
-      ]);
-
-      setCampuses(campuses);
-      setDivisions(divisions);
     };
 
     fetchDataAfterSelectUniversity();
-  }, [universityId]);
+  }, [universityId, router]);
 
   const [formData, setFormData] = useState<{
+    // TODO://ZodのSchemaと共有する
     name: string;
     gender: "male" | "female" | "other";
     isForeignStudent: boolean;
     displayLanguage: "japanese" | "english";
-    grade: number;
+    grade: "B1" | "B2" | "B3" | "B4" | "M1" | "M2" | "D1" | "D2" | "D3";
     universityId: string;
     divisionId: string;
     campusId: string;
@@ -101,7 +112,7 @@ export default function Registration() {
     gender: "male",
     isForeignStudent: false,
     displayLanguage: "japanese",
-    grade: 1,
+    grade: "B1",
     universityId: "",
     divisionId: "",
     campusId: "",
@@ -174,6 +185,7 @@ export default function Registration() {
       }
 
       setStatus("success");
+      localStorage.setItem("utBridgeUserId", body.id);
       router.push("/community");
     } catch (error) {
       console.error("ユーザー登録に失敗しました", error);
@@ -267,16 +279,23 @@ export default function Registration() {
 
         <label>
           学年:
-          <input
-            type="number"
+          <select
             name="grade"
             value={formData.grade}
             onChange={handleChange}
-            min={1}
-            max={6}
-            required
             className="border p-2 w-full"
-          />
+          >
+            <option value="">学年を選択してください</option>
+            <option value="B1">学部1年</option>
+            <option value="B2">学部2年</option>
+            <option value="B3">学部3年</option>
+            <option value="B4">学部4年</option>
+            <option value="M1">修士1年</option>
+            <option value="M2">修士2年</option>
+            <option value="D1">博士1年</option>
+            <option value="D2">博士2年</option>
+            <option value="D3">博士3年</option>
+          </select>
         </label>
 
         <label>
@@ -290,6 +309,15 @@ export default function Registration() {
             <option value="japanese">日本語</option>
             <option value="english">英語</option>
           </select>
+        </label>
+        <label>
+          外国人留学生ですか？
+          <input
+            type="checkbox"
+            name="isForeignStudent"
+            checked={formData.isForeignStudent}
+            onChange={handleChange}
+          />
         </label>
 
         <label>

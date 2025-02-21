@@ -7,7 +7,7 @@ import { UserSchema } from "../zod/schema";
 const router = new Hono()
 
   .get(
-    "/", // userId以外にも、nameなどでユーザーのデータを持ってきたい場合は、ここを編集する
+    "/", // userId以外にも、nameなどでそのユーザーのデータを持ってきたい場合は、ここを編集する
     zValidator("query", z.object({ id: z.string().optional() })),
     async (c) => {
       const userId = c.req.valid("query").id;
@@ -39,11 +39,13 @@ const router = new Hono()
         select: { guid: true, id: true, name: true },
       });
 
+      let resp: { exists: false } | { exists: true; guid: string; id: string };
       if (!user || !user.name) {
-        return c.json({ exists: false }, 404);
+        resp = { exists: false };
+        return c.json(resp, 404);
       }
-
-      return c.json({ exists: true });
+      resp = { exists: true, guid: user.guid, id: user.id };
+      return c.json(resp, 200);
     },
   )
 

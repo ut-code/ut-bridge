@@ -2,6 +2,7 @@ import { languages } from "./data/languages.ts";
 import { universities } from "./data/universities.ts";
 
 import { prisma } from "../../server/config/prisma.ts";
+import { users } from "./data/users.ts";
 
 if (
   await prisma.university.findUnique({ where: { name: universities[0].name } })
@@ -35,4 +36,10 @@ for (const univ of universities) {
       },
     });
   }
+}
+
+for (const user of users) {
+  await prisma.user.create({
+    data: user,
+  });
 }

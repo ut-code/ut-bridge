@@ -1,10 +1,12 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { client } from "../../../client";
 
 export default function Page() {
+  const router = useRouter();
   const [users, setUsers] = useState<
     {
       id: string;
@@ -21,16 +23,23 @@ export default function Page() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await client.community.$get();
+        const myId = localStorage.getItem("utBridgeUserId");
+        if (!myId) {
+          throw new Error("User ID is not found! Please login again!");
+        }
+        const res = await client.community.$get({
+          query: { id: myId },
+        });
         const users = (await res.json()).users;
         setUsers(users);
       } catch (error) {
         console.error("Failed to fetch users:", error);
+        router.push("/login");
       }
     };
 
     fetchUsers();
-  }, []);
+  }, [router]);
 
   return (
     <>

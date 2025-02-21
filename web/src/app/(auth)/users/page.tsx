@@ -1,10 +1,10 @@
 "use client";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { use, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { client } from "../../../client";
 
-interface User {
+export type User = {
   id: string;
   guid: string;
   imageUrl: string | null;
@@ -13,38 +13,42 @@ interface User {
   isForeignStudent: boolean;
   displayLanguage: string;
   campusId: string | null;
-  grade: number | null;
+  grade: string | null;
   hobby: string | null;
   introduction: string | null;
-}
+};
 
-export default function Page(props: { params: Promise<{ id: string }> }) {
-  const params = use(props.params);
+export default function Page() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
 
   useEffect(() => {
     async function fetchUser() {
       try {
+        if (!id) {
+          throw new Error("User Id Not Found!");
+        }
         const res = await client.users.$get({
-          query: { id: params.id },
+          query: { id: id },
         });
         const data = await res.json();
         if (data.length !== 1) {
-          console.error("User Not Found!");
-          router.push("/community");
+          throw new Error("User Not Found!");
         }
         setUser(data[0]);
       } catch (error) {
         console.error("Failed to fetch user:", error);
+        router.push("/community");
       } finally {
         setLoading(false);
       }
     }
 
     fetchUser();
-  }, [params.id, router]);
+  }, [router, id]);
 
   if (loading) return <div>Loading...</div>;
   if (!user) return <div>User not found</div>;
