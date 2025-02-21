@@ -11,6 +11,8 @@ export default function Page() {
   const router = useRouter();
   const [users, setUsers] = useState<CardUser[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isExchangeEnabled, setIsExchangeEnabled] = useState(true);
+  const [isMyForeignStudent, setIsMyForeignStudent] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -22,9 +24,17 @@ export default function Page() {
         const res = await client.community.$get({
           query: { id: myId },
         });
-        const users = (await res.json()).users;
-        const data = formatCardUsers(users);
-        setUsers(data);
+        const data = await res.json();
+        const formattedUsers = formatCardUsers(data.users);
+        const filteredCardUsers = formattedUsers.filter(
+          (user) => user.id !== myId,
+        );
+        setUsers(filteredCardUsers);
+
+        const myUser = formattedUsers.find((user) => user.id === myId);
+        if (myUser) {
+          setIsMyForeignStudent(myUser.isForeignStudent);
+        }
       } catch (error) {
         console.error("Failed to fetch users:", error);
         router.push("/login");
@@ -34,17 +44,24 @@ export default function Page() {
     fetchUsers();
   }, [router]);
 
-  // 検索クエリに基づいてユーザーをフィルタリング リクエストを送るのかは要検討
+  // 検索クエリと toggle の状態に基づいてユーザーをフィルタリング
   const filteredUsers = users.filter((user) => {
     const query = searchQuery.toLowerCase();
-    return (
+    const matchesQuery =
       user.name?.toLowerCase().includes(query) ||
       user.gender?.toLowerCase().includes(query) ||
       user.campus?.toLowerCase().includes(query) ||
       user.motherLanguage?.toLowerCase().includes(query) ||
       user.fluentLanguages.some((lang) => lang.toLowerCase().includes(query)) ||
-      user.learningLanguages.some((lang) => lang.toLowerCase().includes(query))
-    );
+      user.learningLanguages.some((lang) => lang.toLowerCase().includes(query));
+
+    // 言語交換 (toggle) がオンのとき、isForeignStudent の違う人のみ表示
+    const matchesExchange =
+      !isExchangeEnabled ||
+      (isMyForeignStudent !== null &&
+        user.isForeignStudent !== isMyForeignStudent);
+
+    return matchesQuery && matchesExchange;
   });
 
   return (
@@ -60,6 +77,16 @@ export default function Page() {
         onChange={(e) => setSearchQuery(e.target.value)}
         className="border p-2 rounded-md"
       />
+
+      <label htmlFor="exchange-language">言語交換をする</label>
+      <input
+        id="exchange-language"
+        type="checkbox"
+        className="toggle"
+        checked={isExchangeEnabled}
+        onChange={() => setIsExchangeEnabled((prev) => !prev)}
+      />
+
       <ul>
         {filteredUsers.map((user) => (
           <li key={user.id} className="p-4 border-b border-gray-200">
@@ -98,6 +125,9 @@ export default function Page() {
                   <p className="text-sm text-gray-600">
                     Learning Languages:{" "}
                     {user.learningLanguages.join(", ") || "None"}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Foreign Student: {user.isForeignStudent ? "Yes" : "No"}
                   </p>
                 </div>
               </div>

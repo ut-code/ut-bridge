@@ -7,11 +7,7 @@ const router = new Hono().get(
   "/",
   zValidator("query", z.object({ id: z.string() })),
   async (c) => {
-    const { id } = c.req.query();
     const users = await prisma.user.findMany({
-      where: {
-        id: { not: id },
-      },
       select: {
         id: true,
         name: true,
