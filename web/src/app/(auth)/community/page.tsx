@@ -21,7 +21,7 @@ export default function Page() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const myId = sessionStorage.getItem("sessionStorageUserId");
+        const myId = localStorage.getItem("localStorageUserId");
         if (!myId) {
           throw new Error(
             "User ID is not available in session storage. Please login again!",

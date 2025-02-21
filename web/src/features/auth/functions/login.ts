@@ -31,7 +31,7 @@ export function login() {
       });
       const user = await res.json();
       if (user.exists) {
-        sessionStorage.setItem("sessionStorageUserId", user.id);
+        localStorage.setItem("localStorageUserId", user.id);
         window.location.pathname = "/community";
       } else {
         window.location.pathname = "/registration";

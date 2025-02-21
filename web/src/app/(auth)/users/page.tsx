@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { client } from "../../../client";
 
-interface User {
+export type User = {
   id: string;
   guid: string;
   imageUrl: string | null;
@@ -16,7 +16,7 @@ interface User {
   grade: number | null;
   hobby: string | null;
   introduction: string | null;
-}
+};
 
 export default function Page() {
   const [user, setUser] = useState<User | null>(null);
