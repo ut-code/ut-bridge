@@ -29,8 +29,9 @@ export function login() {
       const res = await client.users.exist.$get({
         query: { guid: result.user.uid },
       });
-      const userExists = (await res.json()).exists;
-      if (userExists) {
+      const user = await res.json();
+      if (user.exists) {
+        sessionStorage.setItem("sessionStorageUserId", user.id);
         window.location.pathname = "/community";
       } else {
         window.location.pathname = "/registration";

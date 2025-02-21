@@ -21,7 +21,15 @@ export default function Page() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await client.community.$get();
+        const myId = sessionStorage.getItem("sessionStorageUserId");
+        if (!myId) {
+          throw new Error(
+            "User ID is not available in session storage. Please login again!",
+          );
+        }
+        const res = await client.community.$get({
+          query: { id: myId },
+        });
         const users = (await res.json()).users;
         setUsers(users);
       } catch (error) {
