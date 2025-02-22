@@ -29,12 +29,13 @@ export default function Page() {
         query: { id: myId },
       });
       const data = await res.json();
-      if (data.length !== 1) {
-        throw new Error("My Data Not Found!");
-      }
       const users = formatUsers(data);
-
-      setMydata(users[0]);
+      if (users.length > 1) {
+        throw new Error("too many me found!");
+      }
+      const me = users[0];
+      if (!me) throw new Error("user data not found!");
+      setMydata(me);
     };
     firstFetch();
   }, []);

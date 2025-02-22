@@ -25,11 +25,12 @@ export default function Page() {
           query: { id: id },
         });
         const data = await res.json();
-        if (data.length !== 1) {
+        const users = formatUsers(data);
+        const me = users[0];
+        if (!me) {
           throw new Error("My Data Not Found!");
         }
-        const users = formatUsers(data);
-        setUser(users[0]);
+        setUser(me);
       } catch (error) {
         console.error("Failed to fetch user:", error);
         router.push("./community");
