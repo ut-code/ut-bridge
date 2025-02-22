@@ -19,7 +19,7 @@
     "db:drop": "docker stop utbridge-postgres",
     "db:up": "./scripts/devdb.sh",
     "db:push": "cd server; bun prisma db push",
-    "db:seed": "bun run --env-file=./.env ./scripts/seed/index.ts",
+    "db:seed": "bun run --env-file=./.env --workspace scripts/seed seed",
     "prisma": "cd server; bun prisma"
   }
 }
