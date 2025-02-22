@@ -20,25 +20,18 @@ jobs:
     name: Web
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    defaults:
-      run:
-        working-directory: web
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: 1.2.2
       - run: bun install --frozen-lockfile
-        working-directory: server
-      - run: bun install --frozen-lockfile
       - run: bun run build
+        working-directory: web
   server:
     name: Server
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    defaults:
-      run:
-        working-directory: server
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
@@ -46,3 +39,4 @@ jobs:
           bun-version: 1.2.2
       - run: bun install --frozen-lockfile
       - run: bun run build
+        working-directory: server
