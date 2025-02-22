@@ -1,6 +1,6 @@
 "use client";
-import { formatCardUsers } from "@/features/format";
-import type { CardUser } from "common/zod/schema";
+import { formatCardUsers, formatUsers } from "@/features/format";
+import type { CardUser, User } from "common/zod/schema";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -10,6 +10,7 @@ import { client } from "../../../client";
 export default function Page() {
   const router = useRouter();
   const [users, setUsers] = useState<CardUser[]>([]);
+  const [myData, setMydata] = useState<User>();
   const [searchQuery, setSearchQuery] = useState("");
   const [exchangeQuery, setIsExchangeEnabled] = useState<
     "exchange" | "japanese" | "all"
@@ -26,18 +27,35 @@ export default function Page() {
         if (!myId) {
           throw new Error("User ID is not found! Please login again!");
         }
-        const res = await client.community.$get({
-          query: {
-            id: myId,
-            page: page.toString(),
-            exchangeQuery: exchangeQuery,
-            searchQuery: searchQuery,
-          },
-        });
-        const data = await res.json();
-        const formattedUsers = formatCardUsers(data.users);
-        setUsers(formattedUsers);
-        setTotalUsers(data.totalUsers);
+
+        try {
+          const [res, myDataRes] = await Promise.all([
+            client.community.$get({
+              query: {
+                id: myId,
+                page: page.toString(),
+                exchangeQuery,
+                searchQuery,
+              },
+            }),
+            client.users.$get({
+              //TODO: ここでリクエストを送るのではなく、globalに自分の情報を持たせておく
+              query: { id: myId },
+            }),
+          ]);
+
+          const data = await res.json();
+          const formattedUsers = formatCardUsers(data.users);
+
+          const myData = await myDataRes.json();
+          const users = formatUsers(myData);
+
+          setMydata(users[0]);
+          setUsers(formattedUsers);
+          setTotalUsers(data.totalUsers);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
       } catch (error) {
         console.error("Failed to fetch users:", error);
         router.push("/login");
@@ -71,7 +89,7 @@ export default function Page() {
         checked={exchangeQuery !== "all"}
         onChange={(ev) => {
           const filtered = ev.target.checked;
-          const amIForeignStudent = true;
+          const amIForeignStudent = myData?.isForeignStudent;
           const filterQuery = amIForeignStudent ? "japanese" : "exchange";
           setIsExchangeEnabled(filtered ? filterQuery : "all");
           setPage(1); // 言語交換の設定を変更したらページをリセット
