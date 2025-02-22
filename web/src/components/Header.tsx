@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
-import { AppIcon } from "./AppIcon";
+import { AppIcon } from "./AppIcon.tsx";
 
 export default function Header() {
   const router = useRouter();

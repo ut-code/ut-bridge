@@ -1,14 +1,14 @@
 import { client } from "@/client";
 import logger from "@/features/logger/logger";
 import { signInWithPopup } from "firebase/auth";
-import { auth, provider } from "../config";
+import { auth, provider } from "../config.ts";
 import {
   FB_SESSION_STORAGE_IDTOKEN_KEY,
   FB_SESSION_STORAGE_USER_KEY,
   fbIdTokenAtom,
   fbUserAtom,
-} from "../state";
-import { store } from "../state";
+} from "../state.ts";
+import { store } from "../state.ts";
 
 export function login() {
   signInWithPopup(auth, provider)

@@ -1,23 +1,51 @@
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { Hono } from "hono";
+import { HTTPException } from "hono/http-exception";
+import { prisma } from "./config/prisma.ts";
 import cors from "./middlewares/cors.ts";
 import campusRouter from "./routes/campus.ts";
+import chatRouter from "./routes/chat.ts";
 import communityRouter from "./routes/community.ts";
 import divisionRouter from "./routes/division.ts";
 import languageRouter from "./routes/language.ts";
 import universityRouter from "./routes/university.ts";
-import usersRoutes from "./routes/users.ts";
+import usersRouter from "./routes/users.ts";
 
+if (process.env.NODE_ENV === "development") {
+  prisma.user
+    .findFirst({})
+    .then(() => {
+      console.log("server: database connection OK");
+    })
+    .catch(() => {
+      console.error("server: Could not connect to database");
+      process.exit(1);
+    });
+}
 const app = new Hono()
   .use(cors("CORS_ALLOW_ORIGINS"))
+  .onError((err) => {
+    console.log(err);
+    if (err instanceof PrismaClientKnownRequestError) {
+      if (err.code === "P2003") {
+        console.log(err);
+        throw new HTTPException(409, {
+          message: "database constraint violated",
+        });
+      }
+    }
+    throw err;
+  })
 
   .get("/", (c) => c.text("Hello from Hono 🔥"))
 
-  .route("/users", usersRoutes)
+  .route("/users", usersRouter)
   .route("/community", communityRouter)
   .route("/campus", campusRouter)
   .route("/division", divisionRouter)
   .route("/language", languageRouter)
-  .route("/university", universityRouter);
+  .route("/university", universityRouter)
+  .route("/chat", chatRouter);
 
 export default app;
 export type App = typeof app;

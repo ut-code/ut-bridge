@@ -7,7 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { formatUsers } from "../../../features/format";
+import { formatUsers } from "../../../features/format.ts";
 
 export default function Page() {
   const [user, setUser] = useState<User | null>(null);

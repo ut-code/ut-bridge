@@ -1,8 +1,8 @@
 "use client";
 import { useAtom } from "jotai";
 import Link from "next/link";
-import { logout } from "../functions/logout";
-import { fbUserAtom } from "../state";
+import { logout } from "../functions/logout.ts";
+import { fbUserAtom } from "../state.ts";
 
 export default function LoginBadge() {
   const [user, _] = useAtom(fbUserAtom);

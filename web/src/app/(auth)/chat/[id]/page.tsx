@@ -1,0 +1,162 @@
+"use client";
+
+import { client } from "@/client";
+import { myId } from "@/features/auth/state";
+import { handlers } from "@/features/chat/state";
+import { assert } from "@/lib";
+import { use } from "@/react/useData";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+
+export default function Page() {
+  const roomId = useParams().id as string;
+  assert(typeof roomId === "string");
+
+  return (
+    <>
+      <Load room={roomId} />
+      <MessageInput room={roomId} />
+    </>
+  );
+}
+function MessageInput({ room }: { room: string }) {
+  const [input, setInput] = useState<string>("");
+  const [submitting, setSubmitting] = useState<boolean>(false);
+  return (
+    <form
+      onSubmit={async (ev) => {
+        ev.preventDefault();
+        if (submitting) return;
+        setSubmitting(true);
+        setInput("");
+        await client.chat.rooms[":room"].messages.$post({
+          param: {
+            room: room,
+          },
+          json: {
+            content: input,
+            isPhoto: false,
+          },
+        });
+        setSubmitting(false);
+      }}
+    >
+      <input
+        className="input input-bordered"
+        value={input}
+        onChange={(ev) => {
+          setInput(ev.target.value);
+        }}
+      />
+      <button type="submit" className="btn btn-primary" disabled={submitting}>
+        Send
+      </button>
+    </form>
+  );
+}
+function Load({ room }: { room: string }) {
+  const m = use(async () => {
+    const res = await client.chat.rooms[":room"].$get({
+      param: {
+        room: room,
+      },
+    });
+    const json = await res.json();
+    if ("error" in json) throw new Error(json.error);
+    return json;
+  });
+  if (m.loading) return <span className="loading loading-xl" />;
+  if (m.error) {
+    console.error(m.error);
+    return <span className="text-error">something went wrong</span>;
+  }
+  return (
+    <MessageList
+      data={m.data.messages.map((m) => ({
+        ...m,
+        createdAt: new Date(m.createdAt),
+      }))}
+      room={room}
+    />
+  );
+}
+
+function MessageList({
+  data,
+  room,
+}: {
+  data: {
+    id: string;
+    senderId: string;
+    createdAt: Date;
+    content: string;
+    sender: { name: string };
+  }[];
+  room: string;
+}) {
+  const [messages, setMessages] = useState(data);
+
+  useEffect(() => {
+    handlers.onCreate = (message) => {
+      console.log("onCreate: updating messages...");
+      if (room === message.roomId) {
+        setMessages((prev) => {
+          // avoid react from automatically optimizing the update away
+          return [...prev, message];
+        });
+        return true;
+      }
+      return false;
+    };
+    handlers.onUpdate = (id, message) => {
+      setMessages((prev) => {
+        for (let idx = 0; idx < prev.length; idx++) {
+          if (prev[idx].id === id) {
+            prev[idx].content = message.content;
+          }
+        }
+        // avoid react from automatically optimizing the update away
+        return [...prev];
+      });
+    };
+    handlers.onDelete = (id) => {
+      setMessages((prev) => {
+        for (let idx = 0; idx < prev.length; idx++) {
+          if (prev[idx].id === id) {
+            prev.splice(idx, 1);
+            return prev;
+          }
+        }
+        // avoid react from automatically optimizing the update away
+        return [...prev];
+      });
+    };
+    return () => {
+      handlers.onCreate = undefined;
+      handlers.onUpdate = undefined;
+      handlers.onDelete = undefined;
+    };
+  }, [room]);
+
+  return (
+    <ul>
+      {messages.map((m) => (
+        // TODO: handle pictures
+        <li key={m.id}>
+          <div
+            className={`chat ${m.senderId === myId ? "chat-end" : "chat-start"}`}
+          >
+            <div className="chat-header">
+              {m.sender.name}
+              <time className="text-xs opacity-50">
+                {m.createdAt.toLocaleString()}
+              </time>
+            </div>
+            <div className="chat-bubble">{m.content}</div>
+            {/* <div className="chat-footer opacity-50">Seen</div> */}
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
