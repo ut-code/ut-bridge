@@ -4,6 +4,7 @@ import { client } from "@/client";
 import LoginBadge from "@/features/auth/components/LoginBadge";
 import type { User } from "common/zod/schema";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { formatUsers } from "../../../features/format";
@@ -43,7 +44,12 @@ export default function Page() {
   if (!user) return <div>User not found</div>;
   return (
     <>
-      <LoginBadge />
+      <Link
+        href={"/settings/profile"}
+        className="text-primary text-2xl cursor-pointer px-4"
+      >
+        ユーザー編集画面へ
+      </Link>
       Settings Page
       <div>
         <h1>自分のデータ</h1>
@@ -104,6 +110,7 @@ export default function Page() {
           <strong>Introduction:</strong> {user.introduction || "N/A"}
         </p>
       </div>
+      <LoginBadge />
     </>
   );
 }
