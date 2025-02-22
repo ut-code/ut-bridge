@@ -19,6 +19,25 @@ export default function Page() {
   const [totalUsers, setTotalUsers] = useState(0);
   const usersPerPage = 9;
   const totalPages = Math.ceil(totalUsers / usersPerPage);
+  useEffect(() => {
+    const firstFetch = async () => {
+      const myId = localStorage.getItem("utBridgeUserId");
+      if (!myId) {
+        throw new Error("User ID is not found! Please login again!");
+      }
+      const res = await client.users.$get({
+        query: { id: myId },
+      });
+      const data = await res.json();
+      if (data.length !== 1) {
+        throw new Error("My Data Not Found!");
+      }
+      const users = formatUsers(data);
+
+      setMydata(users[0]);
+    };
+    firstFetch();
+  }, []);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -29,28 +48,18 @@ export default function Page() {
         }
 
         try {
-          const [res, myDataRes] = await Promise.all([
-            client.community.$get({
-              query: {
-                id: myId,
-                page: page.toString(),
-                exchangeQuery,
-                searchQuery,
-              },
-            }),
-            client.users.$get({
-              //TODO: ここでリクエストを送るのではなく、globalに自分の情報を持たせておく
-              query: { id: myId },
-            }),
-          ]);
+          const res = await client.community.$get({
+            query: {
+              id: myId,
+              page: page.toString(),
+              exchangeQuery,
+              searchQuery,
+            },
+          });
 
           const data = await res.json();
           const formattedUsers = formatCardUsers(data.users);
 
-          const myData = await myDataRes.json();
-          const users = formatUsers(myData);
-
-          setMydata(users[0]);
           setUsers(formattedUsers);
           setTotalUsers(data.totalUsers);
         } catch (error) {

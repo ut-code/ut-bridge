@@ -18,7 +18,7 @@ const router = new Hono().get(
   async (c) => {
     const page = Number.parseInt(c.req.query("page") || "1", 10);
     const exchangeQuery = c.req.query("exchangeQuery") || "all";
-    const searchQuery = c.req.query("search") || "";
+    const searchQuery = c.req.query("searchQuery") || "";
     const take = 9;
     const skip = (page - 1) * take;
 
