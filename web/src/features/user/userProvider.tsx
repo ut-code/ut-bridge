@@ -1,6 +1,7 @@
 "use client";
 import { client } from "@/client";
 import type { FullUser } from "common/zod/schema";
+import { useRouter } from "next/navigation";
 import {
   type ReactNode,
   createContext,
@@ -19,23 +20,23 @@ export function useUserContext() {
 
 // Providerの作成
 export function UserProvider({ children }: { children: ReactNode }) {
+  const router = useRouter();
   const { user } = useAuthContext();
-  if (!user) throw new Error("User is not found in Firebase!");
-
   const [myData, setMyData] = useState<FullUser | null>(null);
 
-  const value = {
-    myData,
-  };
-
   useEffect(() => {
+    if (!user) {
+      setMyData(null);
+      router.push("/login");
+      return;
+    }
     const fetchUserData = async () => {
       try {
         const res = await client.users.$get({
           query: { guid: user.uid },
         });
+        if (!res.ok) throw new Error("User is not found in Database!");
         const data = await res.json();
-        if (!data) throw new Error("User is not found in Database!");
         setMyData(data[0]);
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -43,7 +44,9 @@ export function UserProvider({ children }: { children: ReactNode }) {
     };
 
     fetchUserData();
-  }, [user.uid]);
+  }, [user, router]);
 
-  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={{ myData }}>{children}</UserContext.Provider>
+  );
 }
