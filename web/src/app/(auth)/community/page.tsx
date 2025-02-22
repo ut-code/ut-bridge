@@ -12,10 +12,10 @@ export default function Page() {
   const [users, setUsers] = useState<CardUser[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isExchangeEnabled, setIsExchangeEnabled] = useState(true);
-  const [page, setPage] = useState(1); // 現在のページ
-  const [totalUsers, setTotalUsers] = useState(0); // 総ユーザー数
-  const usersPerPage = 9; // 1ページあたりのユーザー数
-  const totalPages = Math.ceil(totalUsers / usersPerPage); // 総ページ数
+  const [page, setPage] = useState(1);
+  const [totalUsers, setTotalUsers] = useState(0);
+  const usersPerPage = 9;
+  const totalPages = Math.ceil(totalUsers / usersPerPage);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -28,21 +28,24 @@ export default function Page() {
           query: {
             id: myId,
             page: page.toString(),
-            isExchangeEnabled: isExchangeEnabled.toString(), // 言語交換の状態を送る
+            isExchangeEnabled: isExchangeEnabled.toString(),
+            searchQuery: searchQuery, // 🔹 検索クエリを送信
           },
         });
         const data = await res.json();
         const formattedUsers = formatCardUsers(data.users);
         setUsers(formattedUsers);
-        setTotalUsers(data.totalUsers); // 総ユーザー数を更新
+        setTotalUsers(data.totalUsers);
       } catch (error) {
         console.error("Failed to fetch users:", error);
         router.push("/login");
       }
     };
 
-    fetchUsers();
-  }, [router, page, isExchangeEnabled]); // 言語交換の状態が変わったらリクエストを再送
+    // 🔹 検索ワードの変更後に 500ms 待ってリクエストを送る（デバウンス処理）
+    const timeoutId = setTimeout(fetchUsers, 500);
+    return () => clearTimeout(timeoutId);
+  }, [router, page, isExchangeEnabled, searchQuery]);
 
   return (
     <>
