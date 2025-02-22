@@ -2,6 +2,7 @@
 
 import { client } from "@/client";
 import LoginBadge from "@/features/auth/components/LoginBadge";
+import { useGoogleLogout } from "@/features/auth/functions/logout.ts";
 import type { User } from "common/zod/schema";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,6 +14,7 @@ export default function Page() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const { logout } = useGoogleLogout();
 
   useEffect(() => {
     const id = localStorage.getItem("utBridgeUserId");
@@ -51,6 +53,9 @@ export default function Page() {
         ユーザー編集画面へ
       </Link>
       Settings Page
+      <button type="button" className="m-5 btn btn-error" onClick={logout}>
+        log out
+      </button>
       <div>
         <h1>自分のデータ</h1>
         {user.imageUrl ? (

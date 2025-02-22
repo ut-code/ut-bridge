@@ -1,43 +1,44 @@
-import { client } from "@/client";
-import logger from "@/features/logger/logger";
+import { client } from "@/client.ts";
 import { signInWithPopup } from "firebase/auth";
+import { useRouter } from "next/navigation";
+import { useCallback } from "react";
 import { auth, provider } from "../config.ts";
-import {
-  FB_SESSION_STORAGE_IDTOKEN_KEY,
-  FB_SESSION_STORAGE_USER_KEY,
-  fbIdTokenAtom,
-  fbUserAtom,
-} from "../state.ts";
-import { store } from "../state.ts";
 
-export function login() {
-  signInWithPopup(auth, provider)
-    .then(async (result) => {
-      logger.log("successfully logged in as", result.user.uid);
-      const token = await result.user.getIdToken();
-      store.set(fbIdTokenAtom, token);
-      store.set(fbUserAtom, result.user);
+async function login() {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+    if (!user) throw new Error("Login Failed");
 
-      sessionStorage.setItem(
-        FB_SESSION_STORAGE_USER_KEY,
-        JSON.stringify(result.user),
-      );
-      sessionStorage.setItem(FB_SESSION_STORAGE_IDTOKEN_KEY, token);
-
-      //ここで、guidだけ登録された空のユーザーを作成する or すでに作成されていたら。
-      if (!result.user.uid) throw Error("GUID not found!");
-      const res = await client.users.exist.$get({
-        query: { guid: result.user.uid },
-      });
-      const user = await res.json();
-      if (user.exists) {
-        localStorage.setItem("utBridgeUserId", user.id);
-        window.location.pathname = "/community";
-      } else {
-        window.location.pathname = "/registration";
-      }
-    })
-    .catch((err) => {
-      logger.error(err);
+    const res = await client.users.exist.$get({
+      query: { guid: result.user.uid },
     });
+    const isUserExist = await res.json();
+    if (isUserExist.exists) return { login: true, isUserExist: true, user };
+    return { login: true, isUserExist: false, user };
+  } catch (error) {
+    console.error("Login Error:", error);
+    return { login: false, error };
+  }
+}
+
+export function useGoogleSignIn() {
+  const router = useRouter();
+
+  const signInWithGoogle = useCallback(async () => {
+    const response = await login();
+
+    if (!response.login) {
+      router.push("/login");
+      return;
+    }
+
+    if (response.isUserExist) {
+      router.push("/community");
+    } else {
+      router.push("/login");
+    }
+  }, [router]);
+
+  return { signInWithGoogle };
 }

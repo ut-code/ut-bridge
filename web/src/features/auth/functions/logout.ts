@@ -1,16 +1,19 @@
-import {
-  FB_SESSION_STORAGE_IDTOKEN_KEY,
-  FB_SESSION_STORAGE_USER_KEY,
-  fbIdTokenAtom,
-  fbUserAtom,
-  store,
-} from "../state.ts";
+import { signOut } from "firebase/auth";
+import { useRouter } from "next/navigation";
+import { useCallback } from "react";
+import { auth } from "../config.ts";
 
-export function logout() {
-  sessionStorage.removeItem(FB_SESSION_STORAGE_IDTOKEN_KEY);
-  sessionStorage.removeItem(FB_SESSION_STORAGE_USER_KEY);
-  localStorage.removeItem("utBridgeUserId");
-  store.set(fbUserAtom, null);
-  store.set(fbIdTokenAtom, null);
-  window.location.pathname = "/login";
+export function useGoogleLogout() {
+  const router = useRouter();
+
+  const logout = useCallback(async () => {
+    try {
+      await signOut(auth);
+      router.push("/login");
+    } catch (error) {
+      console.error("Logout Error:", error);
+    }
+  }, [router]);
+
+  return { logout };
 }

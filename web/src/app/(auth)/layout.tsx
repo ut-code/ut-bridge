@@ -1,10 +1,10 @@
 import Header from "@/components/Header";
-import { AuthBoundary } from "@/features/auth/providers/AuthProvider";
+import { AuthProvider } from "@/features/auth/providers/AuthProvider";
 import { ChatProvider } from "@/features/chat/provider";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <AuthBoundary>
+    <AuthProvider>
       <ChatProvider>
         <div className="h-full">
           <Header />
@@ -13,6 +13,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       </ChatProvider>
-    </AuthBoundary>
+    </AuthProvider>
   );
 }
