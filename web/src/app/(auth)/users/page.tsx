@@ -23,11 +23,15 @@ export default function Page() {
           query: { id: id },
         });
         const data = await res.json();
-        if (data.length !== 1) {
+        if (data.length >= 2)
+          throw new Error(`got too many users: got ${data.length}`);
+
+        const formattedUsers = formatUsers(data);
+        const first = formattedUsers[0];
+        if (!first) {
           throw new Error("User Not Found!");
         }
-        const formattedUsers = formatUsers(data);
-        setUser(formattedUsers[0]);
+        setUser(first);
       } catch (error) {
         console.error("Failed to fetch user:", error);
         router.push("/community");

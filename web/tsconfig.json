@@ -7,6 +7,9 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "noUncheckedIndexedAccess": true,
+    "moduleResolution": "bundler",
+    "verbatimModuleSyntax": false,
     "plugins": [
       {
         "name": "next"

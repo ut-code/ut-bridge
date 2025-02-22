@@ -71,26 +71,28 @@ export default function Page() {
           languageRes.json(),
           userRes.json(),
         ]);
+        const me = data[0];
+        if (!me) throw new Error("my data not found");
 
         const formattedData = {
-          id: data[0].id,
-          imageUrl: data[0].imageUrl,
+          id: me.id,
+          imageUrl: me.imageUrl,
           guid: "",
-          name: data[0].name,
-          gender: data[0].gender,
-          isForeignStudent: data[0].isForeignStudent,
-          displayLanguage: data[0].displayLanguage,
-          grade: data[0].grade,
-          universityId: data[0].campus.universityId,
-          divisionId: data[0].divisionId,
-          campusId: data[0].campusId,
-          hobby: data[0].hobby,
-          introduction: data[0].introduction,
-          motherLanguageId: data[0].motherLanguageId,
-          fluentLanguageIds: data[0].fluentLanguages.map(
+          name: me.name,
+          gender: me.gender,
+          isForeignStudent: me.isForeignStudent,
+          displayLanguage: me.displayLanguage,
+          grade: me.grade,
+          universityId: me.campus.universityId,
+          divisionId: me.divisionId,
+          campusId: me.campusId,
+          hobby: me.hobby,
+          introduction: me.introduction,
+          motherLanguageId: me.motherLanguageId,
+          fluentLanguageIds: me.fluentLanguages.map(
             (lang: { language: { id: string } }) => lang.language.id,
           ),
-          learningLanguageIds: data[0].learningLanguages.map(
+          learningLanguageIds: me.learningLanguages.map(
             (lang: { language: { id: string } }) => lang.language.id,
           ),
         };

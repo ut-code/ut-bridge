@@ -7,9 +7,9 @@
     "moduleDetection": "force",
     "jsx": "react-jsx",
     // Bundler mode
-    "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
+    "resolveJsonModule": true,
     "noEmit": true,
     // Best practices
     "allowJs": true,
@@ -19,7 +19,7 @@
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noUncheckedSideEffectImports": true,
+    // "noUncheckedSideEffectImports": true,
     // ?
     "incremental": true,
     // Some stricter flags (disabled by default)

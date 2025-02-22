@@ -4,8 +4,10 @@ import { universities } from "./data/universities.ts";
 import { prisma } from "../../server/config/prisma.ts";
 import { users } from "./data/users.ts";
 
+const firstUniversity = universities[0];
+if (!firstUniversity) throw new Error("please input universities");
 if (
-  await prisma.university.findUnique({ where: { name: universities[0].name } })
+  await prisma.university.findUnique({ where: { name: firstUniversity.name } })
 ) {
   throw new Error("cannot run seed: university already exists");
 }
@@ -37,6 +39,13 @@ for (const univ of universities) {
     });
   }
 }
+
+function randomSelect<T>(set: T[]) {
+  const rand = set[Math.floor(Math.random() * set.length)];
+  if (!rand) throw new Error("randomSelect called on empty list");
+  return rand;
+}
+
 const seedDivisions = await prisma.division.findMany();
 const seedCampuses = await prisma.campus.findMany();
 const seedLanguages = await prisma.language.findMany();
@@ -54,9 +63,9 @@ for (const user of users) {
       introduction: user.introduction,
       guid: user.guid,
       imageUrl: user.imageUrl,
-      divisionId: seedDivisions[0].id,
-      campusId: seedCampuses[0].id,
-      motherLanguageId: seedLanguages[0].id,
+      divisionId: randomSelect(seedDivisions).id,
+      campusId: randomSelect(seedCampuses).id,
+      motherLanguageId: randomSelect(seedLanguages).id,
       fluentLanguages: {
         create: seedLanguages.map((lang) => ({
           language: { connect: { id: lang.id } },
