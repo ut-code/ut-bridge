@@ -9,7 +9,6 @@ import {
 } from "react";
 import { auth } from "../config.ts";
 
-// Contextの型を変更し、userをnull許容しない
 const AuthContext = createContext<{ user: User }>({} as { user: User });
 
 export function useAuthContext() {
