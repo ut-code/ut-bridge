@@ -20,6 +20,7 @@ export default function Page() {
   const usersPerPage = 9;
   const totalPages = Math.ceil(totalUsers / usersPerPage);
   const { myData } = useUserContext();
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {

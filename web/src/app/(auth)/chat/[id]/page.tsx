@@ -108,11 +108,11 @@ function MessageList({
       }
       return false;
     };
-    handlers.onUpdate = (id, message) => {
+    handlers.onUpdate = (id, newMessage) => {
       setMessages((prev) => {
-        for (let idx = 0; idx < prev.length; idx++) {
-          if (prev[idx].id === id) {
-            prev[idx].content = message.content;
+        for (const m of prev) {
+          if (m.id === id) {
+            m.content = newMessage.content;
           }
         }
         // avoid react from automatically optimizing the update away
@@ -122,7 +122,7 @@ function MessageList({
     handlers.onDelete = (id) => {
       setMessages((prev) => {
         for (let idx = 0; idx < prev.length; idx++) {
-          if (prev[idx].id === id) {
+          if (prev[idx]?.id === id) {
             prev.splice(idx, 1);
             return prev;
           }
