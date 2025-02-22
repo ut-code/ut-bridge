@@ -1,7 +1,7 @@
 import type { CardUser, FullCardUser, FullUser, User } from "common/zod/schema";
 
-export function formatUsers(users: FullUser[]): User[] {
-  return users.map((user) => ({
+export function formatUser(user: FullUser): User {
+  return {
     id: user.id,
     imageUrl: user.imageUrl,
     name: user.name,
@@ -25,11 +25,11 @@ export function formatUsers(users: FullUser[]): User[] {
     motherLanguage: user.motherLanguage.name,
     fluentLanguages: user.fluentLanguages.map((fl) => fl.language.name),
     learningLanguages: user.learningLanguages.map((ll) => ll.language.name),
-  }));
+  };
 }
 
-export function formatCardUsers(users: FullCardUser[]): CardUser[] {
-  return users.map((user) => ({
+export function formatCardUser(user: FullCardUser): CardUser {
+  return {
     id: user.id,
     imageUrl: user.imageUrl,
     name: user.name,
@@ -49,5 +49,5 @@ export function formatCardUsers(users: FullCardUser[]): CardUser[] {
     motherLanguage: user.motherLanguage.name,
     fluentLanguages: user.fluentLanguages.map((fl) => fl.language.name),
     learningLanguages: user.learningLanguages.map((ll) => ll.language.name),
-  }));
+  };
 }

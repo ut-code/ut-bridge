@@ -1,5 +1,5 @@
 "use client";
-import { formatCardUsers } from "@/features/format";
+import { formatCardUser } from "@/features/format";
 import { useUserContext } from "@/features/user/userProvider.tsx";
 import type { CardUser } from "common/zod/schema";
 import Image from "next/image";
@@ -38,7 +38,9 @@ export default function Page() {
           });
 
           const data = await res.json();
-          const formattedUsers = formatCardUsers(data.users);
+          const formattedUsers = data.users.map((user) => {
+            return formatCardUser(user);
+          });
 
           setUsers(formattedUsers);
           setTotalUsers(data.totalUsers);

@@ -1,50 +1,19 @@
 "use client";
 
-import { client } from "@/client";
 import LoginBadge from "@/features/auth/components/LoginBadge";
 import { useGoogleLogout } from "@/features/auth/functions/logout.ts";
 import { useUserContext } from "@/features/user/userProvider.tsx";
-import type { User } from "common/zod/schema";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { formatUsers } from "../../../features/format.ts";
+import { formatUser } from "../../../features/format.ts";
 
 export default function Page() {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
   const { logout } = useGoogleLogout();
   const { myData } = useUserContext();
+  if (!myData) return <div>User not found</div>;
 
-  useEffect(() => {
-    async function fetchUser() {
-      try {
-        if (!myData) {
-          throw new Error("User Not Found!");
-        }
-        const res = await client.users.$get({
-          query: { id: myData.id },
-        });
-        const data = await res.json();
-        if (data.length !== 1) {
-          throw new Error("My Data Not Found!");
-        }
-        const users = formatUsers(data);
-        setUser(users[0]);
-      } catch (error) {
-        console.error("Failed to fetch user:", error);
-        router.push("./community");
-      } finally {
-        setLoading(false);
-      }
-    }
+  const user = formatUser(myData);
 
-    fetchUser();
-  }, [router, myData]);
-  if (loading) return <div>Loading...</div>;
-  if (!user) return <div>User not found</div>;
   return (
     <>
       <Link
