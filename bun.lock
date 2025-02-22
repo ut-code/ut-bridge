@@ -17,11 +17,10 @@
         "typescript": "^5.0.0",
       },
     },
-    "scripts": {
-      "name": "scripts",
+    "scripts/seed": {
+      "name": "seed",
       "devDependencies": {
         "@types/bun": "latest",
-        "common": "workspace:common",
       },
       "peerDependencies": {
         "typescript": "^5.0.0",
@@ -1095,7 +1094,7 @@
 
     "scheduler": ["scheduler@0.25.0", "", {}, "sha512-xFVuu11jh+xcO7JOAGJNOXld8/TcEHK/4CituBUeUb5hqxJLj9YuemAEuvm9gQ/+pgXYfbQuqAkiYu+u7YEsNA=="],
 
-    "scripts": ["scripts@workspace:scripts"],
+    "seed": ["seed@workspace:scripts/seed"],
 
     "semver": ["semver@7.7.1", "", { "bin": { "semver": "bin/semver.js" } }, "sha512-hlq8tAfn0m/61p4BVRcPzIGr6LKiMwo4VM6dGi6pt4qcRkmNzTcWq6eCEjEh+qXjkMDvPlOFFSGwQjoEa6gyMA=="],
 
