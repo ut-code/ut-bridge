@@ -1,18 +1,18 @@
 import Header from "@/components/Header";
-import { AuthBoundary } from "@/features/auth/providers/AuthProvider";
-import { ChatProvider } from "@/features/chat/provider";
+import { AuthProvider } from "@/features/auth/providers/AuthProvider";
+import { UserProvider } from "@/features/user/userProvider";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <AuthBoundary>
-      <ChatProvider>
+    <AuthProvider>
+      <UserProvider>
         <div className="h-full">
           <Header />
           <div className="h-full overflow-y-auto pt-16 bg-tGray">
             {children}
           </div>
         </div>
-      </ChatProvider>
-    </AuthBoundary>
+      </UserProvider>
+    </AuthProvider>
   );
 }

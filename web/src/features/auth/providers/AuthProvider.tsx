@@ -1,50 +1,45 @@
 "use client";
-import { useAtom } from "jotai";
-import Link from "next/link";
-import { useEffect } from "react";
+import type { User } from "firebase/auth";
 import {
-  FB_SESSION_STORAGE_IDTOKEN_KEY,
-  FB_SESSION_STORAGE_USER_KEY,
-  fbIdTokenAtom,
-  fbUserAtom,
-} from "../state.ts";
+  type ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { auth } from "../config.ts";
 
-export function AuthBoundary({ children }: { children: React.ReactNode }) {
-  const [idToken, setIdToken] = useAtom(fbIdTokenAtom);
-  const [_, setUser] = useAtom(fbUserAtom);
+const AuthContext = createContext<{ user: User }>({} as { user: User });
 
-  // biome-ignore lint: i don't think its necessary
+export function useAuthContext() {
+  return useContext(AuthContext);
+}
+
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+export function AuthProvider({ children }: AuthProviderProps) {
+  const [user, setUser] = useState<User | undefined>(undefined);
+
   useEffect(() => {
-    try {
-      const idToken = sessionStorage.getItem(FB_SESSION_STORAGE_IDTOKEN_KEY);
-      const user = sessionStorage.getItem(FB_SESSION_STORAGE_USER_KEY);
-      if (user === null || idToken === null) {
-        throw undefined; // catch below
+    const unsubscribed = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUser(user);
       }
+    });
 
-      setUser(JSON.parse(user));
-      setIdToken(idToken);
-      document.cookie = `ut-bridge-Authorization=${idToken}`;
-      console.log("successfully set local firebase user to", idToken);
-    } catch (err) {
-      setIdToken(null);
-      setUser(null);
-      console.log("failed to login from stale. redirecting to login.");
-      sessionStorage.removeItem(FB_SESSION_STORAGE_USER_KEY);
-      sessionStorage.removeItem(FB_SESSION_STORAGE_IDTOKEN_KEY);
-    }
+    return () => {
+      unsubscribed();
+    };
   }, []);
 
-  if (idToken === undefined) return <span className="loading loading-xl" />;
-  if (idToken === null) {
-    return (
-      <>
-        (todo) you are not logged in. please log in.
-        <Link className="btn btn-primary" href="/login">
-          login
-        </Link>
-      </>
-    );
+  // ユーザーが取得されるまでローディングを表示
+  if (user === undefined) {
+    return <p>loading...</p>;
   }
-  return <>{children}</>;
+
+  return (
+    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
+  );
 }

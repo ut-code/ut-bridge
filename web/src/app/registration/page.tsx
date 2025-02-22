@@ -1,13 +1,14 @@
 "use client";
 
 import { client } from "@/client";
-import { FB_SESSION_STORAGE_USER_KEY } from "@/features/auth/state";
+import { auth } from "@/features/auth/config";
 import type { CreateUser } from "common/zod/schema";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Page() {
   const router = useRouter();
+  const user = auth.currentUser;
   const [campuses, setCampuses] = useState<{ id: string; name: string }[]>([]);
   const [divisions, setDivisions] = useState<{ id: string; name: string }[]>(
     [],
@@ -158,9 +159,8 @@ export default function Page() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("loading");
-    const data = sessionStorage.getItem(FB_SESSION_STORAGE_USER_KEY);
-    const user = data ? JSON.parse(data) : null;
     try {
+      if (!user) throw new Error("User is not found in Firebase!");
       const body = {
         ...formData,
         id: self.crypto.randomUUID(),
@@ -173,7 +173,6 @@ export default function Page() {
       }
 
       setStatus("success");
-      localStorage.setItem("utBridgeUserId", body.id);
       router.push("/community");
     } catch (error) {
       console.error("ユーザー登録に失敗しました", error);

@@ -76,12 +76,12 @@ const router = new Hono().get(
           imageUrl: true,
           campus: { select: { name: true } },
           grade: true,
-          motherLanguage: { select: { name: true } },
+          motherLanguage: true,
           fluentLanguages: {
-            select: { language: { select: { name: true } } },
+            select: { language: true },
           },
           learningLanguages: {
-            select: { language: { select: { name: true } } },
+            select: { language: true },
           },
         },
       }),

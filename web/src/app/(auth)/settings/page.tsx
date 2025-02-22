@@ -1,48 +1,18 @@
 "use client";
 
-import { client } from "@/client";
 import LoginBadge from "@/features/auth/components/LoginBadge";
-import type { User } from "common/zod/schema";
+import { useGoogleLogout } from "@/features/auth/functions/logout.ts";
+import { useUserContext } from "@/features/user/userProvider.tsx";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { formatUsers } from "../../../features/format.ts";
+import { formatUser } from "../../../features/format.ts";
 
 export default function Page() {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
+  const { logout } = useGoogleLogout();
+  const { myData } = useUserContext();
 
-  useEffect(() => {
-    const id = localStorage.getItem("utBridgeUserId");
-    async function fetchUser() {
-      try {
-        if (!id) {
-          throw new Error("My Id Not Found!");
-        }
-        const res = await client.users.$get({
-          query: { id: id },
-        });
-        const data = await res.json();
-        const users = formatUsers(data);
-        const me = users[0];
-        if (!me) {
-          throw new Error("My Data Not Found!");
-        }
-        setUser(me);
-      } catch (error) {
-        console.error("Failed to fetch user:", error);
-        router.push("./community");
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchUser();
-  }, [router]);
-  if (loading) return <div>Loading...</div>;
-  if (!user) return <div>User not found</div>;
+  if (!myData) return <div>User not found</div>;
+  const user = formatUser(myData);
   return (
     <>
       <Link
@@ -52,6 +22,9 @@ export default function Page() {
         ユーザー編集画面へ
       </Link>
       Settings Page
+      <button type="button" className="m-5 btn btn-error" onClick={logout}>
+        log out
+      </button>
       <div>
         <h1>自分のデータ</h1>
         {user.imageUrl ? (

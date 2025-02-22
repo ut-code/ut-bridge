@@ -1,8 +1,8 @@
 "use client";
 
 import { client } from "@/client";
-import { myId } from "@/features/auth/state";
 import { handlers } from "@/features/chat/state";
+import { useUserContext } from "@/features/user/userProvider";
 import { assert } from "@/lib";
 import { use } from "@/react/useData";
 import { useParams } from "next/navigation";
@@ -137,6 +137,7 @@ function MessageList({
       handlers.onDelete = undefined;
     };
   }, [room]);
+  const { myData } = useUserContext();
 
   return (
     <ul>
@@ -144,7 +145,9 @@ function MessageList({
         // TODO: handle pictures
         <li key={m.id}>
           <div
-            className={`chat ${m.senderId === myId ? "chat-end" : "chat-start"}`}
+            className={`chat ${
+              m.senderId === myData?.id ? "chat-end" : "chat-start"
+            }`}
           >
             <div className="chat-header">
               {m.sender.name}

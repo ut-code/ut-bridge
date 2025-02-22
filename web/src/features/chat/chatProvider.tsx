@@ -1,7 +1,6 @@
 "use client";
 import { API_ENDPOINT } from "@/client";
 import { parse } from "devalue";
-import { useAtom } from "jotai";
 /*
 
 DATA FLOW:
@@ -19,11 +18,13 @@ DATA FLOW:
 */
 import { useEffect } from "react";
 import type { BroadcastEvent } from "server/routes/chat";
-import { fbIdTokenAtom } from "../auth/state.ts";
+import { useAuthContext } from "../auth/providers/AuthProvider.tsx";
 import { handlers } from "./state.ts";
 
 export function ChatProvider({ children }: { children: React.ReactNode }) {
-  const [idToken, _] = useAtom(fbIdTokenAtom);
+  const { user } = useAuthContext();
+  const idToken = user?.getIdToken();
+
   useEffect(() => {
     if (!idToken) throw new Error("not authorized yet");
     document.cookie = `ut-bridge-Authorization=${idToken}`;

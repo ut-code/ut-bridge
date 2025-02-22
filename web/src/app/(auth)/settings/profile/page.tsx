@@ -1,12 +1,14 @@
 "use client";
 
 import { client } from "@/client";
-import { FB_SESSION_STORAGE_USER_KEY } from "@/features/auth/state";
+import { useAuthContext } from "@/features/auth/providers/AuthProvider";
+import { useUserContext } from "@/features/user/userProvider";
 import type { CreateUser } from "common/zod/schema";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Page() {
+  const { user } = useAuthContext();
   const router = useRouter();
   const [campuses, setCampuses] = useState<{ id: string; name: string }[]>([]);
   const [divisions, setDivisions] = useState<{ id: string; name: string }[]>(
@@ -37,66 +39,57 @@ export default function Page() {
     fluentLanguageIds: [],
     learningLanguageIds: [],
   });
+  const { myData } = useUserContext();
 
   useEffect(() => {
     const fetchMyData = async () => {
       try {
-        const myId = localStorage.getItem("utBridgeUserId");
-        if (!myId) {
-          throw new Error("User ID is not found! Please login again!");
+        if (!myData) {
+          throw new Error("User Not Found in Database!");
         }
-        const [universityRes, languageRes, userRes] = await Promise.all([
+        const [universityRes, languageRes] = await Promise.all([
           client.university.$get(),
           client.language.$get(),
-          client.users.$get({
-            query: { id: myId },
-          }),
         ]);
-        if (!universityRes.ok || !languageRes.ok || !userRes.ok) {
+        if (!universityRes.ok || !languageRes.ok) {
           console.error("データ取得に失敗しました", {
             university: universityRes.status,
             language: languageRes.status,
-            user: userRes.status,
           });
           throw new Error(
             `データ取得に失敗しました:${{
               university: await universityRes.text(),
               language: await languageRes.text(),
-              user: await userRes.text(),
             }}`,
           );
         }
-        const [universities, languages, data] = await Promise.all([
+        const [universities, languages] = await Promise.all([
           universityRes.json(),
           languageRes.json(),
-          userRes.json(),
         ]);
-        const me = data[0];
-        if (!me) throw new Error("my data not found");
 
         const formattedData = {
-          id: me.id,
-          imageUrl: me.imageUrl,
+          id: myData.id,
+          imageUrl: myData.imageUrl,
           guid: "",
-          name: me.name,
-          gender: me.gender,
-          isForeignStudent: me.isForeignStudent,
-          displayLanguage: me.displayLanguage,
-          grade: me.grade,
-          universityId: me.campus.universityId,
-          divisionId: me.divisionId,
-          campusId: me.campusId,
-          hobby: me.hobby,
-          introduction: me.introduction,
-          motherLanguageId: me.motherLanguageId,
-          fluentLanguageIds: me.fluentLanguages.map(
+          name: myData.name,
+          gender: myData.gender,
+          isForeignStudent: myData.isForeignStudent,
+          displayLanguage: myData.displayLanguage,
+          grade: myData.grade,
+          universityId: myData.campus.universityId,
+          divisionId: myData.divisionId,
+          campusId: myData.campusId,
+          hobby: myData.hobby,
+          introduction: myData.introduction,
+          motherLanguageId: myData.motherLanguageId,
+          fluentLanguageIds: myData.fluentLanguages.map(
             (lang: { language: { id: string } }) => lang.language.id,
           ),
-          learningLanguageIds: me.learningLanguages.map(
+          learningLanguageIds: myData.learningLanguages.map(
             (lang: { language: { id: string } }) => lang.language.id,
           ),
         };
-        console.log(formattedData, "あああ");
         setUniversities(universities);
         setLanguages(languages);
         setFormData(formattedData);
@@ -107,7 +100,7 @@ export default function Page() {
       }
     };
     fetchMyData();
-  }, [router]);
+  }, [router, myData]);
 
   useEffect(() => {
     if (!universityId) return;
@@ -195,9 +188,8 @@ export default function Page() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("loading");
-    const data = sessionStorage.getItem(FB_SESSION_STORAGE_USER_KEY);
-    const user = data ? JSON.parse(data) : null;
     try {
+      if (!user) throw new Error("User is not found in Firebase!");
       const body = {
         ...formData,
         guid: user.uid,
@@ -209,7 +201,6 @@ export default function Page() {
       }
 
       setStatus("success");
-      localStorage.setItem("utBridgeUserId", body.id);
       router.push("/community");
     } catch (error) {
       console.error("ユーザー登録に失敗しました", error);
