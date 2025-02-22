@@ -1,7 +1,10 @@
-node_modules
+/node_modules
 /.env
+
+# web
 web/dist
 web/.next
+web/next-env.d.ts
 
 # Nix + Direnv
 /.direnv
