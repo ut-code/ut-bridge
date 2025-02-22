@@ -36,7 +36,9 @@ export function UserProvider({ children }: { children: ReactNode }) {
         });
         if (!res.ok) throw new Error("User is not found in Database!");
         const data = await res.json();
-        setMyData(data[0]);
+        const me = data[0];
+        if (!me) throw new Error("User is not found in Database!");
+        setMyData(me);
       } catch (error) {
         console.error("Error fetching user data:", error);
         router.push("/login");

@@ -87,7 +87,7 @@ type RoomPreview = {
 };
 
 function Room({ room }: { room: RoomPreview }) {
-  const firstMember = room.members.length > 0 ? room.members[0].user : null;
+  const firstMember = room.members[0]?.user ?? null;
 
   return (
     <Link href={`/chat/${room.id}`} className="flex items-center space-x-4">
