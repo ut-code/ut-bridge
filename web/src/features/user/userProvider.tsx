@@ -18,7 +18,6 @@ export function useUserContext() {
   return useContext(UserContext);
 }
 
-// Providerの作成
 export function UserProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
   const { user } = useAuthContext();
@@ -40,6 +39,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
         setMyData(data[0]);
       } catch (error) {
         console.error("Error fetching user data:", error);
+        router.push("/login");
       }
     };
 

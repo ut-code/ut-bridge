@@ -7,18 +7,19 @@ import { auth, provider } from "../config.ts";
 async function login() {
   try {
     const result = await signInWithPopup(auth, provider);
-    const user = result.user;
-    if (!user) throw new Error("Login Failed");
+    if (!result.user) throw new Error("Login Failed");
 
     const res = await client.users.exist.$get({
       query: { guid: result.user.uid },
     });
-    const isUserExist = await res.json();
-    if (isUserExist.exists) return { login: true, isUserExist: true, user };
-    return { login: true, isUserExist: false, user };
+    const { exists } = await res.json();
+
+    return exists
+      ? { status: "hasData", user: result.user }
+      : { status: "auth-nodata", user: result.user };
   } catch (error) {
     console.error("Login Error:", error);
-    return { login: false, error };
+    return { status: "noAuth", error };
   }
 }
 
@@ -28,15 +29,16 @@ export function useGoogleSignIn() {
   const signInWithGoogle = useCallback(async () => {
     const response = await login();
 
-    if (!response.login) {
-      router.push("/login");
-      return;
-    }
-
-    if (response.isUserExist) {
-      router.push("/community");
-    } else {
-      router.push("/login");
+    switch (response.status) {
+      case "hasData":
+        router.push("/community");
+        break;
+      case "auth-nodata":
+        router.push("/registration");
+        break;
+      default:
+        router.push("/login");
+        break;
     }
   }, [router]);
 
