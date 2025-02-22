@@ -1,14 +1,14 @@
 "use client";
 
 import { client } from "@/client";
-import { useAuthContext } from "@/features/auth/providers/AuthProvider";
+import { auth } from "@/features/auth/config";
 import type { CreateUser } from "common/zod/schema";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Page() {
-  const { user } = useAuthContext();
   const router = useRouter();
+  const user = auth.currentUser;
   const [campuses, setCampuses] = useState<{ id: string; name: string }[]>([]);
   const [divisions, setDivisions] = useState<{ id: string; name: string }[]>(
     [],
