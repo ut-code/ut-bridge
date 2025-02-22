@@ -4,7 +4,7 @@ import type { User } from "common/zod/schema";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { client } from "../../../client.ts";
+import { client } from "../../../../client.ts";
 
 export default function Page() {
   const [user, setUser] = useState<User | null>(null);
