@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import { AuthProvider } from "@/features/auth/providers/AuthProvider";
-import { ChatNotificationProvider } from "@/features/chat/chatProvider";
+import { ChatNotificationProvider } from "@/features/chat/NotificationProvider";
 import { UserProvider } from "@/features/user/userProvider";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
