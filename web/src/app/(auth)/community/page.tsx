@@ -11,7 +11,9 @@ export default function Page() {
   const router = useRouter();
   const [users, setUsers] = useState<CardUser[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isExchangeEnabled, setIsExchangeEnabled] = useState(true);
+  const [exchangeQuery, setIsExchangeEnabled] = useState<
+    "exchange" | "japanese" | "all"
+  >("all");
   const [page, setPage] = useState(1);
   const [totalUsers, setTotalUsers] = useState(0);
   const usersPerPage = 9;
@@ -28,8 +30,8 @@ export default function Page() {
           query: {
             id: myId,
             page: page.toString(),
-            isExchangeEnabled: isExchangeEnabled.toString(),
-            searchQuery: searchQuery, // 🔹 検索クエリを送信
+            exchangeQuery: exchangeQuery,
+            searchQuery: searchQuery,
           },
         });
         const data = await res.json();
@@ -45,7 +47,7 @@ export default function Page() {
     // 🔹 検索ワードの変更後に 500ms 待ってリクエストを送る（デバウンス処理）
     const timeoutId = setTimeout(fetchUsers, 500);
     return () => clearTimeout(timeoutId);
-  }, [router, page, isExchangeEnabled, searchQuery]);
+  }, [router, page, exchangeQuery, searchQuery]);
 
   return (
     <>
@@ -66,9 +68,12 @@ export default function Page() {
         id="exchange-language"
         type="checkbox"
         className="toggle"
-        checked={isExchangeEnabled}
-        onChange={() => {
-          setIsExchangeEnabled((prev) => !prev);
+        checked={exchangeQuery !== "all"}
+        onChange={(ev) => {
+          const filtered = ev.target.checked;
+          const amIForeignStudent = true;
+          const filterQuery = amIForeignStudent ? "japanese" : "exchange";
+          setIsExchangeEnabled(filtered ? filterQuery : "all");
           setPage(1); // 言語交換の設定を変更したらページをリセット
         }}
       />

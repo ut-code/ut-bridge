@@ -11,31 +11,24 @@ const router = new Hono().get(
     z.object({
       id: z.string(),
       page: z.string().optional(),
-      isExchangeEnabled: z.string().optional(),
-      searchQuery: z.string().optional(), // 🔹 検索クエリを追加
+      exchangeQuery: z.enum(["exchange", "japanese", "all"]),
+      searchQuery: z.string().optional(),
     }),
   ),
   async (c) => {
     const page = Number.parseInt(c.req.query("page") || "1", 10);
-    const isExchangeEnabled = c.req.query("isExchangeEnabled") === "true";
-    const searchQuery = c.req.query("searchQuery")?.toLowerCase() || "";
+    const exchangeQuery = c.req.query("exchangeQuery") || "all";
+    const searchQuery = c.req.query("search") || "";
     const take = 9;
     const skip = (page - 1) * take;
-
-    const myUser = await prisma.user.findUnique({
-      where: { id: c.req.query("id") },
-      select: { isForeignStudent: true },
-    });
-
-    if (!myUser) {
-      return c.json({ users: [], totalUsers: 0 });
-    }
 
     const whereCondition: Prisma.UserWhereInput = {};
 
     // 言語交換フィルター
-    if (isExchangeEnabled) {
-      whereCondition.isForeignStudent = { not: myUser.isForeignStudent };
+    if (exchangeQuery === "exchange") {
+      whereCondition.isForeignStudent = true;
+    } else if (exchangeQuery === "japanese") {
+      whereCondition.isForeignStudent = false;
     }
 
     // 検索フィルター
@@ -69,7 +62,6 @@ const router = new Hono().get(
       ];
     }
 
-    // 🔹 ユーザー取得
     const [users, totalUsers] = await Promise.all([
       prisma.user.findMany({
         where: whereCondition,
