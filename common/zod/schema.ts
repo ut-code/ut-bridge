@@ -96,6 +96,7 @@ export const CardUserSchema = z.object({
 });
 
 const LanguageSchema = z.object({
+  id: z.string(),
   name: z.string(),
 });
 

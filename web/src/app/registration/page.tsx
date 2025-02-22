@@ -173,7 +173,6 @@ export default function Page() {
       }
 
       setStatus("success");
-      localStorage.setItem("utBridgeUserId", body.id);
       router.push("/community");
     } catch (error) {
       console.error("ユーザー登録に失敗しました", error);

@@ -2,6 +2,7 @@
 
 import { client } from "@/client";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
+import { useUserContext } from "@/features/user/userProvider";
 import type { CreateUser } from "common/zod/schema";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -38,64 +39,57 @@ export default function Page() {
     fluentLanguageIds: [],
     learningLanguageIds: [],
   });
+  const { myData } = useUserContext();
 
   useEffect(() => {
     const fetchMyData = async () => {
       try {
-        const myId = localStorage.getItem("utBridgeUserId");
-        if (!myId) {
-          throw new Error("User ID is not found! Please login again!");
+        if (!myData) {
+          throw new Error("User Not Found in Database!");
         }
-        const [universityRes, languageRes, userRes] = await Promise.all([
+        const [universityRes, languageRes] = await Promise.all([
           client.university.$get(),
           client.language.$get(),
-          client.users.$get({
-            query: { id: myId },
-          }),
         ]);
-        if (!universityRes.ok || !languageRes.ok || !userRes.ok) {
+        if (!universityRes.ok || !languageRes.ok) {
           console.error("データ取得に失敗しました", {
             university: universityRes.status,
             language: languageRes.status,
-            user: userRes.status,
           });
           throw new Error(
             `データ取得に失敗しました:${{
               university: await universityRes.text(),
               language: await languageRes.text(),
-              user: await userRes.text(),
             }}`,
           );
         }
-        const [universities, languages, data] = await Promise.all([
+        const [universities, languages] = await Promise.all([
           universityRes.json(),
           languageRes.json(),
-          userRes.json(),
         ]);
 
         const formattedData = {
-          id: data[0].id,
-          imageUrl: data[0].imageUrl,
+          id: myData.id,
+          imageUrl: myData.imageUrl,
           guid: "",
-          name: data[0].name,
-          gender: data[0].gender,
-          isForeignStudent: data[0].isForeignStudent,
-          displayLanguage: data[0].displayLanguage,
-          grade: data[0].grade,
-          universityId: data[0].campus.universityId,
-          divisionId: data[0].divisionId,
-          campusId: data[0].campusId,
-          hobby: data[0].hobby,
-          introduction: data[0].introduction,
-          motherLanguageId: data[0].motherLanguageId,
-          fluentLanguageIds: data[0].fluentLanguages.map(
+          name: myData.name,
+          gender: myData.gender,
+          isForeignStudent: myData.isForeignStudent,
+          displayLanguage: myData.displayLanguage,
+          grade: myData.grade,
+          universityId: myData.campus.universityId,
+          divisionId: myData.divisionId,
+          campusId: myData.campusId,
+          hobby: myData.hobby,
+          introduction: myData.introduction,
+          motherLanguageId: myData.motherLanguageId,
+          fluentLanguageIds: myData.fluentLanguages.map(
             (lang: { language: { id: string } }) => lang.language.id,
           ),
-          learningLanguageIds: data[0].learningLanguages.map(
+          learningLanguageIds: myData.learningLanguages.map(
             (lang: { language: { id: string } }) => lang.language.id,
           ),
         };
-        console.log(formattedData, "あああ");
         setUniversities(universities);
         setLanguages(languages);
         setFormData(formattedData);
@@ -106,7 +100,7 @@ export default function Page() {
       }
     };
     fetchMyData();
-  }, [router]);
+  }, [router, myData]);
 
   useEffect(() => {
     if (!universityId) return;
@@ -207,7 +201,6 @@ export default function Page() {
       }
 
       setStatus("success");
-      localStorage.setItem("utBridgeUserId", body.id);
       router.push("/community");
     } catch (error) {
       console.error("ユーザー登録に失敗しました", error);

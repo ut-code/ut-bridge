@@ -3,6 +3,7 @@
 import { client } from "@/client";
 import LoginBadge from "@/features/auth/components/LoginBadge";
 import { useGoogleLogout } from "@/features/auth/functions/logout.ts";
+import { useUserContext } from "@/features/user/userProvider.tsx";
 import type { User } from "common/zod/schema";
 import Image from "next/image";
 import Link from "next/link";
@@ -15,16 +16,16 @@ export default function Page() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { logout } = useGoogleLogout();
+  const { myData } = useUserContext();
 
   useEffect(() => {
-    const id = localStorage.getItem("utBridgeUserId");
     async function fetchUser() {
       try {
-        if (!id) {
-          throw new Error("My Id Not Found!");
+        if (!myData) {
+          throw new Error("User Not Found!");
         }
         const res = await client.users.$get({
-          query: { id: id },
+          query: { id: myData.id },
         });
         const data = await res.json();
         if (data.length !== 1) {
@@ -41,7 +42,7 @@ export default function Page() {
     }
 
     fetchUser();
-  }, [router]);
+  }, [router, myData]);
   if (loading) return <div>Loading...</div>;
   if (!user) return <div>User not found</div>;
   return (

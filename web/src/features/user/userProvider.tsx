@@ -10,14 +10,12 @@ import {
 } from "react";
 import { useAuthContext } from "../auth/providers/AuthProvider.tsx";
 
-// Contextの型定義
-interface UserContextType {
-  myData: FullUser | null;
-  setMyData: React.Dispatch<React.SetStateAction<FullUser | null>>;
+const UserContext = createContext<{ myData: FullUser | null }>({
+  myData: null,
+});
+export function useUserContext() {
+  return useContext(UserContext);
 }
-
-// Contextの作成（デフォルト値は null）
-const UserContext = createContext<UserContextType | null>(null);
 
 // Providerの作成
 export function UserProvider({ children }: { children: ReactNode }) {
@@ -25,6 +23,10 @@ export function UserProvider({ children }: { children: ReactNode }) {
   if (!user) throw new Error("User is not found in Firebase!");
 
   const [myData, setMyData] = useState<FullUser | null>(null);
+
+  const value = {
+    myData,
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -41,20 +43,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
     };
 
     fetchUserData();
-  }, [user.uid]); // user.uid に依存
+  }, [user.uid]);
 
-  return (
-    <UserContext.Provider value={{ myData, setMyData }}>
-      {children}
-    </UserContext.Provider>
-  );
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 }
-
-// useUser フックを作成
-export const useUser = () => {
-  const context = useContext(UserContext);
-  if (!context) {
-    throw new Error("useUser must be used within a UserProvider");
-  }
-  return context;
-};
