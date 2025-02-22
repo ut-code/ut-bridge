@@ -17,7 +17,7 @@ const router = new Hono().get(
   ),
   async (c) => {
     const rawPage = c.req.valid("query").page || "1";
-    const page = z.number().parse(rawPage);
+    const page = z.coerce.number().parse(rawPage);
     const exchangeQuery = c.req.valid("query").exchangeQuery || "all";
     const searchQuery = c.req.valid("query").searchQuery || "";
     const take = 9;
