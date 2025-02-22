@@ -9,7 +9,8 @@ import {
 } from "react";
 import { auth } from "../config.ts";
 
-const AuthContext = createContext<{ user: User | null }>({ user: null });
+// Contextの型を変更し、userをnull許容しない
+const AuthContext = createContext<{ user: User }>({} as { user: User });
 
 export function useAuthContext() {
   return useContext(AuthContext);
@@ -20,30 +21,26 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  const value = {
-    user,
-    loading,
-  };
+  const [user, setUser] = useState<User | undefined>(undefined);
 
   useEffect(() => {
     const unsubscribed = auth.onAuthStateChanged((user) => {
-      setUser(user);
-      setLoading(false);
+      if (user) {
+        setUser(user);
+      }
     });
+
     return () => {
       unsubscribed();
     };
   }, []);
 
-  if (loading) {
+  // ユーザーが取得されるまでローディングを表示
+  if (user === undefined) {
     return <p>loading...</p>;
   }
+
   return (
-    <AuthContext.Provider value={value}>
-      {!loading && children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
   );
 }
