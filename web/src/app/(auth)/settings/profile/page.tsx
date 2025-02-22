@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Page() {
-  const { user } = useAuthContext();
+  const { fbUser: user } = useAuthContext();
   const router = useRouter();
   const [campuses, setCampuses] = useState<{ id: string; name: string }[]>([]);
   const [divisions, setDivisions] = useState<{ id: string; name: string }[]>(
@@ -39,12 +39,12 @@ export default function Page() {
     fluentLanguageIds: [],
     learningLanguageIds: [],
   });
-  const { myData } = useUserContext();
+  const { me } = useUserContext();
 
   useEffect(() => {
     const fetchMyData = async () => {
       try {
-        if (!myData) {
+        if (!me) {
           throw new Error("User Not Found in Database!");
         }
         const [universityRes, languageRes] = await Promise.all([
@@ -69,24 +69,24 @@ export default function Page() {
         ]);
 
         const formattedData = {
-          id: myData.id,
-          imageUrl: myData.imageUrl,
+          id: me.id,
+          imageUrl: me.imageUrl,
           guid: "",
-          name: myData.name,
-          gender: myData.gender,
-          isForeignStudent: myData.isForeignStudent,
-          displayLanguage: myData.displayLanguage,
-          grade: myData.grade,
-          universityId: myData.campus.universityId,
-          divisionId: myData.divisionId,
-          campusId: myData.campusId,
-          hobby: myData.hobby,
-          introduction: myData.introduction,
-          motherLanguageId: myData.motherLanguageId,
-          fluentLanguageIds: myData.fluentLanguages.map(
+          name: me.name,
+          gender: me.gender,
+          isForeignStudent: me.isForeignStudent,
+          displayLanguage: me.displayLanguage,
+          grade: me.grade,
+          universityId: me.campus.universityId,
+          divisionId: me.divisionId,
+          campusId: me.campusId,
+          hobby: me.hobby,
+          introduction: me.introduction,
+          motherLanguageId: me.motherLanguageId,
+          fluentLanguageIds: me.fluentLanguages.map(
             (lang: { language: { id: string } }) => lang.language.id,
           ),
-          learningLanguageIds: myData.learningLanguages.map(
+          learningLanguageIds: me.learningLanguages.map(
             (lang: { language: { id: string } }) => lang.language.id,
           ),
         };
@@ -100,7 +100,7 @@ export default function Page() {
       }
     };
     fetchMyData();
-  }, [router, myData]);
+  }, [router, me]);
 
   useEffect(() => {
     if (!universityId) return;

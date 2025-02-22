@@ -21,56 +21,62 @@ import type { BroadcastEvent } from "server/routes/chat";
 import { useAuthContext } from "../auth/providers/AuthProvider.tsx";
 import { handlers } from "./state.ts";
 
-export function ChatProvider({ children }: { children: React.ReactNode }) {
-  const { user } = useAuthContext();
-  const idToken = user?.getIdToken();
+export function ChatNotificationProvider({
+  children,
+}: { children: React.ReactNode }) {
+  const { fbUser } = useAuthContext();
 
   useEffect(() => {
-    if (!idToken) throw new Error("not authorized yet");
-    document.cookie = `ut-bridge-Authorization=${idToken}`;
-
     const ctrl = new AbortController();
-    const signal = ctrl.signal;
-    const src = new EventSource(`${API_ENDPOINT}/chat/sse`, {
-      withCredentials: true,
-    });
+    // fuck you useEffect
+    let src: EventSource;
 
-    src.addEventListener(
-      "Create",
-      (_e) => {
-        type Event = BroadcastEvent<"Create">;
-        const data = parse(_e.data) as Event["data"]["type"];
-        console.log("event Create received:", data);
-        handlers.onCreate?.(data.message);
-      },
-      { signal },
-    );
-    src.addEventListener(
-      "Update",
-      (_e) => {
-        type Event = BroadcastEvent<"Update">;
-        const data = parse(_e.data) as Event["data"]["type"];
-        console.log("event Update received:", data);
-        handlers.onUpdate?.(data.id, data.message);
-      },
-      { signal },
-    );
-    src.addEventListener(
-      "Delete",
-      (_e) => {
-        type Event = BroadcastEvent<"Delete">;
-        const data = _e.data as Event["data"]["type"];
-        console.log("event Delete received:", data);
-        handlers.onDelete?.(data.id);
-      },
-      { signal },
-    );
+    (async () => {
+      const idToken = await fbUser.getIdToken();
+      document.cookie = `ut-bridge-Authorization=${idToken}`;
+
+      const signal = ctrl.signal;
+      src = new EventSource(`${API_ENDPOINT}/chat/sse`, {
+        withCredentials: true,
+      });
+
+      src.addEventListener(
+        "Create",
+        (_e) => {
+          type Event = BroadcastEvent<"Create">;
+          const data = parse(_e.data) as Event["data"]["type"];
+          console.log("event Create received:", data);
+          handlers.onCreate?.(data.message);
+        },
+        { signal },
+      );
+      src.addEventListener(
+        "Update",
+        (_e) => {
+          type Event = BroadcastEvent<"Update">;
+          const data = parse(_e.data) as Event["data"]["type"];
+          console.log("event Update received:", data);
+          handlers.onUpdate?.(data.id, data.message);
+        },
+        { signal },
+      );
+      src.addEventListener(
+        "Delete",
+        (_e) => {
+          type Event = BroadcastEvent<"Delete">;
+          const data = _e.data as Event["data"]["type"];
+          console.log("event Delete received:", data);
+          handlers.onDelete?.(data.id);
+        },
+        { signal },
+      );
+    })();
 
     return () => {
-      src.close();
+      src?.close();
       ctrl.abort();
     };
-  }, [idToken]);
+  }, [fbUser.getIdToken]);
 
   return children;
 }

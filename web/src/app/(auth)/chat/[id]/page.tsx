@@ -121,14 +121,7 @@ function MessageList({
     };
     handlers.onDelete = (id) => {
       setMessages((prev) => {
-        for (let idx = 0; idx < prev.length; idx++) {
-          if (prev[idx]?.id === id) {
-            prev.splice(idx, 1);
-            return prev;
-          }
-        }
-        // avoid react from automatically optimizing the update away
-        return [...prev];
+        return prev.filter((m) => m.id !== id);
       });
     };
     return () => {
@@ -137,7 +130,7 @@ function MessageList({
       handlers.onDelete = undefined;
     };
   }, [room]);
-  const { myData } = useUserContext();
+  const { me } = useUserContext();
 
   return (
     <ul>
@@ -146,7 +139,7 @@ function MessageList({
         <li key={m.id}>
           <div
             className={`chat ${
-              m.senderId === myData?.id ? "chat-end" : "chat-start"
+              m.senderId === me.id ? "chat-end" : "chat-start"
             }`}
           >
             <div className="chat-header">

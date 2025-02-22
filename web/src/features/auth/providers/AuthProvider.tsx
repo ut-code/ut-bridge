@@ -1,45 +1,41 @@
 "use client";
 import type { User } from "firebase/auth";
-import {
-  type ReactNode,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "../config.ts";
 
-const AuthContext = createContext<{ user: User }>({} as { user: User });
+const AuthContext = createContext<{ fbUser: User } | undefined>(undefined);
 
 export function useAuthContext() {
-  return useContext(AuthContext);
+  const ctx = useContext(AuthContext);
+  if (!ctx)
+    throw new Error(
+      "useAuthContext: please use this within AuthProvider. aborting...",
+    );
+  return ctx;
 }
 
-interface AuthProviderProps {
-  children: ReactNode;
-}
-
-export function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<User | undefined>(undefined);
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [fbUser, setfbUser] = useState<User | undefined>(undefined);
 
   useEffect(() => {
-    const unsubscribed = auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        setUser(user);
+        setfbUser(user);
       }
     });
 
     return () => {
-      unsubscribed();
+      unsubscribe();
     };
   }, []);
 
   // ユーザーが取得されるまでローディングを表示
-  if (user === undefined) {
+  // TODO: 無限にスタックすることはない？要検証
+  if (fbUser === undefined) {
     return <p>loading...</p>;
   }
 
   return (
-    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ fbUser }}>{children}</AuthContext.Provider>
   );
 }

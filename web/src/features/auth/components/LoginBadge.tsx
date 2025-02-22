@@ -4,7 +4,7 @@ import { useGoogleLogout } from "../functions/logout.ts";
 import { useAuthContext } from "../providers/AuthProvider.tsx";
 
 export default function LoginBadge() {
-  const { user } = useAuthContext();
+  const { fbUser: user } = useAuthContext();
   const { logout } = useGoogleLogout();
   switch (user) {
     case undefined:

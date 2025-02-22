@@ -1,5 +1,6 @@
 "use client";
 import { client } from "@/client";
+import { ensure } from "@/lib.ts";
 import type { FullUser } from "common/zod/schema";
 import { useRouter } from "next/navigation";
 import {
@@ -11,20 +12,23 @@ import {
 } from "react";
 import { useAuthContext } from "../auth/providers/AuthProvider.tsx";
 
-const UserContext = createContext<{ myData: FullUser | null }>({
-  myData: null,
-});
-export function useUserContext() {
-  return useContext(UserContext);
+const UserContext = createContext<{ me: FullUser } | null>(null);
+export function useUserContext(): { me: FullUser } {
+  const ctx = useContext(UserContext);
+  if (!ctx)
+    throw new Error(
+      "useUserContext: please use this within UserProvider. aborting...",
+    );
+  return ctx;
 }
 
 export function UserProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
-  const { user } = useAuthContext();
+  const { fbUser } = useAuthContext();
   const [myData, setMyData] = useState<FullUser | null>(null);
 
   useEffect(() => {
-    if (!user) {
+    if (!fbUser) {
       setMyData(null);
       router.push("/login");
       return;
@@ -32,9 +36,9 @@ export function UserProvider({ children }: { children: ReactNode }) {
     const fetchUserData = async () => {
       try {
         const res = await client.users.$get({
-          query: { guid: user.uid },
+          query: { guid: fbUser.uid },
         });
-        if (!res.ok) throw new Error("User is not found in Database!");
+        ensure(res.ok, "User is not found in Database!");
         const data = await res.json();
         const me = data[0];
         if (!me) throw new Error("User is not found in Database!");
@@ -46,9 +50,12 @@ export function UserProvider({ children }: { children: ReactNode }) {
     };
 
     fetchUserData();
-  }, [user, router]);
+  }, [fbUser, router]);
 
+  if (!myData) return <span className="loading loading-xl" />;
   return (
-    <UserContext.Provider value={{ myData }}>{children}</UserContext.Provider>
+    <UserContext.Provider value={{ me: myData }}>
+      {children}
+    </UserContext.Provider>
   );
 }
