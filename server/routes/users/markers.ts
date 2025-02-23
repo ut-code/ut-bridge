@@ -1,13 +1,13 @@
 // favorite + block
 
 import { zValidator } from "@hono/zod-validator";
-import { type MarkerKind, MarkerSchema } from "common/zod/schema.ts";
+import { type Marker, MarkerSchema } from "common/zod/schema.ts";
 import { type Context, Hono } from "hono";
 import { z } from "zod";
 import { getUserID } from "../../auth/func.ts";
 import { prisma } from "../../config/prisma.ts";
 
-async function mark(c: Context, kind: MarkerKind, targetId: string) {
+async function mark(c: Context, kind: Marker, targetId: string) {
   const actorId = await getUserID(c);
   return c.json(
     await prisma.marker.upsert({
@@ -25,7 +25,8 @@ async function mark(c: Context, kind: MarkerKind, targetId: string) {
     201,
   );
 }
-async function unmark(c: Context, kind: MarkerKind, targetId: string) {
+
+async function unmark(c: Context, kind: Marker, targetId: string) {
   const actorId = await getUserID(c);
   try {
     await prisma.marker.delete({

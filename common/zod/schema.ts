@@ -14,6 +14,8 @@ export const GradeEnum = z.enum([
   "D2",
   "D3",
 ]);
+export const ExchangeSchema = z.enum(["all", "exchange", "japanese"]);
+export const MarkerSchema = z.enum(["block", "favorite"]);
 
 // Common Schemas
 export const HobbySchema = z
@@ -34,7 +36,6 @@ const FluentLanguageSchema = z.object({
 const LearningLanguageSchema = z.object({
   language: LanguageSchema,
 });
-export const MarkerSchema = z.enum(["block", "favorite"]);
 
 // User Base Schema
 const BaseUserSchema = z.object({
@@ -160,4 +161,5 @@ export type SeedUser = z.infer<typeof SeedUserSchema>;
 export type FullCardUser = z.infer<typeof FullCardUserSchema>;
 export type CardUser = z.infer<typeof CardUserSchema>;
 export type FullUser = z.infer<typeof FullUserSchema>;
-export type MarkerKind = z.infer<typeof MarkerSchema>;
+export type Marker = z.infer<typeof MarkerSchema>;
+export type Exchange = z.infer<typeof ExchangeSchema>;
