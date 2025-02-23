@@ -1,50 +1,41 @@
 "use client";
-import { useAtom } from "jotai";
-import Link from "next/link";
-import { useEffect } from "react";
-import {
-  FB_SESSION_STORAGE_IDTOKEN_KEY,
-  FB_SESSION_STORAGE_USER_KEY,
-  fbIdTokenAtom,
-  fbUserAtom,
-} from "../state.ts";
+import type { User } from "firebase/auth";
+import { createContext, useContext, useEffect, useState } from "react";
+import { auth } from "../config.ts";
 
-export function AuthBoundary({ children }: { children: React.ReactNode }) {
-  const [idToken, setIdToken] = useAtom(fbIdTokenAtom);
-  const [_, setUser] = useAtom(fbUserAtom);
+const AuthContext = createContext<{ fbUser: User } | undefined>(undefined);
 
-  // biome-ignore lint: i don't think its necessary
+export function useAuthContext() {
+  const ctx = useContext(AuthContext);
+  if (!ctx)
+    throw new Error(
+      "useAuthContext: please use this within AuthProvider. aborting...",
+    );
+  return ctx;
+}
+
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [fbUser, setfbUser] = useState<User | undefined>(undefined);
+
   useEffect(() => {
-    try {
-      const idToken = sessionStorage.getItem(FB_SESSION_STORAGE_IDTOKEN_KEY);
-      const user = sessionStorage.getItem(FB_SESSION_STORAGE_USER_KEY);
-      if (user === null || idToken === null) {
-        throw undefined; // catch below
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setfbUser(user);
       }
+    });
 
-      setUser(JSON.parse(user));
-      setIdToken(idToken);
-      document.cookie = `ut-bridge-Authorization=${idToken}`;
-      console.log("successfully set local firebase user to", idToken);
-    } catch (err) {
-      setIdToken(null);
-      setUser(null);
-      console.log("failed to login from stale. redirecting to login.");
-      sessionStorage.removeItem(FB_SESSION_STORAGE_USER_KEY);
-      sessionStorage.removeItem(FB_SESSION_STORAGE_IDTOKEN_KEY);
-    }
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
-  if (idToken === undefined) return <span className="loading loading-xl" />;
-  if (idToken === null) {
-    return (
-      <>
-        (todo) you are not logged in. please log in.
-        <Link className="btn btn-primary" href="/login">
-          login
-        </Link>
-      </>
-    );
+  // ユーザーが取得されるまでローディングを表示
+  // TODO: 無限にスタックすることはない？要検証
+  if (fbUser === undefined) {
+    return <p>loading...</p>;
   }
-  return <>{children}</>;
+
+  return (
+    <AuthContext.Provider value={{ fbUser }}>{children}</AuthContext.Provider>
+  );
 }

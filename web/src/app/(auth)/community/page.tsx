@@ -1,6 +1,7 @@
 "use client";
-import { formatCardUsers, formatUsers } from "@/features/format";
-import type { CardUser, User } from "common/zod/schema";
+import { formatCardUser } from "@/features/format";
+import { useUserContext } from "@/features/user/userProvider.tsx";
+import type { CardUser } from "common/zod/schema";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -10,7 +11,6 @@ import { client } from "../../../client.ts";
 export default function Page() {
   const router = useRouter();
   const [users, setUsers] = useState<CardUser[]>([]);
-  const [myData, setMydata] = useState<User>();
   const [searchQuery, setSearchQuery] = useState("");
   const [exchangeQuery, setIsExchangeEnabled] = useState<
     "exchange" | "japanese" | "all"
@@ -19,38 +19,19 @@ export default function Page() {
   const [totalUsers, setTotalUsers] = useState(0);
   const usersPerPage = 9;
   const totalPages = Math.ceil(totalUsers / usersPerPage);
-  useEffect(() => {
-    const firstFetch = async () => {
-      const myId = localStorage.getItem("utBridgeUserId");
-      if (!myId) {
-        throw new Error("User ID is not found! Please login again!");
-      }
-      const res = await client.users.$get({
-        query: { id: myId },
-      });
-      const data = await res.json();
-      if (data.length !== 1) {
-        throw new Error("My Data Not Found!");
-      }
-      const users = formatUsers(data);
-
-      setMydata(users[0]);
-    };
-    firstFetch();
-  }, []);
+  const { me } = useUserContext();
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const myId = localStorage.getItem("utBridgeUserId");
-        if (!myId) {
-          throw new Error("User ID is not found! Please login again!");
+        if (!me) {
+          throw new Error("User Not Found in Database!");
         }
 
         try {
           const res = await client.community.$get({
             query: {
-              id: myId,
+              id: me.id,
               page: page.toString(),
               exchangeQuery,
               searchQuery,
@@ -58,7 +39,9 @@ export default function Page() {
           });
 
           const data = await res.json();
-          const formattedUsers = formatCardUsers(data.users);
+          const formattedUsers = data.users.map((user) => {
+            return formatCardUser(user);
+          });
 
           setUsers(formattedUsers);
           setTotalUsers(data.totalUsers);
@@ -74,7 +57,7 @@ export default function Page() {
     // 🔹 検索ワードの変更後に 500ms 待ってリクエストを送る（デバウンス処理）
     const timeoutId = setTimeout(fetchUsers, 500);
     return () => clearTimeout(timeoutId);
-  }, [router, page, exchangeQuery, searchQuery]);
+  }, [router, page, exchangeQuery, searchQuery, me]);
 
   return (
     <>
@@ -98,7 +81,7 @@ export default function Page() {
         checked={exchangeQuery !== "all"}
         onChange={(ev) => {
           const filtered = ev.target.checked;
-          const amIForeignStudent = myData?.isForeignStudent;
+          const amIForeignStudent = me.isForeignStudent;
           const filterQuery = amIForeignStudent ? "japanese" : "exchange";
           setIsExchangeEnabled(filtered ? filterQuery : "all");
           setPage(1); // 言語交換の設定を変更したらページをリセット

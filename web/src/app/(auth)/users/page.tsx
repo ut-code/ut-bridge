@@ -1,5 +1,5 @@
 "use client";
-import { formatUsers } from "@/features/format";
+import { formatUser } from "@/features/format";
 import type { User } from "common/zod/schema";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -23,11 +23,14 @@ export default function Page() {
           query: { id: id },
         });
         const data = await res.json();
-        if (data.length !== 1) {
+        if (data.length >= 2)
+          throw new Error(`got too many users: got ${data.length}`);
+
+        const first = data[0];
+        if (!first) {
           throw new Error("User Not Found!");
         }
-        const formattedUsers = formatUsers(data);
-        setUser(formattedUsers[0]);
+        setUser(formatUser(first));
       } catch (error) {
         console.error("Failed to fetch user:", error);
         router.push("/community");

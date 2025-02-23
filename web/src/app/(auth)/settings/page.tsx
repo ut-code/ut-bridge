@@ -1,48 +1,20 @@
 "use client";
 
-import { client } from "@/client";
+import { client } from "@/client.ts";
 import LoginBadge from "@/features/auth/components/LoginBadge";
-import { ManagedUpload } from "aws-sdk/clients/s3";
-import type { User } from "common/zod/schema";
+import { useGoogleLogout } from "@/features/auth/functions/logout.ts";
+import { useUserContext } from "@/features/user/userProvider.tsx";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { formatUsers } from "../../../features/format.ts";
+import { useState } from "react";
+import { formatUser } from "../../../features/format.ts";
 
 export default function Page() {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
+  const { logout } = useGoogleLogout();
+  const { me } = useUserContext();
 
-  useEffect(() => {
-    const id = localStorage.getItem("utBridgeUserId");
-    async function fetchUser() {
-      try {
-        if (!id) {
-          throw new Error("My Id Not Found!");
-        }
-        const res = await client.users.$get({
-          query: { id: id },
-        });
-        const data = await res.json();
-        if (data.length !== 1) {
-          throw new Error("My Data Not Found!");
-        }
-        const users = formatUsers(data);
-        setUser(users[0]);
-      } catch (error) {
-        console.error("Failed to fetch user:", error);
-        router.push("./community");
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchUser();
-  }, [router]);
-  if (loading) return <div>Loading...</div>;
-  if (!user) return <div>User not found</div>;
+  if (!me) return <div>User not found</div>;
+  const user = formatUser(me);
   return (
     <>
       <Link
@@ -54,6 +26,9 @@ export default function Page() {
       写真アップロード
       <Upload />
       Settings Page
+      <button type="button" className="m-5 btn btn-error" onClick={logout}>
+        log out
+      </button>
       <div>
         <h1>自分のデータ</h1>
         {user.imageUrl ? (
@@ -125,7 +100,9 @@ function Upload() {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setFile(e.target.files[0]);
+      if (e.target.files[0]) {
+        setFile(e.target.files[0]);
+      }
     }
   };
 

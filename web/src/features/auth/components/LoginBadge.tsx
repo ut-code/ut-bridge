@@ -1,11 +1,11 @@
 "use client";
-import { useAtom } from "jotai";
 import Link from "next/link";
-import { logout } from "../functions/logout.ts";
-import { fbUserAtom } from "../state.ts";
+import { useGoogleLogout } from "../functions/logout.ts";
+import { useAuthContext } from "../providers/AuthProvider.tsx";
 
 export default function LoginBadge() {
-  const [user, _] = useAtom(fbUserAtom);
+  const { fbUser: user } = useAuthContext();
+  const { logout } = useGoogleLogout();
   switch (user) {
     case undefined:
       return <span className="loading loading-xl" />;

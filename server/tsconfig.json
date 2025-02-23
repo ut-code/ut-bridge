@@ -1,17 +1,11 @@
 {
+  "extends": ["../tsconfig.json"],
   "compilerOptions": {
-    "target": "es2015",
+    "target": "es2017",
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx",
-    "noEmit": true,
-    "skipLibCheck": true,
-    "allowImportingTsExtensions": true,
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "strict": true
   }
 }

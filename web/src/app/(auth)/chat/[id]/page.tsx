@@ -1,8 +1,8 @@
 "use client";
 
 import { client } from "@/client";
-import { myId } from "@/features/auth/state";
 import { handlers } from "@/features/chat/state";
+import { useUserContext } from "@/features/user/userProvider";
 import { assert } from "@/lib";
 import { use } from "@/react/useData";
 import { useParams } from "next/navigation";
@@ -108,11 +108,11 @@ function MessageList({
       }
       return false;
     };
-    handlers.onUpdate = (id, message) => {
+    handlers.onUpdate = (id, newMessage) => {
       setMessages((prev) => {
-        for (let idx = 0; idx < prev.length; idx++) {
-          if (prev[idx].id === id) {
-            prev[idx].content = message.content;
+        for (const m of prev) {
+          if (m.id === id) {
+            m.content = newMessage.content;
           }
         }
         // avoid react from automatically optimizing the update away
@@ -121,14 +121,7 @@ function MessageList({
     };
     handlers.onDelete = (id) => {
       setMessages((prev) => {
-        for (let idx = 0; idx < prev.length; idx++) {
-          if (prev[idx].id === id) {
-            prev.splice(idx, 1);
-            return prev;
-          }
-        }
-        // avoid react from automatically optimizing the update away
-        return [...prev];
+        return prev.filter((m) => m.id !== id);
       });
     };
     return () => {
@@ -137,6 +130,7 @@ function MessageList({
       handlers.onDelete = undefined;
     };
   }, [room]);
+  const { me } = useUserContext();
 
   return (
     <ul>
@@ -144,7 +138,9 @@ function MessageList({
         // TODO: handle pictures
         <li key={m.id}>
           <div
-            className={`chat ${m.senderId === myId ? "chat-end" : "chat-start"}`}
+            className={`chat ${
+              m.senderId === me.id ? "chat-end" : "chat-start"
+            }`}
           >
             <div className="chat-header">
               {m.sender.name}

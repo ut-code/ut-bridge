@@ -7,12 +7,17 @@ import { prisma } from "../config/prisma.ts";
 const router = new Hono()
 
   .get(
-    "/", // userId以外にも、nameなどでそのユーザーのデータを持ってきたい場合は、ここを編集する
-    zValidator("query", z.object({ id: z.string().optional() })),
+    "/",
+    zValidator(
+      "query",
+      z.object({ id: z.string().optional(), guid: z.string().optional() }),
+    ),
     async (c) => {
-      const { id: userId } = c.req.valid("query");
+      const { id, guid } = c.req.valid("query") ?? {};
       const users = await prisma.user.findMany({
-        where: { id: userId },
+        where: {
+          OR: [id ? { id: id } : {}, guid ? { guid: guid } : {}],
+        },
         include: {
           division: true,
           campus: true,
