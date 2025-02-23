@@ -80,6 +80,11 @@ const router = new Hono().get(
           learningLanguages: {
             select: { language: true },
           },
+          markedAs: {
+            select: {
+              kind: true,
+            },
+          },
         },
       }),
       prisma.user.count({ where: whereCondition }),
