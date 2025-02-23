@@ -8,14 +8,13 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Page() {
-  const { myData } = useUserContext();
+  const { me } = useUserContext();
 
   async function createNewRoom() {
-    if (!myData?.id) return;
     try {
       const res = await client.chat.rooms.$post({
         json: {
-          members: [myData.id],
+          members: [me.id],
         },
       });
       if (!res.ok) throw new Error("Failed to create room");

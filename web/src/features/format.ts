@@ -5,19 +5,10 @@ export function formatUser(user: FullUser): User {
     id: user.id,
     imageUrl: user.imageUrl,
     name: user.name,
-    gender: user.gender as "male" | "female" | "other",
+    gender: user.gender,
     isForeignStudent: user.isForeignStudent,
-    displayLanguage: user.displayLanguage as "japanese" | "english",
-    grade: user.grade as
-      | "B1"
-      | "B2"
-      | "B3"
-      | "B4"
-      | "M1"
-      | "M2"
-      | "D1"
-      | "D2"
-      | "D3",
+    displayLanguage: user.displayLanguage,
+    grade: user.grade,
     hobby: user.hobby,
     introduction: user.introduction,
     division: user.division.name,
@@ -33,18 +24,9 @@ export function formatCardUser(user: FullCardUser): CardUser {
     id: user.id,
     imageUrl: user.imageUrl,
     name: user.name,
-    gender: user.gender as "male" | "female" | "other", //TODO:prismaのenumと定義したenumが大文字とかで違うため、このようにした
+    gender: user.gender, //TODO:prismaのenumと定義したenumが大文字とかで違うため、このようにした
     isForeignStudent: user.isForeignStudent,
-    grade: user.grade as
-      | "B1"
-      | "B2"
-      | "B3"
-      | "B4"
-      | "M1"
-      | "M2"
-      | "D1"
-      | "D2"
-      | "D3",
+    grade: user.grade,
     campus: user.campus.name,
     motherLanguage: user.motherLanguage.name,
     fluentLanguages: user.fluentLanguages.map((fl) => fl.language.name),

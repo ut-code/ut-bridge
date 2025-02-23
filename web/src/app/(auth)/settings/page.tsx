@@ -9,10 +9,10 @@ import { formatUser } from "../../../features/format.ts";
 
 export default function Page() {
   const { logout } = useGoogleLogout();
-  const { myData } = useUserContext();
+  const { me } = useUserContext();
 
-  if (!myData) return <div>User not found</div>;
-  const user = formatUser(myData);
+  if (!me) return <div>User not found</div>;
+  const user = formatUser(me);
   return (
     <>
       <Link

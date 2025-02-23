@@ -19,19 +19,19 @@ export default function Page() {
   const [totalUsers, setTotalUsers] = useState(0);
   const usersPerPage = 9;
   const totalPages = Math.ceil(totalUsers / usersPerPage);
-  const { myData } = useUserContext();
+  const { me } = useUserContext();
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        if (!myData) {
+        if (!me) {
           throw new Error("User Not Found in Database!");
         }
 
         try {
           const res = await client.community.$get({
             query: {
-              id: myData.id,
+              id: me.id,
               page: page.toString(),
               exchangeQuery,
               searchQuery,
@@ -57,7 +57,7 @@ export default function Page() {
     // 🔹 検索ワードの変更後に 500ms 待ってリクエストを送る（デバウンス処理）
     const timeoutId = setTimeout(fetchUsers, 500);
     return () => clearTimeout(timeoutId);
-  }, [router, page, exchangeQuery, searchQuery, myData]);
+  }, [router, page, exchangeQuery, searchQuery, me]);
 
   return (
     <>
@@ -81,7 +81,7 @@ export default function Page() {
         checked={exchangeQuery !== "all"}
         onChange={(ev) => {
           const filtered = ev.target.checked;
-          const amIForeignStudent = myData?.isForeignStudent;
+          const amIForeignStudent = me.isForeignStudent;
           const filterQuery = amIForeignStudent ? "japanese" : "exchange";
           setIsExchangeEnabled(filtered ? filterQuery : "all");
           setPage(1); // 言語交換の設定を変更したらページをリセット
