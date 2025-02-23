@@ -1,5 +1,4 @@
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import { FirebaseAppError } from "firebase-admin/app";
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
 import { prisma } from "./config/prisma.ts";
