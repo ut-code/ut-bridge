@@ -1,17 +1,26 @@
+// favorite + block
+
 import { zValidator } from "@hono/zod-validator";
+import { type MarkerKind, MarkerSchema } from "common/zod/schema.ts";
 import { type Context, Hono } from "hono";
 import { z } from "zod";
 import { getUserID } from "../../auth/func.ts";
 import { prisma } from "../../config/prisma.ts";
 
-const MarkerKindSchema = z.enum(["block", "favorite"]);
-type MarkerKind = z.infer<typeof MarkerKindSchema>;
-
 async function mark(c: Context, kind: MarkerKind, targetId: string) {
   const actorId = await getUserID(c);
   return c.json(
-    await prisma.marker.create({
-      data: { kind, actorId, targetId },
+    await prisma.marker.upsert({
+      where: {
+        actorId_targetId: {
+          actorId,
+          targetId,
+        },
+      },
+      update: {
+        kind,
+      },
+      create: { kind, actorId, targetId },
     }),
     201,
   );
@@ -71,7 +80,7 @@ const route = new Hono()
       "query",
       z.object({
         targetId: z.string().uuid().optional(),
-        kind: MarkerKindSchema.optional(),
+        kind: MarkerSchema.optional(),
       }),
     ),
     async (c) => {

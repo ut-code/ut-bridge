@@ -1,4 +1,5 @@
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { FirebaseAppError } from "firebase-admin/app";
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
 import { prisma } from "./config/prisma.ts";
@@ -22,6 +23,7 @@ if (process.env.NODE_ENV === "development") {
       process.exit(1);
     });
 }
+
 const app = new Hono()
   .use(cors("CORS_ALLOW_ORIGINS"))
   .onError((err) => {

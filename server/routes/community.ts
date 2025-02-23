@@ -1,6 +1,7 @@
 import { zValidator } from "@hono/zod-validator";
 import type { Prisma } from "@prisma/client";
 import { Hono } from "hono";
+import { getUserID } from "server/auth/func.ts";
 import z from "zod";
 import { prisma } from "../config/prisma.ts";
 
@@ -16,6 +17,7 @@ const router = new Hono().get(
     }),
   ),
   async (c) => {
+    const requester = getUserID(c);
     const { page, exchangeQuery, searchQuery } = c.req.valid("query");
     const take = 9;
     const skip = (page - 1) * take;
@@ -83,6 +85,9 @@ const router = new Hono().get(
           markedAs: {
             select: {
               kind: true,
+            },
+            where: {
+              actorId: await requester,
             },
           },
         },

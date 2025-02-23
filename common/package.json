@@ -2,6 +2,9 @@
   "name": "common",
   "module": "index.ts",
   "type": "module",
+  "dependencies": {
+    "zod": "^3.24.2"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },

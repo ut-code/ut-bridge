@@ -167,48 +167,26 @@ export default function Page() {
         ) : (
           users.map((user) => (
             <li key={user.id} className="p-4 border-b border-gray-200">
-              <Link type="button" href={`/users/?id=${user.id}`}>
-                <div className="flex items-center gap-4">
-                  {user.imageUrl ? (
-                    <Image
-                      src={user.imageUrl}
-                      alt={user.name ?? "User"}
-                      width={48}
-                      height={48}
-                      className="w-12 h-12 rounded-full"
-                    />
-                  ) : (
-                    <div className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center">
-                      No Image
-                    </div>
-                  )}
-                  <div>
-                    <h2 className="text-lg font-semibold">
-                      {user.name ?? "Unknown"}
-                    </h2>
-                    <p className="text-sm text-gray-600">
-                      Gender: {user.gender ?? "Unknown"}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      Campus: {user.campus ?? "Unknown"}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      Mother language: {user.motherLanguage || "Unknown"}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      Fluent Languages:
-                      {user.fluentLanguages.join(", ") || "None"}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      Learning Languages:
-                      {user.learningLanguages.join(", ") || "None"}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      Foreign Student: {user.isForeignStudent ? "Yes" : "No"}
-                    </p>
-                  </div>
-                </div>
-              </Link>
+              <UserCard
+                link={`/users/?id=${user.id}`}
+                user={user}
+                on={{
+                  async favorite(id) {
+                    await client.users.markers.favorite[":targetId"].$put({
+                      param: {
+                        targetId: id,
+                      },
+                    });
+                  },
+                  async unfavorite(id) {
+                    await client.users.markers.favorite[":targetId"].$delete({
+                      param: {
+                        targetId: id,
+                      },
+                    });
+                  },
+                }}
+              />
             </li>
           ))
         )}
@@ -249,5 +227,103 @@ export default function Page() {
         </div>
       </div>
     </>
+  );
+}
+
+type UserCardEvent = {
+  favorite: (id: string) => Promise<void>;
+  unfavorite: (id: string) => Promise<void>;
+};
+
+function UserCard({
+  user: init,
+  on,
+  link,
+}: { user: CardUser; on: UserCardEvent; link: string }) {
+  const [user, setUser] = useState(init);
+  const [favoriteBtnLoading, setFavoriteBtnLoading] = useState(false);
+  return (
+    <div
+      className={`flex indicator items-center gap-4 ${user.marker === "block" && "bg-gray-300"}`}
+    >
+      {favoriteBtnLoading ? (
+        <span className="loading loading-spinner" />
+      ) : user.marker === "favorite" ? (
+        <button
+          type="button"
+          aria-label="marked as favorite"
+          className="indicator-item badge bg-transparent text-yellow-400 text-xl"
+          onClick={() => {
+            setFavoriteBtnLoading(true);
+            on.unfavorite(user.id);
+            setUser({
+              ...user,
+              marker: undefined,
+            });
+            setFavoriteBtnLoading(false);
+          }}
+        >
+          ★
+        </button>
+      ) : user.marker === "block" ? (
+        "blocked (todo: make it a button to unblock)"
+      ) : (
+        <button
+          type="button"
+          aria-label="mark as favorite"
+          className="indicator-item badge bg-transparent text-black-700 text-xl"
+          onClick={() => {
+            setFavoriteBtnLoading(true);
+            on.favorite(user.id);
+            setUser({
+              ...user,
+              marker: "favorite",
+            });
+            setFavoriteBtnLoading(false);
+          }}
+        >
+          {/* this doesn't support blocking yet */}★
+        </button>
+      )}
+      {user.imageUrl ? (
+        <Image
+          src={user.imageUrl}
+          alt={user.name ?? "User"}
+          width={48}
+          height={48}
+          className="w-12 h-12 rounded-full"
+        />
+      ) : (
+        <div className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center">
+          No Image
+        </div>
+      )}
+      <div>
+        <h2 className="text-lg font-semibold">{user.name ?? "Unknown"}</h2>
+        <p className="text-sm text-gray-600">
+          Gender: {user.gender ?? "Unknown"}
+        </p>
+        <p className="text-sm text-gray-600">
+          Campus: {user.campus ?? "Unknown"}
+        </p>
+        <p className="text-sm text-gray-600">
+          Mother language: {user.motherLanguage || "Unknown"}
+        </p>
+        <p className="text-sm text-gray-600">
+          Fluent Languages:
+          {user.fluentLanguages.join(", ") || "None"}
+        </p>
+        <p className="text-sm text-gray-600">
+          Learning Languages:
+          {user.learningLanguages.join(", ") || "None"}
+        </p>
+        <p className="text-sm text-gray-600">
+          Foreign Student: {user.isForeignStudent ? "Yes" : "No"}
+        </p>
+      </div>
+      <Link className="btn btn-primary" href={link}>
+        See page
+      </Link>
+    </div>
   );
 }
