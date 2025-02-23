@@ -10,16 +10,13 @@ const router = new Hono().get(
     "query",
     z.object({
       id: z.string(),
-      page: z.string().optional(),
-      exchangeQuery: z.enum(["exchange", "japanese", "all"]),
-      searchQuery: z.string().optional(),
+      page: z.coerce.number().default(1),
+      exchangeQuery: z.enum(["exchange", "japanese", "all"]).default("all"),
+      searchQuery: z.string().default(""),
     }),
   ),
   async (c) => {
-    const rawPage = c.req.valid("query").page || "1";
-    const page = z.coerce.number().parse(rawPage);
-    const exchangeQuery = c.req.valid("query").exchangeQuery || "all";
-    const searchQuery = c.req.valid("query").searchQuery || "";
+    const { page, exchangeQuery, searchQuery } = c.req.valid("query");
     const take = 9;
     const skip = (page - 1) * take;
 
