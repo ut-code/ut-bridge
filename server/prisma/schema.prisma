@@ -47,7 +47,7 @@ kind MarkerKind
 
 enum MarkerKind {
   favorite
-  block
+  blocked
 }
 
 model Message {

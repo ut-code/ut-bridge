@@ -51,11 +51,11 @@ const route = new Hono()
     },
   )
   .put(
-    "/block/:targetId",
+    "/blocked/:targetId",
     zValidator("param", z.object({ targetId: z.string().uuid() })),
     async (c) => {
       const { targetId } = c.req.valid("param");
-      return await mark(c, "block", targetId);
+      return await mark(c, "blocked", targetId);
     },
   )
   .delete(
@@ -67,11 +67,11 @@ const route = new Hono()
     },
   )
   .delete(
-    "/block/:targetId",
+    "/blocked/:targetId",
     zValidator("param", z.object({ targetId: z.string().uuid() })),
     async (c) => {
       const { targetId } = c.req.valid("param");
-      return await unmark(c, "block", targetId);
+      return await unmark(c, "blocked", targetId);
     },
   )
   // delete many

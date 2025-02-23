@@ -31,7 +31,7 @@ function createQueriedURL(params: {
   exchange?: Exchange | undefined;
   page?: number | undefined;
   search?: string | undefined;
-  marker?: "favorite" | "block" | "clear" | undefined; // "clear": set to none, undefined: leave untouched
+  marker?: "favorite" | "blocked" | "clear" | undefined; // "clear": set to none, undefined: leave untouched
 }) {
   const current = new URLSearchParams(window.location.search);
   if (params.exchange) {
@@ -182,7 +182,7 @@ export default function Page() {
             );
           }}
         />
-        {["favorite" as const, "block" as const].map((select) => (
+        {["favorite" as const, "blocked" as const].map((select) => (
           <input
             key={select}
             className="btn"
@@ -287,7 +287,7 @@ function UserCard({
   const [favoriteBtnLoading, setFavoriteBtnLoading] = useState(false);
   return (
     <div
-      className={`flex indicator items-center gap-4 ${user.marker === "block" && "bg-gray-300"}`}
+      className={`flex indicator items-center gap-4 ${user.marker === "blocked" && "bg-gray-300"}`}
     >
       {favoriteBtnLoading ? (
         <span className="loading loading-spinner" />
@@ -308,7 +308,7 @@ function UserCard({
         >
           ★
         </button>
-      ) : user.marker === "block" ? (
+      ) : user.marker === "blocked" ? (
         "blocked (todo: make it a button to unblock)"
       ) : (
         <button

@@ -15,7 +15,7 @@ export const GradeEnum = z.enum([
   "D3",
 ]);
 export const ExchangeSchema = z.enum(["all", "exchange", "japanese"]);
-export const MarkerSchema = z.enum(["block", "favorite"]);
+export const MarkerSchema = z.enum(["blocked", "favorite"]);
 
 // Common Schemas
 export const HobbySchema = z
