@@ -1,4 +1,5 @@
 "use client";
+import Card from "@/components/Card";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -44,6 +45,94 @@ export default function Page() {
   return (
     <>
       <h1>Community Page</h1>
+      <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap gap-4 justify-center flex flex-wrap  w-full sm:w-1/2 md:w-1/3">
+          <Card
+            name={"鈴木 花子"}
+            imageUrl={""}
+            campus={"本郷キャンパス"}
+            fluentLanguages={["日本語"]}
+            learningLanguages={["英語"]}
+          />
+          <Card
+            name={"鈴木 花子"}
+            imageUrl={""}
+            campus={"本郷キャンパス"}
+            fluentLanguages={["日本語"]}
+            learningLanguages={["英語"]}
+          />
+          <Card
+            name={"鈴木 花子"}
+            imageUrl={""}
+            campus={"本郷キャンパス"}
+            fluentLanguages={["日本語"]}
+            learningLanguages={["英語"]}
+          />
+          <Card
+            name={"鈴木 花子"}
+            imageUrl={""}
+            campus={"本郷キャンパス"}
+            fluentLanguages={["日本語"]}
+            learningLanguages={["英語"]}
+          />
+          <Card
+            name={"鈴木 花子"}
+            imageUrl={""}
+            campus={"本郷キャンパス"}
+            fluentLanguages={["日本語"]}
+            learningLanguages={["英語"]}
+          />
+          <Card
+            name={"鈴木 花子"}
+            imageUrl={""}
+            campus={"本郷キャンパス"}
+            fluentLanguages={["日本語"]}
+            learningLanguages={["英語"]}
+          />
+          <Card
+            name={"鈴木 花子"}
+            imageUrl={""}
+            campus={"本郷キャンパス"}
+            fluentLanguages={["日本語"]}
+            learningLanguages={["英語"]}
+          />
+          <Card
+            name={"鈴木 花子"}
+            imageUrl={""}
+            campus={"本郷キャンパス"}
+            fluentLanguages={["日本語"]}
+            learningLanguages={["英語"]}
+          />
+          <Card
+            name={"鈴木 花子"}
+            imageUrl={""}
+            campus={"本郷キャンパス"}
+            fluentLanguages={["日本語"]}
+            learningLanguages={["英語"]}
+          />
+          <Card
+            name={"鈴木 花子"}
+            imageUrl={""}
+            campus={"本郷キャンパス"}
+            fluentLanguages={["日本語"]}
+            learningLanguages={["英語"]}
+          />
+          <Card
+            name={"鈴木 花子"}
+            imageUrl={""}
+            campus={"本郷キャンパス"}
+            fluentLanguages={["日本語"]}
+            learningLanguages={["英語"]}
+          />
+          <Card
+            name={"鈴木 花子"}
+            imageUrl={""}
+            campus={"本郷キャンパス"}
+            fluentLanguages={["日本語"]}
+            learningLanguages={["英語"]}
+          />
+        </div>
+      </div>
       <ul>
         {users.map((user) => (
           <li key={user.id} className="p-4 border-b border-gray-200">
