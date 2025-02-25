@@ -1,7 +1,9 @@
 import { zValidator } from "@hono/zod-validator";
 import { CreateUserSchema } from "common/zod/schema.ts";
 import { Hono } from "hono";
+import { HTTPException } from "hono/http-exception";
 import { z } from "zod";
+import { getUserID } from "../../auth/func.ts";
 import { prisma } from "../../config/prisma.ts";
 import markers from "./markers.ts";
 import me from "./me.ts";
@@ -17,6 +19,11 @@ const router = new Hono()
       z.object({ id: z.string().optional(), guid: z.string().optional() }),
     ),
     async (c) => {
+      const userId = getUserID(c);
+      if (!userId)
+        throw new HTTPException(401, {
+          message: "you need an account to query",
+        });
       const { id, guid } = c.req.valid("query") ?? {};
       const users = await prisma.user.findMany({
         where: {
