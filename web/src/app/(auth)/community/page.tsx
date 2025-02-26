@@ -278,6 +278,7 @@ type UserCardEvent = {
   unfavorite: (id: string) => Promise<void>;
 };
 
+const DEV_EXTRA_QUERY_WAIT = 2000;
 function UserCard({
   user: init,
   on,
@@ -290,20 +291,22 @@ function UserCard({
       className={`flex indicator items-center gap-4 ${user.marker === "blocked" && "bg-gray-300"}`}
     >
       {favoriteBtnLoading ? (
-        <span className="loading loading-spinner" />
+        <span className="indicator-item loading loading-ring" />
       ) : user.marker === "favorite" ? (
         <button
           type="button"
           aria-label="marked as favorite"
           className="indicator-item badge bg-transparent text-yellow-400 text-xl"
-          onClick={() => {
+          onClick={async () => {
             setFavoriteBtnLoading(true);
-            on.unfavorite(user.id);
+            await on.unfavorite(user.id);
             setUser({
               ...user,
               marker: undefined,
             });
-            setFavoriteBtnLoading(false);
+            setTimeout(() => {
+              setFavoriteBtnLoading(false);
+            }, DEV_EXTRA_QUERY_WAIT);
           }}
         >
           ★
@@ -315,14 +318,17 @@ function UserCard({
           type="button"
           aria-label="mark as favorite"
           className="indicator-item badge bg-transparent text-black-700 text-xl"
-          onClick={() => {
+          onClick={async () => {
             setFavoriteBtnLoading(true);
-            on.favorite(user.id);
+            await on.favorite(user.id);
             setUser({
               ...user,
               marker: "favorite",
             });
-            setFavoriteBtnLoading(false);
+            // setFavoriteBtnLoading(false);
+            setTimeout(() => {
+              setFavoriteBtnLoading(false);
+            }, DEV_EXTRA_QUERY_WAIT);
           }}
         >
           {/* this doesn't support blocking yet */}★
