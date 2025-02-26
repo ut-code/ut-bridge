@@ -34,10 +34,9 @@ export default function Page() {
             language: languageRes.status,
           });
           throw new Error(
-            `データ取得に失敗しました:${{
-              university: await universityRes.text(),
-              language: await languageRes.text(),
-            }}`,
+            `データ取得に失敗しました:
+            university: ${await universityRes.text()}
+            languages: ${await languageRes.text()}`,
           );
         }
         const [universities, languages] = await Promise.all([
@@ -71,10 +70,10 @@ export default function Page() {
             division: divisionRes.status,
           });
           throw new Error(
-            `データ取得に失敗しました:${{
-              campus: await campusRes.text(),
-              division: await divisionRes.text(),
-            }}`,
+            `データ取得に失敗しました:
+            campus: ${await campusRes.text()}
+            division: ${await divisionRes.text()}
+            `,
           );
         }
 
@@ -385,13 +384,32 @@ export default function Page() {
           />
         </label>
 
-        <button
-          type="submit"
-          className="bg-blue-500 text-white p-2 rounded"
-          disabled={status === "loading"}
-        >
-          {status === "loading" ? "登録中..." : "登録"}
-        </button>
+        {status === "idle" ? (
+          <button
+            type="submit"
+            className="btn btn-primary text-white p-2 rounded"
+          >
+            登録
+          </button>
+        ) : status === "loading" ? (
+          <button
+            type="submit"
+            className="btn btn-disabled text-white p-2 rounded"
+            disabled
+          >
+            登録中...
+          </button>
+        ) : status === "success" ? (
+          <span className="btn btn-accent text-white p-2 rounded">
+            登録成功
+          </span>
+        ) : status === "error" ? (
+          <span className="btn btn-error text-white p-2 rounded">
+            失敗しました
+          </span>
+        ) : (
+          <></>
+        )}
       </form>
     </div>
   );
