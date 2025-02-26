@@ -24,6 +24,11 @@ if (process.env.NODE_ENV === "development") {
 }
 const app = new Hono()
   .use(cors("CORS_ALLOW_ORIGINS"))
+  // TODO(PERF):: delete this in production
+  .use(async (_c, next) => {
+    await Bun.sleep(1500);
+    await next();
+  })
   .onError((err) => {
     console.log(err);
     if (err instanceof PrismaClientKnownRequestError) {
