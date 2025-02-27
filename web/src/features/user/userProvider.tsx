@@ -3,22 +3,13 @@ import { client } from "@/client";
 import { ensure } from "@/lib.ts";
 import type { FullUser } from "common/zod/schema";
 import { useRouter } from "next/navigation";
-import {
-  type ReactNode,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { type ReactNode, createContext, useContext, useEffect, useState } from "react";
 import { useAuthContext } from "../auth/providers/AuthProvider.tsx";
 
 const UserContext = createContext<{ me: FullUser } | null>(null);
 export function useUserContext(): { me: FullUser } {
   const ctx = useContext(UserContext);
-  if (!ctx)
-    throw new Error(
-      "useUserContext: please use this within UserProvider. aborting...",
-    );
+  if (!ctx) throw new Error("useUserContext: please use this within UserProvider. aborting...");
   return ctx;
 }
 
@@ -53,9 +44,5 @@ export function UserProvider({ children }: { children: ReactNode }) {
   }, [fbUser, router]);
 
   if (!myData) return <span className="loading loading-xl" />;
-  return (
-    <UserContext.Provider value={{ me: myData }}>
-      {children}
-    </UserContext.Provider>
-  );
+  return <UserContext.Provider value={{ me: myData }}>{children}</UserContext.Provider>;
 }

@@ -42,38 +42,22 @@ async function unmark(c: Context, kind: Marker, targetId: string) {
 }
 
 const route = new Hono()
-  .put(
-    "/favorite/:targetId",
-    zValidator("param", z.object({ targetId: z.string().uuid() })),
-    async (c) => {
-      const { targetId } = c.req.valid("param");
-      return await mark(c, "favorite", targetId);
-    },
-  )
-  .put(
-    "/blocked/:targetId",
-    zValidator("param", z.object({ targetId: z.string().uuid() })),
-    async (c) => {
-      const { targetId } = c.req.valid("param");
-      return await mark(c, "blocked", targetId);
-    },
-  )
-  .delete(
-    "/favorite/:targetId",
-    zValidator("param", z.object({ targetId: z.string().uuid() })),
-    async (c) => {
-      const { targetId } = c.req.valid("param");
-      return await unmark(c, "favorite", targetId);
-    },
-  )
-  .delete(
-    "/blocked/:targetId",
-    zValidator("param", z.object({ targetId: z.string().uuid() })),
-    async (c) => {
-      const { targetId } = c.req.valid("param");
-      return await unmark(c, "blocked", targetId);
-    },
-  )
+  .put("/favorite/:targetId", zValidator("param", z.object({ targetId: z.string().uuid() })), async (c) => {
+    const { targetId } = c.req.valid("param");
+    return await mark(c, "favorite", targetId);
+  })
+  .put("/blocked/:targetId", zValidator("param", z.object({ targetId: z.string().uuid() })), async (c) => {
+    const { targetId } = c.req.valid("param");
+    return await mark(c, "blocked", targetId);
+  })
+  .delete("/favorite/:targetId", zValidator("param", z.object({ targetId: z.string().uuid() })), async (c) => {
+    const { targetId } = c.req.valid("param");
+    return await unmark(c, "favorite", targetId);
+  })
+  .delete("/blocked/:targetId", zValidator("param", z.object({ targetId: z.string().uuid() })), async (c) => {
+    const { targetId } = c.req.valid("param");
+    return await unmark(c, "blocked", targetId);
+  })
   // delete many
   .delete(
     "/",

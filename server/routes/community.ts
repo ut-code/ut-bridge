@@ -20,12 +20,7 @@ const router = new Hono().get(
   ),
   async (c) => {
     const requester = await getUserID(c);
-    const {
-      page,
-      exchangeQuery,
-      searchQuery,
-      marker: markerQuery,
-    } = c.req.valid("query");
+    const { page, exchangeQuery, searchQuery, marker: markerQuery } = c.req.valid("query");
     const take = 9;
     const skip = (page - 1) * take;
 

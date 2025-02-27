@@ -21,9 +21,7 @@ import type { BroadcastEvent } from "server/routes/chat";
 import { useAuthContext } from "../auth/providers/AuthProvider.tsx";
 import { handlers } from "./state.ts";
 
-export function ChatNotificationProvider({
-  children,
-}: { children: React.ReactNode }) {
+export function ChatNotificationProvider({ children }: { children: React.ReactNode }) {
   const { fbUser } = useAuthContext();
 
   useEffect(() => {

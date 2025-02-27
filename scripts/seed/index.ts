@@ -6,9 +6,7 @@ import { users } from "./data/users.ts";
 
 const firstUniversity = universities[0];
 if (!firstUniversity) throw new Error("please input universities");
-if (
-  await prisma.university.findUnique({ where: { name: firstUniversity.name } })
-) {
+if (await prisma.university.findUnique({ where: { name: firstUniversity.name } })) {
   throw new Error("cannot run seed: university already exists");
 }
 

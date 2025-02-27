@@ -1,12 +1,7 @@
 "use client";
 import { formatCardUser } from "@/features/format";
 import { useUserContext } from "@/features/user/userProvider.tsx";
-import {
-  type CardUser,
-  type Exchange,
-  ExchangeSchema,
-  MarkerSchema,
-} from "common/zod/schema";
+import { type CardUser, type Exchange, ExchangeSchema, MarkerSchema } from "common/zod/schema";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -19,8 +14,7 @@ function useQuery() {
   const pageQuery = query.get("page");
   const page = Number.parseInt(pageQuery ?? "") || 1; // don't use `??`. it won't filter out NaN (and page won't be 0)
 
-  const exchange =
-    ExchangeSchema.safeParse(query.get("exchange")).data ?? "all";
+  const exchange = ExchangeSchema.safeParse(query.get("exchange")).data ?? "all";
   const search = query.get("search") ?? "";
   console.log(query.get("marker"));
   const marker = MarkerSchema.safeParse(query.get("marker")).data ?? undefined;
@@ -162,9 +156,7 @@ export default function Page() {
           const filtered = ev.target.checked;
           const amIForeignStudent = me.isForeignStudent;
           const filterQuery = amIForeignStudent ? "japanese" : "exchange";
-          router.push(
-            createQueriedURL({ exchange: filtered ? filterQuery : "all" }),
-          );
+          router.push(createQueriedURL({ exchange: filtered ? filterQuery : "all" }));
         }}
       />
 
@@ -237,9 +229,7 @@ export default function Page() {
 
       <div className="text-center my-4">
         <span className="text-gray-700">
-          {totalUsers > 0
-            ? `Page ${query.page} of ${totalPages}`
-            : "No users found"}
+          {totalUsers > 0 ? `Page ${query.page} of ${totalPages}` : "No users found"}
         </span>
       </div>
 
@@ -279,17 +269,11 @@ type UserCardEvent = {
 };
 
 const DEV_EXTRA_QUERY_WAIT = 2000;
-function UserCard({
-  user: init,
-  on,
-  link,
-}: { user: CardUser; on: UserCardEvent; link: string }) {
+function UserCard({ user: init, on, link }: { user: CardUser; on: UserCardEvent; link: string }) {
   const [user, setUser] = useState(init);
   const [favoriteBtnLoading, setFavoriteBtnLoading] = useState(false);
   return (
-    <div
-      className={`flex indicator items-center gap-4 ${user.marker === "blocked" && "bg-gray-300"}`}
-    >
+    <div className={`flex indicator items-center gap-4 ${user.marker === "blocked" && "bg-gray-300"}`}>
       {favoriteBtnLoading ? (
         <span className="indicator-item loading loading-ring" />
       ) : user.marker === "favorite" ? (
@@ -343,21 +327,13 @@ function UserCard({
           className="w-12 h-12 rounded-full"
         />
       ) : (
-        <div className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center">
-          No Image
-        </div>
+        <div className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center">No Image</div>
       )}
       <div>
         <h2 className="text-lg font-semibold">{user.name ?? "Unknown"}</h2>
-        <p className="text-sm text-gray-600">
-          Gender: {user.gender ?? "Unknown"}
-        </p>
-        <p className="text-sm text-gray-600">
-          Campus: {user.campus ?? "Unknown"}
-        </p>
-        <p className="text-sm text-gray-600">
-          Mother language: {user.motherLanguage || "Unknown"}
-        </p>
+        <p className="text-sm text-gray-600">Gender: {user.gender ?? "Unknown"}</p>
+        <p className="text-sm text-gray-600">Campus: {user.campus ?? "Unknown"}</p>
+        <p className="text-sm text-gray-600">Mother language: {user.motherLanguage || "Unknown"}</p>
         <p className="text-sm text-gray-600">
           Fluent Languages:
           {user.fluentLanguages.join(", ") || "None"}
@@ -366,9 +342,7 @@ function UserCard({
           Learning Languages:
           {user.learningLanguages.join(", ") || "None"}
         </p>
-        <p className="text-sm text-gray-600">
-          Foreign Student: {user.isForeignStudent ? "Yes" : "No"}
-        </p>
+        <p className="text-sm text-gray-600">Foreign Student: {user.isForeignStudent ? "Yes" : "No"}</p>
       </div>
       <Link className="btn btn-primary" href={link}>
         See page

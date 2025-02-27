@@ -10,24 +10,15 @@ export default function Page() {
   const router = useRouter();
   const user = auth.currentUser;
   const [campuses, setCampuses] = useState<{ id: string; name: string }[]>([]);
-  const [divisions, setDivisions] = useState<{ id: string; name: string }[]>(
-    [],
-  );
-  const [universities, setUniversities] = useState<
-    { id: string; name: string }[]
-  >([]);
+  const [divisions, setDivisions] = useState<{ id: string; name: string }[]>([]);
+  const [universities, setUniversities] = useState<{ id: string; name: string }[]>([]);
   const [universityId, setUniversityId] = useState<string>("");
-  const [languages, setLanguages] = useState<{ id: string; name: string }[]>(
-    [],
-  );
+  const [languages, setLanguages] = useState<{ id: string; name: string }[]>([]);
 
   useEffect(() => {
     const fetchFirstData = async () => {
       try {
-        const [universityRes, languageRes] = await Promise.all([
-          client.university.$get(),
-          client.language.$get(),
-        ]);
+        const [universityRes, languageRes] = await Promise.all([client.university.$get(), client.language.$get()]);
         if (!universityRes.ok || !languageRes.ok) {
           console.error("データ取得に失敗しました", {
             university: universityRes.status,
@@ -39,10 +30,7 @@ export default function Page() {
             languages: ${await languageRes.text()}`,
           );
         }
-        const [universities, languages] = await Promise.all([
-          universityRes.json(),
-          languageRes.json(),
-        ]);
+        const [universities, languages] = await Promise.all([universityRes.json(), languageRes.json()]);
         setUniversities(universities);
         setLanguages(languages);
       } catch (err) {
@@ -77,10 +65,7 @@ export default function Page() {
           );
         }
 
-        const [campuses, divisions] = await Promise.all([
-          campusRes.json(),
-          divisionRes.json(),
-        ]);
+        const [campuses, divisions] = await Promise.all([campusRes.json(), divisionRes.json()]);
 
         setCampuses(campuses);
         setDivisions(divisions);
@@ -112,15 +97,10 @@ export default function Page() {
     learningLanguageIds: [],
   });
 
-  const [status, setStatus] = useState<
-    "idle" | "loading" | "success" | "error"
-  >("idle");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
-    const { name, value, type, checked, multiple } =
-      e.target as HTMLInputElement;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value, type, checked, multiple } = e.target as HTMLInputElement;
     const { options } = e.target as HTMLSelectElement;
 
     setFormData((prev) => {
@@ -198,12 +178,7 @@ export default function Page() {
 
         <label>
           性別:
-          <select
-            name="gender"
-            value={formData.gender}
-            onChange={handleChange}
-            className="border p-2 w-full"
-          >
+          <select name="gender" value={formData.gender} onChange={handleChange} className="border p-2 w-full">
             <option value="male">男性</option>
             <option value="female">女性</option>
             <option value="other">その他</option>
@@ -265,12 +240,7 @@ export default function Page() {
 
         <label>
           学年:
-          <select
-            name="grade"
-            value={formData.grade}
-            onChange={handleChange}
-            className="border p-2 w-full"
-          >
+          <select name="grade" value={formData.grade} onChange={handleChange} className="border p-2 w-full">
             <option value="">学年を選択してください</option>
             <option value="B1">学部1年</option>
             <option value="B2">学部2年</option>
@@ -298,12 +268,7 @@ export default function Page() {
         </label>
         <label>
           外国人留学生ですか？
-          <input
-            type="checkbox"
-            name="isForeignStudent"
-            checked={formData.isForeignStudent}
-            onChange={handleChange}
-          />
+          <input type="checkbox" name="isForeignStudent" checked={formData.isForeignStudent} onChange={handleChange} />
         </label>
 
         <label>
@@ -385,28 +350,17 @@ export default function Page() {
         </label>
 
         {status === "idle" ? (
-          <button
-            type="submit"
-            className="btn btn-primary text-white p-2 rounded"
-          >
+          <button type="submit" className="btn btn-primary text-white p-2 rounded">
             登録
           </button>
         ) : status === "loading" ? (
-          <button
-            type="submit"
-            className="btn btn-disabled text-white p-2 rounded"
-            disabled
-          >
+          <button type="submit" className="btn btn-disabled text-white p-2 rounded" disabled>
             登録中...
           </button>
         ) : status === "success" ? (
-          <span className="btn btn-accent text-white p-2 rounded">
-            登録成功
-          </span>
+          <span className="btn btn-accent text-white p-2 rounded">登録成功</span>
         ) : status === "error" ? (
-          <span className="btn btn-error text-white p-2 rounded">
-            失敗しました
-          </span>
+          <span className="btn btn-error text-white p-2 rounded">失敗しました</span>
         ) : (
           <></>
         )}

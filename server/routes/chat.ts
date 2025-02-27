@@ -261,8 +261,7 @@ const router = new Hono()
           where: { id: requester },
           select: { name: true },
         });
-        if (!sender)
-          throw new HTTPException(404, { message: "you don't seem to exist" });
+        if (!sender) throw new HTTPException(404, { message: "you don't seem to exist" });
         broadcast(await receivers, {
           event: "Create",
           data: devalue({
@@ -374,39 +373,32 @@ const router = new Hono()
   )
 
   // IO: server -> client
-  .get(
-    "/sse",
-    zValidator(
-      "cookie",
-      z.object({ "ut-bridge-Authorization": z.string().jwt() }),
-    ),
-    async (c) => {
-      return streamSSE(c, async (stream) => {
-        let connected = true;
-        const id = 0;
-        const bc = new BroadcastChannel(`chat:${id}`);
+  .get("/sse", zValidator("cookie", z.object({ "ut-bridge-Authorization": z.string().jwt() })), async (c) => {
+    return streamSSE(c, async (stream) => {
+      let connected = true;
+      const id = 0;
+      const bc = new BroadcastChannel(`chat:${id}`);
 
-        bc.onmessage = (_e) => {
-          const ev: BroadcastEvent = _e.data;
-          stream.writeSSE(ev);
-        };
+      bc.onmessage = (_e) => {
+        const ev: BroadcastEvent = _e.data;
+        stream.writeSSE(ev);
+      };
 
-        stream.onAbort(() => {
-          connected = false;
-          bc.close();
-        });
-
-        while (connected) {
-          const pingEvent: BroadcastEvent = {
-            event: "Ping",
-            data: "",
-          };
-          stream.writeSSE(pingEvent);
-          await Bun.sleep(8000);
-        }
+      stream.onAbort(() => {
+        connected = false;
+        bc.close();
       });
-    },
-  );
+
+      while (connected) {
+        const pingEvent: BroadcastEvent = {
+          event: "Ping",
+          data: "",
+        };
+        stream.writeSSE(pingEvent);
+        await Bun.sleep(8000);
+      }
+    });
+  });
 
 export function devalue<T>(data: T) {
   return stringify(data) as Devalue<T>;

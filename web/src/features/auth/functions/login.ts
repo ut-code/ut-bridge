@@ -14,9 +14,7 @@ async function login() {
     });
     const { exists } = await res.json();
 
-    return exists
-      ? { status: "hasData", user: result.user }
-      : { status: "auth-nodata", user: result.user };
+    return exists ? { status: "hasData", user: result.user } : { status: "auth-nodata", user: result.user };
   } catch (error) {
     console.error("Login Error:", error);
     return { status: "noAuth", error };

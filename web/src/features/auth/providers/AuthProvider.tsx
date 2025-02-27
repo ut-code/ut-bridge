@@ -7,10 +7,7 @@ const AuthContext = createContext<{ fbUser: User } | undefined>(undefined);
 
 export function useAuthContext() {
   const ctx = useContext(AuthContext);
-  if (!ctx)
-    throw new Error(
-      "useAuthContext: please use this within AuthProvider. aborting...",
-    );
+  if (!ctx) throw new Error("useAuthContext: please use this within AuthProvider. aborting...");
   return ctx;
 }
 
@@ -35,7 +32,5 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return <p>loading...</p>;
   }
 
-  return (
-    <AuthContext.Provider value={{ fbUser }}>{children}</AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ fbUser }}>{children}</AuthContext.Provider>;
 }

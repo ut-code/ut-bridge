@@ -12,48 +12,36 @@ const router = new Hono()
   .route("/markers", markers)
   .route("/me", me)
 
-  .get(
-    "/",
-    zValidator(
-      "query",
-      z.object({ id: z.string().optional(), guid: z.string().optional() }),
-    ),
-    async (c) => {
-      const userId = getUserID(c);
-      if (!userId)
-        throw new HTTPException(401, {
-          message: "you need an account to query",
-        });
-      const { id, guid } = c.req.valid("query") ?? {};
-      const users = await prisma.user.findMany({
-        where: {
-          id,
-          guid,
-        },
-        include: {
-          division: true,
-          campus: true,
-          motherLanguage: true,
-          fluentLanguages: {
-            select: { language: true },
-          },
-          learningLanguages: {
-            select: { language: true },
-          },
-        },
+  .get("/", zValidator("query", z.object({ id: z.string().optional(), guid: z.string().optional() })), async (c) => {
+    const userId = getUserID(c);
+    if (!userId)
+      throw new HTTPException(401, {
+        message: "you need an account to query",
       });
-      return c.json(users);
-    },
-  )
+    const { id, guid } = c.req.valid("query") ?? {};
+    const users = await prisma.user.findMany({
+      where: {
+        id,
+        guid,
+      },
+      include: {
+        division: true,
+        campus: true,
+        motherLanguage: true,
+        fluentLanguages: {
+          select: { language: true },
+        },
+        learningLanguages: {
+          select: { language: true },
+        },
+      },
+    });
+    return c.json(users);
+  })
 
   .get(
     "/exist",
-    zValidator(
-      "query",
-      z
-        .object({ guid: z.string().optional(), userId: z.string().optional() })
-        .optional(),
-    ),
+    zValidator("query", z.object({ guid: z.string().optional(), userId: z.string().optional() }).optional()),
     async (c) => {
       const { guid, userId } = c.req.valid("query") ?? {};
 
