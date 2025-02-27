@@ -19,21 +19,35 @@ model User {
   hobby            String
   introduction     String
   divisionId       String
-  division         Division       @relation(fields: [divisionId], references: [id])
+  division         Division        @relation(fields: [divisionId], references: [id])
   campusId         String
-  campus           Campus         @relation(fields: [campusId], references: [id])
+  campus           Campus          @relation(fields: [campusId], references: [id])
 
   motherLanguageId  String
-  motherLanguage    Language               @relation(fields: [motherLanguageId], references: [id])
+  motherLanguage    Language                 @relation(fields: [motherLanguageId], references: [id])
   fluentLanguages   FluentLanguageOnUser[]
   learningLanguages LearningLanguageOnUser[]
 
-  favoriteUsers FavoriteOnUser[] @relation("FavoriteUsers")
-  blockedUsers  BlockOnUser[]    @relation("BlockedUsers")
-  favoriteBy    FavoriteOnUser[] @relation("FavoriteByUser")
-  blockedBy     BlockOnUser[]    @relation("BlockedByUser")
-  joinedRooms   Belongs[]
-  messages      Message[]
+  marking     Marker[]  @relation("Actor")
+  markedAs    Marker[]  @relation("Target")
+
+  joinedRooms Belongs[]
+  messages    Message[]
+}
+
+model Marker {
+kind MarkerKind
+  actorId  String
+  actor    User   @relation("Actor", fields: [actorId], references: [id], onDelete: Cascade)
+  targetId String
+  target   User   @relation("Target", fields: [targetId], references: [id], onDelete: Cascade)
+
+  @@id([actorId, targetId])
+}
+
+enum MarkerKind {
+  favorite
+  blocked
 }
 
 model Message {
@@ -49,10 +63,10 @@ model Message {
 }
 
 model Room {
-  id      String    @id @default(uuid(7))
-  name    String?   // should default to list of member names if not set
+  id       String    @id @default(uuid(7))
+  name     String? // should default to list of member names if not set
   imageUrl String?
-  members Belongs[]
+  members  Belongs[]
   messages Message[]
 }
 
@@ -86,24 +100,6 @@ model University {
   name     String     @unique
   division Division[]
   campus   Campus[]
-}
-
-model FavoriteOnUser {
-  myId       String
-  favoriteId String
-  user       User   @relation("FavoriteByUser", fields: [myId], references: [id], onDelete: Cascade)
-  favorite   User   @relation("FavoriteUsers", fields: [favoriteId], references: [id], onDelete: Cascade)
-
-  @@id([myId, favoriteId])
-}
-
-model BlockOnUser {
-  myId      String
-  blockedId String
-  user      User   @relation("BlockedByUser", fields: [myId], references: [id], onDelete: Cascade)
-  blocked   User   @relation("BlockedUsers", fields: [blockedId], references: [id], onDelete: Cascade)
-
-  @@id([myId, blockedId])
 }
 
 model Language {
