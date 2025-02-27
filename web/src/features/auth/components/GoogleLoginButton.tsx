@@ -5,7 +5,7 @@ export default function GoogleLoginButton() {
   const { signInWithGoogle } = useGoogleSignIn();
 
   return (
-    <button type="button" className="btn bg-white text-black border-[#e5e5e5]" onClick={signInWithGoogle}>
+    <button type="button" className="btn border-[#e5e5e5] bg-white text-black" onClick={signInWithGoogle}>
       <svg aria-label="Google logo" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
         <title>Login with Google</title>
         <g>

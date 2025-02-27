@@ -161,8 +161,8 @@ export default function Page() {
   };
 
   return (
-    <div className="p-4 max-w-md mx-auto">
-      <h1 className="text-xl font-bold mb-4">初期登録画面</h1>
+    <div className="mx-auto max-w-md p-4">
+      <h1 className="mb-4 font-bold text-xl">初期登録画面</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <label>
           名前:
@@ -172,13 +172,13 @@ export default function Page() {
             value={formData.name}
             onChange={handleChange}
             required
-            className="border p-2 w-full"
+            className="w-full border p-2"
           />
         </label>
 
         <label>
           性別:
-          <select name="gender" value={formData.gender} onChange={handleChange} className="border p-2 w-full">
+          <select name="gender" value={formData.gender} onChange={handleChange} className="w-full border p-2">
             <option value="male">男性</option>
             <option value="female">女性</option>
             <option value="other">その他</option>
@@ -191,7 +191,7 @@ export default function Page() {
             name="universityId"
             onChange={handleChange}
             value={formData.universityId}
-            className="border p-2 w-full"
+            className="w-full border p-2"
           >
             <option value="">大学を選択してください</option>
             {universities.map((univ) => (
@@ -208,7 +208,7 @@ export default function Page() {
             name="divisionId"
             value={formData.divisionId}
             onChange={handleChange}
-            className="border p-2 w-full"
+            className="w-full border p-2"
             disabled={!divisions.length}
           >
             <option value="">学部を選択してください</option>
@@ -226,7 +226,7 @@ export default function Page() {
             name="campusId"
             value={formData.campusId}
             onChange={handleChange}
-            className="border p-2 w-full"
+            className="w-full border p-2"
             disabled={!campuses.length}
           >
             <option value="">キャンパスを選択してください</option>
@@ -240,7 +240,7 @@ export default function Page() {
 
         <label>
           学年:
-          <select name="grade" value={formData.grade} onChange={handleChange} className="border p-2 w-full">
+          <select name="grade" value={formData.grade} onChange={handleChange} className="w-full border p-2">
             <option value="">学年を選択してください</option>
             <option value="B1">学部1年</option>
             <option value="B2">学部2年</option>
@@ -260,7 +260,7 @@ export default function Page() {
             name="displayLanguage"
             value={formData.displayLanguage}
             onChange={handleChange}
-            className="border p-2 w-full"
+            className="w-full border p-2"
           >
             <option value="japanese">日本語</option>
             <option value="english">英語</option>
@@ -277,7 +277,7 @@ export default function Page() {
             name="motherLanguageId"
             value={formData.motherLanguageId}
             onChange={handleChange}
-            className="border p-2 w-full"
+            className="w-full border p-2"
             disabled={!languages.length}
           >
             <option value="">母国語を選択してください</option>
@@ -294,7 +294,7 @@ export default function Page() {
             name="fluentLanguageIds"
             value={formData.fluentLanguageIds}
             onChange={handleChange}
-            className="border p-2 w-full"
+            className="w-full border p-2"
             disabled={!languages.length}
             multiple
           >
@@ -312,7 +312,7 @@ export default function Page() {
             name="learningLanguageIds"
             value={formData.learningLanguageIds}
             onChange={handleChange}
-            className="border p-2 w-full"
+            className="w-full border p-2"
             disabled={!languages.length}
             multiple
           >
@@ -333,7 +333,7 @@ export default function Page() {
             value={formData.hobby ?? ""}
             onChange={handleChange}
             required
-            className="border p-2 w-full"
+            className="w-full border p-2"
           />
         </label>
 
@@ -345,22 +345,22 @@ export default function Page() {
             value={formData.introduction ?? ""}
             onChange={handleChange}
             required
-            className="border p-2 w-full"
+            className="w-full border p-2"
           />
         </label>
 
         {status === "idle" ? (
-          <button type="submit" className="btn btn-primary text-white p-2 rounded">
+          <button type="submit" className="btn btn-primary rounded p-2 text-white">
             登録
           </button>
         ) : status === "loading" ? (
-          <button type="submit" className="btn btn-disabled text-white p-2 rounded" disabled>
+          <button type="submit" className="btn btn-disabled rounded p-2 text-white" disabled>
             登録中...
           </button>
         ) : status === "success" ? (
-          <span className="btn btn-accent text-white p-2 rounded">登録成功</span>
+          <span className="btn btn-accent rounded p-2 text-white">登録成功</span>
         ) : status === "error" ? (
-          <span className="btn btn-error text-white p-2 rounded">失敗しました</span>
+          <span className="btn btn-error rounded p-2 text-white">失敗しました</span>
         ) : (
           <></>
         )}

@@ -94,10 +94,10 @@ export default function Page() {
           alt={user.name ?? "User"}
           width={48}
           height={48}
-          className="w-12 h-12 rounded-full"
+          className="h-12 w-12 rounded-full"
         />
       ) : (
-        <div className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center">N/A</div>
+        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-300">N/A</div>
       )}
       <p>
         <strong>Name:</strong> {user.name || "N/A"}

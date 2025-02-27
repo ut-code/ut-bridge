@@ -15,11 +15,11 @@ export default function Page() {
   const user = formatUser(me);
   return (
     <>
-      <Link href={"/settings/profile"} className="text-primary text-2xl cursor-pointer px-4">
+      <Link href={"/settings/profile"} className="cursor-pointer px-4 text-2xl text-primary">
         ユーザー編集画面へ
       </Link>
       Settings Page
-      <button type="button" className="m-5 btn btn-error" onClick={logout}>
+      <button type="button" className="btn btn-error m-5" onClick={logout}>
         log out
       </button>
       <div>
@@ -30,10 +30,10 @@ export default function Page() {
             alt={user.name ?? "User"}
             width={48}
             height={48}
-            className="w-12 h-12 rounded-full"
+            className="h-12 w-12 rounded-full"
           />
         ) : (
-          <div className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center">aaa</div>
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-300">aaa</div>
         )}
         <p>
           <strong>Name:</strong> {user.name || "N/A"}
