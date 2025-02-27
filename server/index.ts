@@ -2,6 +2,7 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
 import { prisma } from "./config/prisma.ts";
+import { env } from "./lib/env.ts";
 import cors from "./middlewares/cors.ts";
 import campusRouter from "./routes/campus.ts";
 import chatRouter from "./routes/chat.ts";
@@ -25,6 +26,11 @@ if (process.env.NODE_ENV === "development") {
 
 const app = new Hono()
   .use(cors("CORS_ALLOW_ORIGINS"))
+  // TODO(PERF):: delete this in production
+  .use(async (c, next) => {
+    await Bun.sleep(Number.parseInt(env(c, "ARTIFICIAL_NETWORK_LATENCY")));
+    await next();
+  })
   .onError((err) => {
     console.log(err);
     if (err instanceof PrismaClientKnownRequestError) {
