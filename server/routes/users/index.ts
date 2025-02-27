@@ -34,6 +34,11 @@ const router = new Hono()
         learningLanguages: {
           select: { language: true },
         },
+        markedAs: {
+          select: {
+            kind: true,
+          },
+        },
       },
     });
     return c.json(users);

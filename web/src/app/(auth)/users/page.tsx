@@ -40,6 +40,47 @@ export default function Page() {
 
     fetchUser();
   }, [router, id]);
+  const [markSpinner, setMarkSpinner] = useState(false);
+
+  function MarkerButton(props: {
+    if: boolean;
+    children: React.ReactNode;
+    class: string;
+    action: "favorite" | "block" | "unblock" | "unfavorite";
+  }) {
+    if (!props.if) return <></>;
+    if (!user) return;
+    return (
+      <button
+        type="button"
+        className={props.class}
+        onClick={async () => {
+          setMarkSpinner(true);
+          const args = { param: { targetId: user.id } };
+          const resp =
+            props.action === "favorite"
+              ? await client.users.markers.favorite[":targetId"].$put(args)
+              : props.action === "block"
+                ? await client.users.markers.blocked[":targetId"].$put(args)
+                : props.action === "unfavorite"
+                  ? await client.users.markers.favorite[":targetId"].$delete(args)
+                  : props.action === "unblock"
+                    ? await client.users.markers.blocked[":targetId"].$delete(args)
+                    : (props.action satisfies never);
+          if (!resp.ok) throw new Error(`Failed to ${props.action} user: ${await resp.text()}`);
+          setMarkSpinner(false);
+          setUser({
+            ...user,
+            markedAs: props.action === "favorite" ? "favorite" : props.action === "block" ? "blocked" : undefined,
+          });
+          console.log(`${props.action}ed user`);
+        }}
+        disabled={markSpinner}
+      >
+        {markSpinner ? <span className="loading loading-spinner" /> : props.children}
+      </button>
+    );
+  }
 
   if (loading) return <div>Loading...</div>;
   if (!user) return <div>User not found</div>;
@@ -94,6 +135,20 @@ export default function Page() {
       </p>
       <p>
         <strong>Introduction:</strong> {user.introduction || "N/A"}
+      </p>
+      <p>
+        <MarkerButton class="btn btn-accent" if={user.markedAs === undefined} action="favorite">
+          お気に入りにする
+        </MarkerButton>
+        <MarkerButton class="btn btn-accent" if={user.markedAs === "favorite"} action="unfavorite">
+          お気に入りを外す
+        </MarkerButton>
+        <MarkerButton class="btn btn-error" if={user.markedAs === undefined} action="block">
+          ブロックする
+        </MarkerButton>
+        <MarkerButton class="btn btn-error" if={user.markedAs === "blocked"} action="unblock">
+          ブロックを外す
+        </MarkerButton>
       </p>
     </div>
   );

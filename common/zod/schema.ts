@@ -35,7 +35,7 @@ const BaseUserSchema = z.object({
   introduction: IntroductionSchema,
 });
 
-// Extended User Schemas
+// UserSchema は、 UI で表示する用のフラットなデータ
 export const UserSchema = BaseUserSchema.extend({
   imageUrl: z.string().nullable(),
   division: z.string(),
@@ -43,6 +43,7 @@ export const UserSchema = BaseUserSchema.extend({
   motherLanguage: z.string(),
   fluentLanguages: z.array(z.string()),
   learningLanguages: z.array(z.string()),
+  markedAs: MarkerSchema.optional(),
 });
 
 export const CreateUserSchema = BaseUserSchema.extend({
@@ -127,6 +128,7 @@ const CampusSchema = z.object({
   universityId: z.string(),
 });
 
+// Full* は、 Prisma からもってきた構造化データ
 export const FullUserSchema = BaseUserSchema.extend({
   guid: z.string(),
   imageUrl: z.string().nullable(),
@@ -138,6 +140,7 @@ export const FullUserSchema = BaseUserSchema.extend({
   motherLanguage: LanguageSchema,
   fluentLanguages: z.array(FluentLanguageSchema),
   learningLanguages: z.array(LearningLanguageSchema),
+  markedAs: z.array(z.object({ kind: MarkerSchema })),
 });
 
 // Types
