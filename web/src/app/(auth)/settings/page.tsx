@@ -3,8 +3,8 @@
 import LoginBadge from "@/features/auth/components/LoginBadge";
 import { useGoogleLogout } from "@/features/auth/functions/logout.ts";
 import { useUserContext } from "@/features/user/userProvider.tsx";
+import { Link } from "@/lib/i18n";
 import Image from "next/image";
-import Link from "next/link";
 import { formatUser } from "../../../features/format.ts";
 
 export default function Page() {

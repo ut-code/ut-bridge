@@ -2,8 +2,8 @@
 
 import { client } from "@/client";
 import { auth } from "@/features/auth/config";
+import { useRouter } from "@/lib/i18n";
 import type { CreateUser } from "common/zod/schema";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Page() {
