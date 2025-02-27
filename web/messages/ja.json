@@ -1,3 +1,7 @@
 {
-  "$schema": "https://inlang.com/schema/inlang-message-format"
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "eccs_required": "ECCSアカウントでのみ、ログイン可能です。",
+  "title_community": "コミュニティ",
+  "title_chat": "チャット",
+  "title_settings": "設定"
 }

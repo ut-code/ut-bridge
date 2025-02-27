@@ -2,6 +2,7 @@
 
 import LoginBadge from "@/features/auth/components/LoginBadge";
 import { useGoogleLogout } from "@/features/auth/functions/logout.ts";
+import { LanguageSelector } from "@/features/i18n/lang-selector.tsx";
 import { useUserContext } from "@/features/user/userProvider.tsx";
 import { Link } from "@/lib/i18n";
 import Image from "next/image";
@@ -73,6 +74,7 @@ export default function Page() {
           <strong>Introduction:</strong> {user.introduction || "N/A"}
         </p>
       </div>
+      <LanguageSelector />
       <LoginBadge />
     </>
   );

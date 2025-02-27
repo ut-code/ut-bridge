@@ -3,6 +3,7 @@ import { formatCardUser } from "@/features/format";
 import { useUserContext } from "@/features/user/userProvider.tsx";
 import { Link } from "@/lib/i18n";
 import { useRouter } from "@/lib/i18n";
+import * as t from "@/paraglide/messages.js";
 import { type CardUser, type Exchange, ExchangeSchema, MarkerSchema } from "common/zod/schema";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";

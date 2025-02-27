@@ -1,4 +1,3 @@
-import { languageTag } from "@/paraglide/runtime.js";
 import { LanguageProvider } from "@inlang/paraglide-next";
 import "../tailwind.css";
 
