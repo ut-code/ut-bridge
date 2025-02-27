@@ -14,6 +14,8 @@ export const GradeEnum = z.enum([
   "D2",
   "D3",
 ]);
+export const ExchangeSchema = z.enum(["all", "exchange", "japanese"]);
+export const MarkerSchema = z.enum(["blocked", "favorite"]);
 
 // Common Schemas
 export const HobbySchema = z
@@ -22,6 +24,18 @@ export const HobbySchema = z
 export const IntroductionSchema = z
   .string()
   .max(225, { message: "コメントは225文字以下です" });
+
+const LanguageSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+});
+
+const FluentLanguageSchema = z.object({
+  language: LanguageSchema,
+});
+const LearningLanguageSchema = z.object({
+  language: LanguageSchema,
+});
 
 // User Base Schema
 const BaseUserSchema = z.object({
@@ -94,18 +108,7 @@ export const CardUserSchema = z.object({
   motherLanguage: z.string(),
   fluentLanguages: z.array(z.string()),
   learningLanguages: z.array(z.string()),
-});
-
-const LanguageSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-});
-
-const FluentLanguageSchema = z.object({
-  language: LanguageSchema,
-});
-const LearningLanguageSchema = z.object({
-  language: LanguageSchema,
+  marker: MarkerSchema.optional(),
 });
 
 export const FullCardUserSchema = z.object({
@@ -121,6 +124,7 @@ export const FullCardUserSchema = z.object({
   motherLanguage: LanguageSchema,
   fluentLanguages: z.array(FluentLanguageSchema),
   learningLanguages: z.array(LearningLanguageSchema),
+  markedAs: z.array(z.object({ kind: MarkerSchema })),
 });
 
 // Additional Schemas
@@ -157,3 +161,5 @@ export type SeedUser = z.infer<typeof SeedUserSchema>;
 export type FullCardUser = z.infer<typeof FullCardUserSchema>;
 export type CardUser = z.infer<typeof CardUserSchema>;
 export type FullUser = z.infer<typeof FullUserSchema>;
+export type Marker = z.infer<typeof MarkerSchema>;
+export type Exchange = z.infer<typeof ExchangeSchema>;

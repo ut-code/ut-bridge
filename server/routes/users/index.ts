@@ -1,10 +1,16 @@
 import { zValidator } from "@hono/zod-validator";
 import { CreateUserSchema } from "common/zod/schema.ts";
 import { Hono } from "hono";
+import { HTTPException } from "hono/http-exception";
 import { z } from "zod";
-import { prisma } from "../config/prisma.ts";
+import { getUserID } from "../../auth/func.ts";
+import { prisma } from "../../config/prisma.ts";
+import markers from "./markers.ts";
+import me from "./me.ts";
 
 const router = new Hono()
+  .route("/markers", markers)
+  .route("/me", me)
 
   .get(
     "/",
@@ -13,10 +19,16 @@ const router = new Hono()
       z.object({ id: z.string().optional(), guid: z.string().optional() }),
     ),
     async (c) => {
+      const userId = getUserID(c);
+      if (!userId)
+        throw new HTTPException(401, {
+          message: "you need an account to query",
+        });
       const { id, guid } = c.req.valid("query") ?? {};
       const users = await prisma.user.findMany({
         where: {
-          OR: [id ? { id: id } : {}, guid ? { guid: guid } : {}],
+          id,
+          guid,
         },
         include: {
           division: true,
@@ -93,68 +105,6 @@ const router = new Hono()
       },
     });
     return c.json(newUser);
-  })
-
-  //TODO://型に合わせてupdateの方法も変化させる
-  .put("/", zValidator("json", CreateUserSchema), async (c) => {
-    const userId = c.req.valid("json").id;
-    const body = c.req.valid("json");
-    console.log("🤩🤩🤩🤩🤩", userId);
-    console.log("⭐️⭐️⭐️⭐️⭐️", body);
-
-    const updatedUser = await prisma.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        guid: body.guid,
-        imageUrl: body.imageUrl,
-        name: body.name,
-        gender: body.gender,
-        isForeignStudent: body.isForeignStudent,
-        displayLanguage: body.displayLanguage,
-        grade: body.grade,
-        divisionId: body.divisionId,
-        campusId: body.campusId,
-        hobby: body.hobby,
-        introduction: body.introduction,
-        motherLanguageId: body.motherLanguageId,
-
-        // 既存データを削除して新規追加 (fluentLanguages)
-        fluentLanguages: {
-          deleteMany: { userId }, // 既存データ削除
-          createMany: {
-            data: body.fluentLanguageIds.map((langId) => ({
-              languageId: langId,
-            })),
-          },
-        },
-
-        // 既存データを削除して新規追加 (learningLanguages)
-        learningLanguages: {
-          deleteMany: { userId }, // 既存データ削除
-          createMany: {
-            data: body.learningLanguageIds.map((langId) => ({
-              languageId: langId,
-            })),
-          },
-        },
-      },
-    });
-
-    return c.json(updatedUser);
-  })
-
-  .delete(
-    "/:id",
-    zValidator("param", z.object({ id: z.string() })),
-    async (c) => {
-      const userId = c.req.valid("param").id;
-      const deletedUser = await prisma.user.delete({
-        where: { id: userId },
-      });
-      return c.json(deletedUser);
-    },
-  );
+  });
 
 export default router;

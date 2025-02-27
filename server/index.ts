@@ -9,7 +9,7 @@ import communityRouter from "./routes/community.ts";
 import divisionRouter from "./routes/division.ts";
 import languageRouter from "./routes/language.ts";
 import universityRouter from "./routes/university.ts";
-import usersRouter from "./routes/users.ts";
+import usersRouter from "./routes/users/index.ts";
 
 if (process.env.NODE_ENV === "development") {
   prisma.user
@@ -22,6 +22,7 @@ if (process.env.NODE_ENV === "development") {
       process.exit(1);
     });
 }
+
 const app = new Hono()
   .use(cors("CORS_ALLOW_ORIGINS"))
   .onError((err) => {
