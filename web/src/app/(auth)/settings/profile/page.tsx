@@ -194,7 +194,7 @@ export default function Page() {
         ...formData,
         guid: user.uid,
       };
-      const res = await client.users.$put({ json: body });
+      const res = await client.users.me.$put({ json: body });
       if (!res.ok) {
         console.error(await res.text());
         throw new Error(`レスポンスステータス: ${res.status}`);

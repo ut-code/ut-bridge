@@ -1,16 +1,17 @@
 "use client";
 import { formatCardUser } from "@/features/format";
 import { useUserContext } from "@/features/user/userProvider.tsx";
-import type { CardUser } from "common/zod/schema";
+import {
+  type CardUser,
+  type Exchange,
+  ExchangeSchema,
+  MarkerSchema,
+} from "common/zod/schema";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { z } from "zod";
 import { client } from "../../../client.ts";
-
-const exchangeSchema = z.enum(["all", "exchange", "japanese"]);
-type Exchange = z.infer<typeof exchangeSchema>;
 
 function useQuery() {
   const query = useSearchParams();
@@ -18,40 +19,51 @@ function useQuery() {
   const pageQuery = query.get("page");
   const page = Number.parseInt(pageQuery ?? "") || 1; // don't use `??`. it won't filter out NaN (and page won't be 0)
 
-  const exchange = exchangeSchema.safeParse(query.get("exchange"));
+  const exchange =
+    ExchangeSchema.safeParse(query.get("exchange")).data ?? "all";
   const search = query.get("search") ?? "";
-  return { page, exchange: exchange.data ?? "all", search };
+  console.log(query.get("marker"));
+  const marker = MarkerSchema.safeParse(query.get("marker")).data ?? undefined;
+  return { page, exchange, search, marker };
 }
 
 function createQueriedURL(params: {
   exchange?: Exchange | undefined;
   page?: number | undefined;
   search?: string | undefined;
+  marker?: "favorite" | "blocked" | "clear" | undefined; // "clear": set to none, undefined: leave untouched
 }) {
-  const query = new URLSearchParams(window.location.search);
+  const current = new URLSearchParams(window.location.search);
   if (params.exchange) {
     if (params.exchange === "all") {
-      query.delete("exchange");
+      current.delete("exchange");
     } else {
-      query.set("exchange", params.exchange);
+      current.set("exchange", params.exchange);
     }
   }
   if (params.page) {
     if (params.page === 1) {
-      query.delete("page");
+      current.delete("page");
     } else {
-      query.set("page", params.page.toString());
+      current.set("page", params.page.toString());
     }
   }
   if (params.search != null) {
     if (params.search === "") {
-      query.delete("search");
+      current.delete("search");
     } else {
-      query.set("search", params.search);
+      current.set("search", params.search);
+    }
+  }
+  if (params.marker) {
+    if (params.marker === "clear") {
+      current.delete("marker");
+    } else {
+      current.set("marker", params.marker);
     }
   }
 
-  const str = query.toString();
+  const str = current.toString();
   if (str === "") return window.location.pathname;
   // isn't there better way to handle this?
   return `${window.location.pathname}?${str}`;
@@ -63,8 +75,6 @@ export default function Page() {
 
   // if null it's loading, if [] there's no more users
   const [users, setUsers] = useState<CardUser[] | null>(null);
-  const exchangeQuery = query.exchange;
-  const searchQuery = query.search;
   const [rawSearchQuery, setRawSearchQuery] = useState("");
   const setDebouncedSearchQuery = useCallback((val: string) => {
     const url = createQueriedURL({ search: val });
@@ -86,10 +96,11 @@ export default function Page() {
         const res = await client.community.$get(
           {
             query: {
-              id: me.id,
+              myId: me.id,
               page: query.page.toString(),
-              exchangeQuery,
-              searchQuery,
+              exchangeQuery: query.exchange,
+              searchQuery: query.search,
+              marker: query.marker,
             },
           },
           {
@@ -113,7 +124,7 @@ export default function Page() {
     return () => {
       ctl.abort();
     };
-  }, [query.page, exchangeQuery, searchQuery, me.id]);
+  }, [query.page, query.exchange, query.marker, query.search, me.id]);
 
   useEffect(() => {
     // 🔹 検索ワードの変更後に 500ms 待ってリクエストを送る（デバウンス処理）
@@ -146,7 +157,7 @@ export default function Page() {
         id="exchange-language"
         type="checkbox"
         className="toggle"
-        checked={exchangeQuery !== "all"}
+        checked={query.exchange !== "all"}
         onChange={(ev) => {
           const filtered = ev.target.checked;
           const amIForeignStudent = me.isForeignStudent;
@@ -156,6 +167,38 @@ export default function Page() {
           );
         }}
       />
+
+      <div className="filter">
+        <input
+          className="btn filter-reset"
+          type="radio"
+          name="metaframeworks"
+          aria-label="All"
+          onInput={() => {
+            router.push(
+              createQueriedURL({
+                marker: "clear",
+              }),
+            );
+          }}
+        />
+        {["favorite" as const, "blocked" as const].map((select) => (
+          <input
+            key={select}
+            className="btn"
+            type="radio"
+            name="metaframeworks"
+            aria-label={select}
+            onInput={() => {
+              router.push(
+                createQueriedURL({
+                  marker: select,
+                }),
+              );
+            }}
+          />
+        ))}
+      </div>
 
       <ul>
         {users === null ? (
@@ -167,48 +210,26 @@ export default function Page() {
         ) : (
           users.map((user) => (
             <li key={user.id} className="p-4 border-b border-gray-200">
-              <Link type="button" href={`/users/?id=${user.id}`}>
-                <div className="flex items-center gap-4">
-                  {user.imageUrl ? (
-                    <Image
-                      src={user.imageUrl}
-                      alt={user.name ?? "User"}
-                      width={48}
-                      height={48}
-                      className="w-12 h-12 rounded-full"
-                    />
-                  ) : (
-                    <div className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center">
-                      No Image
-                    </div>
-                  )}
-                  <div>
-                    <h2 className="text-lg font-semibold">
-                      {user.name ?? "Unknown"}
-                    </h2>
-                    <p className="text-sm text-gray-600">
-                      Gender: {user.gender ?? "Unknown"}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      Campus: {user.campus ?? "Unknown"}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      Mother language: {user.motherLanguage || "Unknown"}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      Fluent Languages:
-                      {user.fluentLanguages.join(", ") || "None"}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      Learning Languages:
-                      {user.learningLanguages.join(", ") || "None"}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      Foreign Student: {user.isForeignStudent ? "Yes" : "No"}
-                    </p>
-                  </div>
-                </div>
-              </Link>
+              <UserCard
+                link={`/users?id=${user.id}`}
+                user={user}
+                on={{
+                  async favorite(id) {
+                    await client.users.markers.favorite[":targetId"].$put({
+                      param: {
+                        targetId: id,
+                      },
+                    });
+                  },
+                  async unfavorite(id) {
+                    await client.users.markers.favorite[":targetId"].$delete({
+                      param: {
+                        targetId: id,
+                      },
+                    });
+                  },
+                }}
+              />
             </li>
           ))
         )}
@@ -249,5 +270,109 @@ export default function Page() {
         </div>
       </div>
     </>
+  );
+}
+
+type UserCardEvent = {
+  favorite: (id: string) => Promise<void>;
+  unfavorite: (id: string) => Promise<void>;
+};
+
+const DEV_EXTRA_QUERY_WAIT = 2000;
+function UserCard({
+  user: init,
+  on,
+  link,
+}: { user: CardUser; on: UserCardEvent; link: string }) {
+  const [user, setUser] = useState(init);
+  const [favoriteBtnLoading, setFavoriteBtnLoading] = useState(false);
+  return (
+    <div
+      className={`flex indicator items-center gap-4 ${user.marker === "blocked" && "bg-gray-300"}`}
+    >
+      {favoriteBtnLoading ? (
+        <span className="indicator-item loading loading-ring" />
+      ) : user.marker === "favorite" ? (
+        <button
+          type="button"
+          aria-label="marked as favorite"
+          className="indicator-item badge bg-transparent text-yellow-400 text-xl"
+          onClick={async () => {
+            setFavoriteBtnLoading(true);
+            await on.unfavorite(user.id);
+            setUser({
+              ...user,
+              marker: undefined,
+            });
+            setTimeout(() => {
+              setFavoriteBtnLoading(false);
+            }, DEV_EXTRA_QUERY_WAIT);
+          }}
+        >
+          ★
+        </button>
+      ) : user.marker === "blocked" ? (
+        "blocked (todo: make it a button to unblock)"
+      ) : (
+        <button
+          type="button"
+          aria-label="mark as favorite"
+          className="indicator-item badge bg-transparent text-black-700 text-xl"
+          onClick={async () => {
+            setFavoriteBtnLoading(true);
+            await on.favorite(user.id);
+            setUser({
+              ...user,
+              marker: "favorite",
+            });
+            // setFavoriteBtnLoading(false);
+            setTimeout(() => {
+              setFavoriteBtnLoading(false);
+            }, DEV_EXTRA_QUERY_WAIT);
+          }}
+        >
+          {/* this doesn't support blocking yet */}★
+        </button>
+      )}
+      {user.imageUrl ? (
+        <Image
+          src={user.imageUrl}
+          alt={user.name ?? "User"}
+          width={48}
+          height={48}
+          className="w-12 h-12 rounded-full"
+        />
+      ) : (
+        <div className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center">
+          No Image
+        </div>
+      )}
+      <div>
+        <h2 className="text-lg font-semibold">{user.name ?? "Unknown"}</h2>
+        <p className="text-sm text-gray-600">
+          Gender: {user.gender ?? "Unknown"}
+        </p>
+        <p className="text-sm text-gray-600">
+          Campus: {user.campus ?? "Unknown"}
+        </p>
+        <p className="text-sm text-gray-600">
+          Mother language: {user.motherLanguage || "Unknown"}
+        </p>
+        <p className="text-sm text-gray-600">
+          Fluent Languages:
+          {user.fluentLanguages.join(", ") || "None"}
+        </p>
+        <p className="text-sm text-gray-600">
+          Learning Languages:
+          {user.learningLanguages.join(", ") || "None"}
+        </p>
+        <p className="text-sm text-gray-600">
+          Foreign Student: {user.isForeignStudent ? "Yes" : "No"}
+        </p>
+      </div>
+      <Link className="btn btn-primary" href={link}>
+        See page
+      </Link>
+    </div>
   );
 }
