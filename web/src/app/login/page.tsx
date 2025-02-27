@@ -14,7 +14,8 @@ export default function Login() {
           </div>
           <p className="text-sm text-gray-500 my-10">
             末尾が@g.ecc.u-tokyo.ac.jpのECCSアカウントで認証してください<br />
-            <a href="" className="text-blue-500 underline">利用規約とプライバシーポリシーはこちら</a>
+            {/* TODO: 遷移先を利用規約ページに変更する */}
+            <a href="/login" className="text-blue-500 underline">利用規約とプライバシーポリシーはこちら</a>
           </p>
         </div>
       </div>
