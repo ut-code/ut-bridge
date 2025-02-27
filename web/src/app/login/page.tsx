@@ -6,13 +6,13 @@ export default function Login() {
     <>
       <Header />
       <h1 className="text-3xl ">ログインページ</h1>
-      <div className="flex justify-center items-center h-screen">
-        <div className="text-center p-6 border rounded-lg shadow-md">
-          <p className="text-lg mt-10 mb-20">ECCSアカウントでのみ、ログイン可能です。</p>
+      <div className="flex h-screen items-center justify-center">
+        <div className="rounded-lg border p-6 text-center shadow-md">
+          <p className="mt-10 mb-20 text-lg">ECCSアカウントでのみ、ログイン可能です。</p>
           <div className="my-10">
             <GoogleLoginButton />
           </div>
-          <p className="text-sm text-gray-500 my-10">
+          <p className="my-10 text-gray-500 text-sm">
             末尾が@g.ecc.u-tokyo.ac.jpのECCSアカウントで認証してください
             <br />
             {/* TODO: 遷移先を利用規約ページに変更する */}

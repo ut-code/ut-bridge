@@ -24,6 +24,9 @@
       "recommended": true,
       "correctness": {
         "useImportExtensions": "error"
+      },
+      "nursery": {
+        "useSortedClasses": "error"
       }
     }
   },

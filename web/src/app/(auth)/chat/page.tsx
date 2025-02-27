@@ -90,7 +90,7 @@ function Room({ room }: { room: RoomPreview }) {
 
   return (
     <Link href={`/chat/${room.id}`} className="flex items-center space-x-4">
-      <div className="text-4xl font-thin opacity-30 tabular-nums">{room.id}</div>
+      <div className="font-thin text-4xl tabular-nums opacity-30">{room.id}</div>
       <Image
         alt={firstMember?.name || "User"}
         className="size-10 rounded-box"
@@ -100,7 +100,7 @@ function Room({ room }: { room: RoomPreview }) {
       />
       <div className="list-col-grow">
         <div>{firstMember?.name || "Unknown User"}</div>
-        <div className="text-xs uppercase font-semibold opacity-60">{room.messages[0]?.content || "No messages"}</div>
+        <div className="font-semibold text-xs uppercase opacity-60">{room.messages[0]?.content || "No messages"}</div>
       </div>
     </Link>
   );

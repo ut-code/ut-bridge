@@ -143,7 +143,7 @@ export default function Page() {
         placeholder="ユーザー検索..."
         value={rawSearchQuery}
         onChange={(e) => setRawSearchQuery(e.target.value)}
-        className="border p-2 rounded-md"
+        className="rounded-md border p-2"
       />
 
       <label htmlFor="exchange-language">言語交換学生に限定する</label>
@@ -201,7 +201,7 @@ export default function Page() {
           </span>
         ) : (
           users.map((user) => (
-            <li key={user.id} className="p-4 border-b border-gray-200">
+            <li key={user.id} className="border-gray-200 border-b p-4">
               <UserCard
                 link={`/users?id=${user.id}`}
                 user={user}
@@ -227,32 +227,32 @@ export default function Page() {
         )}
       </ul>
 
-      <div className="text-center my-4">
+      <div className="my-4 text-center">
         <span className="text-gray-700">
           {totalUsers > 0 ? `Page ${query.page} of ${totalPages}` : "No users found"}
         </span>
       </div>
 
-      <div className="flex justify-between mt-4 mx-20">
+      <div className="mx-20 mt-4 flex justify-between">
         <div className="w-1/2">
           {query.page > 1 && (
             <Link
               href={createQueriedURL({
                 page: query.page - 1,
               })}
-              className="px-4 py-2 bg-blue-200 rounded hover:bg-blue-300"
+              className="rounded bg-blue-200 px-4 py-2 hover:bg-blue-300"
             >
               Previous
             </Link>
           )}
         </div>
-        <div className="w-1/2 flex justify-end">
+        <div className="flex w-1/2 justify-end">
           {query.page < totalPages && (
             <Link
               href={createQueriedURL({
                 page: query.page + 1,
               })}
-              className="px-4 py-2 bg-blue-200 rounded hover:bg-blue-300"
+              className="rounded bg-blue-200 px-4 py-2 hover:bg-blue-300"
             >
               Next
             </Link>
@@ -273,14 +273,14 @@ function UserCard({ user: init, on, link }: { user: CardUser; on: UserCardEvent;
   const [user, setUser] = useState(init);
   const [favoriteBtnLoading, setFavoriteBtnLoading] = useState(false);
   return (
-    <div className={`flex indicator items-center gap-4 ${user.marker === "blocked" && "bg-gray-300"}`}>
+    <div className={`indicator flex items-center gap-4 ${user.marker === "blocked" && "bg-gray-300"}`}>
       {favoriteBtnLoading ? (
         <span className="indicator-item loading loading-ring" />
       ) : user.marker === "favorite" ? (
         <button
           type="button"
           aria-label="marked as favorite"
-          className="indicator-item badge bg-transparent text-yellow-400 text-xl"
+          className="indicator-item badge bg-transparent text-xl text-yellow-400"
           onClick={async () => {
             setFavoriteBtnLoading(true);
             await on.unfavorite(user.id);
@@ -324,25 +324,25 @@ function UserCard({ user: init, on, link }: { user: CardUser; on: UserCardEvent;
           alt={user.name ?? "User"}
           width={48}
           height={48}
-          className="w-12 h-12 rounded-full"
+          className="h-12 w-12 rounded-full"
         />
       ) : (
-        <div className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center">No Image</div>
+        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-300">No Image</div>
       )}
       <div>
-        <h2 className="text-lg font-semibold">{user.name ?? "Unknown"}</h2>
-        <p className="text-sm text-gray-600">Gender: {user.gender ?? "Unknown"}</p>
-        <p className="text-sm text-gray-600">Campus: {user.campus ?? "Unknown"}</p>
-        <p className="text-sm text-gray-600">Mother language: {user.motherLanguage || "Unknown"}</p>
-        <p className="text-sm text-gray-600">
+        <h2 className="font-semibold text-lg">{user.name ?? "Unknown"}</h2>
+        <p className="text-gray-600 text-sm">Gender: {user.gender ?? "Unknown"}</p>
+        <p className="text-gray-600 text-sm">Campus: {user.campus ?? "Unknown"}</p>
+        <p className="text-gray-600 text-sm">Mother language: {user.motherLanguage || "Unknown"}</p>
+        <p className="text-gray-600 text-sm">
           Fluent Languages:
           {user.fluentLanguages.join(", ") || "None"}
         </p>
-        <p className="text-sm text-gray-600">
+        <p className="text-gray-600 text-sm">
           Learning Languages:
           {user.learningLanguages.join(", ") || "None"}
         </p>
-        <p className="text-sm text-gray-600">Foreign Student: {user.isForeignStudent ? "Yes" : "No"}</p>
+        <p className="text-gray-600 text-sm">Foreign Student: {user.isForeignStudent ? "Yes" : "No"}</p>
       </div>
       <Link className="btn btn-primary" href={link}>
         See page
