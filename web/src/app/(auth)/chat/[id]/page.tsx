@@ -137,16 +137,10 @@ function MessageList({
       {messages.map((m) => (
         // TODO: handle pictures
         <li key={m.id}>
-          <div
-            className={`chat ${
-              m.senderId === me.id ? "chat-end" : "chat-start"
-            }`}
-          >
+          <div className={`chat ${m.senderId === me.id ? "chat-end" : "chat-start"}`}>
             <div className="chat-header">
               {m.sender.name}
-              <time className="text-xs opacity-50">
-                {m.createdAt.toLocaleString()}
-              </time>
+              <time className="text-xs opacity-50">{m.createdAt.toLocaleString()}</time>
             </div>
             <div className="chat-bubble">{m.content}</div>
             {/* <div className="chat-footer opacity-50">Seen</div> */}

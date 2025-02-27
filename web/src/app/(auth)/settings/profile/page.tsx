@@ -11,16 +11,10 @@ export default function Page() {
   const { fbUser: user } = useAuthContext();
   const router = useRouter();
   const [campuses, setCampuses] = useState<{ id: string; name: string }[]>([]);
-  const [divisions, setDivisions] = useState<{ id: string; name: string }[]>(
-    [],
-  );
-  const [universities, setUniversities] = useState<
-    { id: string; name: string }[]
-  >([]);
+  const [divisions, setDivisions] = useState<{ id: string; name: string }[]>([]);
+  const [universities, setUniversities] = useState<{ id: string; name: string }[]>([]);
   const [universityId, setUniversityId] = useState<string>("");
-  const [languages, setLanguages] = useState<{ id: string; name: string }[]>(
-    [],
-  );
+  const [languages, setLanguages] = useState<{ id: string; name: string }[]>([]);
   const [formData, setFormData] = useState<CreateUser>({
     id: "",
     imageUrl: null,
@@ -47,10 +41,7 @@ export default function Page() {
         if (!me) {
           throw new Error("User Not Found in Database!");
         }
-        const [universityRes, languageRes] = await Promise.all([
-          client.university.$get(),
-          client.language.$get(),
-        ]);
+        const [universityRes, languageRes] = await Promise.all([client.university.$get(), client.language.$get()]);
         if (!universityRes.ok || !languageRes.ok) {
           console.error("データ取得に失敗しました", {
             university: universityRes.status,
@@ -63,10 +54,7 @@ export default function Page() {
             }}`,
           );
         }
-        const [universities, languages] = await Promise.all([
-          universityRes.json(),
-          languageRes.json(),
-        ]);
+        const [universities, languages] = await Promise.all([universityRes.json(), languageRes.json()]);
 
         const formattedData = {
           id: me.id,
@@ -83,12 +71,8 @@ export default function Page() {
           hobby: me.hobby,
           introduction: me.introduction,
           motherLanguageId: me.motherLanguageId,
-          fluentLanguageIds: me.fluentLanguages.map(
-            (lang: { language: { id: string } }) => lang.language.id,
-          ),
-          learningLanguageIds: me.learningLanguages.map(
-            (lang: { language: { id: string } }) => lang.language.id,
-          ),
+          fluentLanguageIds: me.fluentLanguages.map((lang: { language: { id: string } }) => lang.language.id),
+          learningLanguageIds: me.learningLanguages.map((lang: { language: { id: string } }) => lang.language.id),
         };
         setUniversities(universities);
         setLanguages(languages);
@@ -126,10 +110,7 @@ export default function Page() {
           );
         }
 
-        const [campuses, divisions] = await Promise.all([
-          campusRes.json(),
-          divisionRes.json(),
-        ]);
+        const [campuses, divisions] = await Promise.all([campusRes.json(), divisionRes.json()]);
 
         setCampuses(campuses);
         setDivisions(divisions);
@@ -142,15 +123,10 @@ export default function Page() {
     fetchDataAfterSelectUniversity();
   }, [universityId, router]);
 
-  const [status, setStatus] = useState<
-    "idle" | "loading" | "success" | "error"
-  >("idle");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
-    const { name, value, type, checked, multiple } =
-      e.target as HTMLInputElement;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value, type, checked, multiple } = e.target as HTMLInputElement;
     const { options } = e.target as HTMLSelectElement;
 
     setFormData((prev) => {
@@ -227,12 +203,7 @@ export default function Page() {
 
         <label>
           性別:
-          <select
-            name="gender"
-            value={formData.gender}
-            onChange={handleChange}
-            className="border p-2 w-full"
-          >
+          <select name="gender" value={formData.gender} onChange={handleChange} className="border p-2 w-full">
             <option value="male">男性</option>
             <option value="female">女性</option>
             <option value="other">その他</option>
@@ -294,12 +265,7 @@ export default function Page() {
 
         <label>
           学年:
-          <select
-            name="grade"
-            value={formData.grade}
-            onChange={handleChange}
-            className="border p-2 w-full"
-          >
+          <select name="grade" value={formData.grade} onChange={handleChange} className="border p-2 w-full">
             <option value="">学年を選択してください</option>
             <option value="B1">学部1年</option>
             <option value="B2">学部2年</option>
@@ -327,12 +293,7 @@ export default function Page() {
         </label>
         <label>
           外国人留学生ですか？
-          <input
-            type="checkbox"
-            name="isForeignStudent"
-            checked={formData.isForeignStudent}
-            onChange={handleChange}
-          />
+          <input type="checkbox" name="isForeignStudent" checked={formData.isForeignStudent} onChange={handleChange} />
         </label>
 
         <label>
@@ -413,11 +374,7 @@ export default function Page() {
           />
         </label>
 
-        <button
-          type="submit"
-          className="bg-blue-500 text-white p-2 rounded"
-          disabled={status === "loading"}
-        >
+        <button type="submit" className="bg-blue-500 text-white p-2 rounded" disabled={status === "loading"}>
           {status === "loading" ? "登録中..." : "登録"}
         </button>
       </form>

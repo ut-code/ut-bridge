@@ -13,10 +13,7 @@ export default function Header() {
       <Link href="/community" passHref className="px-4">
         <AppIcon width={36} height={36} />
       </Link>
-      <Link
-        href="/community"
-        className="text-white text-2xl cursor-pointer px-4"
-      >
+      <Link href="/community" className="text-white text-2xl cursor-pointer px-4">
         UT-Bridge
       </Link>
       <button

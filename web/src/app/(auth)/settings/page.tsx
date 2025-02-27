@@ -15,10 +15,7 @@ export default function Page() {
   const user = formatUser(me);
   return (
     <>
-      <Link
-        href={"/settings/profile"}
-        className="text-primary text-2xl cursor-pointer px-4"
-      >
+      <Link href={"/settings/profile"} className="text-primary text-2xl cursor-pointer px-4">
         ユーザー編集画面へ
       </Link>
       Settings Page
@@ -36,9 +33,7 @@ export default function Page() {
             className="w-12 h-12 rounded-full"
           />
         ) : (
-          <div className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center">
-            aaa
-          </div>
+          <div className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center">aaa</div>
         )}
         <p>
           <strong>Name:</strong> {user.name || "N/A"}
@@ -47,8 +42,7 @@ export default function Page() {
           <strong>Gender:</strong> {user.gender || "N/A"}
         </p>
         <p>
-          <strong>Is Foreign Student:</strong>{" "}
-          {user.isForeignStudent ? "Yes" : "No"}
+          <strong>Is Foreign Student:</strong> {user.isForeignStudent ? "Yes" : "No"}
         </p>
         <p>
           <strong>Display Language:</strong> {user.displayLanguage}
@@ -66,16 +60,11 @@ export default function Page() {
           <strong>Mother Language:</strong> {user.motherLanguage ?? "N/A"}
         </p>
         <p>
-          <strong>Fluent Languages:</strong>{" "}
-          {user.fluentLanguages.length > 0
-            ? user.fluentLanguages.join(", ")
-            : "N/A"}
+          <strong>Fluent Languages:</strong> {user.fluentLanguages.length > 0 ? user.fluentLanguages.join(", ") : "N/A"}
         </p>
         <p>
           <strong>Learning Languages:</strong>{" "}
-          {user.learningLanguages.length > 0
-            ? user.learningLanguages.join(", ")
-            : "N/A"}
+          {user.learningLanguages.length > 0 ? user.learningLanguages.join(", ") : "N/A"}
         </p>
         <p>
           <strong>Hobby:</strong> {user.hobby || "N/A"}

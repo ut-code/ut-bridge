@@ -42,10 +42,8 @@ export const users: SeedUser[] = [
     isForeignStudent: false,
     displayLanguage: "japanese",
     grade: "D3",
-    hobby:
-      "アニメでござる。やはりラブライブは最高のエンターテイメントでござるよ。",
-    introduction:
-      "よろしくでござるよ。それがしは皆様とたくさん交流したいと思っておりまする。ウヒョヒョヒョ",
+    hobby: "アニメでござる。やはりラブライブは最高のエンターテイメントでござるよ。",
+    introduction: "よろしくでござるよ。それがしは皆様とたくさん交流したいと思っておりまする。ウヒョヒョヒョ",
     imageUrl: null,
     divisionId: null,
     campusId: null,
@@ -62,8 +60,7 @@ export const users: SeedUser[] = [
     displayLanguage: "japanese",
     grade: "D3",
     hobby: "眠いでござるよ",
-    introduction:
-      "よろしくでござるよ。それがしは皆様とたくさん交流したいと思っておりまする。ウヒョヒョヒョ",
+    introduction: "よろしくでござるよ。それがしは皆様とたくさん交流したいと思っておりまする。ウヒョヒョヒョ",
     imageUrl: null,
     divisionId: null,
     campusId: null,
@@ -80,8 +77,7 @@ export const users: SeedUser[] = [
     displayLanguage: "english",
     grade: "D3",
     hobby: "やはりボカロしか勝たぬよ。",
-    introduction:
-      "よろしくでござるよ。それがしは皆様とたくさん交流したいと思っておりまする。ウヒョヒョヒョ",
+    introduction: "よろしくでござるよ。それがしは皆様とたくさん交流したいと思っておりまする。ウヒョヒョヒョ",
     imageUrl: null,
     divisionId: null,
     campusId: null,
@@ -98,8 +94,7 @@ export const users: SeedUser[] = [
     displayLanguage: "japanese",
     grade: "D3",
     hobby: "アニメは最高でござるよ。",
-    introduction:
-      "よろしくでござるよ。それがしは皆様とたくさん交流したいと思っておりまする。ウヒョヒョヒョ",
+    introduction: "よろしくでござるよ。それがしは皆様とたくさん交流したいと思っておりまする。ウヒョヒョヒョ",
     imageUrl: null,
     divisionId: null,
     campusId: null,
