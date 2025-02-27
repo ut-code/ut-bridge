@@ -1,8 +1,10 @@
+import Header from "@/components/Header";
 import GoogleLoginButton from "@/features/auth/components/GoogleLoginButton";
 
 export default function Login() {
   return (
     <>
+      <Header />
       <h1 className="text-3xl ">ログインページ</h1>
       <div className="flex justify-center items-center h-screen">
         <div className="text-center p-6 border rounded-lg shadow-md">
