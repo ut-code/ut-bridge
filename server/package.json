@@ -17,7 +17,7 @@
     "common": "workspace:common"
   },
   "devDependencies": {
-    "@types/bun": "^1.2.2",
+    "@types/bun": "^1.2.4",
     "prisma": "^6.3.1",
     "typescript": "^5.7.3"
   }
