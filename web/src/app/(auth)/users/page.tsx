@@ -86,70 +86,82 @@ export default function Page() {
   if (!user) return <div>User not found</div>;
 
   return (
-    <div>
-      <h1>User Page</h1>
-      {user.imageUrl ? (
-        <Image
-          src={user.imageUrl}
-          alt={user.name ?? "User"}
-          width={48}
-          height={48}
-          className="h-12 w-12 rounded-full"
-        />
-      ) : (
-        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-300">N/A</div>
-      )}
-      <p>
-        <strong>Name:</strong> {user.name || "N/A"}
-      </p>
-      <p>
-        <strong>Gender:</strong> {user.gender || "N/A"}
-      </p>
-      <p>
-        <strong>Is Foreign Student:</strong> {user.isForeignStudent ? "Yes" : "No"}
-      </p>
-      <p>
-        <strong>Display Language:</strong> {user.displayLanguage}
-      </p>
-      <p>
-        <strong>Campus Name:</strong> {user.campus || "N/A"}
-      </p>
-      <p>
-        <strong>Grade:</strong> {user.grade ?? "N/A"}
-      </p>
-      <p>
-        <strong>Division:</strong> {user.division ?? "N/A"}
-      </p>
-      <p>
-        <strong>Mother Language:</strong> {user.motherLanguage ?? "N/A"}
-      </p>
-      <p>
-        <strong>Fluent Languages:</strong> {user.fluentLanguages.length > 0 ? user.fluentLanguages.join(", ") : "N/A"}
-      </p>
-      <p>
-        <strong>Learning Languages:</strong>{" "}
-        {user.learningLanguages.length > 0 ? user.learningLanguages.join(", ") : "N/A"}
-      </p>
-      <p>
-        <strong>Hobby:</strong> {user.hobby || "N/A"}
-      </p>
-      <p>
-        <strong>Introduction:</strong> {user.introduction || "N/A"}
-      </p>
-      <p>
-        <MarkerButton class="btn btn-accent" if={user.markedAs === undefined} action="favorite">
-          お気に入りにする
-        </MarkerButton>
-        <MarkerButton class="btn btn-accent" if={user.markedAs === "favorite"} action="unfavorite">
-          お気に入りを外す
-        </MarkerButton>
-        <MarkerButton class="btn btn-error" if={user.markedAs === undefined} action="block">
-          ブロックする
-        </MarkerButton>
-        <MarkerButton class="btn btn-error" if={user.markedAs === "blocked"} action="unblock">
-          ブロックを外す
-        </MarkerButton>
-      </p>
+    <div className="m-16 rounded-3xl bg-white p-16">
+      <div className="mb-10 flex items-center justify-around">
+        {user.imageUrl ? (
+          <Image
+            src={user.imageUrl}
+            alt={user.name ?? "User"}
+            width={48}
+            height={48}
+            className="h-12 w-12 rounded-full"
+          />
+        ) : (
+          <div className="flex h-100 w-100 items-center justify-center rounded-full bg-gray-300">N/A</div>
+        )}
+        <div>
+          <p className="mb-4 font-bold text-5xl">{user.name || "N/A"}</p>
+          <p className="my-4 text-2xl">{user.gender || "N/A"}</p>
+          <p className="my-4 text-2xl">{user.isForeignStudent ? "留学生" : " "}</p>
+          <div className="flex gap-10">
+            <button
+              type="button"
+              className="flex h-25 w-25 items-center justify-center rounded-full bg-blue-500 text-white"
+            >
+              <a href={`/chat?userId=${user.id}`}>チャット</a>
+            </button>
+            <MarkerButton if={true} class={"h-25 w-25 rounded-full bg-yellow-400 text-white"} action={"favorite"}>
+              お気に入り
+            </MarkerButton>
+          </div>
+        </div>
+      </div>
+      <div className="mx-24">
+        <div className="mt-24 mb-12">
+          <h2 className="my-3 font-bold text-3xl underline decoration-2">大学情報</h2>
+          <p className="my-3 text-lg">
+            <strong>所属キャンパス：</strong> {user.campus || "N/A"}
+          </p>
+          <p className="my-3 text-lg">
+            <strong>学部・大学院：</strong> {user.division ?? "N/A"}
+          </p>
+          <p className="my-3 text-lg">
+            <strong>学年：</strong> {user.grade ?? "N/A"}
+          </p>
+        </div>
+        <div className="my-12">
+          <h2 className="my-3 font-bold text-3xl underline decoration-2">言語</h2>
+          <p className="my-3 text-lg">
+            <strong>母国語：</strong> {user.motherLanguage ?? "N/A"}
+          </p>
+          <p className="my-3 text-lg">
+            <strong>流暢に話すことのできる言語：</strong> <br />
+            {user.fluentLanguages.length > 0 ? user.fluentLanguages.join(", ") : "N/A"}
+          </p>
+          <p className="my-3 text-lg">
+            <strong>学びたい言語：</strong> <br />
+            {user.learningLanguages.length > 0 ? user.learningLanguages.join(", ") : "N/A"}
+          </p>
+        </div>
+        <div className="my-12">
+          <h2 className="my-3 font-bold text-3xl underline decoration-2">トピック</h2>
+          <p className="my-3 text-lg">
+            <strong>趣味・好きなこと：</strong>
+            <br />
+            {user.hobby || "N/A"}
+          </p>
+          <p className="my-3 text-lg">
+            <strong>自己紹介：</strong>
+            <br />
+            {user.introduction || "N/A"}
+          </p>
+        </div>
+        <div>
+          <MarkerButton if={true} class={"rounded bg-red-500 px-6 py-3 text-white"} action={"block"}>
+            ブロックする
+          </MarkerButton>
+        </div>
+      </div>
     </div>
   );
 }
