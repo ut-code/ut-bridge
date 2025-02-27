@@ -1,10 +1,11 @@
 "use client";
 import { formatCardUser } from "@/features/format";
 import { useUserContext } from "@/features/user/userProvider.tsx";
+import { Link } from "@/lib/i18n";
+import { useRouter } from "@/lib/i18n";
 import { type CardUser, type Exchange, ExchangeSchema, MarkerSchema } from "common/zod/schema";
 import Image from "next/image";
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { client } from "../../../client.ts";
 

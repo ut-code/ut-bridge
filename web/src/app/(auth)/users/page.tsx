@@ -1,8 +1,9 @@
 "use client";
 import { formatUser } from "@/features/format";
+import { useRouter } from "@/lib/i18n";
 import type { User } from "common/zod/schema";
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { client } from "../../../client.ts";
 
