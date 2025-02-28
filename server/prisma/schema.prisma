@@ -28,19 +28,19 @@ model User {
   fluentLanguages   FluentLanguageOnUser[]
   learningLanguages LearningLanguageOnUser[]
 
-  marking     Marker[]  @relation("Actor")
-  markedAs    Marker[]  @relation("Target")
+  marking  Marker[] @relation("Actor")
+  markedAs Marker[] @relation("Target")
 
   joinedRooms Belongs[]
   messages    Message[]
 }
 
 model Marker {
-kind MarkerKind
+  kind     MarkerKind
   actorId  String
-  actor    User   @relation("Actor", fields: [actorId], references: [id], onDelete: Cascade)
+  actor    User       @relation("Actor", fields: [actorId], references: [id], onDelete: Cascade)
   targetId String
-  target   User   @relation("Target", fields: [targetId], references: [id], onDelete: Cascade)
+  target   User       @relation("Target", fields: [targetId], references: [id], onDelete: Cascade)
 
   @@id([actorId, targetId])
 }
