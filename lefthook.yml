@@ -1,8 +1,11 @@
 # Refer for explanation to following link:
-# https://lefthook.dev/configuration/
+# <https://lefthook.dev/configuration/>
 pre-commit:
   parallel: true
   jobs:
     - run: bun biome check --fix {staged_files}
       glob: "*.{mjs,js,ts,jsx,tsx,json,jsonc,css}"
       stage_fixed: true
+    - run: bun prisma format
+      glob: "*.prisma"
+      root: server
