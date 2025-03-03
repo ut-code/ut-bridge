@@ -10,8 +10,6 @@ const route = new Hono()
   .put("/", zValidator("json", CreateUserSchema), async (c) => {
     const userId = await getUserID(c);
     const body = c.req.valid("json");
-    console.log("🤩🤩🤩🤩🤩", userId);
-    console.log("⭐⭐⭐⭐⭐", body);
 
     const updatedUser = await prisma.user.update({
       where: {
@@ -55,6 +53,27 @@ const route = new Hono()
 
     return c.json(updatedUser);
   })
+  .patch(
+    "/",
+    zValidator(
+      "json",
+      z.object({
+        imageURL: z.string().optional(),
+      }),
+    ),
+    async (c) => {
+      const id = await getUserID(c);
+      const body = c.req.valid("json");
+
+      const newUser = await prisma.user.update({
+        where: { id },
+        data: {
+          imageUrl: body.imageURL,
+        },
+      });
+      return c.json(newUser);
+    },
+  )
 
   .delete("/", zValidator("param", z.object({ id: z.string() })), async (c) => {
     const userId = await getUserID(c);

@@ -4,7 +4,7 @@ import { client } from "@/client.ts";
 import LoginBadge from "@/features/auth/components/LoginBadge";
 import { useGoogleLogout } from "@/features/auth/functions/logout.ts";
 import { useUserContext } from "@/features/user/userProvider.tsx";
-import Image from "next/image";
+import { assert } from "@/lib.ts";
 import Link from "next/link";
 import { useState } from "react";
 import { formatUser } from "../../../features/format.ts";
@@ -23,8 +23,14 @@ export default function Page() {
       </Link>
       <h2>写真アップロード</h2>
       <Upload
-        onUpdate={(key) => {
-          client.users.me;
+        onUpdate={async (key) => {
+          const readURL = await getReadURL(key);
+          const res = await client.users.me.$patch({
+            json: {
+              imageURL: readURL,
+            },
+          });
+          assert(res.ok, `response was not ok, got text ${await res.text()}`);
         }}
       />
       <h2>Settings Page</h2>
@@ -34,12 +40,12 @@ export default function Page() {
       <div>
         <h1>自分のデータ</h1>
         {user.imageUrl ? (
-          <Image
+          <img
             src={user.imageUrl}
-            alt={user.name ?? "User"}
+            alt={user.name ?? "your profile"}
             width={48}
             height={48}
-            className="h-12 w-12 rounded-full"
+            className="h-24 w-24 rounded-full object-contain"
           />
         ) : (
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-300">No Image</div>
@@ -152,10 +158,4 @@ function Upload({ onUpdate }: { onUpdate: (key: string) => void }) {
 export async function getReadURL(key: string) {
   const { url } = await (await client.image.get.$get({ query: { key } })).json();
   return url;
-}
-
-// TODO: make images read-only public and remove this component
-export async function BucketImage({ alt, key, className }: { alt: string; key: string; className: string }) {
-  const src = await getReadURL(key);
-  return <Image alt={alt} src={src} className={className} />;
 }
