@@ -1,4 +1,8 @@
-import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import {
+  GetObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3";
 import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { Hono } from "hono";
@@ -20,9 +24,7 @@ const s3 = new S3Client({
   },
 });
 
-// 署名付きURLを生成するエンドポイント
 const router = new Hono()
-  // ファイルの公開URLを取得するエンドポイント
   .get("/", async (c) => {
     const key = c.req.query("key");
 
@@ -31,8 +33,10 @@ const router = new Hono()
       Key: key,
     });
 
-    // 署名付きURLを生成（有効期限 1 時間）
-    const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+    // 署名付きURLを生成（有効期限 7 day）
+    const url = await getSignedUrl(s3, command, {
+      expiresIn: 60 * 60 * 24 * 7,
+    });
 
     return c.json({ url });
   })
@@ -45,10 +49,25 @@ const router = new Hono()
       Bucket: "ut-bridge",
       Key: fileName,
       Conditions: [["content-length-range", 0, 10 * 1024 * 1024]], // 10MBまで許可
-      Expires: 60, // 署名付きURLの有効期限（60秒）
+      Expires: 600,
     });
 
     return c.json({ url, fields, fileName });
+  })
+  .put("/", async (c) => {
+    const key = c.req.query("key");
+
+    const command = new PutObjectCommand({
+      Bucket: "ut-bridge",
+      Key: key,
+    });
+
+    // 署名付きURLを生成（有効期限 7 day）
+    const url = await getSignedUrl(s3, command, {
+      expiresIn: 60 * 60 * 24 * 7,
+    });
+
+    return c.json({ url });
   });
 
 export default router;

@@ -15,6 +15,7 @@ export default function Page() {
 
   if (!me) return <div>User not found</div>;
   const user = formatUser(me);
+
   return (
     <>
       <Link
@@ -23,11 +24,11 @@ export default function Page() {
       >
         ユーザー編集画面へ
       </Link>
-      写真アップロード
+      <h2>写真アップロード</h2>
       <Upload />
-      Settings Page
+      <h2>Settings Page</h2>
       <button type="button" className="m-5 btn btn-error" onClick={logout}>
-        log out
+        Log out
       </button>
       <div>
         <h1>自分のデータ</h1>
@@ -41,7 +42,7 @@ export default function Page() {
           />
         ) : (
           <div className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center">
-            aaa
+            No Image
           </div>
         )}
         <p>
@@ -110,34 +111,34 @@ function Upload() {
     if (!file) return;
 
     setUploading(true);
+    try {
+      const res = await client.image.upload.$get();
+      const { url, fields, fileName } = await res.json();
+      console.log(url, "🤩🤩🤩🤩🤩🤩");
 
-    // バックエンドにリクエストして署名付きURLを取得
-    const res = await client.image.upload.$get();
-    const { url, fields, fileName } = await res.json();
+      const formData = new FormData();
+      for (const [key, value] of Object.entries(fields)) {
+        formData.append(key, value as string);
+      }
+      formData.append("file", file);
+      console.log(formData.get("file"), "⭐️⭐️⭐️⭐️⭐️⭐️");
 
-    console.log(fields, "あああ");
-    const formData = new FormData();
-    for (const [key, value] of Object.entries(fields)) {
-      formData.append(key, value as string);
+      const uploadResponse = await fetch(url, {
+        method: "PUT",
+        body: formData,
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error("Upload failed");
+      }
+
+      setFileUrl(`https://ut-bridge.r2.cloudflarestorage.com/${fileName}`);
+    } catch (error) {
+      console.error("Upload error:", error);
+      alert("ファイルのアップロードに失敗しました。");
+    } finally {
+      setUploading(false);
     }
-    formData.append("file", file);
-    // const upload = new ManagedUpload({
-    //   params: {
-    //     Bucket: "ut-bridge",
-    //     Key: formData.keys,
-    //     Body:  formData
-    //   },
-    // });
-
-    // Cloudflare R2 に直接アップロード
-    const response = await fetch(url, {
-      method: "POST",
-      body: formData,
-    });
-    console.log(response);
-
-    setFileUrl(`https://ut-bridge.r2.cloudflarestorage.com/${fileName}`);
-    setUploading(false);
   };
 
   return (
