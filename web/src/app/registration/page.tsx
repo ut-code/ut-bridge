@@ -1,6 +1,7 @@
 "use client";
 
 import { client } from "@/client";
+import Header from "@/components/Header";
 import { auth } from "@/features/auth/config";
 import type { CreateUser } from "common/zod/schema";
 import { useRouter } from "next/navigation";
@@ -161,210 +162,214 @@ export default function Page() {
   };
 
   return (
-    <div className="mx-auto max-w-md p-4">
-      <h1 className="mb-4 font-bold text-xl">初期登録画面</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-        <label>
-          名前:
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            className="w-full border p-2"
-          />
-        </label>
+    <>
+      <Header />
+      <div className="mx-40 my-20 p-4">
+        <h1 className="mb-8 font-bold text-3xl">ユーザー情報登録</h1>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+          <div className="my-10 px-15">
+            <h2 className="font-bold text-xl">基本情報</h2>
+            <label className="flex items-center justify-between">
+              名前
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                className="my-4 w-1/2 rounded-xl border border-gray-500 p-2"
+              />
+            </label>
 
-        <label>
-          性別:
-          <select name="gender" value={formData.gender} onChange={handleChange} className="w-full border p-2">
-            <option value="male">男性</option>
-            <option value="female">女性</option>
-            <option value="other">その他</option>
-          </select>
-        </label>
+            <label className="flex items-center justify-between">
+              性別
+              <select name="gender" value={formData.gender} onChange={handleChange} className="my-4 w-1/2 rounded-xl border border-gray-500 p-2">
+                <option value="male">男性</option>
+                <option value="female">女性</option>
+                <option value="other">その他</option>
+              </select>
+            </label>
+          </div>
 
-        <label>
-          大学:
-          <select
-            name="universityId"
-            onChange={handleChange}
-            value={formData.universityId}
-            className="w-full border p-2"
-          >
-            <option value="">大学を選択してください</option>
-            {universities.map((univ) => (
-              <option key={univ.id} value={univ.id}>
-                {univ.name}
-              </option>
-            ))}
-          </select>
-        </label>
+          <div className="my-10 px-15">
+            <h2 className="font-bold text-xl">大学情報</h2>
+            <label className="flex items-center justify-between">
+              大学
+              <select
+                name="universityId"
+                onChange={handleChange}
+                value={formData.universityId}
+                className="my-4 w-1/2 rounded-xl border border-gray-500 p-2"
+              >
+                <option value="">大学を選択してください</option>
+                {universities.map((univ) => (
+                  <option key={univ.id} value={univ.id}>
+                    {univ.name}
+                  </option>
+                ))}
+              </select>
+            </label>
 
-        <label>
-          学部:
-          <select
-            name="divisionId"
-            value={formData.divisionId}
-            onChange={handleChange}
-            className="w-full border p-2"
-            disabled={!divisions.length}
-          >
-            <option value="">学部を選択してください</option>
-            {divisions.map((division) => (
-              <option key={division.id} value={division.id}>
-                {division.name}
-              </option>
-            ))}
-          </select>
-        </label>
+            <label className="flex items-center justify-between">
+              学部
+              <select
+                name="divisionId"
+                value={formData.divisionId}
+                onChange={handleChange}
+                className="my-4 w-1/2 rounded-xl border border-gray-500 p-2"
+                disabled={!divisions.length}
+              >
+                <option value="">学部を選択してください</option>
+                {divisions.map((division) => (
+                  <option key={division.id} value={division.id}>
+                    {division.name}
+                  </option>
+                ))}
+              </select>
+            </label>
 
-        <label>
-          キャンパス:
-          <select
-            name="campusId"
-            value={formData.campusId}
-            onChange={handleChange}
-            className="w-full border p-2"
-            disabled={!campuses.length}
-          >
-            <option value="">キャンパスを選択してください</option>
-            {campuses.map((campus) => (
-              <option key={campus.id} value={campus.id}>
-                {campus.name}
-              </option>
-            ))}
-          </select>
-        </label>
+            <label className="flex items-center justify-between">
+              キャンパス
+              <select
+                name="campusId"
+                value={formData.campusId}
+                onChange={handleChange}
+                className="my-4 w-1/2 rounded-xl border border-gray-500 p-2"
+                disabled={!campuses.length}
+              >
+                <option value="">キャンパスを選択してください</option>
+                {campuses.map((campus) => (
+                  <option key={campus.id} value={campus.id}>
+                    {campus.name}
+                  </option>
+                ))}
+              </select>
+            </label>
 
-        <label>
-          学年:
-          <select name="grade" value={formData.grade} onChange={handleChange} className="w-full border p-2">
-            <option value="">学年を選択してください</option>
-            <option value="B1">学部1年</option>
-            <option value="B2">学部2年</option>
-            <option value="B3">学部3年</option>
-            <option value="B4">学部4年</option>
-            <option value="M1">修士1年</option>
-            <option value="M2">修士2年</option>
-            <option value="D1">博士1年</option>
-            <option value="D2">博士2年</option>
-            <option value="D3">博士3年</option>
-          </select>
-        </label>
+            <label className="flex items-center justify-between">
+              学年
+              <select name="grade" value={formData.grade} onChange={handleChange} className="my-4 w-1/2 rounded-xl border border-gray-500 p-2">
+                <option value="">学年を選択してください</option>
+                <option value="B1">学部1年</option>
+                <option value="B2">学部2年</option>
+                <option value="B3">学部3年</option>
+                <option value="B4">学部4年</option>
+                <option value="M1">修士1年</option>
+                <option value="M2">修士2年</option>
+                <option value="D1">博士1年</option>
+                <option value="D2">博士2年</option>
+                <option value="D3">博士3年</option>
+              </select>
+            </label>
+          </div>
 
-        <label>
-          表示言語設定:
-          <select
-            name="displayLanguage"
-            value={formData.displayLanguage}
-            onChange={handleChange}
-            className="w-full border p-2"
-          >
-            <option value="japanese">日本語</option>
-            <option value="english">英語</option>
-          </select>
-        </label>
-        <label>
-          外国人留学生ですか？
-          <input type="checkbox" name="isForeignStudent" checked={formData.isForeignStudent} onChange={handleChange} />
-        </label>
+          <div className="my-10 px-15">
+            <h2 className="font-bold text-xl">言語情報</h2>
+            <label className="relative my-4 block">
+              外国人留学生ですか？
+              <input type="checkbox" name="isForeignStudent" checked={formData.isForeignStudent} onChange={handleChange} className="checkbox checkbox-lg absolute right-[47%]"/>
+            </label>
 
-        <label>
-          母国語:
-          <select
-            name="motherLanguageId"
-            value={formData.motherLanguageId}
-            onChange={handleChange}
-            className="w-full border p-2"
-            disabled={!languages.length}
-          >
-            <option value="">母国語を選択してください</option>
-            {languages.map((language) => (
-              <option key={language.id} value={language.id}>
-                {language.name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          流暢に話せる言語:
-          <select
-            name="fluentLanguageIds"
-            value={formData.fluentLanguageIds}
-            onChange={handleChange}
-            className="w-full border p-2"
-            disabled={!languages.length}
-            multiple
-          >
-            <option value="">流暢に話せる言語を選択してください</option>
-            {languages.map((language) => (
-              <option key={language.id} value={language.id}>
-                {language.name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          勉強している言語:
-          <select
-            name="learningLanguageIds"
-            value={formData.learningLanguageIds}
-            onChange={handleChange}
-            className="w-full border p-2"
-            disabled={!languages.length}
-            multiple
-          >
-            <option value="">勉強している言語を選択してください</option>
-            {languages.map((language) => (
-              <option key={language.id} value={language.id}>
-                {language.name}
-              </option>
-            ))}
-          </select>
-        </label>
+            <label className="flex items-center justify-between">
+              母国語
+              <select
+                name="motherLanguageId"
+                value={formData.motherLanguageId}
+                onChange={handleChange}
+                className="my-4 w-1/2 rounded-xl border border-gray-500 p-2"
+                disabled={!languages.length}
+              >
+                <option value="">母国語を選択してください</option>
+                {languages.map((language) => (
+                  <option key={language.id} value={language.id}>
+                    {language.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="flex items-center justify-between">
+              流暢に話せる言語（母国語を含む）
+              <select
+                name="fluentLanguageIds"
+                value={formData.fluentLanguageIds}
+                onChange={handleChange}
+                className="my-4 w-1/2 rounded-xl border border-gray-500 p-2"
+                disabled={!languages.length}
+                multiple
+              >
+                <option value="">流暢に話せる言語を選択してください</option>
+                {languages.map((language) => (
+                  <option key={language.id} value={language.id}>
+                    {language.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="flex items-center justify-between">
+              勉強している言語
+              <select
+                name="learningLanguageIds"
+                value={formData.learningLanguageIds}
+                onChange={handleChange}
+                className="my-4 w-1/2 rounded-xl border border-gray-500 p-2"
+                disabled={!languages.length}
+                multiple
+              >
+                <option value="">勉強している言語を選択してください</option>
+                {languages.map((language) => (
+                  <option key={language.id} value={language.id}>
+                    {language.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
 
-        <label>
-          趣味:
-          <input
-            type="text"
-            name="hobby"
-            value={formData.hobby ?? ""}
-            onChange={handleChange}
-            required
-            className="w-full border p-2"
-          />
-        </label>
+          <div className="my-10 px-15">
+            <h2 className="font-bold text-xl">その他</h2>
+            <label className="flex items-center justify-between">
+              趣味
+              <input
+                type="text"
+                name="hobby"
+                value={formData.hobby ?? ""}
+                onChange={handleChange}
+                required
+                className="my-4 w-1/2 rounded-xl border border-gray-500 p-2"
+              />
+            </label>
 
-        <label>
-          自己紹介:
-          <input
-            type="text"
-            name="introduction"
-            value={formData.introduction ?? ""}
-            onChange={handleChange}
-            required
-            className="w-full border p-2"
-          />
-        </label>
+            <label className="flex items-center justify-between">
+              自己紹介
+              <input
+                type="text"
+                name="introduction"
+                value={formData.introduction ?? ""}
+                onChange={handleChange}
+                required
+                className="my-4 w-1/2 rounded-xl border border-gray-500 p-2"
+              />
+            </label>
+          </div>
+          
 
-        {status === "idle" ? (
-          <button type="submit" className="btn btn-primary rounded p-2 text-white">
-            登録
-          </button>
-        ) : status === "loading" ? (
-          <button type="submit" className="btn btn-disabled rounded p-2 text-white" disabled>
-            登録中...
-          </button>
-        ) : status === "success" ? (
-          <span className="btn btn-accent rounded p-2 text-white">登録成功</span>
-        ) : status === "error" ? (
-          <span className="btn btn-error rounded p-2 text-white">失敗しました</span>
-        ) : (
-          <></>
-        )}
-      </form>
-    </div>
+          {status === "idle" ? (
+            <button type="submit" className="btn btn-primary rounded p-2 text-white">
+              登録
+            </button>
+          ) : status === "loading" ? (
+            <button type="submit" className="btn btn-disabled rounded p-2 text-white" disabled>
+              登録中...
+            </button>
+          ) : status === "success" ? (
+            <span className="btn btn-accent rounded p-2 text-white">登録成功</span>
+          ) : status === "error" ? (
+            <span className="btn btn-error rounded p-2 text-white">失敗しました</span>
+          ) : (
+            <></>
+          )}
+        </form>
+      </div>
+    </>
   );
 }
