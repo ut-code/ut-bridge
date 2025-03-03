@@ -16,39 +16,45 @@ export default function Header() {
       <Link href="/community" className="cursor-pointer px-4 text-2xl text-white">
         UT-Bridge
       </Link>
-      <button
-        type="button"
-        className={`h-full cursor-pointer px-4 text-white text-xl transition-colors duration-200 ${
-          pathname === "/community" ? "bg-focus" : "hover:bg-focus"
-        }`}
-        onClick={() => {
-          router.push("/community");
-        }}
-      >
-        コミュニティ
-      </button>
-      <button
-        type="button"
-        className={`h-full cursor-pointer px-4 text-white text-xl transition-colors duration-200 ${
-          pathname === "/chat" ? "bg-focus" : "hover:bg-focus"
-        }`}
-        onClick={() => {
-          router.push("/chat");
-        }}
-      >
-        チャット
-      </button>
-      <button
-        type="button"
-        className={`h-full cursor-pointer px-4 text-white text-xl transition-colors duration-200 ${
-          pathname === "/settings" ? "bg-focus" : "hover:bg-focus"
-        }`}
-        onClick={() => {
-          router.push("/settings");
-        }}
-      >
-        設定
-      </button>
+      {pathname === "/login" ? (
+        <></>
+      ) : (
+        <>
+          <button
+            type="button"
+            className={`h-full cursor-pointer px-4 text-white text-xl transition-colors duration-200 ${
+              pathname === "/community" ? "bg-focus" : "hover:bg-focus"
+            }`}
+            onClick={() => {
+              router.push("/community");
+            }}
+          >
+            コミュニティ
+          </button>
+          <button
+            type="button"
+            className={`h-full cursor-pointer px-4 text-white text-xl transition-colors duration-200 ${
+              pathname === "/chat" ? "bg-focus" : "hover:bg-focus"
+            }`}
+            onClick={() => {
+              router.push("/chat");
+            }}
+          >
+            チャット
+          </button>
+          <button
+            type="button"
+            className={`h-full cursor-pointer px-4 text-white text-xl transition-colors duration-200 ${
+              pathname === "/settings" ? "bg-focus" : "hover:bg-focus"
+            }`}
+            onClick={() => {
+              router.push("/settings");
+            }}
+          >
+            設定
+          </button>
+        </>
+      )}
     </header>
   );
 }
