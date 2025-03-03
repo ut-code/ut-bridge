@@ -1,11 +1,10 @@
 "use client";
+import { m } from "@/paraglide/messages.js";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { AppIcon } from "./AppIcon.tsx";
 
 export default function Header() {
-  const router = useRouter();
   const pathname = usePathname();
 
   return (
@@ -16,39 +15,30 @@ export default function Header() {
       <Link href="/community" className="cursor-pointer px-4 text-2xl text-white">
         UT-Bridge
       </Link>
-      <button
-        type="button"
+      <Link
+        href="/community"
         className={`h-full cursor-pointer px-4 text-white text-xl transition-colors duration-200 ${
           pathname === "/community" ? "bg-focus" : "hover:bg-focus"
         }`}
-        onClick={() => {
-          router.push("/community");
-        }}
       >
-        コミュニティ
-      </button>
-      <button
-        type="button"
+        {m.title_community()}
+      </Link>
+      <Link
+        href="/chat"
         className={`h-full cursor-pointer px-4 text-white text-xl transition-colors duration-200 ${
           pathname === "/chat" ? "bg-focus" : "hover:bg-focus"
         }`}
-        onClick={() => {
-          router.push("/chat");
-        }}
       >
-        チャット
-      </button>
-      <button
-        type="button"
+        {m.title_chat()}
+      </Link>
+      <Link
+        href="/settings"
         className={`h-full cursor-pointer px-4 text-white text-xl transition-colors duration-200 ${
           pathname === "/settings" ? "bg-focus" : "hover:bg-focus"
         }`}
-        onClick={() => {
-          router.push("/settings");
-        }}
       >
-        設定
-      </button>
+        {m.title_settings()}
+      </Link>
     </header>
   );
 }

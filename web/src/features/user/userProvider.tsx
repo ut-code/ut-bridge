@@ -18,6 +18,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
   const { fbUser } = useAuthContext();
   const [myData, setMyData] = useState<FullUser | null>(null);
 
+  // biome-ignore lint: router changes very often
   useEffect(() => {
     if (!fbUser) {
       setMyData(null);
@@ -41,7 +42,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
     };
 
     fetchUserData();
-  }, [fbUser, router]);
+  }, [fbUser]);
 
   if (!myData) return <span className="loading loading-xl" />;
   return <UserContext.Provider value={{ me: myData }}>{children}</UserContext.Provider>;
