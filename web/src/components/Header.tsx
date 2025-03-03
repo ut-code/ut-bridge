@@ -16,7 +16,7 @@ export default function Header() {
       <Link href="/community" className="cursor-pointer px-4 text-2xl text-white">
         UT-Bridge
       </Link>
-      {pathname === "/login" ? (
+      {pathname === "/login" || pathname === "/registration" ? (
         <></>
       ) : (
         <>
