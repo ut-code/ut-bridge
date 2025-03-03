@@ -1,5 +1,5 @@
 "use client";
-import * as t from "@/paraglide/messages.js";
+import { m } from "@/paraglide/messages.js";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AppIcon } from "./AppIcon.tsx";
@@ -21,7 +21,7 @@ export default function Header() {
           pathname === "/community" ? "bg-focus" : "hover:bg-focus"
         }`}
       >
-        {t.title_community()}
+        {m.title_community()}
       </Link>
       <Link
         href="/chat"
@@ -29,7 +29,7 @@ export default function Header() {
           pathname === "/chat" ? "bg-focus" : "hover:bg-focus"
         }`}
       >
-        {t.title_chat()}
+        {m.title_chat()}
       </Link>
       <Link
         href="/settings"
@@ -37,7 +37,7 @@ export default function Header() {
           pathname === "/settings" ? "bg-focus" : "hover:bg-focus"
         }`}
       >
-        {t.title_settings()}
+        {m.title_settings()}
       </Link>
     </header>
   );

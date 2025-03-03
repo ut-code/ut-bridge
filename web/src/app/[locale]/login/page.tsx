@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import GoogleLoginButton from "@/features/auth/components/GoogleLoginButton";
-import * as t from "@/paraglide/messages.js";
+import { m } from "@/paraglide/messages.js";
 
 export default function Login() {
   return (
@@ -9,7 +9,7 @@ export default function Login() {
       <h1 className="text-3xl ">ログインページ</h1>
       <div className="flex h-screen items-center justify-center">
         <div className="rounded-lg border p-6 text-center shadow-md">
-          <p className="mt-10 mb-20 text-lg">{t.eccs_required()}</p>
+          <p className="mt-10 mb-20 text-lg">{m.eccs_required()}</p>
           <div className="my-10">
             <GoogleLoginButton />
           </div>
