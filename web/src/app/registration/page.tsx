@@ -183,7 +183,12 @@ export default function Page() {
 
             <label className="flex items-center justify-between">
               性別
-              <select name="gender" value={formData.gender} onChange={handleChange} className="my-4 w-1/2 rounded-xl border border-gray-500 p-2">
+              <select
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+                className="my-4 w-1/2 rounded-xl border border-gray-500 p-2"
+              >
                 <option value="male">男性</option>
                 <option value="female">女性</option>
                 <option value="other">その他</option>
@@ -248,7 +253,12 @@ export default function Page() {
 
             <label className="flex items-center justify-between">
               学年
-              <select name="grade" value={formData.grade} onChange={handleChange} className="my-4 w-1/2 rounded-xl border border-gray-500 p-2">
+              <select
+                name="grade"
+                value={formData.grade}
+                onChange={handleChange}
+                className="my-4 w-1/2 rounded-xl border border-gray-500 p-2"
+              >
                 <option value="">学年を選択してください</option>
                 <option value="B1">学部1年</option>
                 <option value="B2">学部2年</option>
@@ -267,7 +277,13 @@ export default function Page() {
             <h2 className="font-bold text-xl">言語情報</h2>
             <label className="relative my-4 block">
               外国人留学生ですか？
-              <input type="checkbox" name="isForeignStudent" checked={formData.isForeignStudent} onChange={handleChange} className="checkbox checkbox-lg absolute right-[47%]"/>
+              <input
+                type="checkbox"
+                name="isForeignStudent"
+                checked={formData.isForeignStudent}
+                onChange={handleChange}
+                className="checkbox checkbox-lg absolute right-[47%]"
+              />
             </label>
 
             <label className="flex items-center justify-between">
@@ -351,7 +367,6 @@ export default function Page() {
               />
             </label>
           </div>
-          
 
           {status === "idle" ? (
             <button type="submit" className="btn btn-primary rounded p-2 text-white">
