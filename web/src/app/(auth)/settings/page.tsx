@@ -155,7 +155,7 @@ function Upload({ onUpdate }: { onUpdate: (key: string) => void }) {
   );
 }
 
-export async function getReadURL(key: string) {
+async function getReadURL(key: string) {
   const { url } = await (await client.image.get.$get({ query: { key } })).json();
   return url;
 }
