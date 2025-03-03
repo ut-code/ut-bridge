@@ -25,7 +25,11 @@ export default function Page() {
         ユーザー編集画面へ
       </Link>
       <h2>写真アップロード</h2>
-      <Upload />
+      <Upload
+        onUpdate={(key) => {
+          client.users.me;
+        }}
+      />
       <h2>Settings Page</h2>
       <button type="button" className="m-5 btn btn-error" onClick={logout}>
         Log out
@@ -94,10 +98,9 @@ export default function Page() {
   );
 }
 
-function Upload() {
+function Upload({ onUpdate }: { onUpdate: (key: string) => void }) {
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [fileUrl, setFileUrl] = useState("");
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -133,8 +136,7 @@ function Upload() {
       }
       console.log("upload response:", await uploadResponse.text());
 
-      const readURL = await readableURL(key);
-      setFileUrl(readURL);
+      onUpdate(key);
     } catch (error) {
       console.error("Upload error:", error);
       alert("ファイルのアップロードに失敗しました。");
@@ -154,23 +156,23 @@ function Upload() {
       >
         {uploading ? "Uploading..." : "Upload"}
       </button>
-      {fileUrl && (
-        <p>
-          Uploaded File:
-          <img
-            alt="your profile"
-            className="w-[450px] h-[450px] object-contain"
-            src={fileUrl}
-          />
-        </p>
-      )}
     </div>
   );
 }
 
-export async function readableURL(key: string) {
+export async function getReadURL(key: string) {
   const { url } = await (
     await client.image.get.$get({ query: { key } })
   ).json();
   return url;
+}
+
+// TODO: make images read-only public and remove this component
+export async function BucketImage({
+  alt,
+  key,
+  className,
+}: { alt: string; key: string; className: string }) {
+  const src = await getReadURL(key);
+  return <Image alt={alt} src={src} className={className} />;
 }
