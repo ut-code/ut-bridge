@@ -3,9 +3,10 @@ import {
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
-import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
+import { z } from "zod";
 
 // Cloudflare R2 の S3 設定
 const accessKeyId = process.env.CLOUDFLARE_R2_ACCESS_KEY;
@@ -25,49 +26,46 @@ const s3 = new S3Client({
 });
 
 const router = new Hono()
-  .get("/", async (c) => {
-    const key = c.req.query("key");
+  .get(
+    "/get",
+    zValidator("query", z.object({ key: z.string() })),
+    async (c) => {
+      const key = c.req.valid("query").key;
 
-    const command = new GetObjectCommand({
-      Bucket: "ut-bridge",
-      Key: key,
-    });
+      const command = new GetObjectCommand({
+        Bucket: "ut-bridge",
+        Key: key,
+      });
 
-    // 署名付きURLを生成（有効期限 7 day）
-    const url = await getSignedUrl(s3, command, {
-      expiresIn: 60 * 60 * 24 * 7,
-    });
+      // 署名付きURLを生成（有効期限 7 day）
+      const url = await getSignedUrl(s3, command, {
+        expiresIn: 60 * 60 * 24 * 7,
+      });
 
-    return c.json({ url });
-  })
-  .get("/upload", async (c) => {
+      return c.json({ url });
+    },
+  )
+  .get("/put", async (c) => {
     const fileName = `uploads/${Date.now()}-${Math.random()
       .toString(36)
       .slice(2)}`;
 
-    const { url, fields } = await createPresignedPost(s3, {
-      Bucket: "ut-bridge",
-      Key: fileName,
-      Conditions: [["content-length-range", 0, 10 * 1024 * 1024]], // 10MBまで許可
-      Expires: 600,
-    });
+    const url = await getSignedUrl(
+      s3,
+      // TODO(security): limit Content-Length to 10MB
+      new PutObjectCommand({
+        Bucket: "ut-bridge",
+        Key: fileName,
+        // Conditions: // [["content-length-range", 0, 10 * 1024 * 1024]], // 10MBまで許可
+        // Expires: 600,
+      }),
+      {
+        expiresIn: 10 * 60 * 1000,
+      },
+    );
 
-    return c.json({ url, fields, fileName });
-  })
-  .put("/", async (c) => {
-    const key = c.req.query("key");
-
-    const command = new PutObjectCommand({
-      Bucket: "ut-bridge",
-      Key: key,
-    });
-
-    // 署名付きURLを生成（有効期限 7 day）
-    const url = await getSignedUrl(s3, command, {
-      expiresIn: 60 * 60 * 24 * 7,
-    });
-
-    return c.json({ url });
+    console.log(url);
+    return c.json({ url, fileName });
   });
 
 export default router;

@@ -112,27 +112,29 @@ function Upload() {
 
     setUploading(true);
     try {
-      const res = await client.image.upload.$get();
-      const { url, fields, fileName } = await res.json();
-      console.log(url, "🤩🤩🤩🤩🤩🤩");
+      const res = await client.image.put.$get();
+      const { url: putURL, fileName: key } = await res.json();
+      console.log(putURL, "🤩🤩🤩🤩🤩🤩");
 
-      const formData = new FormData();
-      for (const [key, value] of Object.entries(fields)) {
-        formData.append(key, value as string);
-      }
-      formData.append("file", file);
-      console.log(formData.get("file"), "⭐️⭐️⭐️⭐️⭐️⭐️");
+      // const formData = new FormData();
+      // for (const [key, value] of Object.entries(fields)) {
+      // formData.append(key, value);
+      // }
+      // formData.append("file", file);
+      // console.log(formData.get("file"), "⭐⭐⭐⭐⭐⭐");
 
-      const uploadResponse = await fetch(url, {
+      const uploadResponse = await fetch(putURL, {
         method: "PUT",
-        body: formData,
+        body: file,
       });
 
       if (!uploadResponse.ok) {
         throw new Error("Upload failed");
       }
+      console.log("upload response:", await uploadResponse.text());
 
-      setFileUrl(`https://ut-bridge.r2.cloudflarestorage.com/${fileName}`);
+      const readURL = await readableURL(key);
+      setFileUrl(readURL);
     } catch (error) {
       console.error("Upload error:", error);
       alert("ファイルのアップロードに失敗しました。");
@@ -154,12 +156,17 @@ function Upload() {
       </button>
       {fileUrl && (
         <p>
-          Uploaded File:{" "}
-          <a href={fileUrl} rel="noreferrer" target="_blank">
-            View
-          </a>
+          Uploaded File:
+          <img alt="your profile" src={fileUrl} />
         </p>
       )}
     </div>
   );
+}
+
+export async function readableURL(key: string) {
+  const { url } = await (
+    await client.image.get.$get({ query: { key } })
+  ).json();
+  return url;
 }
