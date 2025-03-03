@@ -9,3 +9,4 @@ pre-commit:
     - run: bun prisma format
       glob: "*.prisma"
       root: server
+      stage_fixed: true
