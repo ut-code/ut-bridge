@@ -134,65 +134,68 @@ export default function Page() {
 
   return (
     <>
-      <h1>Community Page</h1>
-      <label htmlFor="user-search">Search users:</label>
-      <input
-        type="search"
-        id="user-search"
-        name="q"
-        placeholder="ユーザー検索..."
-        value={rawSearchQuery}
-        onChange={(e) => setRawSearchQuery(e.target.value)}
-        className="rounded-md border p-2"
-      />
+      <div className="mx-30 my-5 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="filter">
+            <input
+              className="btn filter-reset"
+              type="radio"
+              name="metaframeworks"
+              aria-label="All"
+              onInput={() => {
+                router.push(
+                  createQueriedURL({
+                    marker: "clear",
+                  }),
+                );
+              }}
+            />
+            {["favorite" as const, "blocked" as const].map((select) => (
+              <input
+                key={select}
+                className="btn bg-white"
+                type="radio"
+                name="metaframeworks"
+                aria-label={select}
+                onInput={() => {
+                  router.push(
+                    createQueriedURL({
+                      marker: select,
+                    }),
+                  );
+                }}
+              />
+            ))}
+          </div>
+          <div>
+            <label htmlFor="exchange-language">言語交換学生に限定する</label>
+            <input
+              id="exchange-language"
+              type="checkbox"
+              className="toggle"
+              checked={query.exchange !== "all"}
+              onChange={(ev) => {
+                const filtered = ev.target.checked;
+                const amIForeignStudent = me.isForeignStudent;
+                const filterQuery = amIForeignStudent ? "japanese" : "exchange";
+                router.push(createQueriedURL({ exchange: filtered ? filterQuery : "all" }));
+              }}
+            />
+          </div>
+        </div>
 
-      <label htmlFor="exchange-language">言語交換学生に限定する</label>
-      <input
-        id="exchange-language"
-        type="checkbox"
-        className="toggle"
-        checked={query.exchange !== "all"}
-        onChange={(ev) => {
-          const filtered = ev.target.checked;
-          const amIForeignStudent = me.isForeignStudent;
-          const filterQuery = amIForeignStudent ? "japanese" : "exchange";
-          router.push(createQueriedURL({ exchange: filtered ? filterQuery : "all" }));
-        }}
-      />
-
-      <div className="filter">
         <input
-          className="btn filter-reset"
-          type="radio"
-          name="metaframeworks"
-          aria-label="All"
-          onInput={() => {
-            router.push(
-              createQueriedURL({
-                marker: "clear",
-              }),
-            );
-          }}
+          type="search"
+          id="user-search"
+          name="q"
+          placeholder="検索"
+          value={rawSearchQuery}
+          onChange={(e) => setRawSearchQuery(e.target.value)}
+          className="w-1/4 rounded-full border bg-white p-2"
         />
-        {["favorite" as const, "blocked" as const].map((select) => (
-          <input
-            key={select}
-            className="btn"
-            type="radio"
-            name="metaframeworks"
-            aria-label={select}
-            onInput={() => {
-              router.push(
-                createQueriedURL({
-                  marker: select,
-                }),
-              );
-            }}
-          />
-        ))}
       </div>
 
-      <ul>
+      <ul className="m-5 grid grid-cols-3 gap-4">
         {users === null ? (
           <span>
             {/* TODO: make a skeleton UI s.t. the layout doesn't shift as much */}
@@ -201,7 +204,7 @@ export default function Page() {
           </span>
         ) : (
           users.map((user) => (
-            <li key={user.id} className="border-gray-200 border-b p-4">
+            <li key={user.id} className="rounded-2xl bg-white p-4">
               <UserCard
                 link={`/users?id=${user.id}`}
                 user={user}
@@ -227,14 +230,8 @@ export default function Page() {
         )}
       </ul>
 
-      <div className="my-4 text-center">
-        <span className="text-gray-700">
-          {totalUsers > 0 ? `Page ${query.page} of ${totalPages}` : "No users found"}
-        </span>
-      </div>
-
-      <div className="mx-20 mt-4 flex justify-between">
-        <div className="w-1/2">
+      <div className="mx-20 my-4 flex items-center justify-between">
+        <div className="w-1/3">
           {query.page > 1 && (
             <Link
               href={createQueriedURL({
@@ -242,11 +239,14 @@ export default function Page() {
               })}
               className="rounded bg-blue-200 px-4 py-2 hover:bg-blue-300"
             >
-              Previous
+              前へ
             </Link>
           )}
         </div>
-        <div className="flex w-1/2 justify-end">
+        <span className="text-gray-700 text-lg">
+          {totalUsers > 0 ? `Page ${query.page} of ${totalPages}` : "No users found"}
+        </span>
+        <div className="flex w-1/3 justify-end">
           {query.page < totalPages && (
             <Link
               href={createQueriedURL({
@@ -254,7 +254,7 @@ export default function Page() {
               })}
               className="rounded bg-blue-200 px-4 py-2 hover:bg-blue-300"
             >
-              Next
+              次へ
             </Link>
           )}
         </div>
@@ -273,7 +273,7 @@ function UserCard({ user: init, on, link }: { user: CardUser; on: UserCardEvent;
   const [user, setUser] = useState(init);
   const [favoriteBtnLoading, setFavoriteBtnLoading] = useState(false);
   return (
-    <div className={`indicator flex items-center gap-4 ${user.marker === "blocked" && "bg-gray-300"}`}>
+    <div className={`indicator flex h-35 w-full items-center gap-4 ${user.marker === "blocked" && "bg-gray-300"}`}>
       {favoriteBtnLoading ? (
         <span className="indicator-item loading loading-ring" />
       ) : user.marker === "favorite" ? (
@@ -318,34 +318,32 @@ function UserCard({ user: init, on, link }: { user: CardUser; on: UserCardEvent;
           {/* this doesn't support blocking yet */}★
         </button>
       )}
-      {user.imageUrl ? (
-        <Image
-          src={user.imageUrl}
-          alt={user.name ?? "User"}
-          width={48}
-          height={48}
-          className="h-12 w-12 rounded-full"
-        />
-      ) : (
-        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-300">No Image</div>
-      )}
-      <div>
-        <h2 className="font-semibold text-lg">{user.name ?? "Unknown"}</h2>
-        <p className="text-gray-600 text-sm">Gender: {user.gender ?? "Unknown"}</p>
-        <p className="text-gray-600 text-sm">Campus: {user.campus ?? "Unknown"}</p>
-        <p className="text-gray-600 text-sm">Mother language: {user.motherLanguage || "Unknown"}</p>
-        <p className="text-gray-600 text-sm">
-          Fluent Languages:
-          {user.fluentLanguages.join(", ") || "None"}
-        </p>
-        <p className="text-gray-600 text-sm">
-          Learning Languages:
-          {user.learningLanguages.join(", ") || "None"}
-        </p>
-        <p className="text-gray-600 text-sm">Foreign Student: {user.isForeignStudent ? "Yes" : "No"}</p>
-      </div>
-      <Link className="btn btn-primary" href={link}>
-        See page
+      <Link href={link}>
+        <div className="flex items-center gap-4">
+          {user.imageUrl ? (
+            <Image
+              src={user.imageUrl}
+              alt={user.name ?? "User"}
+              width={48}
+              height={48}
+              className="h-12 w-12 rounded-full"
+            />
+          ) : (
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-300">No Image</div>
+          )}
+          <div>
+            <h2 className="font-semibold text-lg">{user.name ?? "Unknown"}</h2>
+            <p className="text-sm">{user.campus ?? "Unknown"}</p>
+            <p className="text-sm">
+              使える言語:
+              {user.fluentLanguages.join(", ") || "None"}
+            </p>
+            <p className="text-sm">
+              学びたい言語:
+              {user.learningLanguages.join(", ") || "None"}
+            </p>
+          </div>
+        </div>
       </Link>
     </div>
   );
