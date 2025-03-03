@@ -134,63 +134,67 @@ export default function Page() {
 
   return (
     <>
-      <h1>Community Page</h1>
-      <label htmlFor="user-search">Search users:</label>
-      <input
-        type="search"
-        id="user-search"
-        name="q"
-        placeholder="ユーザー検索..."
-        value={rawSearchQuery}
-        onChange={(e) => setRawSearchQuery(e.target.value)}
-        className="rounded-md border p-2"
-      />
-
-      <label htmlFor="exchange-language">言語交換学生に限定する</label>
-      <input
-        id="exchange-language"
-        type="checkbox"
-        className="toggle"
-        checked={query.exchange !== "all"}
-        onChange={(ev) => {
-          const filtered = ev.target.checked;
-          const amIForeignStudent = me.isForeignStudent;
-          const filterQuery = amIForeignStudent ? "japanese" : "exchange";
-          router.push(createQueriedURL({ exchange: filtered ? filterQuery : "all" }));
-        }}
-      />
-
-      <div className="filter">
+      <div className="flex items-center justify-between my-10 mx-30">
+        <div className="flex items-center gap-4">
+          <div className="filter">
+            <input
+              className="btn filter-reset"
+              type="radio"
+              name="metaframeworks"
+              aria-label="All"
+              onInput={() => {
+                router.push(
+                  createQueriedURL({
+                    marker: "clear",
+                  }),
+                );
+              }}
+            />
+            {["favorite" as const, "blocked" as const].map((select) => (
+              <input
+                key={select}
+                className="btn"
+                type="radio"
+                name="metaframeworks"
+                aria-label={select}
+                onInput={() => {
+                  router.push(
+                    createQueriedURL({
+                      marker: select,
+                    }),
+                  );
+                }}
+              />
+            ))}
+          </div>
+          <div>
+            <label htmlFor="exchange-language">言語交換学生に限定する</label>
+            <input
+              id="exchange-language"
+              type="checkbox"
+              className="toggle"
+              checked={query.exchange !== "all"}
+              onChange={(ev) => {
+                const filtered = ev.target.checked;
+                const amIForeignStudent = me.isForeignStudent;
+                const filterQuery = amIForeignStudent ? "japanese" : "exchange";
+                router.push(createQueriedURL({ exchange: filtered ? filterQuery : "all" }));
+              }}
+            />
+          </div>
+        </div>
+        
         <input
-          className="btn filter-reset"
-          type="radio"
-          name="metaframeworks"
-          aria-label="All"
-          onInput={() => {
-            router.push(
-              createQueriedURL({
-                marker: "clear",
-              }),
-            );
-          }}
+          type="search"
+          id="user-search"
+          name="q"
+          placeholder="検索"
+          value={rawSearchQuery}
+          onChange={(e) => setRawSearchQuery(e.target.value)}
+          className="rounded-full border p-2 w-1/4"
         />
-        {["favorite" as const, "blocked" as const].map((select) => (
-          <input
-            key={select}
-            className="btn"
-            type="radio"
-            name="metaframeworks"
-            aria-label={select}
-            onInput={() => {
-              router.push(
-                createQueriedURL({
-                  marker: select,
-                }),
-              );
-            }}
-          />
-        ))}
       </div>
+      
 
       <ul>
         {users === null ? (
@@ -331,18 +335,15 @@ function UserCard({ user: init, on, link }: { user: CardUser; on: UserCardEvent;
       )}
       <div>
         <h2 className="font-semibold text-lg">{user.name ?? "Unknown"}</h2>
-        <p className="text-gray-600 text-sm">Gender: {user.gender ?? "Unknown"}</p>
-        <p className="text-gray-600 text-sm">Campus: {user.campus ?? "Unknown"}</p>
-        <p className="text-gray-600 text-sm">Mother language: {user.motherLanguage || "Unknown"}</p>
-        <p className="text-gray-600 text-sm">
-          Fluent Languages:
+        <p className="text-sm">{user.campus ?? "Unknown"}</p>
+        <p className="text-sm">
+          使える言語:
           {user.fluentLanguages.join(", ") || "None"}
         </p>
-        <p className="text-gray-600 text-sm">
-          Learning Languages:
+        <p className="text-sm">
+          学びたい言語:
           {user.learningLanguages.join(", ") || "None"}
         </p>
-        <p className="text-gray-600 text-sm">Foreign Student: {user.isForeignStudent ? "Yes" : "No"}</p>
       </div>
       <Link className="btn btn-primary" href={link}>
         See page
