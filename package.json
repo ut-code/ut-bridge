@@ -4,7 +4,6 @@
     "@biomejs/biome": "^1.9.4",
     "lefthook": "^1.10.10"
   },
-  "workspaces": ["common", "web", "server", "scripts/*"],
   "scripts": {
     "postinstall": "echo '[bun] installation complete. running preparation scripts...'",
     "prepare": "(cd server && bun prepare) && lefthook install",
@@ -22,8 +21,5 @@
     "db:seed": "bun run --env-file=./.env --workspace scripts/seed seed",
     "prisma": "cd server; bun prisma"
   },
-  "dependencies": {
-    "form-data": "^4.0.2",
-    "wrangler": "^3.109.2"
-  }
+  "workspaces": ["common", "web", "server", "scripts/*"]
 }
