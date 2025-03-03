@@ -1,8 +1,4 @@
-import {
-  GetObjectCommand,
-  PutObjectCommand,
-  S3Client,
-} from "@aws-sdk/client-s3";
+import { GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
@@ -26,29 +22,23 @@ const s3 = new S3Client({
 });
 
 const router = new Hono()
-  .get(
-    "/get",
-    zValidator("query", z.object({ key: z.string() })),
-    async (c) => {
-      const key = c.req.valid("query").key;
+  .get("/get", zValidator("query", z.object({ key: z.string() })), async (c) => {
+    const key = c.req.valid("query").key;
 
-      const command = new GetObjectCommand({
-        Bucket: "ut-bridge",
-        Key: key,
-      });
+    const command = new GetObjectCommand({
+      Bucket: "ut-bridge",
+      Key: key,
+    });
 
-      // 署名付きURLを生成（有効期限 7 day）
-      const url = await getSignedUrl(s3, command, {
-        expiresIn: 60 * 60 * 24 * 7,
-      });
+    // 署名付きURLを生成（有効期限 7 day）
+    const url = await getSignedUrl(s3, command, {
+      expiresIn: 60 * 60 * 24 * 7,
+    });
 
-      return c.json({ url });
-    },
-  )
+    return c.json({ url });
+  })
   .get("/put", async (c) => {
-    const fileName = `uploads/${Date.now()}-${Math.random()
-      .toString(36)
-      .slice(2)}`;
+    const fileName = `uploads/${Date.now()}-${Math.random().toString(36).slice(2)}`;
 
     const url = await getSignedUrl(
       s3,

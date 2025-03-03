@@ -10,40 +10,27 @@ export default function Page() {
   const router = useRouter();
   const user = auth.currentUser;
   const [campuses, setCampuses] = useState<{ id: string; name: string }[]>([]);
-  const [divisions, setDivisions] = useState<{ id: string; name: string }[]>(
-    [],
-  );
-  const [universities, setUniversities] = useState<
-    { id: string; name: string }[]
-  >([]);
+  const [divisions, setDivisions] = useState<{ id: string; name: string }[]>([]);
+  const [universities, setUniversities] = useState<{ id: string; name: string }[]>([]);
   const [universityId, setUniversityId] = useState<string>("");
-  const [languages, setLanguages] = useState<{ id: string; name: string }[]>(
-    [],
-  );
+  const [languages, setLanguages] = useState<{ id: string; name: string }[]>([]);
 
   useEffect(() => {
     const fetchFirstData = async () => {
       try {
-        const [universityRes, languageRes] = await Promise.all([
-          client.university.$get(),
-          client.language.$get(),
-        ]);
+        const [universityRes, languageRes] = await Promise.all([client.university.$get(), client.language.$get()]);
         if (!universityRes.ok || !languageRes.ok) {
           console.error("データ取得に失敗しました", {
             university: universityRes.status,
             language: languageRes.status,
           });
           throw new Error(
-            `データ取得に失敗しました:${{
-              university: await universityRes.text(),
-              language: await languageRes.text(),
-            }}`,
+            `データ取得に失敗しました:
+            university: ${await universityRes.text()}
+            languages: ${await languageRes.text()}`,
           );
         }
-        const [universities, languages] = await Promise.all([
-          universityRes.json(),
-          languageRes.json(),
-        ]);
+        const [universities, languages] = await Promise.all([universityRes.json(), languageRes.json()]);
         setUniversities(universities);
         setLanguages(languages);
       } catch (err) {
@@ -71,17 +58,14 @@ export default function Page() {
             division: divisionRes.status,
           });
           throw new Error(
-            `データ取得に失敗しました:${{
-              campus: await campusRes.text(),
-              division: await divisionRes.text(),
-            }}`,
+            `データ取得に失敗しました:
+            campus: ${await campusRes.text()}
+            division: ${await divisionRes.text()}
+            `,
           );
         }
 
-        const [campuses, divisions] = await Promise.all([
-          campusRes.json(),
-          divisionRes.json(),
-        ]);
+        const [campuses, divisions] = await Promise.all([campusRes.json(), divisionRes.json()]);
 
         setCampuses(campuses);
         setDivisions(divisions);
@@ -113,15 +97,10 @@ export default function Page() {
     learningLanguageIds: [],
   });
 
-  const [status, setStatus] = useState<
-    "idle" | "loading" | "success" | "error"
-  >("idle");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
-    const { name, value, type, checked, multiple } =
-      e.target as HTMLInputElement;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value, type, checked, multiple } = e.target as HTMLInputElement;
     const { options } = e.target as HTMLSelectElement;
 
     setFormData((prev) => {
@@ -182,8 +161,8 @@ export default function Page() {
   };
 
   return (
-    <div className="p-4 max-w-md mx-auto">
-      <h1 className="text-xl font-bold mb-4">初期登録画面</h1>
+    <div className="mx-auto max-w-md p-4">
+      <h1 className="mb-4 font-bold text-xl">初期登録画面</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <label>
           名前:
@@ -193,18 +172,13 @@ export default function Page() {
             value={formData.name}
             onChange={handleChange}
             required
-            className="border p-2 w-full"
+            className="w-full border p-2"
           />
         </label>
 
         <label>
           性別:
-          <select
-            name="gender"
-            value={formData.gender}
-            onChange={handleChange}
-            className="border p-2 w-full"
-          >
+          <select name="gender" value={formData.gender} onChange={handleChange} className="w-full border p-2">
             <option value="male">男性</option>
             <option value="female">女性</option>
             <option value="other">その他</option>
@@ -217,7 +191,7 @@ export default function Page() {
             name="universityId"
             onChange={handleChange}
             value={formData.universityId}
-            className="border p-2 w-full"
+            className="w-full border p-2"
           >
             <option value="">大学を選択してください</option>
             {universities.map((univ) => (
@@ -234,7 +208,7 @@ export default function Page() {
             name="divisionId"
             value={formData.divisionId}
             onChange={handleChange}
-            className="border p-2 w-full"
+            className="w-full border p-2"
             disabled={!divisions.length}
           >
             <option value="">学部を選択してください</option>
@@ -252,7 +226,7 @@ export default function Page() {
             name="campusId"
             value={formData.campusId}
             onChange={handleChange}
-            className="border p-2 w-full"
+            className="w-full border p-2"
             disabled={!campuses.length}
           >
             <option value="">キャンパスを選択してください</option>
@@ -266,12 +240,7 @@ export default function Page() {
 
         <label>
           学年:
-          <select
-            name="grade"
-            value={formData.grade}
-            onChange={handleChange}
-            className="border p-2 w-full"
-          >
+          <select name="grade" value={formData.grade} onChange={handleChange} className="w-full border p-2">
             <option value="">学年を選択してください</option>
             <option value="B1">学部1年</option>
             <option value="B2">学部2年</option>
@@ -291,7 +260,7 @@ export default function Page() {
             name="displayLanguage"
             value={formData.displayLanguage}
             onChange={handleChange}
-            className="border p-2 w-full"
+            className="w-full border p-2"
           >
             <option value="japanese">日本語</option>
             <option value="english">英語</option>
@@ -299,12 +268,7 @@ export default function Page() {
         </label>
         <label>
           外国人留学生ですか？
-          <input
-            type="checkbox"
-            name="isForeignStudent"
-            checked={formData.isForeignStudent}
-            onChange={handleChange}
-          />
+          <input type="checkbox" name="isForeignStudent" checked={formData.isForeignStudent} onChange={handleChange} />
         </label>
 
         <label>
@@ -313,7 +277,7 @@ export default function Page() {
             name="motherLanguageId"
             value={formData.motherLanguageId}
             onChange={handleChange}
-            className="border p-2 w-full"
+            className="w-full border p-2"
             disabled={!languages.length}
           >
             <option value="">母国語を選択してください</option>
@@ -330,7 +294,7 @@ export default function Page() {
             name="fluentLanguageIds"
             value={formData.fluentLanguageIds}
             onChange={handleChange}
-            className="border p-2 w-full"
+            className="w-full border p-2"
             disabled={!languages.length}
             multiple
           >
@@ -348,7 +312,7 @@ export default function Page() {
             name="learningLanguageIds"
             value={formData.learningLanguageIds}
             onChange={handleChange}
-            className="border p-2 w-full"
+            className="w-full border p-2"
             disabled={!languages.length}
             multiple
           >
@@ -369,7 +333,7 @@ export default function Page() {
             value={formData.hobby ?? ""}
             onChange={handleChange}
             required
-            className="border p-2 w-full"
+            className="w-full border p-2"
           />
         </label>
 
@@ -381,17 +345,25 @@ export default function Page() {
             value={formData.introduction ?? ""}
             onChange={handleChange}
             required
-            className="border p-2 w-full"
+            className="w-full border p-2"
           />
         </label>
 
-        <button
-          type="submit"
-          className="bg-blue-500 text-white p-2 rounded"
-          disabled={status === "loading"}
-        >
-          {status === "loading" ? "登録中..." : "登録"}
-        </button>
+        {status === "idle" ? (
+          <button type="submit" className="btn btn-primary rounded p-2 text-white">
+            登録
+          </button>
+        ) : status === "loading" ? (
+          <button type="submit" className="btn btn-disabled rounded p-2 text-white" disabled>
+            登録中...
+          </button>
+        ) : status === "success" ? (
+          <span className="btn btn-accent rounded p-2 text-white">登録成功</span>
+        ) : status === "error" ? (
+          <span className="btn btn-error rounded p-2 text-white">失敗しました</span>
+        ) : (
+          <></>
+        )}
       </form>
     </div>
   );

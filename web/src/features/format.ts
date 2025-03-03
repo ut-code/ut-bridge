@@ -16,6 +16,7 @@ export function formatUser(user: FullUser): User {
     motherLanguage: user.motherLanguage.name,
     fluentLanguages: user.fluentLanguages.map((fl) => fl.language.name),
     learningLanguages: user.learningLanguages.map((ll) => ll.language.name),
+    markedAs: user.markedAs[0]?.kind,
   };
 }
 
@@ -31,5 +32,6 @@ export function formatCardUser(user: FullCardUser): CardUser {
     motherLanguage: user.motherLanguage.name,
     fluentLanguages: user.fluentLanguages.map((fl) => fl.language.name),
     learningLanguages: user.learningLanguages.map((ll) => ll.language.name),
+    marker: user.markedAs[0]?.kind,
   };
 }

@@ -5,6 +5,7 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleDetection": "force",
+    "moduleResolution": "bundler",
     "jsx": "react-jsx",
     // Bundler mode
     "allowImportingTsExtensions": true,

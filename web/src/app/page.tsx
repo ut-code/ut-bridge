@@ -6,10 +6,7 @@ export default function Home() {
   return (
     <>
       Hello ut-bridge!
-      <Link
-        href={"/login"}
-        className="text-primary text-2xl cursor-pointer px-4"
-      >
+      <Link href={"/login"} className="cursor-pointer px-4 text-2xl text-primary">
         ログイン画面へ
       </Link>
     </>

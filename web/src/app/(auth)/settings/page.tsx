@@ -18,10 +18,7 @@ export default function Page() {
 
   return (
     <>
-      <Link
-        href={"/settings/profile"}
-        className="text-primary text-2xl cursor-pointer px-4"
-      >
+      <Link href={"/settings/profile"} className="cursor-pointer px-4 text-2xl text-primary">
         ユーザー編集画面へ
       </Link>
       <h2>写真アップロード</h2>
@@ -31,8 +28,8 @@ export default function Page() {
         }}
       />
       <h2>Settings Page</h2>
-      <button type="button" className="m-5 btn btn-error" onClick={logout}>
-        Log out
+      <button type="button" className="btn btn-error m-5" onClick={logout}>
+        log out
       </button>
       <div>
         <h1>自分のデータ</h1>
@@ -42,12 +39,10 @@ export default function Page() {
             alt={user.name ?? "User"}
             width={48}
             height={48}
-            className="w-12 h-12 rounded-full"
+            className="h-12 w-12 rounded-full"
           />
         ) : (
-          <div className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center">
-            No Image
-          </div>
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-300">No Image</div>
         )}
         <p>
           <strong>Name:</strong> {user.name || "N/A"}
@@ -56,8 +51,7 @@ export default function Page() {
           <strong>Gender:</strong> {user.gender || "N/A"}
         </p>
         <p>
-          <strong>Is Foreign Student:</strong>{" "}
-          {user.isForeignStudent ? "Yes" : "No"}
+          <strong>Is Foreign Student:</strong> {user.isForeignStudent ? "Yes" : "No"}
         </p>
         <p>
           <strong>Display Language:</strong> {user.displayLanguage}
@@ -75,16 +69,11 @@ export default function Page() {
           <strong>Mother Language:</strong> {user.motherLanguage ?? "N/A"}
         </p>
         <p>
-          <strong>Fluent Languages:</strong>{" "}
-          {user.fluentLanguages.length > 0
-            ? user.fluentLanguages.join(", ")
-            : "N/A"}
+          <strong>Fluent Languages:</strong> {user.fluentLanguages.length > 0 ? user.fluentLanguages.join(", ") : "N/A"}
         </p>
         <p>
           <strong>Learning Languages:</strong>{" "}
-          {user.learningLanguages.length > 0
-            ? user.learningLanguages.join(", ")
-            : "N/A"}
+          {user.learningLanguages.length > 0 ? user.learningLanguages.join(", ") : "N/A"}
         </p>
         <p>
           <strong>Hobby:</strong> {user.hobby || "N/A"}
@@ -152,7 +141,7 @@ function Upload({ onUpdate }: { onUpdate: (key: string) => void }) {
         type="button"
         onClick={handleUpload}
         disabled={!file || uploading}
-        className="px-4 py-2 bg-blue-200 rounded hover:bg-blue-300"
+        className="rounded bg-blue-200 px-4 py-2 hover:bg-blue-300"
       >
         {uploading ? "Uploading..." : "Upload"}
       </button>
@@ -161,18 +150,12 @@ function Upload({ onUpdate }: { onUpdate: (key: string) => void }) {
 }
 
 export async function getReadURL(key: string) {
-  const { url } = await (
-    await client.image.get.$get({ query: { key } })
-  ).json();
+  const { url } = await (await client.image.get.$get({ query: { key } })).json();
   return url;
 }
 
 // TODO: make images read-only public and remove this component
-export async function BucketImage({
-  alt,
-  key,
-  className,
-}: { alt: string; key: string; className: string }) {
+export async function BucketImage({ alt, key, className }: { alt: string; key: string; className: string }) {
   const src = await getReadURL(key);
   return <Image alt={alt} src={src} className={className} />;
 }

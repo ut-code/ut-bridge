@@ -11,6 +11,7 @@
   },
   "formatter": {
     "enabled": true,
+    "lineWidth": 120,
     "indentStyle": "space",
     "indentWidth": 2
   },
@@ -23,6 +24,9 @@
       "recommended": true,
       "correctness": {
         "useImportExtensions": "error"
+      },
+      "nursery": {
+        "useSortedClasses": "error"
       }
     }
   },

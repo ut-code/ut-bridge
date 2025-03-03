@@ -9,19 +9,16 @@ export default function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="z-0 h-16 w-full bg-tBlue fixed top-0 flex items-center">
+    <header className="fixed top-0 z-0 flex h-16 w-full items-center bg-tBlue">
       <Link href="/community" passHref className="px-4">
         <AppIcon width={36} height={36} />
       </Link>
-      <Link
-        href="/community"
-        className="text-white text-2xl cursor-pointer px-4"
-      >
+      <Link href="/community" className="cursor-pointer px-4 text-2xl text-white">
         UT-Bridge
       </Link>
       <button
         type="button"
-        className={`text-white text-xl px-4 h-full cursor-pointer transition-colors duration-200 ${
+        className={`h-full cursor-pointer px-4 text-white text-xl transition-colors duration-200 ${
           pathname === "/community" ? "bg-focus" : "hover:bg-focus"
         }`}
         onClick={() => {
@@ -32,7 +29,7 @@ export default function Header() {
       </button>
       <button
         type="button"
-        className={`text-white text-xl px-4 h-full cursor-pointer transition-colors duration-200 ${
+        className={`h-full cursor-pointer px-4 text-white text-xl transition-colors duration-200 ${
           pathname === "/chat" ? "bg-focus" : "hover:bg-focus"
         }`}
         onClick={() => {
@@ -43,7 +40,7 @@ export default function Header() {
       </button>
       <button
         type="button"
-        className={`text-white text-xl px-4 h-full cursor-pointer transition-colors duration-200 ${
+        className={`h-full cursor-pointer px-4 text-white text-xl transition-colors duration-200 ${
           pathname === "/settings" ? "bg-focus" : "hover:bg-focus"
         }`}
         onClick={() => {

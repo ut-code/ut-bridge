@@ -3,25 +3,25 @@ import { z } from "zod";
 // Enums
 export const GenderEnum = z.enum(["male", "female", "other"]);
 export const DisplayLanguageEnum = z.enum(["japanese", "english"]);
-export const GradeEnum = z.enum([
-  "B1",
-  "B2",
-  "B3",
-  "B4",
-  "M1",
-  "M2",
-  "D1",
-  "D2",
-  "D3",
-]);
+export const GradeEnum = z.enum(["B1", "B2", "B3", "B4", "M1", "M2", "D1", "D2", "D3"]);
+export const ExchangeSchema = z.enum(["all", "exchange", "japanese"]);
+export const MarkerSchema = z.enum(["blocked", "favorite"]);
 
 // Common Schemas
-export const HobbySchema = z
-  .string()
-  .max(25, { message: "趣味は25文字以下です" });
-export const IntroductionSchema = z
-  .string()
-  .max(225, { message: "コメントは225文字以下です" });
+export const HobbySchema = z.string().max(25, { message: "趣味は25文字以下です" });
+export const IntroductionSchema = z.string().max(225, { message: "コメントは225文字以下です" });
+
+const LanguageSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+});
+
+const FluentLanguageSchema = z.object({
+  language: LanguageSchema,
+});
+const LearningLanguageSchema = z.object({
+  language: LanguageSchema,
+});
 
 // User Base Schema
 const BaseUserSchema = z.object({
@@ -35,7 +35,7 @@ const BaseUserSchema = z.object({
   introduction: IntroductionSchema,
 });
 
-// Extended User Schemas
+// UserSchema は、 UI で表示する用のフラットなデータ
 export const UserSchema = BaseUserSchema.extend({
   imageUrl: z.string().nullable(),
   division: z.string(),
@@ -43,6 +43,7 @@ export const UserSchema = BaseUserSchema.extend({
   motherLanguage: z.string(),
   fluentLanguages: z.array(z.string()),
   learningLanguages: z.array(z.string()),
+  markedAs: MarkerSchema.optional(),
 });
 
 export const CreateUserSchema = BaseUserSchema.extend({
@@ -94,18 +95,7 @@ export const CardUserSchema = z.object({
   motherLanguage: z.string(),
   fluentLanguages: z.array(z.string()),
   learningLanguages: z.array(z.string()),
-});
-
-const LanguageSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-});
-
-const FluentLanguageSchema = z.object({
-  language: LanguageSchema,
-});
-const LearningLanguageSchema = z.object({
-  language: LanguageSchema,
+  marker: MarkerSchema.optional(),
 });
 
 export const FullCardUserSchema = z.object({
@@ -121,6 +111,7 @@ export const FullCardUserSchema = z.object({
   motherLanguage: LanguageSchema,
   fluentLanguages: z.array(FluentLanguageSchema),
   learningLanguages: z.array(LearningLanguageSchema),
+  markedAs: z.array(z.object({ kind: MarkerSchema })),
 });
 
 // Additional Schemas
@@ -137,6 +128,7 @@ const CampusSchema = z.object({
   universityId: z.string(),
 });
 
+// Full* は、 Prisma からもってきた構造化データ
 export const FullUserSchema = BaseUserSchema.extend({
   guid: z.string(),
   imageUrl: z.string().nullable(),
@@ -148,6 +140,7 @@ export const FullUserSchema = BaseUserSchema.extend({
   motherLanguage: LanguageSchema,
   fluentLanguages: z.array(FluentLanguageSchema),
   learningLanguages: z.array(LearningLanguageSchema),
+  markedAs: z.array(z.object({ kind: MarkerSchema })),
 });
 
 // Types
@@ -157,3 +150,5 @@ export type SeedUser = z.infer<typeof SeedUserSchema>;
 export type FullCardUser = z.infer<typeof FullCardUserSchema>;
 export type CardUser = z.infer<typeof CardUserSchema>;
 export type FullUser = z.infer<typeof FullUserSchema>;
+export type Marker = z.infer<typeof MarkerSchema>;
+export type Exchange = z.infer<typeof ExchangeSchema>;

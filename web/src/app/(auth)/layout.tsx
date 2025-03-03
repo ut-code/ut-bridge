@@ -10,9 +10,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <ChatNotificationProvider>
           <div className="h-full">
             <Header />
-            <div className="h-full overflow-y-auto pt-16 bg-tGray">
-              {children}
-            </div>
+            <div className="h-full overflow-y-auto bg-tGray pt-16">{children}</div>
           </div>
         </ChatNotificationProvider>
       </UserProvider>

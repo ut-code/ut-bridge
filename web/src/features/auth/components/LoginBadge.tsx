@@ -22,7 +22,7 @@ export default function LoginBadge() {
       return (
         <span className="m-5 block">
           logged in as: {user.displayName}
-          <button type="button" className="m-5 btn btn-error" onClick={logout}>
+          <button type="button" className="btn btn-error m-5" onClick={logout}>
             log out
           </button>
         </span>
