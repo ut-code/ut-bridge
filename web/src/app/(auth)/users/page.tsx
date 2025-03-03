@@ -101,8 +101,8 @@ export default function Page() {
           <div className="flex h-100 w-100 items-center justify-center rounded-full bg-gray-300">N/A</div>
         )}
         <div>
-          <p className="mb-4 font-bold text-5xl">{user.name || "N/A"}</p>
-          <p className="my-4 text-2xl">{user.gender || "N/A"}</p>
+          <p className="mb-4 font-bold text-5xl">{user.name}</p>
+          <p className="my-4 text-2xl">{user.gender}</p>
           <p className="my-4 text-2xl">{user.isForeignStudent ? "留学生" : " "}</p>
           <div className="flex gap-10">
             <Link href={`/chat?userId=${user.id}`} className="flex h-25 w-25 items-center justify-center rounded-full bg-blue-500 text-white">チャット</Link>
@@ -116,27 +116,27 @@ export default function Page() {
         <div className="mt-24 mb-12">
           <h2 className="my-3 font-bold text-3xl underline decoration-2">大学情報</h2>
           <p className="my-3 text-lg">
-            <strong>所属キャンパス：</strong> {user.campus || "N/A"}
+            <strong>所属キャンパス：</strong> {user.campus}
           </p>
           <p className="my-3 text-lg">
-            <strong>学部・大学院：</strong> {user.division ?? "N/A"}
+            <strong>学部・大学院：</strong> {user.division}
           </p>
           <p className="my-3 text-lg">
-            <strong>学年：</strong> {user.grade ?? "N/A"}
+            <strong>学年：</strong> {user.grade}
           </p>
         </div>
         <div className="my-12">
           <h2 className="my-3 font-bold text-3xl underline decoration-2">言語</h2>
           <p className="my-3 text-lg">
-            <strong>母国語：</strong> {user.motherLanguage ?? "N/A"}
+            <strong>母国語：</strong> {user.motherLanguage}
           </p>
           <p className="my-3 text-lg">
             <strong>流暢に話すことのできる言語：</strong> <br />
-            {user.fluentLanguages.length > 0 ? user.fluentLanguages.join(", ") : "N/A"}
+            {user.fluentLanguages.join(", ")}
           </p>
           <p className="my-3 text-lg">
             <strong>学びたい言語：</strong> <br />
-            {user.learningLanguages.length > 0 ? user.learningLanguages.join(", ") : "N/A"}
+            {user.learningLanguages.join(", ")}
           </p>
         </div>
         <div className="my-12">
@@ -144,12 +144,12 @@ export default function Page() {
           <p className="my-3 text-lg">
             <strong>趣味・好きなこと：</strong>
             <br />
-            {user.hobby || "N/A"}
+            {user.hobby}
           </p>
           <p className="my-3 text-lg">
             <strong>自己紹介：</strong>
             <br />
-            {user.introduction || "N/A"}
+            {user.introduction}
           </p>
         </div>
         <div>
