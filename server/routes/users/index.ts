@@ -1,8 +1,8 @@
-import { zValidator } from "@hono/zod-validator";
-import { CreateUserSchema } from "common/zod/schema.ts";
+import { vValidator } from "@hono/valibot-validator";
+import { CreateUserSchema } from "common/validation/schema.ts";
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
-import { z } from "zod";
+import * as v from "valibot";
 import { getUserID } from "../../auth/func.ts";
 import { prisma } from "../../config/prisma.ts";
 import markers from "./markers.ts";
@@ -12,7 +12,7 @@ const router = new Hono()
   .route("/markers", markers)
   .route("/me", me)
 
-  .get("/", zValidator("query", z.object({ id: z.string().optional(), guid: z.string().optional() })), async (c) => {
+  .get("/", vValidator("query", v.object({ id: v.optional(v.string()), guid: v.optional(v.string()) })), async (c) => {
     const userId = getUserID(c);
     if (!userId)
       throw new HTTPException(401, {
@@ -46,7 +46,7 @@ const router = new Hono()
 
   .get(
     "/exist",
-    zValidator("query", z.object({ guid: z.string().optional(), userId: z.string().optional() }).optional()),
+    vValidator("query", v.optional(v.object({ guid: v.optional(v.string()), userId: v.optional(v.string()) }))),
     async (c) => {
       const { guid, userId } = c.req.valid("query") ?? {};
 
@@ -68,7 +68,7 @@ const router = new Hono()
     },
   )
 
-  .post("/", zValidator("json", CreateUserSchema), async (c) => {
+  .post("/", vValidator("json", CreateUserSchema), async (c) => {
     const body = c.req.valid("json");
     const newUser = await prisma.user.create({
       data: {

@@ -8,7 +8,7 @@
     "prepare": "prisma generate"
   },
   "dependencies": {
-    "@hono/zod-validator": "^0.4.3",
+    "@hono/valibot-validator": "^0.5.2",
     "@prisma/client": "^6.3.1",
     "common": "workspace:common",
     "devalue": "^5.1.1",

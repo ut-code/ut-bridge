@@ -2,7 +2,7 @@
 
 import { client } from "@/client";
 import { auth } from "@/features/auth/config";
-import type { CreateUser } from "common/zod/schema";
+import type { CreateUser } from "common/validation/schema";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 

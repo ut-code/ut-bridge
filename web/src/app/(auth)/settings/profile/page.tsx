@@ -3,7 +3,7 @@
 import { client } from "@/client";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { useUserContext } from "@/features/user/userProvider";
-import type { CreateUser } from "common/zod/schema";
+import type { CreateUser } from "common/validation/schema";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
