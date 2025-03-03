@@ -157,7 +157,11 @@ function Upload() {
       {fileUrl && (
         <p>
           Uploaded File:
-          <img alt="your profile" src={fileUrl} />
+          <img
+            alt="your profile"
+            className="w-[450px] h-[450px] object-contain"
+            src={fileUrl}
+          />
         </p>
       )}
     </div>
