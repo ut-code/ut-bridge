@@ -1,6 +1,6 @@
 import { client } from "@/client.ts";
-import { useRouter } from "@/lib/i18n";
 import { signInWithPopup } from "firebase/auth";
+import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import { auth, provider } from "../config.ts";
 

@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "bun --env-file=../.env run next dev --port 5173",
-    "build": "bun --env-file=../.env run next build",
+    "build": "paraglide-js compile --project ./project.inlang --outdir ./src/paraglide && bun --env-file=../.env run next build",
     "start": "next start --port $PORT",
-    "lint": "next lint"
+    "lint": "next lint",
+    "machine-translate": "inlang machine translate --project project.inlang"
   },
   "dependencies": {
     "devalue": "^5.1.1",
@@ -16,8 +17,7 @@
     "next": "^15.1.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "zod": "^3.24.2",
-    "@inlang/paraglide-next": "0.7.9"
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -31,6 +31,7 @@
     "typescript": "^5",
     "server": "workspace:server",
     "common": "workspace:common",
-    "@inlang/paraglide-js": "1.11.8"
+    "@inlang/paraglide-js": "2.0.0-beta.26",
+    "@inlang/cli": "^3.0.0"
   }
 }

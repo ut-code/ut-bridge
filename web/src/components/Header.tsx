@@ -1,6 +1,7 @@
 "use client";
-import { Link, usePathname } from "@/lib/i18n";
 import * as t from "@/paraglide/messages.js";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { AppIcon } from "./AppIcon.tsx";
 
 export default function Header() {

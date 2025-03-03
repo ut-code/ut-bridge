@@ -1,6 +1,6 @@
 "use client";
 
-import { Link } from "@/lib/i18n";
+import Link from "next/link";
 
 export default function Home() {
   return (

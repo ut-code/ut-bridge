@@ -1,8 +1,10 @@
-import { languageTag } from "@/paraglide/runtime.js";
-import { switchLanguage } from "./func.ts";
+import { localizeHref } from "@/paraglide/runtime.js";
+import { getLocale } from "@/paraglide/runtime.js";
+import { useRouter } from "next/navigation";
 
 export function LanguageSelector() {
-  const lang = languageTag();
+  const router = useRouter();
+  const locale = getLocale();
   return (
     <>
       <label>
@@ -10,10 +12,11 @@ export function LanguageSelector() {
         <input
           name="language"
           type="radio"
-          defaultChecked={lang === "ja"}
+          defaultChecked={locale === "ja"}
           onChange={() => {
-            console.log("changing to ja...");
-            switchLanguage("ja");
+            const href = localizeHref(location.href, { locale: "ja" });
+            console.log("changing to ja...", href);
+            router.replace(href);
           }}
         />
       </label>
@@ -22,9 +25,11 @@ export function LanguageSelector() {
         <input
           name="language"
           type="radio"
-          defaultChecked={lang === "en"}
+          defaultChecked={locale === "en"}
           onChange={() => {
-            switchLanguage("en");
+            const href = localizeHref(location.href, { locale: "en" });
+            console.log("changing to en...", href);
+            router.replace(href);
           }}
         />
       </label>

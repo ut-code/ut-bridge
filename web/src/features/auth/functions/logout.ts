@@ -1,5 +1,5 @@
-import { useRouter } from "@/lib/i18n";
 import { signOut } from "firebase/auth";
+import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import { auth } from "../config.ts";
 

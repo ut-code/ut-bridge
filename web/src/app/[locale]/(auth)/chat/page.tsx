@@ -3,8 +3,8 @@
 import { client } from "@/client";
 import LoginBadge from "@/features/auth/components/LoginBadge";
 import { useUserContext } from "@/features/user/userProvider";
-import { Link } from "@/lib/i18n";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Page() {
