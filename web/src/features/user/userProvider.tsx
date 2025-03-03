@@ -1,7 +1,7 @@
 "use client";
 import { client } from "@/client";
 import { ensure } from "@/lib.ts";
-import type { FullUser } from "common/zod/schema";
+import type { FullUser } from "common/validation/schema";
 import { useRouter } from "next/navigation";
 import { type ReactNode, createContext, useContext, useEffect, useState } from "react";
 import { useAuthContext } from "../auth/providers/AuthProvider.tsx";

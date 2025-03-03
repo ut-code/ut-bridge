@@ -1,13 +1,13 @@
-import { zValidator } from "@hono/zod-validator";
-import { CreateUserSchema } from "common/zod/schema.ts";
+import { vValidator } from "@hono/valibot-validator";
+import { CreateUserSchema } from "common/validation/schema.ts";
 import { Hono } from "hono";
-import { z } from "zod";
+import * as v from "valibot";
 import { getUserID } from "../../auth/func.ts";
 import { prisma } from "../../config/prisma.ts";
 
 const route = new Hono()
   //TODO://型に合わせてupdateの方法も変化させる
-  .put("/", zValidator("json", CreateUserSchema), async (c) => {
+  .put("/", vValidator("json", CreateUserSchema), async (c) => {
     const userId = await getUserID(c);
     const body = c.req.valid("json");
     console.log("🤩🤩🤩🤩🤩", userId);
@@ -56,7 +56,7 @@ const route = new Hono()
     return c.json(updatedUser);
   })
 
-  .delete("/", zValidator("param", z.object({ id: z.string() })), async (c) => {
+  .delete("/", vValidator("param", v.object({ id: v.string() })), async (c) => {
     const userId = await getUserID(c);
     const deletedUser = await prisma.user.delete({
       where: { id: userId },

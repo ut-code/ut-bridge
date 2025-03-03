@@ -1,12 +1,24 @@
 "use client";
 import { formatCardUser } from "@/features/format";
 import { useUserContext } from "@/features/user/userProvider.tsx";
-import { type CardUser, type Exchange, ExchangeSchema, MarkerSchema } from "common/zod/schema";
+import { type CardUser, type Exchange, ExchangeSchema, MarkerSchema } from "common/validation/schema.ts";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { type BaseIssue, type BaseSchema, type InferOutput, parse } from "valibot";
 import { client } from "../../../client.ts";
+
+function parseOptional<const TSchema extends BaseSchema<unknown, unknown, BaseIssue<unknown>>>(
+  schema: TSchema,
+  input: unknown,
+): InferOutput<TSchema> | undefined {
+  try {
+    return parse(schema, input);
+  } catch (err) {
+    return undefined;
+  }
+}
 
 function useQuery() {
   const query = useSearchParams();
@@ -14,10 +26,10 @@ function useQuery() {
   const pageQuery = query.get("page");
   const page = Number.parseInt(pageQuery ?? "") || 1; // don't use `??`. it won't filter out NaN (and page won't be 0)
 
-  const exchange = ExchangeSchema.safeParse(query.get("exchange")).data ?? "all";
+  const exchange = parseOptional(ExchangeSchema, query.get("exchange")) ?? "all";
   const search = query.get("search") ?? "";
   console.log(query.get("marker"));
-  const marker = MarkerSchema.safeParse(query.get("marker")).data ?? undefined;
+  const marker = parseOptional(MarkerSchema, query.get("marker")) ?? undefined;
   return { page, exchange, search, marker };
 }
 

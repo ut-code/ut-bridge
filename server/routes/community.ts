@@ -1,21 +1,21 @@
-import { zValidator } from "@hono/zod-validator";
+import { vValidator } from "@hono/valibot-validator";
 import type { Prisma } from "@prisma/client";
-import { MarkerSchema } from "common/zod/schema.ts";
+import { ExchangeSchema, MarkerSchema } from "common/validation/schema.ts";
 import { Hono } from "hono";
 import { getUserID } from "server/auth/func.ts";
-import z from "zod";
+import * as v from "valibot";
 import { prisma } from "../config/prisma.ts";
 
 const router = new Hono().get(
   "/",
-  zValidator(
+  vValidator(
     "query",
-    z.object({
-      myId: z.string(),
-      page: z.coerce.number().default(1),
-      exchangeQuery: z.enum(["exchange", "japanese", "all"]).default("all"),
-      searchQuery: z.string().default(""),
-      marker: MarkerSchema.optional(),
+    v.object({
+      myId: v.string(),
+      page: v.optional(v.pipe(v.string(), v.transform(Number), v.number()), "1"),
+      exchangeQuery: v.optional(ExchangeSchema, "all"),
+      searchQuery: v.optional(v.string(), ""),
+      marker: v.optional(MarkerSchema),
     }),
   ),
   async (c) => {

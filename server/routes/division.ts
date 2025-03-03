@@ -1,9 +1,9 @@
-import { zValidator } from "@hono/zod-validator";
+import { vValidator } from "@hono/valibot-validator";
 import { Hono } from "hono";
-import z from "zod";
+import * as v from "valibot";
 import { prisma } from "../config/prisma.ts";
 
-const router = new Hono().get("/", zValidator("query", z.object({ id: z.string().optional() })), async (c) => {
+const router = new Hono().get("/", vValidator("query", v.object({ id: v.optional(v.string()) })), async (c) => {
   const universityId = c.req.valid("query").id;
 
   const divisions = await prisma.division.findMany({

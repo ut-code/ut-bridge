@@ -1,4 +1,4 @@
-import type { CardUser, FullCardUser, FullUser, User } from "common/zod/schema";
+import type { CardUser, FullCardUser, FullUser, User } from "common/validation/schema";
 
 export function formatUser(user: FullUser): User {
   return {

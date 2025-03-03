@@ -1,6 +1,6 @@
 "use client";
 import { formatUser } from "@/features/format";
-import type { User } from "common/zod/schema";
+import type { User } from "common/validation/schema.ts";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";

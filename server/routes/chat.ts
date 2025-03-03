@@ -1,9 +1,9 @@
-import { zValidator } from "@hono/zod-validator";
+import { vValidator } from "@hono/valibot-validator";
 import { randomUUIDv7 } from "bun";
 import { stringify } from "devalue";
 import { Hono } from "hono";
 import { streamSSE } from "hono/streaming";
-import z from "zod";
+import * as v from "valibot";
 import { prisma } from "../config/prisma.ts";
 
 // TODO: use types from schema
@@ -22,12 +22,12 @@ const router = new Hono()
   // ## about room
   .post(
     "/rooms",
-    zValidator(
+    vValidator(
       "json",
-      z.object({
-        name: z.string().optional(),
-        pictureUrl: z.string().optional(),
-        members: z.array(z.string()),
+      v.object({
+        name: v.optional(v.string()),
+        pictureUrl: v.optional(v.string()),
+        members: v.array(v.string()),
       }),
     ),
     async (c) => {
@@ -49,8 +49,8 @@ const router = new Hono()
   )
   .put(
     "/rooms/:room",
-    zValidator("param", z.object({ room: z.string() })),
-    zValidator("json", z.object({ name: z.string() })),
+    vValidator("param", v.object({ room: v.string() })),
+    vValidator("json", v.object({ name: v.string() })),
     async (c) => {
       const userId = await getUserID(c);
       const roomId = c.req.valid("param").room;
@@ -74,11 +74,11 @@ const router = new Hono()
   )
   .post(
     "/rooms/:room/members",
-    zValidator("param", z.object({ room: z.string() })),
-    zValidator(
+    vValidator("param", v.object({ room: v.string() })),
+    vValidator(
       "json",
-      z.object({
-        member: z.string(),
+      v.object({
+        member: v.string(),
       }),
     ),
     async (c) => {
@@ -104,7 +104,7 @@ const router = new Hono()
   )
   .delete(
     "/rooms/:room/members/:member",
-    zValidator("param", z.object({ room: z.string(), member: z.string() })),
+    vValidator("param", v.object({ room: v.string(), member: v.string() })),
     async (c) => {
       const userId = await getUserID(c);
       const param = c.req.valid("param");
@@ -171,10 +171,10 @@ const router = new Hono()
   // ## room data
   .get(
     "/rooms/:room",
-    zValidator(
+    vValidator(
       "param",
-      z.object({
-        room: z.string().uuid(), // Room ID
+      v.object({
+        room: v.pipe(v.string(), v.uuid()), // Room ID
       }),
     ),
     async (c) => {
@@ -221,17 +221,17 @@ const router = new Hono()
   // # IO: client -> server
   .post(
     "/rooms/:room/messages",
-    zValidator(
+    vValidator(
       "param",
-      z.object({
-        room: z.string().uuid(),
+      v.object({
+        room: v.pipe(v.string(), v.uuid()),
       }),
     ),
-    zValidator(
+    vValidator(
       "json",
-      z.object({
-        isPhoto: z.boolean(),
-        content: z.string(),
+      v.object({
+        isPhoto: v.boolean(),
+        content: v.string(),
       }),
     ),
     async (c) => {
@@ -280,16 +280,16 @@ const router = new Hono()
   )
   .patch(
     "/messages/:message",
-    zValidator(
+    vValidator(
       "param",
-      z.object({
-        message: z.string().uuid(), // Message ID
+      v.object({
+        message: v.pipe(v.string(), v.uuid()), // Message ID
       }),
     ),
-    zValidator(
+    vValidator(
       "json",
-      z.object({
-        content: z.string(),
+      v.object({
+        content: v.string(),
       }),
     ),
     async (c) => {
@@ -332,11 +332,11 @@ const router = new Hono()
   )
   .delete(
     "/messages/:message",
-    zValidator(
+    vValidator(
       "param",
-      z.object({
-        message: z.string(), // Message ID
-        room: z.string(),
+      v.object({
+        message: v.string(), // Message ID
+        room: v.string(),
       }),
     ),
     async (c) => {
@@ -373,7 +373,7 @@ const router = new Hono()
   )
 
   // IO: server -> client
-  .get("/sse", zValidator("cookie", z.object({ "ut-bridge-Authorization": z.string().jwt() })), async (c) => {
+  .get("/sse", vValidator("cookie", v.object({ "ut-bridge-Authorivation": v.string() })), async (c) => {
     return streamSSE(c, async (stream) => {
       let connected = true;
       const id = 0;
