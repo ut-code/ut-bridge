@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { client } from "../../../client.ts";
+import Link from "next/link";
 
 export default function Page() {
   const [user, setUser] = useState<User | null>(null);
@@ -104,12 +105,7 @@ export default function Page() {
           <p className="my-4 text-2xl">{user.gender || "N/A"}</p>
           <p className="my-4 text-2xl">{user.isForeignStudent ? "留学生" : " "}</p>
           <div className="flex gap-10">
-            <button
-              type="button"
-              className="flex h-25 w-25 items-center justify-center rounded-full bg-blue-500 text-white"
-            >
-              <a href={`/chat?userId=${user.id}`}>チャット</a>
-            </button>
+            <Link href={`/chat?userId=${user.id}`} className="flex h-25 w-25 items-center justify-center rounded-full bg-blue-500 text-white">チャット</Link>
             <MarkerButton if={true} class={"h-25 w-25 rounded-full bg-yellow-400 text-white"} action={"favorite"}>
               お気に入り
             </MarkerButton>
