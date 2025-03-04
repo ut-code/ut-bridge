@@ -100,7 +100,7 @@ export default function Page() {
     fluentLanguageIds: [],
     learningLanguageIds: [],
   });
-  const [file, setFile] = useState<File | null>(null); // 選択された画像を一時保存
+  const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [preview, setPreview] = useState<string | null>(null);
 
@@ -464,7 +464,7 @@ export default function Page() {
                 )}
               </div>
             </div>
-          )}
+          </div>
         </form>
       </div>
     </>

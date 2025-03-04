@@ -2,6 +2,7 @@
 
 import { client } from "@/client";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
+import { upload } from "@/features/image/ImageUpload";
 import { useUserContext } from "@/features/user/userProvider";
 import type { CreateUser } from "common/zod/schema";
 import { useRouter } from "next/navigation";
@@ -10,6 +11,7 @@ import { useEffect, useState } from "react";
 export default function Page() {
   const { fbUser: user } = useAuthContext();
   const router = useRouter();
+  const { me } = useUserContext();
   const [formData, setFormData] = useState<CreateUser>({
     id: "",
     imageUrl: null,
@@ -28,7 +30,6 @@ export default function Page() {
     fluentLanguageIds: [],
     learningLanguageIds: [],
   });
-  const { me } = useUserContext();
 
   useEffect(() => {
     const fetchMyData = async () => {
@@ -36,6 +37,7 @@ export default function Page() {
         if (!me) {
           throw new Error("User Not Found in Database!");
         }
+
         const [universityRes, languageRes] = await Promise.all([client.university.$get(), client.language.$get()]);
         if (!universityRes.ok || !languageRes.ok) {
           console.error("データ取得に失敗しました", {
@@ -69,8 +71,9 @@ export default function Page() {
           learningLanguageIds: me.learningLanguages.map((lang: { language: { id: string } }) => lang.language.id),
         };
         setFormData(formattedData);
+        setPreview(me.imageUrl);
       } catch (err) {
-        console.error("Failed to fetch university or language Data ", err);
+        console.error("Failed to fetch user data", err);
         router.push("/login");
       }
     };
@@ -84,35 +87,49 @@ export default function Page() {
     const { options } = e.target as HTMLSelectElement;
 
     setFormData((prev) => {
-      // 複数選択の処理（言語選択）
       if (multiple) {
         const selectedValues = Array.from(options)
           .filter((option) => option.selected)
           .map((option) => option.value);
-
-        return {
-          ...prev,
-          [name]: selectedValues,
-        };
+        return { ...prev, [name]: selectedValues };
       }
-
-      // 通常の入力フォーム（チェックボックス含む）
-      return {
-        ...prev,
-        [name]: type === "checkbox" ? checked : value,
-      };
+      return { ...prev, [name]: type === "checkbox" ? checked : value };
     });
   };
 
+  // 画像アップロード関連の状態管理
+  const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+
+  // 画像選択時にプレビューを表示
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(selectedFile);
+    }
+  };
+
+  // フォーム送信処理
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("loading");
+
     try {
       if (!user) throw new Error("User is not found in Firebase!");
-      const body = {
-        ...formData,
-        guid: user.uid,
-      };
+
+      let imageUrl = formData.imageUrl;
+
+      if (file) {
+        imageUrl = await upload(file);
+      }
+
+      const body = { ...formData, guid: user.uid, imageUrl };
+
       const res = await client.users.me.$put({ json: body });
       if (!res.ok) {
         console.error(await res.text());
@@ -122,38 +139,61 @@ export default function Page() {
       setStatus("success");
       window.location.href = "/settings";
     } catch (error) {
-      console.error("ユーザー登録に失敗しました", error);
+      console.error("ユーザー情報の更新に失敗しました", error);
       setStatus("error");
       router.push("/login");
     }
   };
 
   return (
-    <div className="mx-auto max-w-md p-4">
+    <div className="max-w my-20 p-4">
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-        <label>
-          名前:
+        <label htmlFor="name" className="flex items-center justify-between">
+          名前
           <input
             type="text"
             name="name"
             value={formData.name}
             onChange={handleChange}
             required
-            className="w-full border p-2"
+            className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
           />
         </label>
 
-        <label>
+        <label htmlFor="gender" className="flex items-center justify-between">
           性別:
-          <select name="gender" value={formData.gender} onChange={handleChange} className="w-full border p-2">
+          <select
+            name="gender"
+            value={formData.gender}
+            onChange={handleChange}
+            className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
+          >
             <option value="male">男性</option>
             <option value="female">女性</option>
             <option value="other">その他</option>
           </select>
         </label>
-        <button type="submit" className="rounded bg-blue-500 p-2 text-white" disabled={status === "loading"}>
-          {status === "loading" ? "登録中..." : "登録"}
-        </button>
+
+        <div className="my-4 flex justify-between">
+          <span>写真</span>
+          <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" id="image-upload" />
+          <div className={`flex h-40 w-40 items-center justify-center rounded-lg ${preview ? "" : "bg-gray-300"}`}>
+            {preview ? <img src={preview} alt="プレビュー" className="rounded-lg object-cover" /> : null}
+          </div>
+          <label htmlFor="image-upload" className="h-10 cursor-pointer rounded bg-blue-500 px-4 py-2 text-white">
+            写真を登録
+          </label>
+        </div>
+
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            className="mt-15 w-50 rounded bg-blue-500 p-2 text-white"
+            disabled={status === "loading"}
+          >
+            {status === "loading" ? "登録中..." : "登録"}
+          </button>
+        </div>
       </form>
     </div>
   );

@@ -45,7 +45,7 @@ export default function Header() {
           <button
             type="button"
             className={`h-full cursor-pointer px-4 text-white text-xl transition-colors duration-200 ${
-              pathname === "/settings" ? "bg-focus" : "hover:bg-focus"
+              pathname.startsWith("/settings") ? "bg-focus" : "hover:bg-focus"
             }`}
             onClick={() => {
               router.push("/settings");
