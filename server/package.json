@@ -4,8 +4,7 @@
   "scripts": {
     "dev": "NODE_ENV=development bun run --env-file=../.env --hot index.ts",
     "build": "bun tsc",
-    "prisma": "bun run --env-file=../.env bunx prisma",
-    "prepare": "prisma generate"
+    "prisma": "bun run --env-file=../.env bunx prisma"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.4.3",
