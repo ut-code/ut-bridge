@@ -5,6 +5,8 @@
 web/dist
 web/.next
 web/next-env.d.ts
+web/project.inlang/cache
+web/src/paraglide
 
 # ?
 tsconfig.tsbuildinfo

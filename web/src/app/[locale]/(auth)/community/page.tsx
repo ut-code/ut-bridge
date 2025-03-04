@@ -1,4 +1,5 @@
 "use client";
+import { client } from "@/client.ts";
 import { formatCardUser } from "@/features/format";
 import { useUserContext } from "@/features/user/userProvider.tsx";
 import { type CardUser, type Exchange, ExchangeSchema, MarkerSchema } from "common/zod/schema";
@@ -6,7 +7,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { client } from "../../../client.ts";
 
 function useQuery() {
   const query = useSearchParams();

@@ -2,10 +2,11 @@
 
 import LoginBadge from "@/features/auth/components/LoginBadge";
 import { useGoogleLogout } from "@/features/auth/functions/logout.ts";
+import { formatUser } from "@/features/format.ts";
+import { LanguageSelector } from "@/features/i18n/lang-selector.tsx";
 import { useUserContext } from "@/features/user/userProvider.tsx";
 import Image from "next/image";
 import Link from "next/link";
-import { formatUser } from "../../../features/format.ts";
 
 export default function Page() {
   const { logout } = useGoogleLogout();
@@ -73,6 +74,7 @@ export default function Page() {
           <strong>Introduction:</strong> {user.introduction || "N/A"}
         </p>
       </div>
+      <LanguageSelector />
       <LoginBadge />
     </>
   );
