@@ -282,53 +282,56 @@ function UserCard({
 
   return (
     <div
-      className={`indicator flex h-62 w-100 items-center rounded-2xl bg-white ${
+      className={`relative flex h-62 w-100 items-center rounded-2xl bg-white ${
         user.marker === "blocked" && "bg-gray-300"
       }`}
     >
-      {favoriteBtnLoading ? (
-        <span className="indicator-item loading loading-ring" />
-      ) : user.marker === "favorite" ? (
-        <button
-          type="button"
-          aria-label="marked as favorite"
-          className="indicator-item badge bg-transparent text-xl text-yellow-400"
-          onClick={async () => {
-            setFavoriteBtnLoading(true);
-            await on.unfavorite(user.id);
-            setUser({
-              ...user,
-              marker: undefined,
-            });
-            setTimeout(() => {
-              setFavoriteBtnLoading(false);
-            }, DEV_EXTRA_QUERY_WAIT);
-          }}
-        >
-          ★
-        </button>
-      ) : user.marker === "blocked" ? (
-        "blocked (todo: make it a button to unblock)"
-      ) : (
-        <button
-          type="button"
-          aria-label="mark as favorite"
-          className="indicator-item badge bg-transparent text-black-700 text-xl"
-          onClick={async () => {
-            setFavoriteBtnLoading(true);
-            await on.favorite(user.id);
-            setUser({
-              ...user,
-              marker: "favorite",
-            });
-            setTimeout(() => {
-              setFavoriteBtnLoading(false);
-            }, DEV_EXTRA_QUERY_WAIT);
-          }}
-        >
-          ★
-        </button>
-      )}
+      {/* お気に入りボタン（右上に配置） */}
+      <div className="absolute top-2 right-2 z-10">
+        {favoriteBtnLoading ? (
+          <span className="loading loading-ring" />
+        ) : user.marker === "favorite" ? (
+          <button
+            type="button"
+            aria-label="marked as favorite"
+            className="badge bg-transparent text-xl text-yellow-400"
+            onClick={async () => {
+              setFavoriteBtnLoading(true);
+              await on.unfavorite(user.id);
+              setUser({
+                ...user,
+                marker: undefined,
+              });
+              setTimeout(() => {
+                setFavoriteBtnLoading(false);
+              }, DEV_EXTRA_QUERY_WAIT);
+            }}
+          >
+            ★
+          </button>
+        ) : user.marker === "blocked" ? (
+          "blocked (todo: make it a button to unblock)"
+        ) : (
+          <button
+            type="button"
+            aria-label="mark as favorite"
+            className="badge bg-transparent text-black-700 text-xl"
+            onClick={async () => {
+              setFavoriteBtnLoading(true);
+              await on.favorite(user.id);
+              setUser({
+                ...user,
+                marker: "favorite",
+              });
+              setTimeout(() => {
+                setFavoriteBtnLoading(false);
+              }, DEV_EXTRA_QUERY_WAIT);
+            }}
+          >
+            ★
+          </button>
+        )}
+      </div>
 
       <Link href={link} className="h-full w-full p-4">
         <div className="flex h-full flex-row items-center">
