@@ -279,6 +279,7 @@ function UserCard({
 }) {
   const [user, setUser] = useState(init);
   const [favoriteBtnLoading, setFavoriteBtnLoading] = useState(false);
+
   return (
     <div
       className={`indicator flex h-62 w-100 items-center rounded-2xl bg-white ${
@@ -320,34 +321,41 @@ function UserCard({
               ...user,
               marker: "favorite",
             });
-            // setFavoriteBtnLoading(false);
             setTimeout(() => {
               setFavoriteBtnLoading(false);
             }, DEV_EXTRA_QUERY_WAIT);
           }}
         >
-          {/* this doesn't support blocking yet */}★
+          ★
         </button>
       )}
+
       <Link href={link} className="h-full w-full p-4">
-        <div className="flex items-center">
-          {user.imageUrl ? (
-            <Image src={user.imageUrl} alt={user.name ?? "User"} width={60} height={60} />
-          ) : (
-            <div className="flex h-15 w-15 items-center justify-center rounded-full bg-gray-300">No Image</div>
-          )}
-          {/* <div>
-            <h2 className="font-semibold text-lg">{user.name ?? "Unknown"}</h2>
+        <div className="flex h-full flex-row items-center">
+          <div className="flex w-1/3 items-center justify-center">
+            {user.imageUrl ? (
+              <Image
+                src={user.imageUrl}
+                alt={user.name ?? "User"}
+                width={80}
+                height={80}
+                className="rounded-full object-cover"
+              />
+            ) : (
+              <div className="flex h-30 w-30 items-center justify-center rounded-full bg-gray-300">No Image</div>
+            )}
+          </div>
+
+          <div className="w-2/3 pl-4">
+            <h2 className="truncate font-semibold text-lg">{user.name ?? "Unknown"}</h2>
             <p className="text-sm">{user.campus ?? "Unknown"}</p>
-            <p className="text-sm">
-              使える言語:
-              {user.fluentLanguages.join(", ") || "None"}
+            <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-sm">
+              使える言語: {user.fluentLanguages.join(", ") || "None"}
             </p>
-            <p className="text-sm">
-              学びたい言語:
-              {user.learningLanguages.join(", ") || "None"}
+            <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-sm">
+              学びたい言語: {user.learningLanguages.join(", ") || "None"}
             </p>
-          </div> */}
+          </div>
         </div>
       </Link>
     </div>
