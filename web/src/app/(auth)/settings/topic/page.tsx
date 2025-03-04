@@ -80,7 +80,7 @@ export default function Page() {
 
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type, checked, multiple } = e.target as HTMLInputElement;
     const { options } = e.target as HTMLSelectElement;
 
@@ -134,9 +134,10 @@ export default function Page() {
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <label htmlFor="hobby" className="my-4 flex justify-between">
           趣味
-          <input
-            type="text"
+          <textarea
+            id="hobby"
             name="hobby"
+            rows={5}
             value={formData.hobby ?? ""}
             onChange={handleChange}
             required
@@ -146,9 +147,10 @@ export default function Page() {
 
         <label htmlFor="introduction" className="my-4 flex items-center justify-between">
           自己紹介
-          <input
-            type="text"
+          <textarea
+            id="introduction"
             name="introduction"
+            rows={5}
             value={formData.introduction ?? ""}
             onChange={handleChange}
             required
