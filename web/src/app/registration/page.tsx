@@ -364,11 +364,11 @@ export default function Page() {
                 value={formData.hobby ?? ""}
                 onChange={handleChange}
                 required
-                className=" w-1/2 rounded-xl border border-gray-500 bg-white p-2"
+                className="w-1/2 rounded-xl border border-gray-500 bg-white p-2"
               />
             </label>
 
-            <label htmlFor="introduction" className="my-4 flex items-center justify-between ">
+            <label htmlFor="introduction" className="my-4 flex items-center justify-between">
               自己紹介
               <textarea
                 id="introduction"
