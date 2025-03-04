@@ -2,83 +2,14 @@
 
 import { client } from "@/client";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
-import { useUserContext } from "@/features/user/userProvider";
-import type { CreateUser } from "common/zod/schema";
+import { useUserFormContext } from "@/features/user/UserFormProvider";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function Page() {
   const { fbUser: user } = useAuthContext();
   const router = useRouter();
-  const [languages, setLanguages] = useState<{ id: string; name: string }[]>([]);
-  const [formData, setFormData] = useState<CreateUser>({
-    id: "",
-    imageUrl: null,
-    guid: "",
-    name: "",
-    gender: "male",
-    isForeignStudent: false,
-    displayLanguage: "japanese",
-    grade: "B1",
-    universityId: "",
-    divisionId: "",
-    campusId: "",
-    hobby: "",
-    introduction: "",
-    motherLanguageId: "",
-    fluentLanguageIds: [],
-    learningLanguageIds: [],
-  });
-  const { me } = useUserContext();
-
-  useEffect(() => {
-    const fetchMyData = async () => {
-      try {
-        if (!me) {
-          throw new Error("User Not Found in Database!");
-        }
-        const [universityRes, languageRes] = await Promise.all([client.university.$get(), client.language.$get()]);
-        if (!universityRes.ok || !languageRes.ok) {
-          console.error("データ取得に失敗しました", {
-            university: universityRes.status,
-            language: languageRes.status,
-          });
-          throw new Error(
-            `データ取得に失敗しました:${{
-              university: await universityRes.text(),
-              language: await languageRes.text(),
-            }}`,
-          );
-        }
-        const [languages] = await Promise.all([languageRes.json()]);
-
-        const formattedData = {
-          id: me.id,
-          imageUrl: me.imageUrl,
-          guid: "",
-          name: me.name,
-          gender: me.gender,
-          isForeignStudent: me.isForeignStudent,
-          displayLanguage: me.displayLanguage,
-          grade: me.grade,
-          universityId: me.campus.universityId,
-          divisionId: me.divisionId,
-          campusId: me.campusId,
-          hobby: me.hobby,
-          introduction: me.introduction,
-          motherLanguageId: me.motherLanguageId,
-          fluentLanguageIds: me.fluentLanguages.map((lang: { language: { id: string } }) => lang.language.id),
-          learningLanguageIds: me.learningLanguages.map((lang: { language: { id: string } }) => lang.language.id),
-        };
-        setLanguages(languages);
-        setFormData(formattedData);
-      } catch (err) {
-        console.error("Failed to fetch university or language Data ", err);
-        router.push("/login");
-      }
-    };
-    fetchMyData();
-  }, [router, me]);
+  const { formData, setFormData, languages } = useUserFormContext();
 
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 

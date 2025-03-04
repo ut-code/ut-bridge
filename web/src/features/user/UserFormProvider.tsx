@@ -12,6 +12,7 @@ interface UserFormContextType {
   universities: { id: string; name: string }[];
   campuses: { id: string; name: string }[];
   divisions: { id: string; name: string }[];
+  languages: { id: string; name: string }[];
 }
 
 // Contextの作成
@@ -57,20 +58,33 @@ export const UserFormProvider = ({
   const [universities, setUniversities] = useState<{ id: string; name: string }[]>([]);
   const [campuses, setCampuses] = useState<{ id: string; name: string }[]>([]);
   const [divisions, setDivisions] = useState<{ id: string; name: string }[]>([]);
+  const [languages, setLanguages] = useState<{ id: string; name: string }[]>([]);
 
-  // 大学データを取得
+  // データを一括取得
   useEffect(() => {
-    const fetchUniversities = async () => {
+    const fetchData = async () => {
       try {
-        const res = await client.university.$get();
-        if (!res.ok) throw new Error(`大学データ取得失敗: ${await res.text()}`);
-        setUniversities(await res.json());
+        const [universityRes, languageRes] = await Promise.all([client.university.$get(), client.language.$get()]);
+
+        if (!universityRes.ok || !languageRes.ok) {
+          throw new Error(
+            `データ取得に失敗しました: ${JSON.stringify({
+              university: await universityRes.text(),
+              language: await languageRes.text(),
+            })}`,
+          );
+        }
+
+        const [universitiesData, languagesData] = await Promise.all([universityRes.json(), languageRes.json()]);
+
+        setUniversities(universitiesData);
+        setLanguages(languagesData);
       } catch (error) {
-        console.error("大学データの取得に失敗しました", error);
+        console.error("大学・言語データの取得に失敗しました", error);
       }
     };
 
-    fetchUniversities();
+    fetchData();
   }, []);
 
   // ユーザー情報を取得
@@ -107,7 +121,6 @@ export const UserFormProvider = ({
 
     fetchMyData();
   }, [me, router]);
-
   // 学部 & キャンパス データを取得
   useEffect(() => {
     if (!formData.universityId) return;
@@ -133,9 +146,17 @@ export const UserFormProvider = ({
 
     fetchCampusAndDivisions();
   }, [formData.universityId, router]);
-
   return (
-    <UserFormContext.Provider value={{ formData, setFormData, universities, campuses, divisions }}>
+    <UserFormContext.Provider
+      value={{
+        formData,
+        setFormData,
+        universities,
+        campuses,
+        divisions,
+        languages,
+      }}
+    >
       {children}
     </UserFormContext.Provider>
   );
