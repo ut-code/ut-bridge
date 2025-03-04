@@ -10,6 +10,9 @@ import {
 import { headers } from "next/headers";
 import { cache } from "react";
 
+// export function generateStaticParams() {
+//   return [{ locale: "en" }, { locale: "ja" }, { baseLocale: "en" }];
+// }
 const ssrLocale = cache(() => ({ locale: baseLocale, origin: "http://localhost:3000" }));
 
 // overwrite the getLocale function to use the locale from the request

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "sync": "paraglide-js compile --project ./project.inlang --outdir ./src/paraglide",
-    "dev": "bun --env-file=../.env run next dev --port 5173",
+    "dev": "bun sync && bun --env-file=../.env run next dev --port 5173",
     "build": "bun sync && bun --env-file=../.env run next build",
     "start": "next start --port $PORT",
     "lint": "next lint",
