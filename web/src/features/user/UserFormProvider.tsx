@@ -5,16 +5,17 @@ import type { CreateUser } from "common/zod/schema";
 import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 
-// Define context type
+// Contextの型定義
 interface UserFormContextType {
   formData: CreateUser;
   setFormData: React.Dispatch<React.SetStateAction<CreateUser>>;
+  universities: { id: string; name: string }[];
 }
 
-// Create context
+// Contextの作成
 const UserFormContext = createContext<UserFormContextType | undefined>(undefined);
 
-// Custom hook for consuming context
+// Contextを利用するカスタムフック
 export const useUserFormContext = () => {
   const context = useContext(UserFormContext);
   if (!context) {
@@ -23,7 +24,7 @@ export const useUserFormContext = () => {
   return context;
 };
 
-// Provider Component
+// Provider コンポーネント
 export const UserFormProvider = ({
   children,
 }: {
@@ -51,6 +52,24 @@ export const UserFormProvider = ({
     learningLanguageIds: [],
   });
 
+  const [universities, setUniversities] = useState<{ id: string; name: string }[]>([]);
+
+  // 大学データを取得
+  useEffect(() => {
+    const fetchUniversities = async () => {
+      try {
+        const res = await client.university.$get();
+        if (!res.ok) throw new Error(`大学データ取得失敗: ${await res.text()}`);
+        setUniversities(await res.json());
+      } catch (error) {
+        console.error("大学データの取得に失敗しました", error);
+      }
+    };
+
+    fetchUniversities();
+  }, []);
+
+  // ユーザー情報を取得
   useEffect(() => {
     const fetchMyData = async () => {
       try {
@@ -92,13 +111,15 @@ export const UserFormProvider = ({
           learningLanguageIds: me.learningLanguages.map((lang: { language: { id: string } }) => lang.language.id),
         });
       } catch (err) {
-        console.error("Failed to fetch university or language Data", err);
+        console.error("ユーザー情報の取得に失敗しました", err);
         router.push("/login");
       }
     };
 
     fetchMyData();
-  }, [router, me]);
+  }, [me, router]);
 
-  return <UserFormContext.Provider value={{ formData, setFormData }}>{children}</UserFormContext.Provider>;
+  return (
+    <UserFormContext.Provider value={{ formData, setFormData, universities }}>{children}</UserFormContext.Provider>
+  );
 };

@@ -9,29 +9,11 @@ import { useEffect, useState } from "react";
 export default function Page() {
   const { fbUser: user } = useAuthContext();
   const router = useRouter();
+  const { formData, setFormData, universities } = useUserFormContext();
 
-  const [universities, setUniversities] = useState<{ id: string; name: string }[]>([]);
   const [campuses, setCampuses] = useState<{ id: string; name: string }[]>([]);
   const [divisions, setDivisions] = useState<{ id: string; name: string }[]>([]);
-
-  const { formData, setFormData } = useUserFormContext();
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-
-  useEffect(() => {
-    const fetchUniversities = async () => {
-      try {
-        const res = await client.university.$get();
-        if (!res.ok) throw new Error(`大学データ取得失敗: ${await res.text()}`);
-
-        setUniversities(await res.json());
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchUniversities();
-  }, []);
-
   useEffect(() => {
     if (!formData.universityId) return;
 
@@ -53,7 +35,7 @@ export default function Page() {
         setCampuses(await campusRes.json());
         setDivisions(await divisionRes.json());
       } catch (error) {
-        console.error(error);
+        console.error("キャンパス・学部データの取得に失敗しました", error);
         router.push("/login");
       }
     };
