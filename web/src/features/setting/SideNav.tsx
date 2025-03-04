@@ -10,46 +10,46 @@ export default function SideNav() {
   return (
     <>
       <h1 className="font-bold text-3xl">設定画面</h1>
-      <div className="m-5">
+      <div className="m-5 border-gray-300 border-r">
         <Link
           href={"/settings/basic"}
-          className={`block text-xl my-3 ${pathname === "/settings/basic" ? "font-bold underline" : ""}`}
+          className={`my-3 block text-xl ${pathname === "/settings/basic" ? "font-bold underline" : ""}`}
         >
           基本情報
         </Link>
         <Link
           href={"/settings/university"}
-          className={`block text-xl my-3 ${pathname === "/settings/university" ? "font-bold underline" : ""}`}
+          className={`my-3 block text-xl ${pathname === "/settings/university" ? "font-bold underline" : ""}`}
         >
           大学情報
         </Link>
         <Link
           href={"/settings/language"}
-          className={`block text-xl my-3 ${pathname === "/settings/language" ? "font-bold underline" : ""}`}
+          className={`my-3 block text-xl ${pathname === "/settings/language" ? "font-bold underline" : ""}`}
         >
           言語情報
         </Link>
         <Link
           href={"/settings/topic"}
-          className={`block text-xl my-3 ${pathname === "/settings/topic" ? "font-bold underline" : ""}`}
+          className={`my-3 block text-xl ${pathname === "/settings/topic" ? "font-bold underline" : ""}`}
         >
           トピック
         </Link>
         <Link
           href={"/settings/favorite"}
-          className={`block text-xl my-3 ${pathname === "/settings/favorite" ? "font-bold underline" : ""}`}
+          className={`my-3 block text-xl ${pathname === "/settings/favorite" ? "font-bold underline" : ""}`}
         >
           お気に入り
         </Link>
         <Link
           href={"/settings/block"}
-          className={`block text-xl my-3 ${pathname === "/settings/block" ? "font-bold underline" : ""}`}
+          className={`my-3 block text-xl ${pathname === "/settings/block" ? "font-bold underline" : ""}`}
         >
           ブロック
         </Link>
         <Link
           href={"/settings/other"}
-          className={`block text-xl my-3 ${pathname === "/settings/other" ? "font-bold underline" : ""}`}
+          className={`my-3 block text-xl ${pathname === "/settings/other" ? "font-bold underline" : ""}`}
         >
           その他
         </Link>
