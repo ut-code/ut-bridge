@@ -5,7 +5,7 @@ import { useUserContext } from "@/features/user/userProvider";
 import type { CreateUser } from "common/zod/schema";
 import type { CardUser } from "common/zod/schema";
 import { useRouter } from "next/navigation";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 
 // Contextの型定義
 interface UserFormContextType {
@@ -16,7 +16,9 @@ interface UserFormContextType {
   divisions: { id: string; name: string }[];
   languages: { id: string; name: string }[];
   favoriteUsers: CardUser[];
+  blockedUsers: CardUser[];
   refetchFavoriteUsers: () => void;
+  refetchBlockedUsers: () => void;
 }
 
 // Contextの作成
@@ -64,6 +66,7 @@ export const UserFormProvider = ({
   const [divisions, setDivisions] = useState<{ id: string; name: string }[]>([]);
   const [languages, setLanguages] = useState<{ id: string; name: string }[]>([]);
   const [favoriteUsers, setFavoriteUsers] = useState<CardUser[]>([]);
+  const [blockedUsers, setBlockedUsers] = useState<CardUser[]>([]);
 
   // 一括データ取得（大学 & 言語）
   useEffect(() => {
@@ -126,31 +129,6 @@ export const UserFormProvider = ({
 
     fetchMyData();
   }, [me, router]);
-  useEffect(() => {
-    // お気に入りユーザーを取得
-    const fetchFavoriteUsers = async () => {
-      try {
-        if (!me) return;
-        const res = await client.community.$get({
-          query: {
-            myId: me.id,
-            marker: "favorite",
-          },
-        });
-
-        if (!res.ok) {
-          throw new Error(`お気に入りユーザーの取得失敗: ${await res.text()}`);
-        }
-
-        const data = await res.json();
-        setFavoriteUsers(data.users.map(formatCardUser));
-      } catch (error) {
-        console.error("お気に入りユーザーの取得に失敗しました", error);
-      }
-    };
-
-    fetchFavoriteUsers();
-  }, [me]);
 
   // 学部 & キャンパス データを取得
   useEffect(() => {
@@ -177,8 +155,7 @@ export const UserFormProvider = ({
 
     fetchCampusAndDivisions();
   }, [formData.universityId, router]);
-  // お気に入りユーザーを再取得する関数
-  const refetchFavoriteUsers = async () => {
+  const refetchFavoriteUsers = useCallback(async () => {
     try {
       if (!me) return;
       const res = await client.community.$get({
@@ -197,7 +174,33 @@ export const UserFormProvider = ({
     } catch (error) {
       console.error("お気に入りユーザーの取得に失敗しました", error);
     }
-  };
+  }, [me]);
+
+  const refetchBlockedUsers = useCallback(async () => {
+    try {
+      if (!me) return;
+      const res = await client.community.$get({
+        query: {
+          myId: me.id,
+          marker: "blocked",
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error(`ブロックユーザーの取得失敗: ${await res.text()}`);
+      }
+
+      const data = await res.json();
+      setBlockedUsers(data.users.map(formatCardUser));
+    } catch (error) {
+      console.error("ブロックユーザーの取得に失敗しました", error);
+    }
+  }, [me]);
+
+  useEffect(() => {
+    refetchFavoriteUsers();
+    refetchBlockedUsers();
+  }, [refetchFavoriteUsers, refetchBlockedUsers]);
 
   return (
     <UserFormContext.Provider
@@ -209,7 +212,9 @@ export const UserFormProvider = ({
         divisions,
         languages,
         favoriteUsers,
+        blockedUsers,
         refetchFavoriteUsers,
+        refetchBlockedUsers,
       }}
     >
       {children}
