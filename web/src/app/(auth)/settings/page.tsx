@@ -23,11 +23,10 @@ export default function Page() {
       </Link>
       <h2>写真アップロード</h2>
       <Upload
-        onUpdate={async (key) => {
-          const readURL = await getReadURL(key);
+        onUpdate={async (url) => {
           const res = await client.users.me.$patch({
             json: {
-              imageURL: readURL,
+              imageURL: url,
             },
           });
           assert(res.ok, `response was not ok, got text ${await res.text()}`);
@@ -93,7 +92,7 @@ export default function Page() {
   );
 }
 
-function Upload({ onUpdate }: { onUpdate: (key: string) => void }) {
+function Upload({ onUpdate }: { onUpdate: (url: string) => void }) {
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
 
@@ -107,31 +106,10 @@ function Upload({ onUpdate }: { onUpdate: (key: string) => void }) {
 
   const handleUpload = async () => {
     if (!file) return;
-
     setUploading(true);
     try {
-      const res = await client.image.put.$get();
-      const { url: putURL, fileName: key } = await res.json();
-      console.log(putURL, "🤩🤩🤩🤩🤩🤩");
-
-      // const formData = new FormData();
-      // for (const [key, value] of Object.entries(fields)) {
-      // formData.append(key, value);
-      // }
-      // formData.append("file", file);
-      // console.log(formData.get("file"), "⭐⭐⭐⭐⭐⭐");
-
-      const uploadResponse = await fetch(putURL, {
-        method: "PUT",
-        body: file,
-      });
-
-      if (!uploadResponse.ok) {
-        throw new Error("Upload failed");
-      }
-      console.log("upload response:", await uploadResponse.text());
-
-      onUpdate(key);
+      const url = await upload(file);
+      onUpdate(url);
     } catch (error) {
       console.error("Upload error:", error);
       alert("ファイルのアップロードに失敗しました。");
@@ -153,6 +131,32 @@ function Upload({ onUpdate }: { onUpdate: (key: string) => void }) {
       </button>
     </div>
   );
+}
+
+async function upload(file: File): Promise<string> {
+  const res = await client.image.put.$get();
+  const { url: putURL, fileName: key } = await res.json();
+  console.log(putURL, "🤩🤩🤩🤩🤩🤩");
+
+  // const formData = new FormData();
+  // for (const [key, value] of Object.entries(fields)) {
+  // formData.append(key, value);
+  // }
+  // formData.append("file", file);
+  // console.log(formData.get("file"), "⭐⭐⭐⭐⭐⭐");
+
+  const uploadResponse = await fetch(putURL, {
+    method: "PUT",
+    body: file,
+  });
+
+  if (!uploadResponse.ok) {
+    throw new Error("Upload failed");
+  }
+  console.log("upload response:", await uploadResponse.text());
+
+  // TODO: make it valid forever by making it public
+  return await getReadURL(key);
 }
 
 async function getReadURL(key: string) {
