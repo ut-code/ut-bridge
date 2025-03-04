@@ -15,7 +15,6 @@ function useQuery() {
 
   const exchange = ExchangeSchema.safeParse(query.get("exchange")).data ?? "all";
   const search = query.get("search") ?? "";
-  console.log(query.get("marker"));
   const marker = MarkerSchema.safeParse(query.get("marker")).data ?? undefined;
   return { page, exchange, search, marker };
 }
@@ -71,7 +70,6 @@ export default function Page() {
   const [rawSearchQuery, setRawSearchQuery] = useState("");
   const setDebouncedSearchQuery = useCallback((val: string) => {
     const url = createQueriedURL({ search: val });
-    console.log("to:", url);
     // router.replace(url); // this doesn't work?
     window.history.replaceState(null, "", url);
   }, []);

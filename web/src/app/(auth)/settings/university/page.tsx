@@ -2,125 +2,14 @@
 
 import { client } from "@/client";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
-import { useUserContext } from "@/features/user/userProvider";
-import type { CreateUser } from "common/zod/schema";
+import { useUserFormContext } from "@/features/user/UserFormProvider";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function Page() {
   const { fbUser: user } = useAuthContext();
   const router = useRouter();
-  const [campuses, setCampuses] = useState<{ id: string; name: string }[]>([]);
-  const [divisions, setDivisions] = useState<{ id: string; name: string }[]>([]);
-  const [universities, setUniversities] = useState<{ id: string; name: string }[]>([]);
-  const [universityId, setUniversityId] = useState<string>("");
-  const [formData, setFormData] = useState<CreateUser>({
-    id: "",
-    imageUrl: null,
-    guid: "",
-    name: "",
-    gender: "male",
-    isForeignStudent: false,
-    displayLanguage: "japanese",
-    grade: "B1",
-    universityId: "",
-    divisionId: "",
-    campusId: "",
-    hobby: "",
-    introduction: "",
-    motherLanguageId: "",
-    fluentLanguageIds: [],
-    learningLanguageIds: [],
-  });
-  const { me } = useUserContext();
-
-  useEffect(() => {
-    const fetchMyData = async () => {
-      try {
-        if (!me) {
-          throw new Error("User Not Found in Database!");
-        }
-        const [universityRes, languageRes] = await Promise.all([client.university.$get(), client.language.$get()]);
-        if (!universityRes.ok || !languageRes.ok) {
-          console.error("データ取得に失敗しました", {
-            university: universityRes.status,
-            language: languageRes.status,
-          });
-          throw new Error(
-            `データ取得に失敗しました:${{
-              university: await universityRes.text(),
-              language: await languageRes.text(),
-            }}`,
-          );
-        }
-        const [universities] = await Promise.all([universityRes.json()]);
-
-        const formattedData = {
-          id: me.id,
-          imageUrl: me.imageUrl,
-          guid: "",
-          name: me.name,
-          gender: me.gender,
-          isForeignStudent: me.isForeignStudent,
-          displayLanguage: me.displayLanguage,
-          grade: me.grade,
-          universityId: me.campus.universityId,
-          divisionId: me.divisionId,
-          campusId: me.campusId,
-          hobby: me.hobby,
-          introduction: me.introduction,
-          motherLanguageId: me.motherLanguageId,
-          fluentLanguageIds: me.fluentLanguages.map((lang: { language: { id: string } }) => lang.language.id),
-          learningLanguageIds: me.learningLanguages.map((lang: { language: { id: string } }) => lang.language.id),
-        };
-        setUniversities(universities);
-        setFormData(formattedData);
-        setUniversityId(formattedData.universityId);
-      } catch (err) {
-        console.error("Failed to fetch university or language Data ", err);
-        router.push("/login");
-      }
-    };
-    fetchMyData();
-  }, [router, me]);
-
-  useEffect(() => {
-    if (!universityId) return;
-
-    const fetchDataAfterSelectUniversity = async () => {
-      try {
-        const [campusRes, divisionRes] = await Promise.all([
-          client.campus.$get({ query: { id: universityId } }),
-          client.division.$get({ query: { id: universityId } }),
-        ]);
-
-        // どちらかが失敗した場合エラーハンドリング
-        if (!campusRes.ok || !divisionRes.ok) {
-          console.error("データ取得に失敗しました", {
-            campus: campusRes.status,
-            division: divisionRes.status,
-          });
-          throw new Error(
-            `データ取得に失敗しました:${{
-              campus: await campusRes.text(),
-              division: await divisionRes.text(),
-            }}`,
-          );
-        }
-
-        const [campuses, divisions] = await Promise.all([campusRes.json(), divisionRes.json()]);
-
-        setCampuses(campuses);
-        setDivisions(divisions);
-      } catch (err) {
-        console.error("Failed to fetch campus or division Data ", err);
-        router.push("/login");
-      }
-    };
-
-    fetchDataAfterSelectUniversity();
-  }, [universityId, router]);
-
+  const { formData, setFormData, universities, divisions, campuses } = useUserFormContext();
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -128,51 +17,32 @@ export default function Page() {
     const { options } = e.target as HTMLSelectElement;
 
     setFormData((prev) => {
-      // 大学を変更した場合、関連するキャンパスと学部をリセット
       if (name === "universityId") {
-        setUniversityId(value);
-        return {
-          ...prev,
-          universityId: value,
-          campusId: "",
-          divisionId: "",
-        };
+        return { ...prev, universityId: value, campusId: "", divisionId: "" };
       }
 
-      // 複数選択の処理（言語選択）
       if (multiple) {
         const selectedValues = Array.from(options)
           .filter((option) => option.selected)
           .map((option) => option.value);
-
-        return {
-          ...prev,
-          [name]: selectedValues,
-        };
+        return { ...prev, [name]: selectedValues };
       }
 
-      // 通常の入力フォーム（チェックボックス含む）
-      return {
-        ...prev,
-        [name]: type === "checkbox" ? checked : value,
-      };
+      return { ...prev, [name]: type === "checkbox" ? checked : value };
     });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("loading");
+
     try {
-      if (!user) throw new Error("User is not found in Firebase!");
-      const body = {
-        ...formData,
-        guid: user.uid,
-      };
-      const res = await client.users.me.$put({ json: body });
-      if (!res.ok) {
-        console.error(await res.text());
-        throw new Error(`レスポンスステータス: ${res.status}`);
-      }
+      if (!user) throw new Error("User not found in Firebase!");
+
+      const body = { ...formData, guid: user.uid };
+      const res = await client.users.me.$patch({ json: body });
+
+      if (!res.ok) throw new Error(`レスポンスステータス: ${res.status} - ${await res.text()}`);
 
       setStatus("success");
       window.location.href = "/settings";
@@ -186,6 +56,7 @@ export default function Page() {
   return (
     <div className="max-w my-20 p-4">
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+        {/* University Selection */}
         <label className="flex items-center justify-between">
           大学:
           <select
@@ -203,6 +74,7 @@ export default function Page() {
           </select>
         </label>
 
+        {/* Division Selection */}
         <label className="flex items-center justify-between">
           学部:
           <select
@@ -221,6 +93,7 @@ export default function Page() {
           </select>
         </label>
 
+        {/* Campus Selection */}
         <label className="flex items-center justify-between">
           キャンパス:
           <select
@@ -239,6 +112,7 @@ export default function Page() {
           </select>
         </label>
 
+        {/* Grade Selection */}
         <label className="flex items-center justify-between">
           学年:
           <select
@@ -259,6 +133,8 @@ export default function Page() {
             <option value="D3">博士3年</option>
           </select>
         </label>
+
+        {/* Submit Button */}
         <div className="flex justify-end">
           <button
             type="submit"
