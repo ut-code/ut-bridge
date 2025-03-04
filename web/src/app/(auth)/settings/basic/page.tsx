@@ -129,31 +129,42 @@ export default function Page() {
   };
 
   return (
-    <div className="mx-auto max-w-md p-4">
+    <div className="max-w my-20 p-4">
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-        <label>
-          名前:
+        <label htmlFor="name" className="flex items-center justify-between">
+          名前
           <input
             type="text"
             name="name"
             value={formData.name}
             onChange={handleChange}
             required
-            className="w-full border p-2"
+            className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
           />
         </label>
 
-        <label>
+        <label htmlFor="gender" className="flex items-center justify-between">
           性別:
-          <select name="gender" value={formData.gender} onChange={handleChange} className="w-full border p-2">
+          <select
+            name="gender"
+            value={formData.gender}
+            onChange={handleChange}
+            className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
+          >
             <option value="male">男性</option>
             <option value="female">女性</option>
             <option value="other">その他</option>
           </select>
         </label>
-        <button type="submit" className="rounded bg-blue-500 p-2 text-white" disabled={status === "loading"}>
-          {status === "loading" ? "登録中..." : "登録"}
-        </button>
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            className="mt-15 w-50 rounded bg-blue-500 p-2 text-white"
+            disabled={status === "loading"}
+          >
+            {status === "loading" ? "登録中..." : "登録"}
+          </button>
+        </div>
       </form>
     </div>
   );

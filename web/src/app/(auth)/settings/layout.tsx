@@ -7,7 +7,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div className="center w-1/4 p-20">
           <SideNav />
         </div>
-        <div className="p-12">{children}</div>
+        <div className="w-2/3 p-12">{children}</div>
       </div>
     </>
   );
