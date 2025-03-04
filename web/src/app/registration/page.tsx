@@ -297,7 +297,7 @@ export default function Page() {
               />
             </label>
 
-            <label className="flex items-center justify-between">
+            <label className="my-4 flex items-center justify-between">
               母国語
               <select
                 name="motherLanguageId"
@@ -314,9 +314,9 @@ export default function Page() {
                 ))}
               </select>
             </label>
-            <fieldset className="flex flex-col">
-              <legend>流暢に話せる言語（母国語を含む）</legend>
-              <div className="my-2 flex flex-wrap gap-2">
+            <div className="my-4 flex justify-between">
+              <p>流暢に話せる言語（母国語を含む）</p>
+              <div className="flex w-1/2 flex-wrap gap-2">
                 {languages.map((language) => (
                   <label key={language.id} className="flex items-center space-x-2">
                     <input
@@ -331,11 +331,11 @@ export default function Page() {
                   </label>
                 ))}
               </div>
-            </fieldset>
+            </div>
 
-            <fieldset className="flex flex-col">
-              <legend>勉強している言語</legend>
-              <div className="my-2 flex flex-wrap gap-2">
+            <div className="my-4 flex w-full justify-between">
+              <p className="w-1/2 text-left">勉強している言語</p>
+              <div className=" flex w-1/2 flex-wrap gap-2">
                 {languages.map((language) => (
                   <label key={language.id} className="flex items-center space-x-2">
                     <input
@@ -350,7 +350,7 @@ export default function Page() {
                   </label>
                 ))}
               </div>
-            </fieldset>
+            </div>
           </div>
 
           <div className="my-10 px-15">
