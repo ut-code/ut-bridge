@@ -355,43 +355,45 @@ export default function Page() {
 
           <div className="my-10 px-15">
             <h2 className="font-bold text-xl">トピック</h2>
-            <label htmlFor="hobby" className="flex items-center justify-between">
+            <label htmlFor="hobby" className="my-4 flex justify-between">
               趣味
               <textarea
                 id="hobby"
                 name="hobby"
+                rows={5}
                 value={formData.hobby ?? ""}
                 onChange={handleChange}
                 required
-                className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
+                className=" w-1/2 rounded-xl border border-gray-500 bg-white p-2"
               />
             </label>
 
-            <label htmlFor="introduction" className="flex items-center justify-between">
+            <label htmlFor="introduction" className="my-4 flex items-center justify-between ">
               自己紹介
               <textarea
                 id="introduction"
                 name="introduction"
+                rows={5}
                 value={formData.introduction ?? ""}
                 onChange={handleChange}
                 required
-                className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
+                className="w-1/2 rounded-xl border border-gray-500 bg-white p-2"
               />
             </label>
           </div>
 
           {status === "idle" ? (
-            <button type="submit" className="btn btn-primary rounded p-2 text-white">
+            <button type="submit" className="btn h-10 rounded bg-tBlue p-2 text-white">
               登録
             </button>
           ) : status === "loading" ? (
-            <button type="submit" className="btn btn-disabled rounded p-2 text-white" disabled>
+            <button type="submit" className="btn btn-disabled h-10 rounded p-2 text-white" disabled>
               登録中...
             </button>
           ) : status === "success" ? (
-            <span className="btn btn-accent rounded p-2 text-white">登録成功</span>
+            <span className="btn btn-accent h-10 rounded p-2 text-white">登録成功</span>
           ) : status === "error" ? (
-            <span className="btn btn-error rounded p-2 text-white">失敗しました</span>
+            <span className="btn btn-error h-10 rounded p-2 text-white">失敗しました</span>
           ) : (
             <></>
           )}
