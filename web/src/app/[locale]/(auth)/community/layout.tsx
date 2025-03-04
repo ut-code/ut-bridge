@@ -1,3 +1,3 @@
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <div className="h-full">{children}</div>;
+  return <div className="m-5 h-full">{children}</div>;
 }
