@@ -123,7 +123,7 @@ export default function Page() {
       }
 
       setStatus("success");
-      router.push("/community");
+      window.location.href = "/settings";
     } catch (error) {
       console.error("ユーザー登録に失敗しました", error);
       setStatus("error");
