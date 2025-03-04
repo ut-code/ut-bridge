@@ -148,6 +148,7 @@ const router = new Hono()
           select: {
             user: {
               select: {
+                id: true,
                 name: true,
                 imageUrl: true,
               },
@@ -169,6 +170,23 @@ const router = new Hono()
     return c.json(resp, 200);
   })
   // ## room data
+  .get("/rooms/dmwith/:user", zValidator("param", z.object({ user: z.string() })), async (c) => {
+    const meId = await getUserID(c);
+    const { user } = c.req.valid("param");
+    const rooms = await prisma.room.findMany({
+      where: {
+        members: {
+          every: {
+            OR: [{ userId: user }, { userId: meId }],
+          },
+        },
+      },
+      select: {
+        id: true,
+      },
+    });
+    return c.json(rooms);
+  })
   .get(
     "/rooms/:room",
     zValidator(
