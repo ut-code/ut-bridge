@@ -9,7 +9,7 @@ export default function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="fixed top-0 z-0 flex h-16 w-full items-center bg-tBlue">
+    <header className="flex h-16 w-full items-center bg-tBlue">
       <Link href="/community" passHref className="px-4">
         <AppIcon width={36} height={36} />
       </Link>
