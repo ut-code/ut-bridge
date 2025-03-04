@@ -18,11 +18,17 @@ export default function Page() {
       <Link href={"/settings/profile"} className="cursor-pointer px-4 text-2xl text-primary">
         ユーザー編集画面へ
       </Link>
-      Settings Page
-      <button type="button" className="btn btn-error m-5" onClick={logout}>
-        log out
-      </button>
+      設定画面
       <div>
+        <Link href={"/settings/basic"}>基本情報</Link>
+        <Link href={"/settings/university"}>大学情報</Link>
+        <Link href={"/settings/language"}>言語情報</Link>
+        <Link href={"/settings/topic"}>トピック</Link>
+        <Link href={"#"}>友達</Link>
+        <Link href={"#"}>その他</Link>
+        <button type="button" className="btn btn-error m-5" onClick={logout}>
+          log out
+        </button>
         <h1>自分のデータ</h1>
         {user.imageUrl ? (
           <Image
