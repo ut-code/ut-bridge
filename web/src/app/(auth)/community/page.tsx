@@ -194,10 +194,9 @@ export default function Page() {
         />
       </div>
 
-      <ul className="m-5 grid grid-cols-3 gap-6">
+      <ul className="m-5 grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {users === null ? (
           <span>
-            {/* TODO: make a skeleton UI s.t. the layout doesn't shift as much */}
             <span className="loading loading-bars loading-xl" />
             Loading...
           </span>
@@ -229,29 +228,31 @@ export default function Page() {
         )}
       </ul>
 
-      <div className="my-4 flex items-center justify-between px-20">
-        <div className="w-1/3">
+      <div className="m-6 mb-6 flex items-center justify-between gap-6 px-10 py-8 md:px-20">
+        <div className="w-auto">
           {query.page > 1 && (
             <Link
               href={createQueriedURL({
                 page: query.page - 1,
               })}
-              className="rounded bg-blue-200 px-4 py-2 hover:bg-blue-300"
+              className="rounded bg-blue-200 px-6 py-3 hover:bg-blue-300"
             >
               前へ
             </Link>
           )}
         </div>
-        <span className="text-gray-700 text-lg">
+
+        <span className="text-center text-gray-700 text-lg">
           {totalUsers > 0 ? `Page ${query.page} of ${totalPages}` : "No users found"}
         </span>
-        <div className="flex w-1/3 justify-end">
+
+        <div className="w-auto">
           {query.page < totalPages && (
             <Link
               href={createQueriedURL({
                 page: query.page + 1,
               })}
-              className="rounded bg-blue-200 px-4 py-2 hover:bg-blue-300"
+              className="rounded bg-blue-200 px-6 py-3 hover:bg-blue-300"
             >
               次へ
             </Link>
