@@ -4,7 +4,12 @@
     "@biomejs/biome": "^1.9.4",
     "lefthook": "^1.10.10"
   },
-  "workspaces": ["common", "web", "server", "scripts/seed"],
+  "workspaces": [
+    "common",
+    "web",
+    "server",
+    "scripts/seed"
+  ],
   "scripts": {
     "postinstall": "echo '[bun] installation complete. running preparation scripts...'",
     "prepare": "(cd server && bun prepare) && lefthook install",
@@ -14,7 +19,7 @@
     "check:fix": "bun fix && bun run build",
     "check": "bun biome check . && bun run build",
     "build": "(cd web && bun run build) && (cd server && bun run build)",
-    "clean": "rm -rf node_modules; rm -rf **/node_modules; rm -r web/.next web/dist; true",
+    "clean": "rm -rf node_modules; rm -rf **/node_modules; rm -r web/.next web/dist web/src/paraglide -r; true",
     "db": "bun db:up && bun db:push && bun db:seed",
     "db:drop": "docker stop utbridge-postgres",
     "db:up": "./scripts/devdb.sh",
