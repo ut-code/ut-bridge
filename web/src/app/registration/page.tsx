@@ -2,6 +2,9 @@
 
 import { client } from "@/client";
 import { auth } from "@/features/auth/config";
+import { upload } from "@/features/image/ImageUpload";
+// import { Upload } from "@/features/image/ImageUpload";
+// import { assert } from "@/lib";
 import type { CreateUser } from "common/zod/schema";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -96,8 +99,21 @@ export default function Page() {
     fluentLanguageIds: [],
     learningLanguageIds: [],
   });
-
+  const [file, setFile] = useState<File | null>(null); // 選択された画像を一時保存
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [preview, setPreview] = useState<string | null>(null);
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setFile(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type, checked, multiple } = e.target as HTMLInputElement;
@@ -150,10 +166,16 @@ export default function Page() {
     setStatus("loading");
     try {
       if (!user) throw new Error("User is not found in Firebase!");
+      let imageUrl = null;
+
+      if (file) {
+        imageUrl = await upload(file);
+      }
       const body = {
         ...formData,
         id: self.crypto.randomUUID(),
         guid: user.uid,
+        imageUrl: imageUrl,
       };
       const res = await client.users.$post({ json: body });
       if (!res.ok) {
@@ -204,7 +226,18 @@ export default function Page() {
                 <option value="other">その他</option>
               </select>
             </label>
-            {/* <label className="flex items-center justify-between">写真</label> */}
+            <div className="my-4 flex justify-between">
+              <span className="">写真</span>
+              <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" id="image-upload" />
+
+              <div className={`flex h-40 w-40 items-center justify-center rounded-lg ${preview ? "" : "bg-gray-300"}`}>
+                {preview ? <img src={preview} alt="プレビュー" className="rounded-lg object-cover" /> : null}
+              </div>
+
+              <label htmlFor="image-upload" className="h-10 cursor-pointer rounded bg-blue-500 px-4 py-2 text-white">
+                写真を登録
+              </label>
+            </div>
           </div>
 
           <div className="my-10 px-15">
