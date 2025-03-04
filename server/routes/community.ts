@@ -21,7 +21,7 @@ const router = new Hono().get(
   async (c) => {
     const requester = await getUserID(c);
     const { page, exchangeQuery, searchQuery, marker: markerQuery } = c.req.valid("query");
-    const take = 9;
+    const take = 15; //TODO: web側で指定できるようにする
     const skip = (page - 1) * take;
 
     const whereCondition: Prisma.UserWhereInput = {};

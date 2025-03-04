@@ -77,7 +77,7 @@ export default function Page() {
   }, []);
 
   const [totalUsers, setTotalUsers] = useState(0);
-  const usersPerPage = 9;
+  const usersPerPage = 15;
   const totalPages = Math.ceil(totalUsers / usersPerPage);
   const { me } = useUserContext();
 
@@ -133,7 +133,7 @@ export default function Page() {
 
   return (
     <>
-      <div className="mx-30 my-5 flex items-center justify-between">
+      <div className="flex items-center justify-between px-30">
         <div className="flex items-center gap-4">
           <div className="filter">
             <input
@@ -194,7 +194,7 @@ export default function Page() {
         />
       </div>
 
-      <ul className="m-5 grid grid-cols-3 gap-4">
+      <ul className="m-5 grid grid-cols-3 gap-6">
         {users === null ? (
           <span>
             {/* TODO: make a skeleton UI s.t. the layout doesn't shift as much */}
@@ -203,7 +203,7 @@ export default function Page() {
           </span>
         ) : (
           users.map((user) => (
-            <li key={user.id} className="rounded-2xl bg-white p-4">
+            <li key={user.id}>
               <UserCard
                 link={`/users?id=${user.id}`}
                 user={user}
@@ -229,7 +229,7 @@ export default function Page() {
         )}
       </ul>
 
-      <div className="mx-20 my-4 flex items-center justify-between">
+      <div className="my-4 flex items-center justify-between px-20">
         <div className="w-1/3">
           {query.page > 1 && (
             <Link
@@ -268,11 +268,23 @@ type UserCardEvent = {
 };
 
 const DEV_EXTRA_QUERY_WAIT = 2000;
-function UserCard({ user: init, on, link }: { user: CardUser; on: UserCardEvent; link: string }) {
+function UserCard({
+  user: init,
+  on,
+  link,
+}: {
+  user: CardUser;
+  on: UserCardEvent;
+  link: string;
+}) {
   const [user, setUser] = useState(init);
   const [favoriteBtnLoading, setFavoriteBtnLoading] = useState(false);
   return (
-    <div className={`indicator flex h-35 w-full items-center gap-4 ${user.marker === "blocked" && "bg-gray-300"}`}>
+    <div
+      className={`indicator flex h-62 w-100 items-center rounded-2xl bg-white ${
+        user.marker === "blocked" && "bg-gray-300"
+      }`}
+    >
       {favoriteBtnLoading ? (
         <span className="indicator-item loading loading-ring" />
       ) : user.marker === "favorite" ? (
@@ -317,20 +329,14 @@ function UserCard({ user: init, on, link }: { user: CardUser; on: UserCardEvent;
           {/* this doesn't support blocking yet */}★
         </button>
       )}
-      <Link href={link}>
-        <div className="flex items-center gap-4">
+      <Link href={link} className="h-full w-full p-4">
+        <div className="flex items-center">
           {user.imageUrl ? (
-            <Image
-              src={user.imageUrl}
-              alt={user.name ?? "User"}
-              width={48}
-              height={48}
-              className="h-12 w-12 rounded-full"
-            />
+            <Image src={user.imageUrl} alt={user.name ?? "User"} width={60} height={60} />
           ) : (
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-300">No Image</div>
+            <div className="flex h-15 w-15 items-center justify-center rounded-full bg-gray-300">No Image</div>
           )}
-          <div>
+          {/* <div>
             <h2 className="font-semibold text-lg">{user.name ?? "Unknown"}</h2>
             <p className="text-sm">{user.campus ?? "Unknown"}</p>
             <p className="text-sm">
@@ -341,7 +347,7 @@ function UserCard({ user: init, on, link }: { user: CardUser; on: UserCardEvent;
               学びたい言語:
               {user.learningLanguages.join(", ") || "None"}
             </p>
-          </div>
+          </div> */}
         </div>
       </Link>
     </div>
