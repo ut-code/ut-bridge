@@ -32,7 +32,7 @@ jobs:
       - run: bun install --frozen-lockfile
       - run: bun sync
         working-directory: web
-      - run: ls web/src/paraglide/ -R
+      - run: cat web/src/paraglide/messages/_index.js
       - run: bun run build
         working-directory: web
   server:
