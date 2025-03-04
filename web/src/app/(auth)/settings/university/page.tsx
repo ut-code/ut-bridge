@@ -14,7 +14,6 @@ export default function Page() {
   const [divisions, setDivisions] = useState<{ id: string; name: string }[]>([]);
   const [universities, setUniversities] = useState<{ id: string; name: string }[]>([]);
   const [universityId, setUniversityId] = useState<string>("");
-  const [languages, setLanguages] = useState<{ id: string; name: string }[]>([]);
   const [formData, setFormData] = useState<CreateUser>({
     id: "",
     imageUrl: null,
@@ -54,7 +53,7 @@ export default function Page() {
             }}`,
           );
         }
-        const [universities, languages] = await Promise.all([universityRes.json(), languageRes.json()]);
+        const [universities] = await Promise.all([universityRes.json()]);
 
         const formattedData = {
           id: me.id,
@@ -75,7 +74,6 @@ export default function Page() {
           learningLanguageIds: me.learningLanguages.map((lang: { language: { id: string } }) => lang.language.id),
         };
         setUniversities(universities);
-        setLanguages(languages);
         setFormData(formattedData);
         setUniversityId(formattedData.universityId);
       } catch (err) {
@@ -187,29 +185,7 @@ export default function Page() {
 
   return (
     <div className="mx-auto max-w-md p-4">
-      <h1 className="mb-4 font-bold text-xl">編集画面</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-        <label>
-          名前:
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            className="w-full border p-2"
-          />
-        </label>
-
-        <label>
-          性別:
-          <select name="gender" value={formData.gender} onChange={handleChange} className="w-full border p-2">
-            <option value="male">男性</option>
-            <option value="female">女性</option>
-            <option value="other">その他</option>
-          </select>
-        </label>
-
         <label>
           大学:
           <select
@@ -278,102 +254,6 @@ export default function Page() {
             <option value="D3">博士3年</option>
           </select>
         </label>
-
-        <label>
-          表示言語設定:
-          <select
-            name="displayLanguage"
-            value={formData.displayLanguage}
-            onChange={handleChange}
-            className="w-full border p-2"
-          >
-            <option value="japanese">日本語</option>
-            <option value="english">英語</option>
-          </select>
-        </label>
-        <label>
-          外国人留学生ですか？
-          <input type="checkbox" name="isForeignStudent" checked={formData.isForeignStudent} onChange={handleChange} />
-        </label>
-
-        <label>
-          母国語:
-          <select
-            name="motherLanguageId"
-            value={formData.motherLanguageId}
-            onChange={handleChange}
-            className="w-full border p-2"
-            disabled={!languages.length}
-          >
-            <option value="">母国語を選択してください</option>
-            {languages.map((language) => (
-              <option key={language.id} value={language.id}>
-                {language.name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          流暢に話せる言語:
-          <select
-            name="fluentLanguageIds"
-            value={formData.fluentLanguageIds}
-            onChange={handleChange}
-            className="w-full border p-2"
-            disabled={!languages.length}
-            multiple
-          >
-            <option value="">流暢に話せる言語を選択してください</option>
-            {languages.map((language) => (
-              <option key={language.id} value={language.id}>
-                {language.name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          勉強している言語:
-          <select
-            name="learningLanguageIds"
-            value={formData.learningLanguageIds}
-            onChange={handleChange}
-            className="w-full border p-2"
-            disabled={!languages.length}
-            multiple
-          >
-            <option value="">勉強している言語を選択してください</option>
-            {languages.map((language) => (
-              <option key={language.id} value={language.id}>
-                {language.name}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <label>
-          趣味:
-          <input
-            type="text"
-            name="hobby"
-            value={formData.hobby ?? ""}
-            onChange={handleChange}
-            required
-            className="w-full border p-2"
-          />
-        </label>
-
-        <label>
-          自己紹介:
-          <input
-            type="text"
-            name="introduction"
-            value={formData.introduction ?? ""}
-            onChange={handleChange}
-            required
-            className="w-full border p-2"
-          />
-        </label>
-
         <button type="submit" className="rounded bg-blue-500 p-2 text-white" disabled={status === "loading"}>
           {status === "loading" ? "登録中..." : "登録"}
         </button>
