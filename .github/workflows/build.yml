@@ -27,6 +27,9 @@ jobs:
         with:
           bun-version: 1.2.2
       - run: bun install --frozen-lockfile
+      - run: bun sync
+        working-directory: web
+      - run: ls web/src/paraglide/ -R
       - run: bun run build
         working-directory: web
   server:

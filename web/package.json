@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "sync": "paraglide-js compile --project ./project.inlang --outdir ./src/paraglide",
     "dev": "bun --env-file=../.env run next dev --port 5173",
-    "build": "paraglide-js compile --project ./project.inlang --outdir ./src/paraglide && bun --env-file=../.env run next build",
+    "build": "bun sync && bun --env-file=../.env run next build",
     "start": "next start --port $PORT",
     "lint": "next lint",
     "machine-translate": "inlang machine translate --project project.inlang"
