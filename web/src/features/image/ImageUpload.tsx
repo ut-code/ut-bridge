@@ -42,17 +42,10 @@ export function Upload({ onUpdate }: { onUpdate: (url: string) => void }) {
   );
 }
 
-async function upload(file: File): Promise<string> {
+export async function upload(file: File): Promise<string> {
   const res = await client.image.put.$get();
   const { url: putURL, fileName: key } = await res.json();
   console.log(putURL, "🤩🤩🤩🤩🤩🤩");
-
-  // const formData = new FormData();
-  // for (const [key, value] of Object.entries(fields)) {
-  // formData.append(key, value);
-  // }
-  // formData.append("file", file);
-  // console.log(formData.get("file"), "⭐⭐⭐⭐⭐⭐");
 
   const uploadResponse = await fetch(putURL, {
     method: "PUT",

@@ -2,6 +2,7 @@
 
 import { client } from "@/client";
 import { auth } from "@/features/auth/config";
+import { upload } from "@/features/image/ImageUpload";
 // import { Upload } from "@/features/image/ImageUpload";
 // import { assert } from "@/lib";
 import type { CreateUser } from "common/zod/schema";
@@ -98,8 +99,21 @@ export default function Page() {
     fluentLanguageIds: [],
     learningLanguageIds: [],
   });
-
+  const [file, setFile] = useState<File | null>(null); // 選択された画像を一時保存
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [preview, setPreview] = useState<string | null>(null);
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setFile(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type, checked, multiple } = e.target as HTMLInputElement;
@@ -152,10 +166,16 @@ export default function Page() {
     setStatus("loading");
     try {
       if (!user) throw new Error("User is not found in Firebase!");
+      let imageUrl = null;
+
+      if (file) {
+        imageUrl = await upload(file);
+      }
       const body = {
         ...formData,
         id: self.crypto.randomUUID(),
         guid: user.uid,
+        imageUrl: imageUrl,
       };
       const res = await client.users.$post({ json: body });
       if (!res.ok) {
@@ -169,18 +189,6 @@ export default function Page() {
       console.error("ユーザー登録に失敗しました", error);
       setStatus("error");
       router.push("/login");
-    }
-  };
-  const [preview, setPreview] = useState<string | null>(null);
-
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setPreview(e.target?.result as string);
-      };
-      reader.readAsDataURL(file);
     }
   };
 
