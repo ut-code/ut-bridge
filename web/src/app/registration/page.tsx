@@ -1,7 +1,6 @@
 "use client";
 
 import { client } from "@/client";
-import Header from "@/components/Header";
 import { auth } from "@/features/auth/config";
 import type { CreateUser } from "common/zod/schema";
 import { useRouter } from "next/navigation";
@@ -163,9 +162,8 @@ export default function Page() {
 
   return (
     <>
-      <Header />
-      <div className="mx-40 my-20 p-4">
-        <h1 className="mb-8 font-bold text-3xl">ユーザー情報登録</h1>
+      <div className="mx-60 my-20 p-4">
+        <h1 className="mb-8 font-bold text-3xl">初期登録画面</h1>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <div className="my-10 px-15">
             <h2 className="font-bold text-xl">基本情報</h2>
@@ -177,7 +175,7 @@ export default function Page() {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                className="my-4 w-1/2 rounded-xl border border-gray-500 p-2"
+                className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
               />
             </label>
 
@@ -187,13 +185,14 @@ export default function Page() {
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
-                className="my-4 w-1/2 rounded-xl border border-gray-500 p-2"
+                className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
               >
                 <option value="male">男性</option>
                 <option value="female">女性</option>
                 <option value="other">その他</option>
               </select>
             </label>
+            {/* <label className="flex items-center justify-between">写真</label> */}
           </div>
 
           <div className="my-10 px-15">
@@ -204,7 +203,7 @@ export default function Page() {
                 name="universityId"
                 onChange={handleChange}
                 value={formData.universityId}
-                className="my-4 w-1/2 rounded-xl border border-gray-500 p-2"
+                className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
               >
                 <option value="">大学を選択してください</option>
                 {universities.map((univ) => (
@@ -221,7 +220,7 @@ export default function Page() {
                 name="divisionId"
                 value={formData.divisionId}
                 onChange={handleChange}
-                className="my-4 w-1/2 rounded-xl border border-gray-500 p-2"
+                className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
                 disabled={!divisions.length}
               >
                 <option value="">学部を選択してください</option>
@@ -239,7 +238,7 @@ export default function Page() {
                 name="campusId"
                 value={formData.campusId}
                 onChange={handleChange}
-                className="my-4 w-1/2 rounded-xl border border-gray-500 p-2"
+                className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
                 disabled={!campuses.length}
               >
                 <option value="">キャンパスを選択してください</option>
@@ -257,7 +256,7 @@ export default function Page() {
                 name="grade"
                 value={formData.grade}
                 onChange={handleChange}
-                className="my-4 w-1/2 rounded-xl border border-gray-500 p-2"
+                className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
               >
                 <option value="">学年を選択してください</option>
                 <option value="B1">学部1年</option>
@@ -282,7 +281,7 @@ export default function Page() {
                 name="isForeignStudent"
                 checked={formData.isForeignStudent}
                 onChange={handleChange}
-                className="checkbox checkbox-lg absolute right-[47%]"
+                className="checkbox checkbox-lg absolute right-[47%] bg-white"
               />
             </label>
 
@@ -292,7 +291,7 @@ export default function Page() {
                 name="motherLanguageId"
                 value={formData.motherLanguageId}
                 onChange={handleChange}
-                className="my-4 w-1/2 rounded-xl border border-gray-500 p-2"
+                className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
                 disabled={!languages.length}
               >
                 <option value="">母国語を選択してください</option>
@@ -309,7 +308,7 @@ export default function Page() {
                 name="fluentLanguageIds"
                 value={formData.fluentLanguageIds}
                 onChange={handleChange}
-                className="my-4 w-1/2 rounded-xl border border-gray-500 p-2"
+                className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
                 disabled={!languages.length}
                 multiple
               >
@@ -327,7 +326,7 @@ export default function Page() {
                 name="learningLanguageIds"
                 value={formData.learningLanguageIds}
                 onChange={handleChange}
-                className="my-4 w-1/2 rounded-xl border border-gray-500 p-2"
+                className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
                 disabled={!languages.length}
                 multiple
               >
@@ -351,7 +350,7 @@ export default function Page() {
                 value={formData.hobby ?? ""}
                 onChange={handleChange}
                 required
-                className="my-4 w-1/2 rounded-xl border border-gray-500 p-2"
+                className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
               />
             </label>
 
@@ -363,7 +362,7 @@ export default function Page() {
                 value={formData.introduction ?? ""}
                 onChange={handleChange}
                 required
-                className="my-4 w-1/2 rounded-xl border border-gray-500 p-2"
+                className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
               />
             </label>
           </div>
