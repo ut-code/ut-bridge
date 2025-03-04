@@ -132,7 +132,6 @@ export default function Page() {
   return (
     <div className="mx-auto max-w-md p-4">
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-
         <label>
           趣味:
           <input
