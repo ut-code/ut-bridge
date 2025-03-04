@@ -1,7 +1,7 @@
 import type { CardUser } from "common/zod/schema";
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import Image from "next/image";
 
 type UserCardEvent = {
   favorite: (id: string) => Promise<void>;

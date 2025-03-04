@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { client } from "../../../../client.ts";
-import type { CardUser } from "common/zod/schema.ts";
-import { useUserContext } from "@/features/user/userProvider.tsx";
 import { formatCardUser } from "@/features/format.ts";
 import UserCard from "@/features/user/UserCard.tsx";
+import { useUserContext } from "@/features/user/userProvider.tsx";
+import type { CardUser } from "common/zod/schema.ts";
+import { useEffect, useState } from "react";
+import { client } from "../../../../client.ts";
 
 export default function Page() {
   const [users, setUsers] = useState<CardUser[] | null>(null);

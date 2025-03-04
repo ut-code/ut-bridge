@@ -1,12 +1,12 @@
 "use client";
 import { formatCardUser } from "@/features/format";
+import UserCard from "@/features/user/UserCard.tsx";
 import { useUserContext } from "@/features/user/userProvider.tsx";
 import { type CardUser, type Exchange, ExchangeSchema, MarkerSchema } from "common/zod/schema";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { client } from "../../../client.ts";
-import UserCard from "@/features/user/UserCard.tsx";
 
 function useQuery() {
   const query = useSearchParams();
