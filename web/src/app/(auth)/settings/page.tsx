@@ -2,7 +2,6 @@
 
 import { client } from "@/client.ts";
 import LoginBadge from "@/features/auth/components/LoginBadge";
-import { useGoogleLogout } from "@/features/auth/functions/logout.ts";
 import { useUserContext } from "@/features/user/userProvider.tsx";
 import { assert } from "@/lib.ts";
 import Link from "next/link";
@@ -10,7 +9,6 @@ import { useState } from "react";
 import { formatUser } from "../../../features/format.ts";
 
 export default function Page() {
-  const { logout } = useGoogleLogout();
   const { me } = useUserContext();
 
   if (!me) return <div>User not found</div>;
@@ -33,9 +31,6 @@ export default function Page() {
         }}
       />
       <h2>Settings Page</h2>
-      <button type="button" className="btn btn-error m-5" onClick={logout}>
-        log out
-      </button>
       <div>
         <h1>自分のデータ</h1>
         {user.imageUrl ? (

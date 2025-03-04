@@ -1,8 +1,8 @@
 "use client";
 import { formatCardUser } from "@/features/format";
+import UserCard from "@/features/user/UserCard.tsx";
 import { useUserContext } from "@/features/user/userProvider.tsx";
 import { type CardUser, type Exchange, ExchangeSchema, MarkerSchema } from "common/zod/schema";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
@@ -10,7 +10,6 @@ import { client } from "../../../client.ts";
 
 function useQuery() {
   const query = useSearchParams();
-  // const query = new URLSearchParams(location.href);
   const pageQuery = query.get("page");
   const page = Number.parseInt(pageQuery ?? "") || 1; // don't use `??`. it won't filter out NaN (and page won't be 0)
 
@@ -78,7 +77,7 @@ export default function Page() {
   }, []);
 
   const [totalUsers, setTotalUsers] = useState(0);
-  const usersPerPage = 9;
+  const usersPerPage = 15;
   const totalPages = Math.ceil(totalUsers / usersPerPage);
   const { me } = useUserContext();
 
@@ -134,74 +133,76 @@ export default function Page() {
 
   return (
     <>
-      <h1>Community Page</h1>
-      <label htmlFor="user-search">Search users:</label>
-      <input
-        type="search"
-        id="user-search"
-        name="q"
-        placeholder="ユーザー検索..."
-        value={rawSearchQuery}
-        onChange={(e) => setRawSearchQuery(e.target.value)}
-        className="rounded-md border p-2"
-      />
+      <div className="flex items-center justify-between px-30">
+        <div className="flex items-center gap-4">
+          <div className="filter">
+            <input
+              className="btn filter-reset"
+              type="radio"
+              name="metaframeworks"
+              aria-label="All"
+              onInput={() => {
+                router.push(
+                  createQueriedURL({
+                    marker: "clear",
+                  }),
+                );
+              }}
+            />
+            {["favorite" as const, "blocked" as const].map((select) => (
+              <input
+                key={select}
+                className="btn bg-white"
+                type="radio"
+                name="metaframeworks"
+                aria-label={select}
+                onInput={() => {
+                  router.push(
+                    createQueriedURL({
+                      marker: select,
+                    }),
+                  );
+                }}
+              />
+            ))}
+          </div>
+          <div>
+            <label htmlFor="exchange-language">言語交換学生に限定する</label>
+            <input
+              id="exchange-language"
+              type="checkbox"
+              className="toggle"
+              checked={query.exchange !== "all"}
+              onChange={(ev) => {
+                const filtered = ev.target.checked;
+                const amIForeignStudent = me.isForeignStudent;
+                const filterQuery = amIForeignStudent ? "japanese" : "exchange";
+                router.push(createQueriedURL({ exchange: filtered ? filterQuery : "all" }));
+              }}
+            />
+          </div>
+        </div>
 
-      <label htmlFor="exchange-language">言語交換学生に限定する</label>
-      <input
-        id="exchange-language"
-        type="checkbox"
-        className="toggle"
-        checked={query.exchange !== "all"}
-        onChange={(ev) => {
-          const filtered = ev.target.checked;
-          const amIForeignStudent = me.isForeignStudent;
-          const filterQuery = amIForeignStudent ? "japanese" : "exchange";
-          router.push(createQueriedURL({ exchange: filtered ? filterQuery : "all" }));
-        }}
-      />
-
-      <div className="filter">
         <input
-          className="btn filter-reset"
-          type="radio"
-          name="metaframeworks"
-          aria-label="All"
-          onInput={() => {
-            router.push(
-              createQueriedURL({
-                marker: "clear",
-              }),
-            );
-          }}
+          type="search"
+          id="user-search"
+          name="q"
+          placeholder="検索"
+          value={rawSearchQuery}
+          onChange={(e) => setRawSearchQuery(e.target.value)}
+          className="w-1/4 rounded-full border bg-white p-2"
         />
-        {["favorite" as const, "blocked" as const].map((select) => (
-          <input
-            key={select}
-            className="btn"
-            type="radio"
-            name="metaframeworks"
-            aria-label={select}
-            onInput={() => {
-              router.push(
-                createQueriedURL({
-                  marker: select,
-                }),
-              );
-            }}
-          />
-        ))}
       </div>
 
-      <ul>
+      <ul className="m-5 grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {users === null ? (
           <span>
-            {/* TODO: make a skeleton UI s.t. the layout doesn't shift as much */}
             <span className="loading loading-bars loading-xl" />
             Loading...
           </span>
         ) : (
           users.map((user) => (
-            <li key={user.id} className="border-gray-200 border-b p-4">
+            <li key={user.id}>
               <UserCard
                 link={`/users?id=${user.id}`}
                 user={user}
@@ -227,126 +228,37 @@ export default function Page() {
         )}
       </ul>
 
-      <div className="my-4 text-center">
-        <span className="text-gray-700">
-          {totalUsers > 0 ? `Page ${query.page} of ${totalPages}` : "No users found"}
-        </span>
-      </div>
-
-      <div className="mx-20 mt-4 flex justify-between">
-        <div className="w-1/2">
+      <div className="m-6 mb-6 flex items-center justify-between gap-6 px-10 py-8 md:px-20">
+        <div className="w-auto">
           {query.page > 1 && (
             <Link
               href={createQueriedURL({
                 page: query.page - 1,
               })}
-              className="rounded bg-blue-200 px-4 py-2 hover:bg-blue-300"
+              className="rounded bg-blue-200 px-6 py-3 hover:bg-blue-300"
             >
-              Previous
+              前へ
             </Link>
           )}
         </div>
-        <div className="flex w-1/2 justify-end">
+
+        <span className="text-center text-gray-700 text-lg">
+          {totalUsers > 0 ? `Page ${query.page} of ${totalPages}` : "No users found"}
+        </span>
+
+        <div className="w-auto">
           {query.page < totalPages && (
             <Link
               href={createQueriedURL({
                 page: query.page + 1,
               })}
-              className="rounded bg-blue-200 px-4 py-2 hover:bg-blue-300"
+              className="rounded bg-blue-200 px-6 py-3 hover:bg-blue-300"
             >
-              Next
+              次へ
             </Link>
           )}
         </div>
       </div>
     </>
-  );
-}
-
-type UserCardEvent = {
-  favorite: (id: string) => Promise<void>;
-  unfavorite: (id: string) => Promise<void>;
-};
-
-const DEV_EXTRA_QUERY_WAIT = 2000;
-function UserCard({ user: init, on, link }: { user: CardUser; on: UserCardEvent; link: string }) {
-  const [user, setUser] = useState(init);
-  const [favoriteBtnLoading, setFavoriteBtnLoading] = useState(false);
-  return (
-    <div className={`indicator flex items-center gap-4 ${user.marker === "blocked" && "bg-gray-300"}`}>
-      {favoriteBtnLoading ? (
-        <span className="indicator-item loading loading-ring" />
-      ) : user.marker === "favorite" ? (
-        <button
-          type="button"
-          aria-label="marked as favorite"
-          className="indicator-item badge bg-transparent text-xl text-yellow-400"
-          onClick={async () => {
-            setFavoriteBtnLoading(true);
-            await on.unfavorite(user.id);
-            setUser({
-              ...user,
-              marker: undefined,
-            });
-            setTimeout(() => {
-              setFavoriteBtnLoading(false);
-            }, DEV_EXTRA_QUERY_WAIT);
-          }}
-        >
-          ★
-        </button>
-      ) : user.marker === "blocked" ? (
-        "blocked (todo: make it a button to unblock)"
-      ) : (
-        <button
-          type="button"
-          aria-label="mark as favorite"
-          className="indicator-item badge bg-transparent text-black-700 text-xl"
-          onClick={async () => {
-            setFavoriteBtnLoading(true);
-            await on.favorite(user.id);
-            setUser({
-              ...user,
-              marker: "favorite",
-            });
-            // setFavoriteBtnLoading(false);
-            setTimeout(() => {
-              setFavoriteBtnLoading(false);
-            }, DEV_EXTRA_QUERY_WAIT);
-          }}
-        >
-          {/* this doesn't support blocking yet */}★
-        </button>
-      )}
-      {user.imageUrl ? (
-        <Image
-          src={user.imageUrl}
-          alt={user.name ?? "User"}
-          width={48}
-          height={48}
-          className="h-12 w-12 rounded-full"
-        />
-      ) : (
-        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-300">No Image</div>
-      )}
-      <div>
-        <h2 className="font-semibold text-lg">{user.name ?? "Unknown"}</h2>
-        <p className="text-gray-600 text-sm">Gender: {user.gender ?? "Unknown"}</p>
-        <p className="text-gray-600 text-sm">Campus: {user.campus ?? "Unknown"}</p>
-        <p className="text-gray-600 text-sm">Mother language: {user.motherLanguage || "Unknown"}</p>
-        <p className="text-gray-600 text-sm">
-          Fluent Languages:
-          {user.fluentLanguages.join(", ") || "None"}
-        </p>
-        <p className="text-gray-600 text-sm">
-          Learning Languages:
-          {user.learningLanguages.join(", ") || "None"}
-        </p>
-        <p className="text-gray-600 text-sm">Foreign Student: {user.isForeignStudent ? "Yes" : "No"}</p>
-      </div>
-      <Link className="btn btn-primary" href={link}>
-        See page
-      </Link>
-    </div>
   );
 }
