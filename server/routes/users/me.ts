@@ -7,7 +7,7 @@ import { prisma } from "../../config/prisma.ts";
 
 const route = new Hono()
   //TODO://型に合わせてupdateの方法も変化させる
-  .put("/", zValidator("json", CreateUserSchema), async (c) => {
+  .patch("/", zValidator("json", CreateUserSchema.partial()), async (c) => {
     const userId = await getUserID(c);
     const body = c.req.valid("json");
 
@@ -33,7 +33,7 @@ const route = new Hono()
         fluentLanguages: {
           deleteMany: { userId }, // 既存データ削除
           createMany: {
-            data: body.fluentLanguageIds.map((langId) => ({
+            data: (body.fluentLanguageIds ?? []).map((langId) => ({
               languageId: langId,
             })),
           },
@@ -43,7 +43,7 @@ const route = new Hono()
         learningLanguages: {
           deleteMany: { userId }, // 既存データ削除
           createMany: {
-            data: body.learningLanguageIds.map((langId) => ({
+            data: (body.fluentLanguageIds ?? []).map((langId) => ({
               languageId: langId,
             })),
           },
