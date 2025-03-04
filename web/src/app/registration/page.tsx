@@ -99,7 +99,7 @@ export default function Page() {
 
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type, checked, multiple } = e.target as HTMLInputElement;
     const { options } = e.target as HTMLSelectElement;
 
@@ -354,32 +354,30 @@ export default function Page() {
           </div>
 
           <div className="my-10 px-15">
-            <h2 className="font-bold text-xl">その他</h2>
+            <h2 className="font-bold text-xl">トピック</h2>
             <label htmlFor="hobby" className="flex items-center justify-between">
               趣味
+              <textarea
+                id="hobby"
+                name="hobby"
+                value={formData.hobby ?? ""}
+                onChange={handleChange}
+                required
+                className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
+              />
             </label>
-            <input
-              id="hobby"
-              type="text"
-              name="hobby"
-              value={formData.hobby ?? ""}
-              onChange={handleChange}
-              required
-              className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
-            />
 
             <label htmlFor="introduction" className="flex items-center justify-between">
               自己紹介
+              <textarea
+                id="introduction"
+                name="introduction"
+                value={formData.introduction ?? ""}
+                onChange={handleChange}
+                required
+                className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
+              />
             </label>
-            <input
-              id="introduction"
-              type="text"
-              name="introduction"
-              value={formData.introduction ?? ""}
-              onChange={handleChange}
-              required
-              className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
-            />
           </div>
 
           {status === "idle" ? (
