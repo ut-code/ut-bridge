@@ -47,42 +47,41 @@ export default function Page() {
 
   return (
     <>
-      <div>
-        <h1>ブロックしているユーザー</h1>
+      <div className="max-w my-10 p-4">
+        <h1 className="mb-8 text-xl">お気に入りユーザー</h1>
+        <ul className="m-5 grid w-full grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2">
+          {users === null ? (
+            <p>Loading...</p>
+          ) : users.length === 0 ? (
+            <p>お気に入りユーザーはいません。</p>
+          ) : (
+            users.map((user) => (
+              <li key={user.id}>
+                <UserCard
+                  link={`/users?id=${user.id}`}
+                  user={user}
+                  on={{
+                    async favorite(id) {
+                      await client.users.markers.favorite[":targetId"].$put({
+                        param: {
+                          targetId: id,
+                        },
+                      });
+                    },
+                    async unfavorite(id) {
+                      await client.users.markers.favorite[":targetId"].$delete({
+                        param: {
+                          targetId: id,
+                        },
+                      });
+                    },
+                  }}
+                />
+              </li>
+            ))
+          )}
+        </ul>
       </div>
-
-      <ul>
-        {users === null ? (
-          <p>Loading...</p>
-        ) : users.length === 0 ? (
-          <p>ブロックしているユーザーはありません。</p>
-        ) : (
-          users.map((user) => (
-            <li key={user.id}>
-              <UserCard
-                link={`/users?id=${user.id}`}
-                user={user}
-                on={{
-                  async favorite(id) {
-                    await client.users.markers.favorite[":targetId"].$put({
-                      param: {
-                        targetId: id,
-                      },
-                    });
-                  },
-                  async unfavorite(id) {
-                    await client.users.markers.favorite[":targetId"].$delete({
-                      param: {
-                        targetId: id,
-                      },
-                    });
-                  },
-                }}
-              />
-            </li>
-          ))
-        )}
-      </ul>
     </>
   );
 }
