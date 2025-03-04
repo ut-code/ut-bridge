@@ -1,14 +1,16 @@
 "use client";
 import { formatUser } from "@/features/format";
+import { useUserContext } from "@/features/user/userProvider.tsx";
 import type { User } from "common/zod/schema";
 import Image from "next/image";
-import Link from "next/link";
+// import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { client } from "../../../client.ts";
 
 export default function Page() {
   const [user, setUser] = useState<User | null>(null);
+  const { me } = useUserContext();
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -41,7 +43,9 @@ export default function Page() {
 
     fetchUser();
   }, [router, id]);
+
   const [markSpinner, setMarkSpinner] = useState(false);
+  const [chatButtonState, setChatButtonState] = useState<"idle" | "creating" | "created">("idle");
 
   function MarkerButton(props: {
     if: boolean;
@@ -105,12 +109,40 @@ export default function Page() {
           <p className="my-4 text-2xl">{user.gender}</p>
           <p className="my-4 text-2xl">{user.isForeignStudent ? "留学生" : " "}</p>
           <div className="flex gap-10">
-            <Link
-              href={`/chat?userId=${user.id}`}
-              className="flex h-25 w-25 items-center justify-center rounded-full bg-blue-500 text-white"
+            {chatButtonState === "creating" && <span className="loading loading-spinner absolute" />}
+            <button
+              type="button"
+              disabled={chatButtonState !== "idle"}
+              onClick={async () => {
+                setChatButtonState("creating");
+                // find previous
+                const prevs = await (
+                  await client.chat.rooms.dmwith[":user"].$get({
+                    param: {
+                      user: user.id,
+                    },
+                  })
+                ).json();
+                console.log("previous chat rooms:", prevs);
+                const prev = prevs[0];
+                if (prev) {
+                  router.push(`/chat/${prev.id}`);
+                  return;
+                }
+                // create new if it doesn't exist
+                const res = await client.chat.rooms.$post({
+                  json: {
+                    members: [me.id, user.id],
+                  },
+                });
+                const room = await res.json();
+                setChatButtonState("created");
+                router.push(`/chat/${room.id}`);
+              }}
+              className="btn flex h-25 w-25 items-center justify-center rounded-full bg-blue-500 text-white"
             >
               チャット
-            </Link>
+            </button>
             <MarkerButton if={true} class={"h-25 w-25 rounded-full bg-yellow-400 text-white"} action="favorite">
               お気に入り
             </MarkerButton>

@@ -9,7 +9,6 @@ import { useEffect, useState } from "react";
 
 export default function Page() {
   const { me } = useUserContext();
-
   async function createNewRoom() {
     try {
       const res = await client.chat.rooms.$post({

@@ -16,6 +16,7 @@ export type Message = PrismaMessage & {
 };
 
 import { HTTPException } from "hono/http-exception";
+import { equal } from "hono/utils/buffer";
 import { getUserID } from "../auth/func.ts";
 const router = new Hono()
   // # general paths
@@ -169,6 +170,23 @@ const router = new Hono()
     return c.json(resp, 200);
   })
   // ## room data
+  .get("/rooms/dmwith/:user", zValidator("param", z.object({ user: z.string() })), async (c) => {
+    const meId = await getUserID(c);
+    const { user } = c.req.valid("param");
+    const rooms = await prisma.room.findMany({
+      where: {
+        members: {
+          every: {
+            OR: [{ userId: user }, { userId: meId }],
+          },
+        },
+      },
+      select: {
+        id: true,
+      },
+    });
+    return c.json(rooms);
+  })
   .get(
     "/rooms/:room",
     zValidator(
