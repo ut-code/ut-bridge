@@ -23,9 +23,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
+        with:
+          node_version: 22.13.1
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: 1.2.2
+      - run: node --version
       - run: bun install --frozen-lockfile
       - run: bun sync
         working-directory: web
