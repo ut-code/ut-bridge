@@ -80,8 +80,6 @@ export default function Page() {
     fetchMyData();
   }, [router, me]);
 
-  
-
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
