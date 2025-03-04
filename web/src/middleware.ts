@@ -8,3 +8,10 @@ export function middleware(request: NextRequest) {
     return NextResponse.rewrite(request.url, request);
   });
 }
+
+export const config = {
+  matcher: [
+    // Skip all internal paths (_next)
+    "/((?!_next).*)",
+  ],
+};

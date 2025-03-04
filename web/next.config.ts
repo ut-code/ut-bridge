@@ -4,10 +4,10 @@ import type { NextConfig } from "next";
 const ssgPlugin = paraglideWebpackPlugin({
   outdir: "./src/paraglide",
   project: "./project.inlang",
-  strategy: ["url"],
+  strategy: ["url", "cookie", "preferredLanguage", "baseLocale"],
   urlPatterns: [
     {
-      pattern: ":protocol://:domain(.*)::port?/:locale(ja|en|_next)?/:path(.*)?",
+      pattern: ":protocol://:domain(.*)::port?/:locale(ja|en)?/:path(.*)?",
       deLocalizedNamedGroups: {
         locale: "en",
       },
@@ -18,19 +18,22 @@ const ssgPlugin = paraglideWebpackPlugin({
     },
   ],
 });
-ssgPlugin;
+
 const ssrPlugin = paraglideWebpackPlugin({
   outdir: "./src/paraglide",
   project: "./project.inlang",
-  strategy: ["url"],
+  strategy: ["url", "cookie", "preferredLanguage", "baseLocale"],
 });
+
+ssgPlugin;
+ssrPlugin;
 
 const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
   webpack: (config) => {
-    config.plugins.push(ssrPlugin);
+    config.plugins.push(ssgPlugin);
     return config;
   },
   /* config options here */
