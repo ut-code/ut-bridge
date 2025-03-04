@@ -10,7 +10,6 @@ import { client } from "../../../client.ts";
 
 function useQuery() {
   const query = useSearchParams();
-  // const query = new URLSearchParams(location.href);
   const pageQuery = query.get("page");
   const page = Number.parseInt(pageQuery ?? "") || 1; // don't use `??`. it won't filter out NaN (and page won't be 0)
 

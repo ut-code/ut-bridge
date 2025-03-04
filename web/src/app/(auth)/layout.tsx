@@ -8,9 +8,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <AuthProvider>
       <UserProvider>
         <ChatNotificationProvider>
-          <div className="h-full">
+          <div className="flex h-full flex-col">
             <Header />
-            <div className="h-full overflow-y-auto bg-tGray pt-16">{children}</div>
+            <main className="flex-1 overflow-y-auto bg-tGra">{children}</main>
           </div>
         </ChatNotificationProvider>
       </UserProvider>
