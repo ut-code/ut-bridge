@@ -1,7 +1,9 @@
 "use client";
 import { client } from "@/client";
+import { formatCardUser } from "@/features/format";
 import { useUserContext } from "@/features/user/userProvider";
 import type { CreateUser } from "common/zod/schema";
+import type { CardUser } from "common/zod/schema";
 import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -13,6 +15,8 @@ interface UserFormContextType {
   campuses: { id: string; name: string }[];
   divisions: { id: string; name: string }[];
   languages: { id: string; name: string }[];
+  favoriteUsers: CardUser[];
+  refetchFavoriteUsers: () => void;
 }
 
 // Contextの作成
@@ -59,8 +63,9 @@ export const UserFormProvider = ({
   const [campuses, setCampuses] = useState<{ id: string; name: string }[]>([]);
   const [divisions, setDivisions] = useState<{ id: string; name: string }[]>([]);
   const [languages, setLanguages] = useState<{ id: string; name: string }[]>([]);
+  const [favoriteUsers, setFavoriteUsers] = useState<CardUser[]>([]);
 
-  // データを一括取得
+  // 一括データ取得（大学 & 言語）
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -121,6 +126,32 @@ export const UserFormProvider = ({
 
     fetchMyData();
   }, [me, router]);
+  useEffect(() => {
+    // お気に入りユーザーを取得
+    const fetchFavoriteUsers = async () => {
+      try {
+        if (!me) return;
+        const res = await client.community.$get({
+          query: {
+            myId: me.id,
+            marker: "favorite",
+          },
+        });
+
+        if (!res.ok) {
+          throw new Error(`お気に入りユーザーの取得失敗: ${await res.text()}`);
+        }
+
+        const data = await res.json();
+        setFavoriteUsers(data.users.map(formatCardUser));
+      } catch (error) {
+        console.error("お気に入りユーザーの取得に失敗しました", error);
+      }
+    };
+
+    fetchFavoriteUsers();
+  }, [me]);
+
   // 学部 & キャンパス データを取得
   useEffect(() => {
     if (!formData.universityId) return;
@@ -146,6 +177,28 @@ export const UserFormProvider = ({
 
     fetchCampusAndDivisions();
   }, [formData.universityId, router]);
+  // お気に入りユーザーを再取得する関数
+  const refetchFavoriteUsers = async () => {
+    try {
+      if (!me) return;
+      const res = await client.community.$get({
+        query: {
+          myId: me.id,
+          marker: "favorite",
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error(`お気に入りユーザーの取得失敗: ${await res.text()}`);
+      }
+
+      const data = await res.json();
+      setFavoriteUsers(data.users.map(formatCardUser));
+    } catch (error) {
+      console.error("お気に入りユーザーの取得に失敗しました", error);
+    }
+  };
+
   return (
     <UserFormContext.Provider
       value={{
@@ -155,6 +208,8 @@ export const UserFormProvider = ({
         campuses,
         divisions,
         languages,
+        favoriteUsers,
+        refetchFavoriteUsers,
       }}
     >
       {children}
