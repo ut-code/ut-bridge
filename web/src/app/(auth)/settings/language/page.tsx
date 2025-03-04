@@ -99,6 +99,18 @@ export default function Page() {
         };
       }
 
+      // 言語の選択（チェックボックス）
+      if (name === "fluentLanguageIds" || name === "learningLanguageIds") {
+        const updatedLanguages = checked
+          ? [...prev[name], value] // 追加
+          : prev[name].filter((id) => id !== value); // 削除
+
+        return {
+          ...prev,
+          [name]: updatedLanguages,
+        };
+      }
+
       // 通常の入力フォーム（チェックボックス含む）
       return {
         ...prev,
@@ -132,20 +144,26 @@ export default function Page() {
   };
 
   return (
-    <div className="mx-auto max-w-md p-4">
+    <div className="max-w my-20 p-4">
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-        <label>
+        <label className="relative my-4 block">
           外国人留学生ですか？
-          <input type="checkbox" name="isForeignStudent" checked={formData.isForeignStudent} onChange={handleChange} />
+          <input
+            type="checkbox"
+            name="isForeignStudent"
+            checked={formData.isForeignStudent}
+            onChange={handleChange}
+            className="checkbox checkbox-lg absolute right-[47%] bg-white"
+          />
         </label>
 
-        <label>
-          母国語:
+        <label className="my-4 flex items-center justify-between">
+          母国語
           <select
             name="motherLanguageId"
             value={formData.motherLanguageId}
             onChange={handleChange}
-            className="w-full border p-2"
+            className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
             disabled={!languages.length}
           >
             <option value="">母国語を選択してください</option>
@@ -156,45 +174,51 @@ export default function Page() {
             ))}
           </select>
         </label>
-        <label>
-          流暢に話せる言語（母国語を含む）:
-          <select
-            name="fluentLanguageIds"
-            value={formData.fluentLanguageIds}
-            onChange={handleChange}
-            className="w-full border p-2"
-            disabled={!languages.length}
-            multiple
-          >
-            <option value="">流暢に話せる言語を選択してください</option>
+        <div className="my-4 flex justify-between">
+          <p>流暢に話せる言語（母国語を含む）</p>
+          <div className="flex w-1/2 flex-wrap gap-2">
             {languages.map((language) => (
-              <option key={language.id} value={language.id}>
-                {language.name}
-              </option>
+              <label key={language.id} className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  name="fluentLanguageIds"
+                  value={language.id}
+                  checked={formData.fluentLanguageIds.includes(language.id)}
+                  onChange={handleChange}
+                  className="accent-blue-500"
+                />
+                <span>{language.name}</span>
+              </label>
             ))}
-          </select>
-        </label>
-        <label>
-          勉強している言語:
-          <select
-            name="learningLanguageIds"
-            value={formData.learningLanguageIds}
-            onChange={handleChange}
-            className="w-full border p-2"
-            disabled={!languages.length}
-            multiple
-          >
-            <option value="">勉強している言語を選択してください</option>
+          </div>
+        </div>
+        <div className="my-4 flex w-full justify-between">
+          <p className="w-1/2 text-left">勉強している言語</p>
+          <div className=" flex w-1/2 flex-wrap gap-2">
             {languages.map((language) => (
-              <option key={language.id} value={language.id}>
-                {language.name}
-              </option>
+              <label key={language.id} className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  name="learningLanguageIds"
+                  value={language.id}
+                  checked={formData.learningLanguageIds.includes(language.id)}
+                  onChange={handleChange}
+                  className="accent-blue-500"
+                />
+                <span>{language.name}</span>
+              </label>
             ))}
-          </select>
-        </label>
-        <button type="submit" className="rounded bg-blue-500 p-2 text-white" disabled={status === "loading"}>
-          {status === "loading" ? "登録中..." : "登録"}
-        </button>
+          </div>
+        </div>
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            className="mt-15 w-50 rounded bg-blue-500 p-2 text-white"
+            disabled={status === "loading"}
+          >
+            {status === "loading" ? "登録中..." : "登録"}
+          </button>
+        </div>
       </form>
     </div>
   );
