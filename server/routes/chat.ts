@@ -16,7 +16,6 @@ export type Message = PrismaMessage & {
 };
 
 import { HTTPException } from "hono/http-exception";
-import { equal } from "hono/utils/buffer";
 import { getUserID } from "../auth/func.ts";
 const router = new Hono()
   // # general paths
@@ -149,6 +148,7 @@ const router = new Hono()
           select: {
             user: {
               select: {
+                id: true,
                 name: true,
                 imageUrl: true,
               },

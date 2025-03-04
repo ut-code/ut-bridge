@@ -78,6 +78,7 @@ type RoomPreview = {
   }[];
   members: {
     user: {
+      id: string;
       imageUrl: string | null;
       name: string;
     };
@@ -85,7 +86,8 @@ type RoomPreview = {
 };
 
 function Room({ room }: { room: RoomPreview }) {
-  const firstMember = room.members[0]?.user ?? null;
+  const { me } = useUserContext();
+  const firstMember = room.members.filter((m) => m.user.id !== me.id)[0]?.user ?? null;
 
   return (
     <Link href={`/chat/${room.id}`} className="flex items-center space-x-4">
