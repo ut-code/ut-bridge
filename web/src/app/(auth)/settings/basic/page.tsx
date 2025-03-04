@@ -77,13 +77,25 @@ export default function Page() {
     fetchMyData();
   }, [router, me]);
 
-
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value, type, checked } = e.target as HTMLInputElement;
+    const { name, value, type, checked, multiple } = e.target as HTMLInputElement;
+    const { options } = e.target as HTMLSelectElement;
 
     setFormData((prev) => {
+      // 複数選択の処理（言語選択）
+      if (multiple) {
+        const selectedValues = Array.from(options)
+          .filter((option) => option.selected)
+          .map((option) => option.value);
+
+        return {
+          ...prev,
+          [name]: selectedValues,
+        };
+      }
+
       // 通常の入力フォーム（チェックボックス含む）
       return {
         ...prev,
