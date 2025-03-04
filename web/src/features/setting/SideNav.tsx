@@ -35,13 +35,22 @@ export default function SideNav() {
         >
           トピック
         </Link>
-        <Link href={"/settings/favorite"} className={`block ${pathname === "/settings/favorite" ? "font-bold underline" : ""}`}>
+        <Link
+          href={"/settings/favorite"}
+          className={`block ${pathname === "/settings/favorite" ? "font-bold underline" : ""}`}
+        >
           お気に入り
         </Link>
-        <Link href={"/settings/block"} className={`block ${pathname === "/settings/block" ? "font-bold underline" : ""}`}>
+        <Link
+          href={"/settings/block"}
+          className={`block ${pathname === "/settings/block" ? "font-bold underline" : ""}`}
+        >
           ブロック
         </Link>
-        <Link href={"/settings/other"} className={`block ${pathname === "/settings/other" ? "font-bold underline" : ""}`}>
+        <Link
+          href={"/settings/other"}
+          className={`block ${pathname === "/settings/other" ? "font-bold underline" : ""}`}
+        >
           その他
         </Link>
         <button type="button" className="btn btn-error m-5" onClick={logout}>
