@@ -114,8 +114,6 @@ export default function Page() {
           divisionId: "",
         };
       }
-
-      // 複数選択の処理（言語選択）
       if (multiple) {
         const selectedValues = Array.from(options)
           .filter((option) => option.selected)
@@ -124,6 +122,18 @@ export default function Page() {
         return {
           ...prev,
           [name]: selectedValues,
+        };
+      }
+
+      // 言語の選択（チェックボックス）
+      if (name === "fluentLanguageIds" || name === "learningLanguageIds") {
+        const updatedLanguages = checked
+          ? [...prev[name], value] // 追加
+          : prev[name].filter((id) => id !== value); // 削除
+
+        return {
+          ...prev,
+          [name]: updatedLanguages,
         };
       }
 
@@ -167,9 +177,10 @@ export default function Page() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <div className="my-10 px-15">
             <h2 className="font-bold text-xl">基本情報</h2>
-            <label className="flex items-center justify-between">
+            <label htmlFor="name" className="flex items-center justify-between">
               名前
               <input
+                id="name"
                 type="text"
                 name="name"
                 value={formData.name}
@@ -179,9 +190,10 @@ export default function Page() {
               />
             </label>
 
-            <label className="flex items-center justify-between">
+            <label htmlFor="gender" className="flex items-center justify-between">
               性別
               <select
+                id="gender"
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
@@ -302,69 +314,72 @@ export default function Page() {
                 ))}
               </select>
             </label>
-            <label className="flex items-center justify-between">
-              流暢に話せる言語（母国語を含む）
-              <select
-                name="fluentLanguageIds"
-                value={formData.fluentLanguageIds}
-                onChange={handleChange}
-                className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
-                disabled={!languages.length}
-                multiple
-              >
-                <option value="">流暢に話せる言語を選択してください</option>
+            <fieldset className="flex flex-col">
+              <legend>流暢に話せる言語（母国語を含む）</legend>
+              <div className="my-2 flex flex-wrap gap-2">
                 {languages.map((language) => (
-                  <option key={language.id} value={language.id}>
-                    {language.name}
-                  </option>
+                  <label key={language.id} className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      name="fluentLanguageIds"
+                      value={language.id}
+                      checked={formData.fluentLanguageIds.includes(language.id)}
+                      onChange={handleChange}
+                      className="accent-blue-500"
+                    />
+                    <span>{language.name}</span>
+                  </label>
                 ))}
-              </select>
-            </label>
-            <label className="flex items-center justify-between">
-              勉強している言語
-              <select
-                name="learningLanguageIds"
-                value={formData.learningLanguageIds}
-                onChange={handleChange}
-                className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
-                disabled={!languages.length}
-                multiple
-              >
-                <option value="">勉強している言語を選択してください</option>
+              </div>
+            </fieldset>
+
+            <fieldset className="flex flex-col">
+              <legend>勉強している言語</legend>
+              <div className="my-2 flex flex-wrap gap-2">
                 {languages.map((language) => (
-                  <option key={language.id} value={language.id}>
-                    {language.name}
-                  </option>
+                  <label key={language.id} className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      name="learningLanguageIds"
+                      value={language.id}
+                      checked={formData.learningLanguageIds.includes(language.id)}
+                      onChange={handleChange}
+                      className="accent-blue-500"
+                    />
+                    <span>{language.name}</span>
+                  </label>
                 ))}
-              </select>
-            </label>
+              </div>
+            </fieldset>
           </div>
 
           <div className="my-10 px-15">
             <h2 className="font-bold text-xl">その他</h2>
-            <label className="flex items-center justify-between">
+            <label htmlFor="hobby" className="flex items-center justify-between">
               趣味
-              <input
-                type="text"
-                name="hobby"
-                value={formData.hobby ?? ""}
-                onChange={handleChange}
-                required
-                className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
-              />
             </label>
+            <input
+              id="hobby"
+              type="text"
+              name="hobby"
+              value={formData.hobby ?? ""}
+              onChange={handleChange}
+              required
+              className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
+            />
 
-            <label className="flex items-center justify-between">
+            <label htmlFor="introduction" className="flex items-center justify-between">
               自己紹介
-              <input
-                type="text"
-                name="introduction"
-                value={formData.introduction ?? ""}
-                onChange={handleChange}
-                required
-                className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
-              />
             </label>
+            <input
+              id="introduction"
+              type="text"
+              name="introduction"
+              value={formData.introduction ?? ""}
+              onChange={handleChange}
+              required
+              className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
+            />
           </div>
 
           {status === "idle" ? (
