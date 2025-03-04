@@ -2,6 +2,8 @@
 
 import { client } from "@/client";
 import { auth } from "@/features/auth/config";
+// import { Upload } from "@/features/image/ImageUpload";
+// import { assert } from "@/lib";
 import type { CreateUser } from "common/zod/schema";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -169,6 +171,18 @@ export default function Page() {
       router.push("/login");
     }
   };
+  const [preview, setPreview] = useState<string | null>(null);
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   return (
     <>
@@ -204,7 +218,18 @@ export default function Page() {
                 <option value="other">その他</option>
               </select>
             </label>
-            {/* <label className="flex items-center justify-between">写真</label> */}
+            <div className="my-4 flex justify-between">
+              <span className="">写真</span>
+              <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" id="image-upload" />
+
+              <div className={`flex h-40 w-40 items-center justify-center rounded-lg ${preview ? "" : "bg-gray-300"}`}>
+                {preview ? <img src={preview} alt="プレビュー" className="rounded-lg object-cover" /> : null}
+              </div>
+
+              <label htmlFor="image-upload" className="h-10 cursor-pointer rounded bg-blue-500 px-4 py-2 text-white">
+                写真を登録
+              </label>
+            </div>
           </div>
 
           <div className="my-10 px-15">
