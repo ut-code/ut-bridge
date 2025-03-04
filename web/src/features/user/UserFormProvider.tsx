@@ -10,6 +10,8 @@ interface UserFormContextType {
   formData: CreateUser;
   setFormData: React.Dispatch<React.SetStateAction<CreateUser>>;
   universities: { id: string; name: string }[];
+  campuses: { id: string; name: string }[];
+  divisions: { id: string; name: string }[];
 }
 
 // Contextの作成
@@ -53,6 +55,8 @@ export const UserFormProvider = ({
   });
 
   const [universities, setUniversities] = useState<{ id: string; name: string }[]>([]);
+  const [campuses, setCampuses] = useState<{ id: string; name: string }[]>([]);
+  const [divisions, setDivisions] = useState<{ id: string; name: string }[]>([]);
 
   // 大学データを取得
   useEffect(() => {
@@ -75,21 +79,6 @@ export const UserFormProvider = ({
       try {
         if (!me) {
           throw new Error("User Not Found in Database!");
-        }
-
-        const [universityRes, languageRes] = await Promise.all([client.university.$get(), client.language.$get()]);
-
-        if (!universityRes.ok || !languageRes.ok) {
-          console.error("データ取得に失敗しました", {
-            university: universityRes.status,
-            language: languageRes.status,
-          });
-          throw new Error(
-            `データ取得に失敗しました:${{
-              university: await universityRes.text(),
-              language: await languageRes.text(),
-            }}`,
-          );
         }
 
         setFormData({
@@ -119,7 +108,35 @@ export const UserFormProvider = ({
     fetchMyData();
   }, [me, router]);
 
+  // 学部 & キャンパス データを取得
+  useEffect(() => {
+    if (!formData.universityId) return;
+
+    const fetchCampusAndDivisions = async () => {
+      try {
+        const [campusRes, divisionRes] = await Promise.all([
+          client.campus.$get({ query: { id: formData.universityId } }),
+          client.division.$get({ query: { id: formData.universityId } }),
+        ]);
+
+        if (!campusRes.ok || !divisionRes.ok) {
+          throw new Error("キャンパスまたは学部データの取得に失敗しました");
+        }
+
+        setCampuses(await campusRes.json());
+        setDivisions(await divisionRes.json());
+      } catch (error) {
+        console.error(error);
+        router.push("/login");
+      }
+    };
+
+    fetchCampusAndDivisions();
+  }, [formData.universityId, router]);
+
   return (
-    <UserFormContext.Provider value={{ formData, setFormData, universities }}>{children}</UserFormContext.Provider>
+    <UserFormContext.Provider value={{ formData, setFormData, universities, campuses, divisions }}>
+      {children}
+    </UserFormContext.Provider>
   );
 };

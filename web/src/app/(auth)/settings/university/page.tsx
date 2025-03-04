@@ -4,44 +4,13 @@ import { client } from "@/client";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { useUserFormContext } from "@/features/user/UserFormProvider";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function Page() {
   const { fbUser: user } = useAuthContext();
   const router = useRouter();
-  const { formData, setFormData, universities } = useUserFormContext();
-
-  const [campuses, setCampuses] = useState<{ id: string; name: string }[]>([]);
-  const [divisions, setDivisions] = useState<{ id: string; name: string }[]>([]);
+  const { formData, setFormData, universities, divisions, campuses } = useUserFormContext();
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  useEffect(() => {
-    if (!formData.universityId) return;
-
-    const fetchCampusAndDivisions = async () => {
-      try {
-        const [campusRes, divisionRes] = await Promise.all([
-          client.campus.$get({ query: { id: formData.universityId } }),
-          client.division.$get({ query: { id: formData.universityId } }),
-        ]);
-
-        if (!campusRes.ok || !divisionRes.ok) {
-          console.error("データ取得に失敗しました", {
-            campus: campusRes.status,
-            division: divisionRes.status,
-          });
-          throw new Error("データ取得に失敗しました");
-        }
-
-        setCampuses(await campusRes.json());
-        setDivisions(await divisionRes.json());
-      } catch (error) {
-        console.error("キャンパス・学部データの取得に失敗しました", error);
-        router.push("/login");
-      }
-    };
-
-    fetchCampusAndDivisions();
-  }, [formData.universityId, router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type, checked, multiple } = e.target as HTMLInputElement;
