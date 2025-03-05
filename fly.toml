@@ -9,7 +9,7 @@ primary_region = 'nrt'
 [build]
 
 [deploy]
-# release_command = 'bunx prisma migrate deploy'
+release_command = 'bunx prisma migrate deploy'
 
 [http_service]
 internal_port = 3000
