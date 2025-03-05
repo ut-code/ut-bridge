@@ -132,7 +132,7 @@ export default function Page() {
   return (
     <>
       <div className="flex flex-col-reverse items-center sm:flex-row sm:justify-between sm:px-30">
-        <div className="flex items-center">
+        <div className="mb-5 flex items-center sm:mb-0">
           <div className="filter">
             <input
               className="btn filter-reset"
@@ -188,11 +188,11 @@ export default function Page() {
           placeholder="検索"
           value={rawSearchQuery}
           onChange={(e) => setRawSearchQuery(e.target.value)}
-          className="mb-5 w-full rounded-full border border-gray-500 bg-white p-2 pl-5 sm:mb-0 sm:w-1/4"
+          className="mb-5 w-full rounded-full border border-gray-400 bg-white p-2 pl-5 sm:mb-0 sm:w-1/4"
         />
       </div>
 
-      <ul className="m-5 grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+      <ul className="grid grid-cols-1 sm:m-5 sm:grid-cols-1 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
         {users === null ? (
           <span>
             <span className="loading loading-bars loading-xl" />
