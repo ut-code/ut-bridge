@@ -12,9 +12,13 @@ export default function handler(req: NextRequest) {
   const locales = routing.locales;
   const defaultLocale = routing.defaultLocale || "ja"; // デフォルトロケール
 
+  // next-intl の middleware を適用
+  const response = middleware(req);
+  if (response) return response;
+
   // 既にロケールが含まれている場合はそのまま処理
   if (locales.some((locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`))) {
-    return middleware(req);
+    return NextResponse.next();
   }
 
   // `/` にアクセスした場合は `/ja` にリダイレクト
@@ -22,7 +26,7 @@ export default function handler(req: NextRequest) {
     return NextResponse.redirect(new URL(`/${defaultLocale}`, req.url));
   }
 
-  // それ以外のロケールなしのルートをデフォルトロケールへリダイレクト
+  // ロケールなしのルートをデフォルトロケールへリダイレクト
   return NextResponse.redirect(new URL(`/${defaultLocale}${pathname}`, req.url));
 }
 
