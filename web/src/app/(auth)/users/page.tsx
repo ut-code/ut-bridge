@@ -112,8 +112,19 @@ export default function Page() {
             >
               チャット
             </Link>
-            <MarkerButton if={true} class={"h-25 w-25 rounded-full bg-yellow-400 text-white"} action="favorite">
+            <MarkerButton
+              if={user.markedAs !== "favorite"}
+              class={"btn h-25 w-25 rounded-full text-yellow-500"}
+              action="favorite"
+            >
               お気に入り
+            </MarkerButton>
+            <MarkerButton
+              if={user.markedAs === "favorite"}
+              class={"btn h-25 w-25 rounded-full bg-yellow-400 text-white"}
+              action="unfavorite"
+            >
+              お気に入りを解除する
             </MarkerButton>
           </div>
         </div>
@@ -159,8 +170,11 @@ export default function Page() {
           </p>
         </div>
         <div>
-          <MarkerButton if={true} class={"rounded bg-red-500 px-6 py-3 text-white"} action={"block"}>
+          <MarkerButton if={user.markedAs !== "blocked"} class="btn btn-error" action="block">
             ブロックする
+          </MarkerButton>
+          <MarkerButton if={user.markedAs === "blocked"} class="btn btn-neutral btn-soft" action="unblock">
+            ブロックを解除する
           </MarkerButton>
         </div>
       </div>
