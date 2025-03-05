@@ -1,7 +1,6 @@
 "use client";
 
 import { client } from "@/client";
-import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { useUserFormContext } from "@/features/user/UserFormProvider";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
@@ -9,7 +8,6 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Page() {
-  const { fbUser: user } = useAuthContext();
   const router = useRouter();
   const { formData, setFormData, universities, divisions, campuses } = useUserFormContext();
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -39,9 +37,7 @@ export default function Page() {
     setStatus("loading");
 
     try {
-      if (!user) throw new Error("User not found in Firebase!");
-
-      const body = { ...formData, guid: user.uid };
+      const body = { ...formData };
       const res = await client.users.me.$patch({ json: body });
 
       if (!res.ok) throw new Error(`レスポンスステータス: ${res.status} - ${await res.text()}`);

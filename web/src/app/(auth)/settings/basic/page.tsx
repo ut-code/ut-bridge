@@ -1,7 +1,6 @@
 "use client";
 
 import { client } from "@/client";
-import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { upload } from "@/features/image/ImageUpload";
 import { useUserContext } from "@/features/user/userProvider";
 import Link from "next/link";
@@ -10,7 +9,6 @@ import { useEffect, useState } from "react";
 import { ChevronLeft } from "lucide-react";
 
 export default function Page() {
-  const { fbUser: user } = useAuthContext();
   const router = useRouter();
   const { me } = useUserContext();
   const [formData, setFormData] = useState<{
@@ -57,12 +55,6 @@ export default function Page() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) {
-      console.error("User is not found in Firebase!");
-      router.push("/login");
-      return;
-    }
-
     let imageUrl = formData.imageUrl;
     if (file) {
       imageUrl = await upload(file);
