@@ -22,7 +22,7 @@ import { useAuthContext } from "../auth/providers/AuthProvider.tsx";
 import { handlers } from "./state.ts";
 
 export function ChatNotificationProvider({ children }: { children: React.ReactNode }) {
-  const { fbUser } = useAuthContext();
+  const { idToken } = useAuthContext();
 
   useEffect(() => {
     const ctrl = new AbortController();
@@ -30,7 +30,6 @@ export function ChatNotificationProvider({ children }: { children: React.ReactNo
     let src: EventSource;
 
     (async () => {
-      const idToken = await fbUser.getIdToken();
       document.cookie = `ut-bridge-Authorization=${idToken}`;
 
       const signal = ctrl.signal;
@@ -74,7 +73,7 @@ export function ChatNotificationProvider({ children }: { children: React.ReactNo
       src?.close();
       ctrl.abort();
     };
-  }, [fbUser.getIdToken]);
+  }, [idToken]);
 
   return children;
 }
