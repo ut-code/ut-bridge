@@ -7,6 +7,7 @@ scripts/seed/node_modules
 web/dist
 web/.next
 web/next-env.d.ts
+web/.vercel
 
 # ?
 tsconfig.tsbuildinfo

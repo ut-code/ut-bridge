@@ -1,0 +1,8 @@
+/.git
+node_modules/*
+# fuck prisma
+!node_modules/.prisma
+.dockerignore
+.env
+Dockerfile
+fly.toml

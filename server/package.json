@@ -5,7 +5,9 @@
     "dev": "NODE_ENV=development bun run --env-file=../.env --hot index.ts",
     "build": "bun tsc",
     "prisma": "bun run --env-file=../.env bunx prisma",
-    "prepare": "prisma generate"
+    "prepare": "prisma generate",
+    "start": "bun run .",
+    "deploy": ""
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.758.0",
