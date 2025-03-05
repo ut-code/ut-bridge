@@ -29,51 +29,38 @@ const route = new Hono()
         introduction: body.introduction,
         motherLanguageId: body.motherLanguageId,
 
-        // 既存データを削除して新規追加 (fluentLanguages)
-        fluentLanguages: {
-          deleteMany: { userId }, // 既存データ削除
-          createMany: {
-            data: (body.fluentLanguageIds ?? []).map((langId) => ({
-              languageId: langId,
-            })),
-          },
-        },
+        // 既存データがある場合のみ削除して新規追加 (fluentLanguages)
+        ...(body.fluentLanguageIds?.length
+          ? {
+              fluentLanguages: {
+                deleteMany: { userId }, // 既存データ削除
+                createMany: {
+                  data: body.fluentLanguageIds.map((langId) => ({
+                    languageId: langId,
+                  })),
+                },
+              },
+            }
+          : {}),
 
-        // 既存データを削除して新規追加 (learningLanguages)
-        learningLanguages: {
-          deleteMany: { userId }, // 既存データ削除
-          createMany: {
-            data: (body.fluentLanguageIds ?? []).map((langId) => ({
-              languageId: langId,
-            })),
-          },
-        },
+        // 既存データがある場合のみ削除して新規追加 (learningLanguages)
+        ...(body.learningLanguageIds?.length
+          ? {
+              learningLanguages: {
+                deleteMany: { userId }, // 既存データ削除
+                createMany: {
+                  data: body.learningLanguageIds.map((langId) => ({
+                    languageId: langId,
+                  })),
+                },
+              },
+            }
+          : {}),
       },
     });
 
     return c.json(updatedUser);
   })
-  .patch(
-    "/",
-    zValidator(
-      "json",
-      z.object({
-        imageURL: z.string().optional(),
-      }),
-    ),
-    async (c) => {
-      const id = await getUserID(c);
-      const body = c.req.valid("json");
-
-      const newUser = await prisma.user.update({
-        where: { id },
-        data: {
-          imageUrl: body.imageURL,
-        },
-      });
-      return c.json(newUser);
-    },
-  )
 
   .delete("/", zValidator("param", z.object({ id: z.string() })), async (c) => {
     const userId = await getUserID(c);
