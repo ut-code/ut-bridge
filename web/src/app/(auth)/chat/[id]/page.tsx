@@ -55,7 +55,7 @@ function MessageInput({ room }: { room: string }) {
           }}
         />
         <button type="submit" className="btn btn-primary" disabled={submitting}>
-          Send
+          送信
         </button>
       </form>
     </div>
