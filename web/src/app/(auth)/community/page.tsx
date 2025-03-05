@@ -1,4 +1,5 @@
 "use client";
+import Loading from "@/components/Loading.tsx";
 import { formatCardUser } from "@/features/format";
 import UserCard from "@/features/user/UserCard.tsx";
 import { useUserContext } from "@/features/user/userProvider.tsx";
@@ -194,10 +195,7 @@ export default function Page() {
 
       <ul className="m-5 grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {users === null ? (
-          <span>
-            <span className="loading loading-bars loading-xl" />
-            Loading...
-          </span>
+          <Loading stage="community.users" />
         ) : (
           users.map((user) => (
             <li key={user.id}>

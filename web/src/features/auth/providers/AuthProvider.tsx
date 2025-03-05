@@ -1,4 +1,5 @@
 "use client";
+import Loading from "@/components/Loading.tsx";
 import type { User } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "../config.ts";
@@ -28,9 +29,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // ユーザーが取得されるまでローディングを表示
   // TODO: 無限にスタックすることはない？要検証
-  if (fbUser === undefined) {
-    return <p>loading...</p>;
-  }
+  if (fbUser === undefined) return <Loading stage="auth" />;
 
   return <AuthContext.Provider value={{ fbUser }}>{children}</AuthContext.Provider>;
 }
