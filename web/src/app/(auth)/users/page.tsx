@@ -181,38 +181,38 @@ export default function Page() {
         <div className="mt-24 mb-12">
           <h2 className="my-3 font-bold text-3xl underline decoration-2">大学情報</h2>
           <p className="my-3 text-lg">
-            <strong>所属キャンパス  </strong> {user.campus}
+            <strong>所属キャンパス </strong> {user.campus}
           </p>
           <p className="my-3 text-lg">
-            <strong>学部・大学院  </strong> {user.division}
+            <strong>学部・大学院 </strong> {user.division}
           </p>
           <p className="my-3 text-lg">
-            <strong>学年  </strong> {user.grade}
+            <strong>学年 </strong> {user.grade}
           </p>
         </div>
         <div className="my-12">
-          <h2 className="my-3 font-bold text-3xl underline decoration-2">言語  </h2>
+          <h2 className="my-3 font-bold text-3xl underline decoration-2">言語 </h2>
           <p className="my-3 text-lg">
-            <strong>母国語  </strong> {user.motherLanguage}
+            <strong>母国語 </strong> {user.motherLanguage}
           </p>
           <p className="my-3 text-lg">
-            <strong>流暢に話すことのできる言語  </strong> <br />
+            <strong>流暢に話すことのできる言語 </strong> <br />
             {user.fluentLanguages.join(", ")}
           </p>
           <p className="my-3 text-lg">
-            <strong>学びたい言語  </strong> <br />
+            <strong>学びたい言語 </strong> <br />
             {user.learningLanguages.join(", ")}
           </p>
         </div>
         <div className="my-12">
           <h2 className="my-3 font-bold text-3xl underline decoration-2">トピック</h2>
           <p className="my-3 text-lg">
-            <strong>趣味・好きなこと  </strong>
+            <strong>趣味・好きなこと </strong>
             <br />
             {user.hobby}
           </p>
           <p className="my-3 text-lg">
-            <strong>自己紹介  </strong>
+            <strong>自己紹介 </strong>
             <br />
             {user.introduction}
           </p>
