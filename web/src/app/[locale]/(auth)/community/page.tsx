@@ -131,8 +131,8 @@ export default function Page() {
 
   return (
     <>
-      <div className="flex items-center justify-between px-30">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col-reverse items-center sm:flex-row sm:justify-between sm:px-30">
+        <div className="mb-5 flex items-center sm:mb-0">
           <div className="filter">
             <input
               className="btn filter-reset"
@@ -150,10 +150,10 @@ export default function Page() {
             {["favorite" as const, "blocked" as const].map((select) => (
               <input
                 key={select}
-                className="btn bg-white"
+                className="btn mx-4 rounded-xl bg-white"
                 type="radio"
                 name="metaframeworks"
-                aria-label={select}
+                aria-label={select === "favorite" ? "お気に入り" : "ブロック"}
                 onInput={() => {
                   router.push(
                     createQueriedURL({
@@ -165,12 +165,12 @@ export default function Page() {
             ))}
           </div>
           <div>
-            <label htmlFor="exchange-language">言語交換学生に限定する</label>
             <input
               id="exchange-language"
               type="checkbox"
-              className="toggle"
+              className="btn rounded-xl bg-white"
               checked={query.exchange !== "all"}
+              aria-label="留学生に限定"
               onChange={(ev) => {
                 const filtered = ev.target.checked;
                 const amIForeignStudent = me.isForeignStudent;
@@ -188,11 +188,11 @@ export default function Page() {
           placeholder="検索"
           value={rawSearchQuery}
           onChange={(e) => setRawSearchQuery(e.target.value)}
-          className="w-1/4 rounded-full border bg-white p-2"
+          className="mb-5 w-full rounded-full border border-gray-400 bg-white p-2 pl-5 sm:mb-0 sm:w-1/4"
         />
       </div>
 
-      <ul className="m-5 grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+      <ul className="grid grid-cols-1 sm:m-5 sm:grid-cols-1 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
         {users === null ? (
           <span>
             <span className="loading loading-bars loading-xl" />

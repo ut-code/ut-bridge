@@ -195,14 +195,17 @@ export default function Page() {
 
   return (
     <>
-      <div className="mx-60 my-20 p-4">
-        <h1 className="mb-8 font-bold text-3xl">初期登録</h1>
+      <div className="my-5 p-4 sm:mx-60 sm:my-20">
+        <h1 className="mx-5 mb-8 font-bold text-3xl sm:mx-0">初期登録</h1>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           {page === "former" ? (
             <div>
-              <div className="my-10 px-15">
+              <div className="px-15 sm:my-10">
                 <h2 className="font-bold text-xl">基本情報</h2>
-                <label htmlFor="name" className="flex items-center justify-between">
+                <label
+                  htmlFor="name"
+                  className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between"
+                >
                   名前
                   <input
                     id="name"
@@ -211,26 +214,29 @@ export default function Page() {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
+                    className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                   />
                 </label>
 
-                <label htmlFor="gender" className="flex items-center justify-between">
+                <label
+                  htmlFor="gender"
+                  className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between"
+                >
                   性別
                   <select
                     id="gender"
                     name="gender"
                     value={formData.gender}
                     onChange={handleChange}
-                    className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
+                    className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                   >
                     <option value="male">男性</option>
                     <option value="female">女性</option>
                     <option value="other">その他</option>
                   </select>
                 </label>
-                <div className="my-4 flex justify-between">
-                  <span className="">写真</span>
+                <div className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
+                  <span className="mb-5 sm:mb-0">写真</span>
                   <input
                     type="file"
                     accept="image/*"
@@ -247,7 +253,7 @@ export default function Page() {
 
                   <label
                     htmlFor="image-upload"
-                    className="h-10 cursor-pointer rounded bg-blue-500 px-4 py-2 text-white"
+                    className="mt-5 flex h-10 cursor-pointer justify-center rounded bg-blue-400 px-4 py-2 text-white sm:mt-0 sm:flex-none"
                   >
                     写真を登録
                   </label>
@@ -256,13 +262,13 @@ export default function Page() {
 
               <div className="my-10 px-15">
                 <h2 className="font-bold text-xl">大学情報</h2>
-                <label className="flex items-center justify-between">
+                <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
                   大学
                   <select
                     name="universityId"
                     onChange={handleChange}
                     value={formData.universityId}
-                    className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
+                    className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                   >
                     <option value="">大学を選択してください</option>
                     {universities.map((univ) => (
@@ -273,13 +279,13 @@ export default function Page() {
                   </select>
                 </label>
 
-                <label className="flex items-center justify-between">
+                <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
                   学部
                   <select
                     name="divisionId"
                     value={formData.divisionId}
                     onChange={handleChange}
-                    className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
+                    className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                     disabled={!divisions.length}
                   >
                     <option value="">学部を選択してください</option>
@@ -291,13 +297,13 @@ export default function Page() {
                   </select>
                 </label>
 
-                <label className="flex items-center justify-between">
+                <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
                   キャンパス
                   <select
                     name="campusId"
                     value={formData.campusId}
                     onChange={handleChange}
-                    className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
+                    className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                     disabled={!campuses.length}
                   >
                     <option value="">キャンパスを選択してください</option>
@@ -309,13 +315,13 @@ export default function Page() {
                   </select>
                 </label>
 
-                <label className="flex items-center justify-between">
+                <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
                   学年
                   <select
                     name="grade"
                     value={formData.grade}
                     onChange={handleChange}
-                    className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
+                    className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                   >
                     <option value="">学年を選択してください</option>
                     <option value="B1">学部1年</option>
@@ -342,26 +348,26 @@ export default function Page() {
             </div>
           ) : (
             <div>
-              <div className="my-10 px-15">
+              <div className="px-15 sm:my-10">
                 <h2 className="font-bold text-xl">言語情報</h2>
-                <label className="relative my-4 block">
+                <label className="mt-5 flex flex-row justify-between sm:relative sm:my-4 sm:block sm:flex-none">
                   外国人留学生ですか？
                   <input
                     type="checkbox"
                     name="isForeignStudent"
                     checked={formData.isForeignStudent}
                     onChange={handleChange}
-                    className="checkbox checkbox-lg absolute right-[47%] bg-white"
+                    className="checkbox checkbox-lg bg-white sm:absolute sm:right-[47%]"
                   />
                 </label>
 
-                <label className="my-4 flex items-center justify-between">
+                <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
                   母国語
                   <select
                     name="motherLanguageId"
                     value={formData.motherLanguageId}
                     onChange={handleChange}
-                    className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
+                    className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                     disabled={!languages.length}
                   >
                     <option value="">母国語を選択してください</option>
@@ -372,7 +378,7 @@ export default function Page() {
                     ))}
                   </select>
                 </label>
-                <div className="my-4 flex justify-between">
+                <div className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
                   <p>流暢に話せる言語（母国語を含む）</p>
                   <div className="flex w-1/2 flex-wrap gap-2">
                     {languages.map((language) => (
@@ -391,8 +397,8 @@ export default function Page() {
                   </div>
                 </div>
 
-                <div className="my-4 flex w-full justify-between">
-                  <p className="w-1/2 text-left">勉強している言語</p>
+                <div className="mt-5 flex flex-col sm:mt-10 sm:flex-row sm:items-center sm:justify-between">
+                  <p>勉強している言語</p>
                   <div className=" flex w-1/2 flex-wrap gap-2">
                     {languages.map((language) => (
                       <label key={language.id} className="flex items-center space-x-2">
@@ -413,7 +419,10 @@ export default function Page() {
 
               <div className="my-10 px-15">
                 <h2 className="font-bold text-xl">トピック</h2>
-                <label htmlFor="hobby" className="my-4 flex justify-between">
+                <label
+                  htmlFor="hobby"
+                  className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between"
+                >
                   趣味
                   <textarea
                     id="hobby"
@@ -422,11 +431,14 @@ export default function Page() {
                     value={formData.hobby ?? ""}
                     onChange={handleChange}
                     required
-                    className=" w-1/2 rounded-xl border border-gray-500 bg-white p-2"
+                    className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                   />
                 </label>
 
-                <label htmlFor="introduction" className="my-4 flex items-center justify-between ">
+                <label
+                  htmlFor="introduction"
+                  className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between"
+                >
                   自己紹介
                   <textarea
                     id="introduction"
@@ -435,7 +447,7 @@ export default function Page() {
                     value={formData.introduction ?? ""}
                     onChange={handleChange}
                     required
-                    className="w-1/2 rounded-xl border border-gray-500 bg-white p-2"
+                    className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                   />
                 </label>
               </div>
