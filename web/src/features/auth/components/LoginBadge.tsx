@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import Link from "@/i18n/navigation";
 import { useGoogleLogout } from "../functions/logout.ts";
 import { useAuthContext } from "../providers/AuthProvider.tsx";
 

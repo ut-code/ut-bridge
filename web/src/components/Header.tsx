@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import Link from "@/i18n/navigation";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { AppIcon } from "./AppIcon.tsx";

@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 
 export default function Home() {
   return (
@@ -8,6 +8,9 @@ export default function Home() {
       Hello ut-bridge!
       <Link href={"/login"} className="cursor-pointer px-4 text-2xl text-primary">
         ログイン画面へ
+      </Link>
+      <Link href="/" locale="en">
+        Switch to English
       </Link>
     </>
   );
