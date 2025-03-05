@@ -8,7 +8,11 @@ export default function LanguageSwitcher() {
   const pathname = usePathname();
   const currentLocale = useLocale();
 
-  const changeLanguage = (locale) => {
+  interface ChangeLanguageProps {
+    locale: string;
+  }
+
+  const changeLanguage = (locale: ChangeLanguageProps["locale"]): void => {
     if (locale === currentLocale) return;
 
     // 言語プレフィックスを変更
