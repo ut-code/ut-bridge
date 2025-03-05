@@ -91,8 +91,8 @@ export default function Page() {
   if (!user) return <div>User not found</div>;
 
   return (
-    <div className="m-16 rounded-3xl bg-white p-16">
-      <div className="mb-10 flex items-center justify-around">
+    <div className="rounded-3xl p-16 sm:m-16 sm:bg-white">
+      <div className="mb-10 flex flex-col items-center sm:flex-row sm:justify-around">
         {user.imageUrl ? (
           <Image
             src={user.imageUrl}
@@ -105,9 +105,11 @@ export default function Page() {
           <div className="flex h-100 w-100 items-center justify-center rounded-full bg-gray-300">N/A</div>
         )}
         <div>
-          <p className="mb-4 font-bold text-5xl">{user.name}</p>
-          <p className="my-4 text-2xl">{user.gender}</p>
-          <p className="my-4 text-2xl">{user.isForeignStudent ? "留学生" : " "}</p>
+          <div className="flex flex-col items-center sm:items-start">
+            <p className="mb-4 font-bold text-5xl">{user.name}</p>
+            <p className="my-4 text-2xl">{user.gender}</p>
+            <p className="my-4 text-2xl">{user.isForeignStudent ? "留学生" : " "}</p>
+          </div>
           <div className="flex gap-10">
             <span className="absolute w-15">
               {chatButtonState === "creating" ? (
@@ -158,55 +160,69 @@ export default function Page() {
             >
               チャット
             </button>
-            <MarkerButton if={true} class={"h-25 w-25 rounded-full bg-yellow-400 text-white"} action="favorite">
+            <MarkerButton
+              if={user.markedAs !== "favorite"}
+              class={"btn h-25 w-25 rounded-full text-yellow-500"}
+              action="favorite"
+            >
               お気に入り
+            </MarkerButton>
+            <MarkerButton
+              if={user.markedAs === "favorite"}
+              class={"btn h-25 w-25 rounded-full bg-yellow-400 text-white"}
+              action="unfavorite"
+            >
+              お気に入りを解除する
             </MarkerButton>
           </div>
         </div>
       </div>
-      <div className="mx-24">
+      <div className="sm:mx-24">
         <div className="mt-24 mb-12">
           <h2 className="my-3 font-bold text-3xl underline decoration-2">大学情報</h2>
           <p className="my-3 text-lg">
-            <strong>所属キャンパス：</strong> {user.campus}
+            <strong>所属キャンパス  </strong> {user.campus}
           </p>
           <p className="my-3 text-lg">
-            <strong>学部・大学院：</strong> {user.division}
+            <strong>学部・大学院  </strong> {user.division}
           </p>
           <p className="my-3 text-lg">
-            <strong>学年：</strong> {user.grade}
+            <strong>学年  </strong> {user.grade}
           </p>
         </div>
         <div className="my-12">
-          <h2 className="my-3 font-bold text-3xl underline decoration-2">言語</h2>
+          <h2 className="my-3 font-bold text-3xl underline decoration-2">言語  </h2>
           <p className="my-3 text-lg">
-            <strong>母国語：</strong> {user.motherLanguage}
+            <strong>母国語  </strong> {user.motherLanguage}
           </p>
           <p className="my-3 text-lg">
-            <strong>流暢に話すことのできる言語：</strong> <br />
+            <strong>流暢に話すことのできる言語  </strong> <br />
             {user.fluentLanguages.join(", ")}
           </p>
           <p className="my-3 text-lg">
-            <strong>学びたい言語：</strong> <br />
+            <strong>学びたい言語  </strong> <br />
             {user.learningLanguages.join(", ")}
           </p>
         </div>
         <div className="my-12">
           <h2 className="my-3 font-bold text-3xl underline decoration-2">トピック</h2>
           <p className="my-3 text-lg">
-            <strong>趣味・好きなこと：</strong>
+            <strong>趣味・好きなこと  </strong>
             <br />
             {user.hobby}
           </p>
           <p className="my-3 text-lg">
-            <strong>自己紹介：</strong>
+            <strong>自己紹介  </strong>
             <br />
             {user.introduction}
           </p>
         </div>
         <div>
-          <MarkerButton if={true} class={"rounded bg-red-500 px-6 py-3 text-white"} action={"block"}>
+          <MarkerButton if={user.markedAs !== "blocked"} class="btn btn-error" action="block">
             ブロックする
+          </MarkerButton>
+          <MarkerButton if={user.markedAs === "blocked"} class="btn btn-neutral btn-soft" action="unblock">
+            ブロックを解除する
           </MarkerButton>
         </div>
       </div>
