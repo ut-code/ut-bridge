@@ -20,6 +20,7 @@ export default function Page() {
   const [languages, setLanguages] = useState<{ id: string; name: string }[]>([]);
   const [page, setPage] = useState<string>("former");
   const t = useTranslations();
+  const [loadingState, setLoadingState] = useState<"idle" | "loading">("idle");
 
   useEffect(() => {
     const fetchFirstData = async () => {
@@ -51,23 +52,18 @@ export default function Page() {
     if (!universityId) return;
 
     const fetchDataAfterSelectUniversity = async () => {
+      setLoadingState("loading"); // データ取得開始
       try {
         const [campusRes, divisionRes] = await Promise.all([
           client.campus.$get({ query: { id: universityId } }),
           client.division.$get({ query: { id: universityId } }),
         ]);
 
-        // どちらかが失敗した場合エラーハンドリング
         if (!campusRes.ok || !divisionRes.ok) {
-          console.error("データ取得に失敗しました", {
-            campus: campusRes.status,
-            division: divisionRes.status,
-          });
           throw new Error(
             `データ取得に失敗しました:
             campus: ${await campusRes.text()}
-            division: ${await divisionRes.text()}
-            `,
+            division: ${await divisionRes.text()}`,
           );
         }
 
@@ -76,8 +72,10 @@ export default function Page() {
         setCampuses(campuses);
         setDivisions(divisions);
       } catch (err) {
-        console.error("Failed to fetch campus or division Data ", err);
+        console.error("Failed to fetch campus or division Data", err);
         router.push("/login");
+      } finally {
+        setLoadingState("idle"); // データ取得完了
       }
     };
 
@@ -274,6 +272,7 @@ export default function Page() {
                     value={formData.universityId}
                     className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                   >
+                    <option disabled={true} className="select" />
                     {universities.map((univ) => (
                       <option key={univ.id} value={univ.id}>
                         {univ.name}
@@ -289,8 +288,11 @@ export default function Page() {
                     value={formData.divisionId}
                     onChange={handleChange}
                     className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
-                    disabled={!divisions.length}
+                    disabled={loadingState === "loading"}
                   >
+                    <option disabled={true} className="select">
+                      {loadingState === "loading" ? "Loading..." : ""}
+                    </option>
                     {divisions.map((division) => (
                       <option key={division.id} value={division.id}>
                         {division.name}
@@ -301,14 +303,16 @@ export default function Page() {
 
                 <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
                   {t("setting.university.campus")}
-
                   <select
                     name="campusId"
                     value={formData.campusId}
                     onChange={handleChange}
                     className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
-                    disabled={!campuses.length}
+                    disabled={loadingState === "loading"}
                   >
+                    <option disabled={true} className="select">
+                      {loadingState === "loading" ? "Loading..." : ""}
+                    </option>
                     {campuses.map((campus) => (
                       <option key={campus.id} value={campus.id}>
                         {campus.name}
