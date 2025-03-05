@@ -20,7 +20,8 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential node-gyp openssl pkg-config python-is-python3
 
 COPY . .
-RUN bun install --frozen-lockfile --production --filter="server"
+RUN bun install --frozen-lockfile --production --ignore-scripts --filter="server"
+RUN bun node_modules/@prisma/client/scripts/postinstall.js
 
 # Final stage for app image
 FROM base AS runner
