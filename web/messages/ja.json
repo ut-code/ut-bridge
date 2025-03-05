@@ -4,5 +4,46 @@
     "loginButton": "ECCSアカウントでログイン",
     "info": "末尾が@g.ecc.u-tokyo.ac.jpのECCSアカウントで認証してください",
     "privacy": "利用規約とプライバシーポリシーはこちら"
+  },
+  "community": {
+    "title": "コミュニティ",
+    "favorite": "お気に入り",
+    "filter": "留学生に限定",
+    "search": "検索",
+    "nextButton": "次へ",
+    "previousButton": "前へ"
+  },
+  "chat": { "title": "チャット" },
+  "setting": {
+    "title": "設定",
+    "register": "登録",
+    "basic": {
+      "title": "基本情報",
+      "name": "名前",
+      "sex": "性別",
+      "photo": "写真",
+      "photoUpload": "アップロード"
+    },
+    "university": {
+      "title": "大学情報",
+      "univ": "大学",
+      "campus": "キャンパス",
+      "divisions": "学部",
+      "grade": "学年"
+    },
+    "language": {
+      "title": "言語情報",
+      "isForeign": "留学生ですか？",
+      "motherLanguage": "母国語",
+      "fluentLanguage": "流暢に話せる言語",
+      "learningLanguage": "勉強している言語"
+    },
+    "topic": {
+      "title": "トピック",
+      "hobby": "趣味",
+      "introduction": "自己紹介"
+    },
+    "other": { "title": "その他" },
+    "logout": "ログアウト"
   }
 }

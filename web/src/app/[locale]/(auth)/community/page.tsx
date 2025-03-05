@@ -147,22 +147,20 @@ export default function Page() {
                 );
               }}
             />
-            {["favorite" as const, "blocked" as const].map((select) => (
-              <input
-                key={select}
-                className="btn mx-4 rounded-xl bg-white"
-                type="radio"
-                name="metaframeworks"
-                aria-label={select === "favorite" ? "お気に入り" : "ブロック"}
-                onInput={() => {
-                  router.push(
-                    createQueriedURL({
-                      marker: select,
-                    }),
-                  );
-                }}
-              />
-            ))}
+
+            <input
+              className="btn mx-4 rounded-xl bg-white"
+              type="radio"
+              name="favorite"
+              aria-label="お気に入り"
+              onInput={() => {
+                router.push(
+                  createQueriedURL({
+                    marker: "favorite",
+                  }),
+                );
+              }}
+            />
           </div>
           <div>
             <input

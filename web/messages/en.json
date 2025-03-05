@@ -1,8 +1,49 @@
 {
   "Login": {
-    "title": "Welcome Back!",
-    "loginButton": "Login with ECCS account",
-    "info": "Please authenticate using an ECCS account ending with @g.ecc.u-tokyo.ac.jp.",
-    "privacy": "Terms of Service and Privacy Policy can be found here."
+    "title": "Welcome!",
+    "loginButton": "Login with ECCS Account",
+    "info": "Please authenticate using your ECCS account ending with @g.ecc.u-tokyo.ac.jp",
+    "privacy": "Terms of Use and Privacy Policy here"
+  },
+  "community": {
+    "title": "Community",
+    "favorite": "Favorites",
+    "filter": "Limit to International Students",
+    "search": "Search",
+    "nextButton": "Next",
+    "previousButton": "Previous"
+  },
+  "chat": { "title": "Chat" },
+  "setting": {
+    "title": "Settings",
+    "register": "Register",
+    "basic": {
+      "title": "Basic Information",
+      "name": "Name",
+      "sex": "Gender",
+      "photo": "Photo",
+      "photoUpload": "Upload"
+    },
+    "university": {
+      "title": "University Information",
+      "univ": "University",
+      "campus": "Campus",
+      "divisions": "Faculty",
+      "grade": "Grade"
+    },
+    "language": {
+      "title": "Language Information",
+      "isForeign": "Are you an international student?",
+      "motherLanguage": "Mother Language",
+      "fluentLanguage": "Fluent Languages",
+      "learningLanguage": "Languages Being Learned"
+    },
+    "topic": {
+      "title": "Topics",
+      "hobby": "Hobbies",
+      "introduction": "Self-Introduction"
+    },
+    "other": { "title": "Other" },
+    "logout": "Logout"
   }
 }
