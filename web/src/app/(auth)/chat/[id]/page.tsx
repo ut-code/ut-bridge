@@ -13,45 +13,52 @@ export default function Page() {
   assert(typeof roomId === "string");
 
   return (
-    <>
-      <Load room={roomId} />
-      <MessageInput room={roomId} />
-    </>
+    <div className="flex h-full">
+      <div className="m-5 flex-1">
+        <div className="flex h-full flex-col">
+          <Load room={roomId} />
+          <MessageInput room={roomId} />
+        </div>
+      </div>
+    </div>
   );
 }
 function MessageInput({ room }: { room: string }) {
   const [input, setInput] = useState<string>("");
   const [submitting, setSubmitting] = useState<boolean>(false);
   return (
-    <form
-      onSubmit={async (ev) => {
-        ev.preventDefault();
-        if (submitting) return;
-        setSubmitting(true);
-        setInput("");
-        await client.chat.rooms[":room"].messages.$post({
-          param: {
-            room: room,
-          },
-          json: {
-            content: input,
-            isPhoto: false,
-          },
-        });
-        setSubmitting(false);
-      }}
-    >
-      <input
-        className="input input-bordered"
-        value={input}
-        onChange={(ev) => {
-          setInput(ev.target.value);
+    <div className="flex flex-row justify-center">
+      <form
+        className="inline"
+        onSubmit={async (ev) => {
+          ev.preventDefault();
+          if (submitting) return;
+          setSubmitting(true);
+          setInput("");
+          await client.chat.rooms[":room"].messages.$post({
+            param: {
+              room: room,
+            },
+            json: {
+              content: input,
+              isPhoto: false,
+            },
+          });
+          setSubmitting(false);
         }}
-      />
-      <button type="submit" className="btn btn-primary" disabled={submitting}>
-        Send
-      </button>
-    </form>
+      >
+        <input
+          className="input input-bordered "
+          value={input}
+          onChange={(ev) => {
+            setInput(ev.target.value);
+          }}
+        />
+        <button type="submit" className="btn btn-primary" disabled={submitting}>
+          送信
+        </button>
+      </form>
+    </div>
   );
 }
 function Load({ room }: { room: string }) {
@@ -65,7 +72,7 @@ function Load({ room }: { room: string }) {
     if ("error" in json) throw new Error(json.error);
     return json;
   });
-  if (m.loading) return <span className="loading loading-xl" />;
+  if (m.loading) return <span className="loading loading-xl flex-1" />;
   if (m.error) {
     console.error(m.error);
     return <span className="text-error">something went wrong</span>;
@@ -133,7 +140,7 @@ function MessageList({
   const { me } = useUserContext();
 
   return (
-    <ul>
+    <ul className="grow ">
       {messages.map((m) => (
         // TODO: handle pictures
         <li key={m.id}>
