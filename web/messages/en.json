@@ -5,6 +5,9 @@
     "info": "Please authenticate using your ECCS account ending with @g.ecc.u-tokyo.ac.jp",
     "privacy": "Terms of Use and Privacy Policy here"
   },
+  "registration": {
+    "title": "Registration"
+  },
   "community": {
     "title": "Community",
     "favorite": "Favorites",
@@ -18,6 +21,8 @@
     "title": "Settings",
     "register": "Register",
     "isRegister": "Registering...",
+    "success": "Success!",
+    "failed": "Failed...",
     "basic": {
       "title": "Basic",
       "name": "Name",

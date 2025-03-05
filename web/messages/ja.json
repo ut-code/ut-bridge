@@ -5,6 +5,9 @@
     "info": "末尾が@g.ecc.u-tokyo.ac.jpのECCSアカウントで認証してください",
     "privacy": "利用規約とプライバシーポリシーはこちら"
   },
+  "registration": {
+    "title": "初期登録"
+  },
   "community": {
     "title": "コミュニティ",
     "favorite": "お気に入り",
@@ -18,6 +21,8 @@
     "title": "設定",
     "register": "登録",
     "isRegister": "登録中...",
+    "success": "成功しました",
+    "failed": "失敗しました...",
     "basic": {
       "title": "基本情報",
       "name": "名前",

@@ -6,6 +6,7 @@ import { upload } from "@/features/image/ImageUpload";
 // import { Upload } from "@/features/image/ImageUpload";
 // import { assert } from "@/lib";
 import type { CreateUser } from "common/zod/schema";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -18,6 +19,7 @@ export default function Page() {
   const [universityId, setUniversityId] = useState<string>("");
   const [languages, setLanguages] = useState<{ id: string; name: string }[]>([]);
   const [page, setPage] = useState<string>("former");
+  const t = useTranslations();
 
   useEffect(() => {
     const fetchFirstData = async () => {
@@ -196,17 +198,18 @@ export default function Page() {
   return (
     <>
       <div className="my-5 p-4 sm:mx-60 sm:my-20">
-        <h1 className="mx-5 mb-8 font-bold text-3xl sm:mx-0">初期登録</h1>
+        <h1 className="mx-5 mb-8 font-bold text-3xl sm:mx-0"> {t("registration.title")}</h1>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           {page === "former" ? (
             <div>
               <div className="px-15 sm:my-10">
-                <h2 className="font-bold text-xl">基本情報</h2>
+                <h2 className="font-bold text-xl"> {t("setting.basic.title")}</h2>
                 <label
                   htmlFor="name"
                   className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between"
                 >
-                  名前
+                  {t("setting.basic.name")}
+
                   <input
                     id="name"
                     type="text"
@@ -222,7 +225,8 @@ export default function Page() {
                   htmlFor="gender"
                   className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between"
                 >
-                  性別
+                  {t("setting.basic.sex")}
+
                   <select
                     id="gender"
                     name="gender"
@@ -230,13 +234,13 @@ export default function Page() {
                     onChange={handleChange}
                     className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                   >
-                    <option value="male">男性</option>
-                    <option value="female">女性</option>
-                    <option value="other">その他</option>
+                    <option value="male"> {t("setting.basic.male")}</option>
+                    <option value="female"> {t("setting.basic.female")}</option>
+                    <option value="other"> {t("setting.basic.other")}</option>
                   </select>
                 </label>
                 <div className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
-                  <span className="mb-5 sm:mb-0">写真</span>
+                  <span className="mb-5 sm:mb-0">{t("setting.basic.photo")}</span>
                   <input
                     type="file"
                     accept="image/*"
@@ -255,22 +259,21 @@ export default function Page() {
                     htmlFor="image-upload"
                     className="mt-5 flex h-10 cursor-pointer justify-center rounded bg-blue-400 px-4 py-2 text-white sm:mt-0 sm:flex-none"
                   >
-                    写真を登録
+                    {t("setting.basic.photoUpload")}
                   </label>
                 </div>
               </div>
 
               <div className="my-10 px-15">
-                <h2 className="font-bold text-xl">大学情報</h2>
+                <h2 className="font-bold text-xl">{t("setting.university.title")}</h2>
                 <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
-                  大学
+                  {t("setting.university.univ")}
                   <select
                     name="universityId"
                     onChange={handleChange}
                     value={formData.universityId}
                     className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                   >
-                    <option value="">大学を選択してください</option>
                     {universities.map((univ) => (
                       <option key={univ.id} value={univ.id}>
                         {univ.name}
@@ -280,7 +283,7 @@ export default function Page() {
                 </label>
 
                 <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
-                  学部
+                  {t("setting.university.divisions")}
                   <select
                     name="divisionId"
                     value={formData.divisionId}
@@ -288,7 +291,6 @@ export default function Page() {
                     className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                     disabled={!divisions.length}
                   >
-                    <option value="">学部を選択してください</option>
                     {divisions.map((division) => (
                       <option key={division.id} value={division.id}>
                         {division.name}
@@ -298,7 +300,8 @@ export default function Page() {
                 </label>
 
                 <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
-                  キャンパス
+                  {t("setting.university.campus")}
+
                   <select
                     name="campusId"
                     value={formData.campusId}
@@ -306,7 +309,6 @@ export default function Page() {
                     className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                     disabled={!campuses.length}
                   >
-                    <option value="">キャンパスを選択してください</option>
                     {campuses.map((campus) => (
                       <option key={campus.id} value={campus.id}>
                         {campus.name}
@@ -316,23 +318,23 @@ export default function Page() {
                 </label>
 
                 <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
-                  学年
+                  {t("setting.university.grade")}
+
                   <select
                     name="grade"
                     value={formData.grade}
                     onChange={handleChange}
                     className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                   >
-                    <option value="">学年を選択してください</option>
-                    <option value="B1">学部1年</option>
-                    <option value="B2">学部2年</option>
-                    <option value="B3">学部3年</option>
-                    <option value="B4">学部4年</option>
-                    <option value="M1">修士1年</option>
-                    <option value="M2">修士2年</option>
-                    <option value="D1">博士1年</option>
-                    <option value="D2">博士2年</option>
-                    <option value="D3">博士3年</option>
+                    <option value="B1"> {t("setting.university.gradeOptions.B1")}</option>
+                    <option value="B2"> {t("setting.university.gradeOptions.B2")}</option>
+                    <option value="B3"> {t("setting.university.gradeOptions.B3")}</option>
+                    <option value="B4"> {t("setting.university.gradeOptions.B4")}</option>
+                    <option value="M1"> {t("setting.university.gradeOptions.M1")}</option>
+                    <option value="M2"> {t("setting.university.gradeOptions.M2")}</option>
+                    <option value="D1"> {t("setting.university.gradeOptions.D1")}</option>
+                    <option value="D2"> {t("setting.university.gradeOptions.D2")}</option>
+                    <option value="D3"> {t("setting.university.gradeOptions.D3")}</option>
                   </select>
                 </label>
               </div>
@@ -342,16 +344,17 @@ export default function Page() {
                   onClick={() => setPage("latter")}
                   className="btn borfer h-10 w-25 rounded-lg border-tBlue p-2 text-tBlue"
                 >
-                  次へ
+                  {t("community.nextButton")}
                 </button>
               </div>
             </div>
           ) : (
             <div>
               <div className="px-15 sm:my-10">
-                <h2 className="font-bold text-xl">言語情報</h2>
+                <h2 className="font-bold text-xl"> {t("setting.language.title")}</h2>
                 <label className="mt-5 flex flex-row justify-between sm:relative sm:my-4 sm:block sm:flex-none">
-                  外国人留学生ですか？
+                  {t("setting.language.isForeign")}
+
                   <input
                     type="checkbox"
                     name="isForeignStudent"
@@ -362,7 +365,7 @@ export default function Page() {
                 </label>
 
                 <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
-                  母国語
+                  {t("setting.language.motherLanguage")}
                   <select
                     name="motherLanguageId"
                     value={formData.motherLanguageId}
@@ -370,7 +373,6 @@ export default function Page() {
                     className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                     disabled={!languages.length}
                   >
-                    <option value="">母国語を選択してください</option>
                     {languages.map((language) => (
                       <option key={language.id} value={language.id}>
                         {language.name}
@@ -379,7 +381,7 @@ export default function Page() {
                   </select>
                 </label>
                 <div className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
-                  <p>流暢に話せる言語（母国語を含む）</p>
+                  <p> {t("setting.language.fluentLanguage")}</p>
                   <div className="flex w-1/2 flex-wrap gap-2">
                     {languages.map((language) => (
                       <label key={language.id} className="flex items-center space-x-2">
@@ -398,7 +400,7 @@ export default function Page() {
                 </div>
 
                 <div className="mt-5 flex flex-col sm:mt-10 sm:flex-row sm:items-center sm:justify-between">
-                  <p>勉強している言語</p>
+                  <p> {t("setting.language.learningLanguage")}</p>
                   <div className=" flex w-1/2 flex-wrap gap-2">
                     {languages.map((language) => (
                       <label key={language.id} className="flex items-center space-x-2">
@@ -418,12 +420,13 @@ export default function Page() {
               </div>
 
               <div className="my-10 px-15">
-                <h2 className="font-bold text-xl">トピック</h2>
+                <h2 className="font-bold text-xl">{t("setting.topic.title")}</h2>
                 <label
                   htmlFor="hobby"
                   className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between"
                 >
-                  趣味
+                  {t("setting.topic.hobby")}
+
                   <textarea
                     id="hobby"
                     name="hobby"
@@ -439,7 +442,7 @@ export default function Page() {
                   htmlFor="introduction"
                   className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between"
                 >
-                  自己紹介
+                  {t("setting.topic.introduction")}
                   <textarea
                     id="introduction"
                     name="introduction"
@@ -457,20 +460,20 @@ export default function Page() {
                   onClick={() => setPage("former")}
                   className="btn borfer h-10 w-25 rounded-lg border-tBlue p-2 text-tBlue"
                 >
-                  前へ
+                  {t("community.previousButton")}
                 </button>
                 {status === "idle" ? (
                   <button type="submit" className="btn h-10 w-25 rounded-lg bg-tBlue p-2 text-white">
-                    登録
+                    {t("setting.register")}
                   </button>
                 ) : status === "loading" ? (
                   <button type="submit" className="btn btn-disabled h-10 rounded p-2 text-white" disabled>
-                    登録中...
+                    {t("setting.isRegister")}
                   </button>
                 ) : status === "success" ? (
-                  <span className="btn btn-accent h-10 rounded p-2 text-white">登録成功</span>
+                  <span className="btn btn-accent h-10 rounded p-2 text-white">{t("setting.success")}</span>
                 ) : status === "error" ? (
-                  <span className="btn btn-error h-10 rounded p-2 text-white">失敗しました</span>
+                  <span className="btn btn-error h-10 rounded p-2 text-white">{t("setting.failed")}</span>
                 ) : (
                   <></>
                 )}
