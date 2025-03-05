@@ -3,7 +3,6 @@ import { MessageSquareText, Settings, Users } from "lucide-react";
 import Link from "next/link";
 
 export default function Footer() {
-
   return (
     <footer className="flex h-16 w-full items-center justify-around bg-tBlue sm:hidden">
       <Link href={"/community"}>
