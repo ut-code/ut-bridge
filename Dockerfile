@@ -15,13 +15,8 @@ ENV NODE_ENV="production"
 FROM base AS build
 WORKDIR /builder
 
-# Install packages needed to build node modules
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential node-gyp openssl pkg-config python-is-python3
-
 COPY . .
 RUN bun install --frozen-lockfile --production --ignore-scripts --filter="server"
-RUN bun node_modules/@prisma/client/scripts/postinstall.js
 RUN bun prisma generate
 
 # Final stage for app image
