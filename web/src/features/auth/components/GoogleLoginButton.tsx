@@ -5,7 +5,7 @@ export default function GoogleLoginButton() {
   const { signInWithGoogle } = useGoogleSignIn();
 
   return (
-    <button type="button" className="btn border-[#e5e5e5] bg-white text-black" onClick={signInWithGoogle}>
+    <button type="button" className="btn border-[#e5e5e5] bg-white text-gray-600" onClick={signInWithGoogle}>
       <svg aria-label="Google logo" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
         <title>Login with Google</title>
         <g>
@@ -16,7 +16,7 @@ export default function GoogleLoginButton() {
           <path fill="#ea4335" d="m153 219c22-69 116-109 179-50l55-54c-78-75-230-72-297 55" />
         </g>
       </svg>
-      Login with Google
+      ECCSアカウントでログイン
     </button>
   );
 }
