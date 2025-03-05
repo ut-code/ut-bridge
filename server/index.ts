@@ -29,7 +29,8 @@ const app = new Hono()
   .use(cors("CORS_ALLOW_ORIGINS"))
   // TODO(PERF):: delete this in production
   .use(async (c, next) => {
-    await Bun.sleep(Number.parseInt(env(c, "ARTIFICIAL_NETWORK_LATENCY")));
+    const latency = Number.parseInt(env(c, "ARTIFICIAL_NETWORK_LATENCY", { fallback: "0" }));
+    await Bun.sleep(latency);
     await next();
   })
   .onError((err) => {
