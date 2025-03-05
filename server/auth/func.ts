@@ -24,7 +24,7 @@ export async function getGUID(c: Context) {
       message: "cookie ut-bridge-Authorization not found",
     });
 
-  return getGUIDFromIDToken(idToken);
+  return await getGUIDFromIDToken(idToken);
 }
 
 export async function getUserID(c: Context) {

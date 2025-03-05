@@ -1,6 +1,5 @@
-// import { setupDevPlatform } from "@cloudflare/next-on-pages/next-dev";
-
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
   eslint: {
@@ -11,9 +10,6 @@ const nextConfig: NextConfig = {
   },
   /* config options here */
 };
+const withNextIntl = createNextIntlPlugin();
 
-// if (process.env.NODE_ENV === "development") {
-// await setupDevPlatform();
-// }
-
-export default nextConfig;
+export default withNextIntl(nextConfig);

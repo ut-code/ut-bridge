@@ -1,6 +1,6 @@
+import { Link } from "@/i18n/navigation.ts";
 import type { CardUser } from "common/zod/schema";
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
 
 type UserCardEvent = {
@@ -23,10 +23,11 @@ export default function UserCard({
 
   return (
     <div
-      className={`relative flex h-62 w-100 items-center rounded-2xl bg-white ${
+      className={`relative flex h-36 w-full items-center rounded-2xl sm:h-62 sm:bg-white ${
         user.marker === "blocked" && "bg-gray-300"
       }`}
     >
+      <div className="absolute top-0 left-0 h-[1px] w-full bg-gray-300 sm:hidden" />
       {/* お気に入りボタン（右上に配置） */}
       <div className="absolute top-2 right-2 z-10">
         {favoriteBtnLoading ? (
@@ -74,7 +75,7 @@ export default function UserCard({
         )}
       </div>
 
-      <Link href={link} className="h-full w-full p-4">
+      <Link href={link} className="h-full w-full sm:p-4">
         <div className="flex h-full flex-row items-center">
           <div className="flex w-1/3 items-center justify-center">
             {user.imageUrl ? (

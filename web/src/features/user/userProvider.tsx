@@ -1,5 +1,6 @@
 "use client";
 import { client } from "@/client";
+import Loading from "@/components/Loading.tsx";
 import { ensure } from "@/lib.ts";
 import type { FullUser } from "common/zod/schema";
 import { useRouter } from "next/navigation";
@@ -15,19 +16,14 @@ export function useUserContext(): { me: FullUser } {
 
 export function UserProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
-  const { fbUser } = useAuthContext();
+  const { guid } = useAuthContext();
   const [myData, setMyData] = useState<FullUser | null>(null);
 
   useEffect(() => {
-    if (!fbUser) {
-      setMyData(null);
-      router.push("/login");
-      return;
-    }
     const fetchUserData = async () => {
       try {
         const res = await client.users.$get({
-          query: { guid: fbUser.uid },
+          query: { guid },
         });
         ensure(res.ok, "User is not found in Database!");
         const data = await res.json();
@@ -41,8 +37,8 @@ export function UserProvider({ children }: { children: ReactNode }) {
     };
 
     fetchUserData();
-  }, [fbUser, router]);
+  }, [router, guid]);
 
-  if (!myData) return <span className="loading loading-xl" />;
+  if (!myData) return <Loading stage="my info" />;
   return <UserContext.Provider value={{ me: myData }}>{children}</UserContext.Provider>;
 }

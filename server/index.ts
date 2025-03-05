@@ -33,17 +33,19 @@ const app = new Hono()
     await Bun.sleep(latency);
     await next();
   })
-  .onError((err) => {
+  .onError((err, c) => {
     console.log(err);
     if (err instanceof PrismaClientKnownRequestError) {
       if (err.code === "P2003") {
         console.log(err);
-        throw new HTTPException(409, {
-          message: "database constraint violated",
-        });
+        return c.json({ error: "database constraint violated" }, 409);
       }
     }
-    throw err;
+    if (err instanceof HTTPException) {
+      return c.json({ error: err.message }, err.status);
+    }
+    console.error(err);
+    return c.json({ error: "unknown error occured" }, 500);
   })
 
   .get("/", (c) => c.text("Hello from Hono 🔥"))

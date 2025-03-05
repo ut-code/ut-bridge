@@ -45,7 +45,6 @@ export function Upload({ onUpdate }: { onUpdate: (url: string) => void }) {
 export async function upload(file: File): Promise<string> {
   const res = await client.image.put.$get();
   const { url: putURL, fileName: key } = await res.json();
-  console.log(putURL, "🤩🤩🤩🤩🤩🤩");
 
   const uploadResponse = await fetch(putURL, {
     method: "PUT",

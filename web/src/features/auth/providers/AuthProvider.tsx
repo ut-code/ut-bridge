@@ -1,9 +1,11 @@
 "use client";
-import type { User } from "firebase/auth";
+import Loading from "@/components/Loading.tsx";
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "../config.ts";
 
-const AuthContext = createContext<{ fbUser: User } | undefined>(undefined);
+const AuthContext = createContext<{ idToken: string; guid: string; displayName: string | undefined } | undefined>(
+  undefined,
+);
 
 export function useAuthContext() {
   const ctx = useContext(AuthContext);
@@ -12,12 +14,32 @@ export function useAuthContext() {
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [fbUser, setfbUser] = useState<User | undefined>(undefined);
+  const [idToken, setIDToken] = useState<string | undefined>(undefined);
+  const [guid, setGUID] = useState<string | undefined>(undefined);
+  const [displayName, setDisplayName] = useState<string | undefined>(undefined);
 
   useEffect(() => {
+    if (idToken) {
+      document.cookie = `ut-bridge-Authorization=${idToken};`;
+    }
+  }, [idToken]);
+  useEffect(() => {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      setDisplayName(currentUser.displayName ?? undefined);
+      setGUID(currentUser.uid);
+      currentUser.getIdToken(true).then((id) => {
+        setIDToken(id);
+      });
+    }
+
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        setfbUser(user);
+        setGUID(user.uid);
+        setDisplayName(user.displayName ?? undefined);
+        user.getIdToken().then((idToken) => {
+          setIDToken(idToken);
+        });
       }
     });
 
@@ -28,9 +50,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // ユーザーが取得されるまでローディングを表示
   // TODO: 無限にスタックすることはない？要検証
-  if (fbUser === undefined) {
-    return <p>loading...</p>;
-  }
+  if (guid === undefined) return <Loading stage="guid" />;
+  if (idToken === undefined) return <Loading stage="idToken" />;
 
-  return <AuthContext.Provider value={{ fbUser }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ idToken, guid, displayName }}>{children}</AuthContext.Provider>;
 }
