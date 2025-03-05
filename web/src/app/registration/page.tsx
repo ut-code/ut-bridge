@@ -211,7 +211,7 @@ export default function Page() {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
+                    className="my-4 w-1/2 rounded-xl border border-gray-200 bg-white p-2"
                   />
                 </label>
 
@@ -222,7 +222,7 @@ export default function Page() {
                     name="gender"
                     value={formData.gender}
                     onChange={handleChange}
-                    className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
+                    className="my-4 w-1/2 rounded-xl border border-gray-200 bg-white p-2"
                   >
                     <option value="male">男性</option>
                     <option value="female">女性</option>
@@ -247,7 +247,7 @@ export default function Page() {
 
                   <label
                     htmlFor="image-upload"
-                    className="h-10 cursor-pointer rounded bg-blue-500 px-4 py-2 text-white"
+                    className="h-10 cursor-pointer rounded bg-blue-400 px-4 py-2 text-white"
                   >
                     写真を登録
                   </label>
@@ -262,7 +262,7 @@ export default function Page() {
                     name="universityId"
                     onChange={handleChange}
                     value={formData.universityId}
-                    className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
+                    className="my-4 w-1/2 rounded-xl border border-gray-200 bg-white p-2"
                   >
                     <option value="">大学を選択してください</option>
                     {universities.map((univ) => (
@@ -279,7 +279,7 @@ export default function Page() {
                     name="divisionId"
                     value={formData.divisionId}
                     onChange={handleChange}
-                    className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
+                    className="my-4 w-1/2 rounded-xl border border-gray-200 bg-white p-2"
                     disabled={!divisions.length}
                   >
                     <option value="">学部を選択してください</option>
@@ -297,7 +297,7 @@ export default function Page() {
                     name="campusId"
                     value={formData.campusId}
                     onChange={handleChange}
-                    className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
+                    className="my-4 w-1/2 rounded-xl border border-gray-200 bg-white p-2"
                     disabled={!campuses.length}
                   >
                     <option value="">キャンパスを選択してください</option>
@@ -315,7 +315,7 @@ export default function Page() {
                     name="grade"
                     value={formData.grade}
                     onChange={handleChange}
-                    className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
+                    className="my-4 w-1/2 rounded-xl border border-gray-200 bg-white p-2"
                   >
                     <option value="">学年を選択してください</option>
                     <option value="B1">学部1年</option>
@@ -361,7 +361,7 @@ export default function Page() {
                     name="motherLanguageId"
                     value={formData.motherLanguageId}
                     onChange={handleChange}
-                    className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
+                    className="my-4 w-1/2 rounded-xl border border-gray-200 bg-white p-2"
                     disabled={!languages.length}
                   >
                     <option value="">母国語を選択してください</option>
@@ -422,7 +422,7 @@ export default function Page() {
                     value={formData.hobby ?? ""}
                     onChange={handleChange}
                     required
-                    className=" w-1/2 rounded-xl border border-gray-500 bg-white p-2"
+                    className=" w-1/2 rounded-xl border border-gray-200 bg-white p-2"
                   />
                 </label>
 
@@ -435,7 +435,7 @@ export default function Page() {
                     value={formData.introduction ?? ""}
                     onChange={handleChange}
                     required
-                    className="w-1/2 rounded-xl border border-gray-500 bg-white p-2"
+                    className="w-1/2 rounded-xl border border-gray-200 bg-white p-2"
                   />
                 </label>
               </div>
