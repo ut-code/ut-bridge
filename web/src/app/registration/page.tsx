@@ -195,12 +195,12 @@ export default function Page() {
 
   return (
     <>
-      <div className="my-20 p-4 sm:mx-60">
+      <div className="my-5 p-4 sm:mx-60 sm:my-20">
         <h1 className="mx-5 mb-8 font-bold text-3xl sm:mx-0">初期登録</h1>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           {page === "former" ? (
             <div>
-              <div className="my-10 px-15">
+              <div className="px-15 sm:my-10">
                 <h2 className="font-bold text-xl">基本情報</h2>
                 <label htmlFor="name" className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
                   名前
@@ -342,26 +342,26 @@ export default function Page() {
             </div>
           ) : (
             <div>
-              <div className="my-10 px-15">
+              <div className="px-15 sm:my-10">
                 <h2 className="font-bold text-xl">言語情報</h2>
-                <label className="relative my-4 block">
+                <label className="mt-5 flex flex-row justify-between sm:relative sm:my-4 sm:block sm:flex-none">
                   外国人留学生ですか？
                   <input
                     type="checkbox"
                     name="isForeignStudent"
                     checked={formData.isForeignStudent}
                     onChange={handleChange}
-                    className="checkbox checkbox-lg absolute right-[47%] bg-white"
+                    className="checkbox checkbox-lg bg-white sm:absolute sm:right-[47%]"
                   />
                 </label>
 
-                <label className="my-4 flex items-center justify-between">
+                <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
                   母国語
                   <select
                     name="motherLanguageId"
                     value={formData.motherLanguageId}
                     onChange={handleChange}
-                    className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
+                    className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                     disabled={!languages.length}
                   >
                     <option value="">母国語を選択してください</option>
@@ -372,7 +372,7 @@ export default function Page() {
                     ))}
                   </select>
                 </label>
-                <div className="my-4 flex justify-between">
+                <div className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
                   <p>流暢に話せる言語（母国語を含む）</p>
                   <div className="flex w-1/2 flex-wrap gap-2">
                     {languages.map((language) => (
@@ -391,8 +391,8 @@ export default function Page() {
                   </div>
                 </div>
 
-                <div className="my-4 flex w-full justify-between">
-                  <p className="w-1/2 text-left">勉強している言語</p>
+                <div className="mt-5 flex flex-col sm:mt-10 sm:flex-row sm:items-center sm:justify-between">
+                  <p>勉強している言語</p>
                   <div className=" flex w-1/2 flex-wrap gap-2">
                     {languages.map((language) => (
                       <label key={language.id} className="flex items-center space-x-2">
@@ -413,7 +413,7 @@ export default function Page() {
 
               <div className="my-10 px-15">
                 <h2 className="font-bold text-xl">トピック</h2>
-                <label htmlFor="hobby" className="my-4 flex justify-between">
+                <label htmlFor="hobby" className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
                   趣味
                   <textarea
                     id="hobby"
@@ -422,11 +422,11 @@ export default function Page() {
                     value={formData.hobby ?? ""}
                     onChange={handleChange}
                     required
-                    className=" w-1/2 rounded-xl border border-gray-500 bg-white p-2"
+                    className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                   />
                 </label>
 
-                <label htmlFor="introduction" className="my-4 flex items-center justify-between ">
+                <label htmlFor="introduction" className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
                   自己紹介
                   <textarea
                     id="introduction"
@@ -435,7 +435,7 @@ export default function Page() {
                     value={formData.introduction ?? ""}
                     onChange={handleChange}
                     required
-                    className="w-1/2 rounded-xl border border-gray-500 bg-white p-2"
+                    className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                   />
                 </label>
               </div>
