@@ -1,6 +1,6 @@
 "use client";
 import { useGoogleLogout } from "@/features/auth/functions/logout.ts";
-import Link from "@/i18n/navigation";
+import Link from "@/i18n/navigation.ts";
 import { usePathname } from "next/navigation";
 
 export default function SideNav() {

@@ -2,7 +2,7 @@
 
 import { client } from "@/client";
 import { useUserContext } from "@/features/user/userProvider";
-import Link from "@/i18n/navigation";
+import Link from "@/i18n/navigation.ts";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
