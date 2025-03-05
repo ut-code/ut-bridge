@@ -1,5 +1,6 @@
 "use client";
 
+import LanguageSwitcher from "@/components/LanguageSelectar";
 import { Link } from "@/i18n/navigation.ts";
 
 export default function Home() {
@@ -9,9 +10,7 @@ export default function Home() {
       <Link href={"/login"} className="cursor-pointer px-4 text-2xl text-primary">
         ログイン画面へ
       </Link>
-      <Link href="/" locale="en">
-        Switch to English
-      </Link>
+      <LanguageSwitcher />
     </>
   );
 }
