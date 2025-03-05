@@ -1,0 +1,8 @@
+{
+  "Login": {
+    "title": "Welcome Back!",
+    "loginButton": "Login with ECCS account",
+    "info": "Please authenticate using an ECCS account ending with @g.ecc.u-tokyo.ac.jp.",
+    "privacy": "Terms of Service and Privacy Policy can be found here."
+  }
+}
