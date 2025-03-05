@@ -1,8 +1,10 @@
 "use client";
+import { useTranslations } from "next-intl";
 import { useGoogleSignIn } from "../functions/login.ts";
 
 export default function GoogleLoginButton() {
   const { signInWithGoogle } = useGoogleSignIn();
+  const t = useTranslations("Login");
 
   return (
     <button type="button" className="btn border-[#e5e5e5] bg-white text-gray-600" onClick={signInWithGoogle}>
@@ -16,7 +18,7 @@ export default function GoogleLoginButton() {
           <path fill="#ea4335" d="m153 219c22-69 116-109 179-50l55-54c-78-75-230-72-297 55" />
         </g>
       </svg>
-      ECCSアカウントでログイン
+      {t("loginButton")}
     </button>
   );
 }
