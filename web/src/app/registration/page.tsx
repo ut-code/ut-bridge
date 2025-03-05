@@ -202,7 +202,10 @@ export default function Page() {
             <div>
               <div className="px-15 sm:my-10">
                 <h2 className="font-bold text-xl">基本情報</h2>
-                <label htmlFor="name" className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
+                <label
+                  htmlFor="name"
+                  className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between"
+                >
                   名前
                   <input
                     id="name"
@@ -215,7 +218,10 @@ export default function Page() {
                   />
                 </label>
 
-                <label htmlFor="gender" className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
+                <label
+                  htmlFor="gender"
+                  className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between"
+                >
                   性別
                   <select
                     id="gender"
@@ -413,7 +419,10 @@ export default function Page() {
 
               <div className="my-10 px-15">
                 <h2 className="font-bold text-xl">トピック</h2>
-                <label htmlFor="hobby" className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
+                <label
+                  htmlFor="hobby"
+                  className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between"
+                >
                   趣味
                   <textarea
                     id="hobby"
@@ -426,7 +435,10 @@ export default function Page() {
                   />
                 </label>
 
-                <label htmlFor="introduction" className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
+                <label
+                  htmlFor="introduction"
+                  className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between"
+                >
                   自己紹介
                   <textarea
                     id="introduction"
