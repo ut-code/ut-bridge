@@ -27,13 +27,14 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y openssl && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
-WORKDIR /app/server
+WORKDIR /app
+COPY ./package.json /app/package.json
+COPY ./scripts /app/scripts
 # Copy built application
 COPY --from=build /builder/server /app/server
 COPY --from=build /builder/common /app/common
 COPY --from=build /builder/node_modules /app/node_modules
-# fuck prisma
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-CMD [ "bun", "run", "." ]
+CMD [ "bun", "run", "./server" ]

@@ -9,7 +9,7 @@ primary_region = 'nrt'
 [build]
 
 [deploy]
-release_command = 'bunx prisma migrate deploy && bun db:seed'
+release_command = 'sh ./scripts/release_command.sh'
 
 [http_service]
 internal_port = 3000
