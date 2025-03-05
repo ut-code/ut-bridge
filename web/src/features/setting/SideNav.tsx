@@ -6,8 +6,10 @@ import { usePathname } from "next/navigation";
 
 export default function SideNav() {
   const { logout } = useGoogleLogout();
-  const pathname = usePathname();
+  const path = usePathname();
   const t = useTranslations("setting");
+  // ロケールを考慮してパスを正規化する（/ja/login, /en/login → /login）
+  const pathname = path.replace(/^\/(en|ja)\//, "/");
 
   return (
     <>
