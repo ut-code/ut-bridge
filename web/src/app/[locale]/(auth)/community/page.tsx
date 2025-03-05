@@ -3,10 +3,10 @@ import { client } from "@/client";
 import { formatCardUser } from "@/features/format";
 import UserCard from "@/features/user/UserCard.tsx";
 import { useUserContext } from "@/features/user/userProvider.tsx";
-import { Link } from "@/i18n/navigation.ts";
+import { Link, useRouter } from "@/i18n/navigation.ts";
 import { type CardUser, type Exchange, ExchangeSchema, MarkerSchema } from "common/zod/schema";
 import { useTranslations } from "next-intl";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
 function useQuery() {
@@ -57,10 +57,12 @@ function createQueriedURL(params: {
   }
 
   const str = current.toString();
-  if (str === "") return window.location.pathname;
+  const pathname = window.location.pathname.replace(PATHNAME_LANG_PREFIX_PATTERN, "/");
+  if (str === "") return pathname;
   // isn't there better way to handle this?
-  return `${window.location.pathname}?${str}`;
+  return `${pathname}?${str}`;
 }
+const PATHNAME_LANG_PREFIX_PATTERN = /^\/(en|ja)\//;
 
 export default function Page() {
   const router = useRouter();
