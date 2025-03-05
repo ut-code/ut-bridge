@@ -20,7 +20,7 @@ export default function Page() {
       </div>
       <div className="max-w my-10 p-4">
         <h1 className="mb-8 hidden text-xl sm:block">ブロックしているユーザー</h1>
-        <ul className="grid w-full grid-cols-1 gap-6 sm:m-5 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2">
+        <ul className="grid w-full grid-cols-1 sm:m-5 sm:grid-cols-1 sm:gap-6 md:grid-cols-1 lg:grid-cols-2">
           {blockedUsers.length === 0 ? (
             <p>ブロックしているユーザーはいません。</p>
           ) : (
