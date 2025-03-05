@@ -27,7 +27,7 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y openssl && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
-WORKDIR /app
+WORKDIR /app/server
 # Copy built application
 COPY --from=build /builder/server /app/server
 COPY --from=build /builder/common /app/common
@@ -36,4 +36,4 @@ COPY --from=build /builder/node_modules /app/node_modules
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-CMD [ "bun", "run", "./server" ]
+CMD [ "bun", "run", "." ]
