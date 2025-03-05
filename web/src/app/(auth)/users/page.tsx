@@ -45,7 +45,7 @@ export default function Page() {
   }, [router, id]);
 
   const [markSpinner, setMarkSpinner] = useState(false);
-  const [chatButtonState, setChatButtonState] = useState<"idle" | "creating" | "created">("idle");
+  const [chatButtonState, setChatButtonState] = useState<"idle" | "searching" | "creating" | "created">("idle");
 
   function MarkerButton(props: {
     if: boolean;
@@ -109,13 +109,27 @@ export default function Page() {
           <p className="my-4 text-2xl">{user.gender}</p>
           <p className="my-4 text-2xl">{user.isForeignStudent ? "留学生" : " "}</p>
           <div className="flex gap-10">
-            {chatButtonState === "creating" && <span className="loading loading-spinner absolute" />}
+            <span className="absolute w-15">
+              {chatButtonState === "creating" ? (
+                <span>
+                  <span className="loading loading-spinner absolute" />
+                  作成中...
+                </span>
+              ) : (
+                chatButtonState === "searching" && (
+                  <span>
+                    <span className="loading loading-spinner " />
+                    探し中...
+                  </span>
+                )
+              )}
+            </span>
             <button
               type="button"
               disabled={chatButtonState !== "idle"}
               onClick={async () => {
-                setChatButtonState("creating");
-                // find previous
+                setChatButtonState("searching");
+                // find previous room
                 const prevs = await (
                   await client.chat.rooms.dmwith[":user"].$get({
                     param: {
@@ -129,6 +143,7 @@ export default function Page() {
                   router.push(`/chat/${prev.id}`);
                   return;
                 }
+                setChatButtonState("creating");
                 // create new if it doesn't exist
                 const res = await client.chat.rooms.$post({
                   json: {
