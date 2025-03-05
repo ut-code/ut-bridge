@@ -22,6 +22,7 @@ RUN apt-get update -qq && \
 COPY . .
 RUN bun install --frozen-lockfile --production --ignore-scripts --filter="server"
 RUN bun node_modules/@prisma/client/scripts/postinstall.js
+RUN bun prisma generate
 
 # Final stage for app image
 FROM base AS runner
