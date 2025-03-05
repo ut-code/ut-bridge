@@ -2,12 +2,14 @@
 
 import { client } from "@/client";
 import { useUserFormContext } from "@/features/user/UserFormProvider";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Page() {
   const router = useRouter();
   const { formData, setFormData, languages } = useUserFormContext();
+  const t = useTranslations("setting");
 
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
@@ -74,7 +76,7 @@ export default function Page() {
     <div className="max-w my-20 p-4">
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <label className="relative my-4 block">
-          外国人留学生ですか？
+          {t("language.isForeign")}
           <input
             type="checkbox"
             name="isForeignStudent"
@@ -85,7 +87,8 @@ export default function Page() {
         </label>
 
         <label className="my-4 flex items-center justify-between">
-          母国語
+          {t("language.motherLanguage")}
+
           <select
             name="motherLanguageId"
             value={formData.motherLanguageId}
@@ -93,7 +96,6 @@ export default function Page() {
             className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
             disabled={!languages.length}
           >
-            <option value="">母国語を選択してください</option>
             {languages.map((language) => (
               <option key={language.id} value={language.id}>
                 {language.name}
@@ -102,7 +104,7 @@ export default function Page() {
           </select>
         </label>
         <div className="my-4 flex justify-between">
-          <p>流暢に話せる言語（母国語を含む）</p>
+          <p> {t("language.fluentLanguage")}</p>
           <div className="flex w-1/2 flex-wrap gap-2">
             {languages.map((language) => (
               <label key={language.id} className="flex items-center space-x-2">
@@ -120,7 +122,7 @@ export default function Page() {
           </div>
         </div>
         <div className="my-4 flex w-full justify-between">
-          <p className="w-1/2 text-left">勉強している言語</p>
+          <p className="w-1/2 text-left"> {t("language.learningLanguage")}</p>
           <div className=" flex w-1/2 flex-wrap gap-2">
             {languages.map((language) => (
               <label key={language.id} className="flex items-center space-x-2">
@@ -143,7 +145,7 @@ export default function Page() {
             className="mt-15 w-50 rounded bg-blue-500 p-2 text-white"
             disabled={status === "loading"}
           >
-            {status === "loading" ? "登録中..." : "登録"}
+            {status === "loading" ? t("isRegister") : t("register")}
           </button>
         </div>
       </form>
