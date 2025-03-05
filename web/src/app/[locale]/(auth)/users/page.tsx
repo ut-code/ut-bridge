@@ -1,5 +1,6 @@
 "use client";
 import { client } from "@/client";
+import Loading from "@/components/Loading.tsx";
 import { formatUser } from "@/features/format";
 import { useUserContext } from "@/features/user/userProvider.tsx";
 import type { User } from "common/zod/schema";
@@ -87,7 +88,7 @@ export default function Page() {
     );
   }
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Loading stage="users.user" />;
   if (!user) return <div>User not found</div>;
 
   return (

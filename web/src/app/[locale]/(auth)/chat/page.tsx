@@ -1,6 +1,7 @@
 "use client";
 
 import { client } from "@/client";
+import Loading from "@/components/Loading";
 import { useUserContext } from "@/features/user/userProvider";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
@@ -36,7 +37,7 @@ function Rooms() {
     fetchRooms();
   }, []);
 
-  if (loading) return <span className="loading loading-xl" />;
+  if (loading) return <Loading stage="room.info" />;
   if (error) return <span className="text-error">{error}</span>;
 
   return (

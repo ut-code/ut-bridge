@@ -1,5 +1,6 @@
 "use client";
 import { client } from "@/client";
+import Loading from "@/components/Loading.tsx";
 import { formatCardUser } from "@/features/format";
 import UserCard from "@/features/user/UserCard.tsx";
 import { useUserContext } from "@/features/user/userProvider.tsx";
@@ -194,14 +195,15 @@ export default function Page() {
         />
       </div>
 
-      <ul className="grid grid-cols-1 sm:m-5 sm:grid-cols-1 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {users === null ? (
-          <span>
-            <span className="loading loading-bars loading-xl" />
-            Loading...
-          </span>
-        ) : (
-          users.map((user) => (
+      {users === null ? (
+        <Loading stage="community.users" />
+      ) : users.length === 0 ? (
+        <div className="flex">
+          <span className="mt-10 flex-1 text-center text-gray-400 text-lg">No users found</span>
+        </div>
+      ) : (
+        <ul className="grid grid-cols-1 sm:m-5 sm:grid-cols-1 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {users.map((user) => (
             <li key={user.id}>
               <UserCard
                 link={`/users?id=${user.id}`}
@@ -224,9 +226,9 @@ export default function Page() {
                 }}
               />
             </li>
-          ))
-        )}
-      </ul>
+          ))}
+        </ul>
+      )}
 
       <div className="m-6 mb-6 flex items-center justify-between gap-6 px-10 py-8 md:px-20">
         <div className="w-auto">
@@ -243,7 +245,7 @@ export default function Page() {
         </div>
 
         <span className="text-center text-gray-700 text-lg">
-          {totalUsers > 0 ? `Page ${query.page} of ${totalPages}` : "No users found"}
+          {totalUsers > 0 && `Page ${query.page} of ${totalPages}`}
         </span>
 
         <div className="w-auto">
