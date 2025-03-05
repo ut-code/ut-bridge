@@ -1,36 +1,15 @@
 "use client";
 
 import { client } from "@/client";
-import LoginBadge from "@/features/auth/components/LoginBadge";
 import { useUserContext } from "@/features/user/userProvider";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Page() {
-  const { me } = useUserContext();
-  async function createNewRoom() {
-    try {
-      const res = await client.chat.rooms.$post({
-        json: {
-          members: [me.id],
-        },
-      });
-      if (!res.ok) throw new Error("Failed to create room");
-      const { id } = await res.json();
-      location.pathname = `/chat/${id}`;
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
   return (
     <>
-      <LoginBadge />
-      <h1>Chat Page</h1>
-      <button type="button" className="btn btn-primary" onClick={createNewRoom}>
-        Create New Room
-      </button>
+      <h1>チャット画面</h1>
       <Rooms />
     </>
   );
@@ -91,7 +70,6 @@ function Room({ room }: { room: RoomPreview }) {
 
   return (
     <Link href={`/chat/${room.id}`} className="flex items-center space-x-4">
-      <div className="font-thin text-4xl tabular-nums opacity-30">{room.id}</div>
       <Image
         alt={firstMember?.name || "User"}
         className="size-10 rounded-box"
