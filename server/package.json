@@ -7,7 +7,7 @@
     "prisma": "bun run --env-file=../.env bunx prisma",
     "prepare": "prisma generate",
     "start": "bun run .",
-    "deploy": ""
+    "deploy": "cd ..; flyctl deploy"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.758.0",
@@ -25,5 +25,6 @@
     "@types/bun": "^1.2.4",
     "prisma": "^6.3.1",
     "typescript": "^5.7.3"
-  }
+  },
+  "trustedDependencies": ["@prisma/client"]
 }

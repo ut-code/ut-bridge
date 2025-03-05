@@ -20,7 +20,7 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential node-gyp openssl pkg-config python-is-python3
 
 COPY . .
-RUN bun install --frozen-lockfile --ignore-scripts --filte="server"
+RUN bun install --frozen-lockfile --production --filter="server"
 
 # Final stage for app image
 FROM base AS runner
@@ -36,7 +36,6 @@ COPY --from=build /builder/server /app/server
 COPY --from=build /builder/common /app/common
 COPY --from=build /builder/node_modules /app/node_modules
 # fuck prisma
-COPY ./node_modules/.prisma /app/node_modules/.prisma
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
