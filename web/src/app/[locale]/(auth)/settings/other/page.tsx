@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "@/i18n/navigation.ts";
+import { Link } from "@/i18n/navigation.ts";
 
 export default function Page() {
   return (

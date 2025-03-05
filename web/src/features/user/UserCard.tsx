@@ -1,4 +1,4 @@
-import Link from "@/i18n/navigation.ts";
+import { Link } from "@/i18n/navigation.ts";
 import type { CardUser } from "common/zod/schema";
 import Image from "next/image";
 import { useState } from "react";

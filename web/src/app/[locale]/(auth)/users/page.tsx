@@ -4,7 +4,7 @@ import { formatUser } from "@/features/format";
 import { useUserContext } from "@/features/user/userProvider.tsx";
 import type { User } from "common/zod/schema";
 import Image from "next/image";
-// import Link from "@/i18n/navigation.ts";
+// import {Link} from "@/i18n/navigation.ts";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
