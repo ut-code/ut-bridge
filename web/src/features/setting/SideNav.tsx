@@ -17,49 +17,49 @@ export default function SideNav() {
           className={`flex justify-between rounded-t-xl bg-neutral-50 p-4 px-8 text-xl sm:bg-transparent sm:px-4 ${pathname === "/settings/basic" ? "font-bold underline" : ""}`}
         >
           基本情報
-          <ChevronRight className="sm:hidden"/>
+          <ChevronRight className="sm:hidden" />
         </Link>
         <Link
           href={"/settings/university"}
           className={`flex justify-between bg-neutral-50 p-4 px-8 text-xl sm:bg-transparent sm:px-4 ${pathname === "/settings/university" ? "font-bold underline" : ""}`}
         >
           大学情報
-          <ChevronRight className="sm:hidden"/>
+          <ChevronRight className="sm:hidden" />
         </Link>
         <Link
           href={"/settings/language"}
           className={`flex justify-between bg-neutral-50 p-4 px-8 text-xl sm:bg-transparent sm:px-4 ${pathname === "/settings/language" ? "font-bold underline" : ""}`}
         >
           言語情報
-          <ChevronRight className="sm:hidden"/>
+          <ChevronRight className="sm:hidden" />
         </Link>
         <Link
           href={"/settings/topic"}
           className={`flex justify-between bg-neutral-50 p-4 px-8 text-xl sm:bg-transparent sm:px-4 ${pathname === "/settings/topic" ? "font-bold underline" : ""}`}
         >
           トピック
-          <ChevronRight className="sm:hidden"/>
+          <ChevronRight className="sm:hidden" />
         </Link>
         <Link
           href={"/settings/favorite"}
           className={`flex justify-between bg-neutral-50 p-4 px-8 text-xl sm:bg-transparent sm:px-4 ${pathname === "/settings/favorite" ? "font-bold underline" : ""}`}
         >
           お気に入り
-          <ChevronRight className="sm:hidden"/>
+          <ChevronRight className="sm:hidden" />
         </Link>
         <Link
           href={"/settings/block"}
           className={`flex justify-between bg-neutral-50 p-4 px-8 text-xl sm:bg-transparent sm:px-4 ${pathname === "/settings/block" ? "font-bold underline" : ""}`}
         >
           ブロック
-          <ChevronRight className="sm:hidden"/>
+          <ChevronRight className="sm:hidden" />
         </Link>
         <Link
           href={"/settings/other"}
           className={`flex justify-between rounded-b-xl bg-neutral-50 p-4 px-8 text-xl sm:bg-transparent sm:px-4 ${pathname === "/settings/other" ? "font-bold underline" : ""}`}
         >
           その他
-          <ChevronRight className="sm:hidden"/>
+          <ChevronRight className="sm:hidden" />
         </Link>
         <button type="button" className="btn btn-outline btn-error my-12 sm:my-3" onClick={logout}>
           ログアウト
