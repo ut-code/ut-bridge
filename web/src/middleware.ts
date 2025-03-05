@@ -10,16 +10,20 @@ export default function handler(req: NextRequest) {
 
   // 設定したロケール（例: 'en', 'ja'）
   const locales = routing.locales;
-  const defaultLocale = routing.defaultLocale || "ja"; // デフォルトロケールを設定
+  const defaultLocale = routing.defaultLocale || "ja"; // デフォルトロケール
 
-  // 既にロケールがある場合はそのまま処理
-  if (locales.some((locale) => pathname.startsWith(`/${locale}/`))) {
+  // 既にロケールが含まれている場合はそのまま処理
+  if (locales.some((locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`))) {
     return middleware(req);
   }
 
-  // ルートがロケールなしの場合、デフォルトロケールへリダイレクト
-  const redirectUrl = new URL(`/${defaultLocale}${pathname}`, req.url);
-  return NextResponse.redirect(redirectUrl);
+  // `/` にアクセスした場合は `/ja` にリダイレクト
+  if (pathname === "/") {
+    return NextResponse.redirect(new URL(`/${defaultLocale}`, req.url));
+  }
+
+  // それ以外のロケールなしのルートをデフォルトロケールへリダイレクト
+  return NextResponse.redirect(new URL(`/${defaultLocale}${pathname}`, req.url));
 }
 
 export const config = {
