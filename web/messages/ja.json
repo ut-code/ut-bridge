@@ -17,10 +17,14 @@
   "setting": {
     "title": "設定",
     "register": "登録",
+    "isRegister": "登録中...",
     "basic": {
       "title": "基本情報",
       "name": "名前",
       "sex": "性別",
+      "male": "男性",
+      "female": "女性",
+      "other": "その他",
       "photo": "写真",
       "photoUpload": "アップロード"
     },
@@ -29,7 +33,18 @@
       "univ": "大学",
       "campus": "キャンパス",
       "divisions": "学部",
-      "grade": "学年"
+      "grade": "学年",
+      "gradeOptions": {
+        "B1": "学部1年",
+        "B2": "学部2年",
+        "B3": "学部3年",
+        "B4": "学部4年",
+        "M1": "修士1年",
+        "M2": "修士1年",
+        "D1": "博士1年",
+        "D2": "博士1年",
+        "D3": "博士1年"
+      }
     },
     "language": {
       "title": "言語情報",
@@ -42,6 +57,16 @@
       "title": "トピック",
       "hobby": "趣味",
       "introduction": "自己紹介"
+    },
+    "favorite": {
+      "title": "お気に入り",
+      "subTitle": "お気に入りのユーザー",
+      "noUser": "お気に入りのユーザーはいません。"
+    },
+    "block": {
+      "title": "ブロック",
+      "subTitle": "ブロックしているユーザー",
+      "noUser": "ブロックしているユーザーはいません。"
     },
     "other": { "title": "その他" },
     "logout": "ログアウト"

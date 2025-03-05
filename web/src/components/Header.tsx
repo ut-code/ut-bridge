@@ -1,5 +1,6 @@
 "use client";
 import { Link } from "@/i18n/navigation.ts";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { AppIcon } from "./AppIcon.tsx";
@@ -7,7 +8,7 @@ import { AppIcon } from "./AppIcon.tsx";
 export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
-
+  const t = useTranslations();
   return (
     <header className="flex h-16 w-full items-center bg-tBlue">
       <Link href="/community" passHref className="px-4">
@@ -29,7 +30,7 @@ export default function Header() {
               router.push("/community");
             }}
           >
-            コミュニティ
+            {t("community.title")}
           </button>
           <button
             type="button"
@@ -40,7 +41,7 @@ export default function Header() {
               router.push("/chat");
             }}
           >
-            チャット
+            {t("chat.title")}
           </button>
           <button
             type="button"
@@ -51,7 +52,7 @@ export default function Header() {
               router.push("/settings");
             }}
           >
-            設定
+            {t("setting.title")}
           </button>
         </>
       )}

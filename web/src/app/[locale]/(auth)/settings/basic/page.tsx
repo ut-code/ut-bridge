@@ -3,12 +3,14 @@
 import { client } from "@/client";
 import { upload } from "@/features/image/ImageUpload";
 import { useUserContext } from "@/features/user/userProvider";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Page() {
   const router = useRouter();
   const { me } = useUserContext();
+  const t = useTranslations("setting");
   const [formData, setFormData] = useState<{
     name: string;
     gender: "male" | "female" | "other";
@@ -18,6 +20,7 @@ export default function Page() {
     gender: "male",
     imageUrl: "",
   });
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
   useEffect(() => {
     if (!me) {
@@ -53,6 +56,7 @@ export default function Page() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setStatus("loading");
     let imageUrl = formData.imageUrl;
     if (file) {
       imageUrl = await upload(file);
@@ -65,9 +69,11 @@ export default function Page() {
       if (!res.ok) {
         throw new Error(`レスポンスステータス: ${res.status}`);
       }
-      alert("編集が完了しました。");
+      setStatus("success");
+      window.location.href = "/settings";
     } catch (error) {
       console.error("ユーザー情報の更新に失敗しました", error);
+      setStatus("error");
       router.push("/login");
     }
   };
@@ -76,7 +82,7 @@ export default function Page() {
     <div className="max-w my-20 p-4">
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <label className="flex items-center justify-between">
-          名前
+          {t("basic.name")}
           <input
             type="text"
             name="name"
@@ -88,33 +94,39 @@ export default function Page() {
         </label>
 
         <label className="flex items-center justify-between">
-          性別:
+          {t("basic.sex")}
+
           <select
             name="gender"
             value={formData.gender}
             onChange={handleChange}
             className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
           >
-            <option value="male">男性</option>
-            <option value="female">女性</option>
-            <option value="other">その他</option>
+            <option value="male"> {t("basic.male")}</option>
+            <option value="female"> {t("basic.female")}</option>
+            <option value="other"> {t("basic.other")}</option>
           </select>
         </label>
 
         <div className="my-4 flex justify-between">
-          <span>写真</span>
+          {t("basic.photo")}
+
           <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" id="image-upload" />
           <div className={`flex h-40 w-40 items-center justify-center rounded-lg ${preview ? "" : "bg-gray-300"}`}>
             {preview && <img src={preview} alt="プレビュー" className="rounded-lg object-cover" />}
           </div>
           <label htmlFor="image-upload" className="h-10 cursor-pointer rounded bg-blue-500 px-4 py-2 text-white">
-            写真を登録
+            {t("basic.photoUpload")}
           </label>
         </div>
 
         <div className="flex justify-end">
-          <button type="submit" className="mt-15 w-50 rounded bg-blue-500 p-2 text-white">
-            登録
+          <button
+            type="submit"
+            className="mt-15 w-50 rounded bg-blue-500 p-2 text-white"
+            disabled={status === "loading"}
+          >
+            {status === "loading" ? t("isRegister") : t("register")}
           </button>
         </div>
       </form>

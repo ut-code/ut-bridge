@@ -2,6 +2,7 @@
 
 import { client } from "@/client";
 import { useUserFormContext } from "@/features/user/UserFormProvider";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -9,7 +10,7 @@ export default function Page() {
   const router = useRouter();
   const { formData, setFormData, universities, divisions, campuses } = useUserFormContext();
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-
+  const t = useTranslations("setting");
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type, checked, multiple } = e.target as HTMLInputElement;
     const { options } = e.target as HTMLSelectElement;
@@ -52,16 +53,14 @@ export default function Page() {
   return (
     <div className="max-w my-20 p-4">
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-        {/* University Selection */}
         <label className="flex items-center justify-between">
-          大学:
+          {t("university.univ")}
           <select
             name="universityId"
             onChange={handleChange}
             value={formData.universityId}
             className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
           >
-            <option value="">大学を選択してください</option>
             {universities.map((univ) => (
               <option key={univ.id} value={univ.id}>
                 {univ.name}
@@ -72,7 +71,7 @@ export default function Page() {
 
         {/* Division Selection */}
         <label className="flex items-center justify-between">
-          学部:
+          {t("university.divisions")}
           <select
             name="divisionId"
             value={formData.divisionId}
@@ -80,7 +79,6 @@ export default function Page() {
             className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
             disabled={!divisions.length}
           >
-            <option value="">学部を選択してください</option>
             {divisions.map((division) => (
               <option key={division.id} value={division.id}>
                 {division.name}
@@ -91,7 +89,8 @@ export default function Page() {
 
         {/* Campus Selection */}
         <label className="flex items-center justify-between">
-          キャンパス:
+          {t("university.campus")}
+
           <select
             name="campusId"
             value={formData.campusId}
@@ -99,7 +98,6 @@ export default function Page() {
             className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
             disabled={!campuses.length}
           >
-            <option value="">キャンパスを選択してください</option>
             {campuses.map((campus) => (
               <option key={campus.id} value={campus.id}>
                 {campus.name}
@@ -110,14 +108,13 @@ export default function Page() {
 
         {/* Grade Selection */}
         <label className="flex items-center justify-between">
-          学年:
+          {t("university.grade")}
           <select
             name="grade"
             value={formData.grade}
             onChange={handleChange}
             className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
           >
-            <option value="">学年を選択してください</option>
             <option value="B1">学部1年</option>
             <option value="B2">学部2年</option>
             <option value="B3">学部3年</option>
@@ -137,7 +134,7 @@ export default function Page() {
             className="mt-15 w-50 rounded bg-blue-500 p-2 text-white"
             disabled={status === "loading"}
           >
-            {status === "loading" ? "登録中..." : "登録"}
+            {status === "loading" ? t("isRegister") : t("register")}
           </button>
         </div>
       </form>

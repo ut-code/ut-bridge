@@ -2,12 +2,14 @@
 
 import { client } from "@/client";
 import { useUserFormContext } from "@/features/user/UserFormProvider";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Page() {
   const { formData, setFormData } = useUserFormContext();
   const router = useRouter();
+  const t = useTranslations("setting");
 
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
@@ -62,7 +64,7 @@ export default function Page() {
     <div className="max-w my-20 p-4">
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <label htmlFor="hobby" className="my-4 flex justify-between">
-          趣味
+          {t("topic.hobby")}
           <textarea
             id="hobby"
             name="hobby"
@@ -75,7 +77,8 @@ export default function Page() {
         </label>
 
         <label htmlFor="introduction" className="my-4 flex items-center justify-between">
-          自己紹介
+          {t("topic.introduction")}
+
           <textarea
             id="introduction"
             name="introduction"
@@ -93,7 +96,7 @@ export default function Page() {
             className="mt-15 w-50 rounded bg-blue-500 p-2 text-white"
             disabled={status === "loading"}
           >
-            {status === "loading" ? "登録中..." : "登録"}
+            {status === "loading" ? t("isRegister") : t("register")}
           </button>
         </div>
       </form>

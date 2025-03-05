@@ -5,6 +5,7 @@ import UserCard from "@/features/user/UserCard.tsx";
 import { useUserContext } from "@/features/user/userProvider.tsx";
 import { Link } from "@/i18n/navigation.ts";
 import { type CardUser, type Exchange, ExchangeSchema, MarkerSchema } from "common/zod/schema";
+import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
@@ -64,6 +65,7 @@ function createQueriedURL(params: {
 export default function Page() {
   const router = useRouter();
   const query = useQuery();
+  const t = useTranslations("community");
 
   // if null it's loading, if [] there's no more users
   const [users, setUsers] = useState<CardUser[] | null>(null);
@@ -152,7 +154,7 @@ export default function Page() {
               className="btn mx-4 rounded-xl bg-white"
               type="radio"
               name="favorite"
-              aria-label="お気に入り"
+              aria-label={t("favorite")}
               onInput={() => {
                 router.push(
                   createQueriedURL({
@@ -168,7 +170,7 @@ export default function Page() {
               type="checkbox"
               className="btn rounded-xl bg-white"
               checked={query.exchange !== "all"}
-              aria-label="留学生に限定"
+              aria-label={t("filter")}
               onChange={(ev) => {
                 const filtered = ev.target.checked;
                 const amIForeignStudent = me.isForeignStudent;
@@ -183,7 +185,7 @@ export default function Page() {
           type="search"
           id="user-search"
           name="q"
-          placeholder="検索"
+          placeholder={t("search")}
           value={rawSearchQuery}
           onChange={(e) => setRawSearchQuery(e.target.value)}
           className="mb-5 w-full rounded-full border border-gray-400 bg-white p-2 pl-5 sm:mb-0 sm:w-1/4"
@@ -233,7 +235,7 @@ export default function Page() {
               })}
               className="rounded bg-blue-200 px-6 py-3 hover:bg-blue-300"
             >
-              前へ
+              {t("previousButton")}
             </Link>
           )}
         </div>
@@ -250,7 +252,7 @@ export default function Page() {
               })}
               className="rounded bg-blue-200 px-6 py-3 hover:bg-blue-300"
             >
-              次へ
+              {t("nextButton")}
             </Link>
           )}
         </div>
