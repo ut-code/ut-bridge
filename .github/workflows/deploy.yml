@@ -1,0 +1,15 @@
+on:
+  push:
+    branches:
+      - main
+      - deploy-on-cloudflare
+
+env:
+  FLY_TOKEN: ${{ secrets.FLY_ACCESS_TOKEN }}
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy --access-token "$FLY_TOKEN"
