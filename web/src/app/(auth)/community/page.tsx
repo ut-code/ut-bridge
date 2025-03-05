@@ -201,7 +201,7 @@ export default function Page() {
         </div>
       ) : (
         <ul className="grid grid-cols-1 sm:m-5 sm:grid-cols-1 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
-          users.map((user) => (
+          {users.map((user) => (
             <li key={user.id}>
               <UserCard
                 link={`/users?id=${user.id}`}
