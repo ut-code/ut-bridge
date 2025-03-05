@@ -1,6 +1,6 @@
 "use client";
+import { Link } from "@/i18n/navigation";
 import { MessageSquareText, Settings, Users } from "lucide-react";
-import Link from "next/link";
 
 export default function Footer() {
   return (
