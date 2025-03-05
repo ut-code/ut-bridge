@@ -14,8 +14,11 @@ export default function Header() {
 
   // ロケールを考慮してパスを正規化する（/ja/login, /en/login → /login）
   const pathname = path.replace(/^\/(en|ja)\//, "/");
-  const userContext = useUserContext();
-  const me = pathname === "/registration" || pathname === "/login" ? { imageUrl: "", name: "" } : userContext.me;
+  const me =
+    pathname === "/registration" || pathname === "/login"
+      ? { imageUrl: "", name: "" }
+      : // eslint-disable-next-line react-hooks/rules-of-hooks
+        useUserContext();
 
   return (
     <header className="flex h-16 w-full items-center bg-tBlue">
@@ -82,8 +85,8 @@ export default function Header() {
                         : ""}
           </p>
           <div className="absolute right-4 flex items-center gap-4">
-            <p>
-              {me.imageUrl ? (
+            <div>
+              {"imageUrl" in me ? (
                 <Image
                   src={me.imageUrl}
                   alt={me.name ?? "User"}
@@ -92,10 +95,10 @@ export default function Header() {
                   className="rounded-full object-cover"
                 />
               ) : (
-                <div className="flex h-30 w-30 items-center justify-center rounded-full bg-gray-300">No Image</div>
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-300">No Image</div>
               )}
-            </p>
-            <p className="hidden text-white text-xl sm:block">{me.name}</p>
+            </div>
+            {"name" in me && <p className="hidden text-white text-xl sm:block">{me.name}</p>}
           </div>
         </>
       )}
