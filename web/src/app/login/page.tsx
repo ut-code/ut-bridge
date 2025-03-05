@@ -1,3 +1,4 @@
+import { AppIcon } from "@/components/AppIcon";
 import Header from "@/components/Header";
 import GoogleLoginButton from "@/features/auth/components/GoogleLoginButton";
 
@@ -5,10 +6,13 @@ export default function Login() {
   return (
     <>
       <Header />
-      <h1 className="text-3xl ">ログインページ</h1>
-      <div className="flex h-screen items-center justify-center">
-        <div className="rounded-lg border p-6 text-center shadow-md">
-          <p className="mt-10 mb-20 text-lg">ECCSアカウントでのみ、ログイン可能です。</p>
+      <div className="flex h-screen justify-center sm:items-center">
+        <div className="p-6 text-center sm:rounded-lg sm:border sm:shadow-md">
+          <p className="mt-10 sm:hidden">UT-Bridge</p>
+          <p className="mt-10 mb-20 font-bold text-3xl">Welcome Back</p>
+          <div className="flex justify-center sm:hidden">
+            <AppIcon width={200} height={200} />
+          </div>
           <div className="my-10">
             <GoogleLoginButton />
           </div>
