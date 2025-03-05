@@ -1,6 +1,5 @@
 "use client";
 import Loading from "@/components/Loading.tsx";
-import type { User } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "../config.ts";
 
