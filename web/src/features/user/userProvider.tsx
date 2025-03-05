@@ -1,5 +1,6 @@
 "use client";
 import { client } from "@/client";
+import Loading from "@/components/Loading.tsx";
 import { ensure } from "@/lib.ts";
 import type { FullUser } from "common/zod/schema";
 import { useRouter } from "next/navigation";
@@ -38,6 +39,6 @@ export function UserProvider({ children }: { children: ReactNode }) {
     fetchUserData();
   }, [router, guid]);
 
-  if (!myData) return <span className="loading loading-xl" />;
+  if (!myData) return <Loading stage="my info" />;
   return <UserContext.Provider value={{ me: myData }}>{children}</UserContext.Provider>;
 }
