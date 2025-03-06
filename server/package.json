@@ -3,7 +3,9 @@
   "type": "module",
   "scripts": {
     "dev": "NODE_ENV=development bun run --env-file=../.env --hot index.ts",
-    "build": "bun tsc",
+    "check": "bun tsc",
+    "build": "bun run check && bun run :build",
+    ":build": "bun build index.ts --target bun --outfile target/index.js",
     "prisma": "bun run --env-file=../.env bunx prisma",
     "prepare": "prisma generate",
     "start": "bun run .",

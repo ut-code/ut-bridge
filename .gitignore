@@ -9,6 +9,8 @@ web/.next
 web/next-env.d.ts
 web/.vercel
 web/.dev.vars
+# server
+server/target
 
 # ?
 tsconfig.tsbuildinfo

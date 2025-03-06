@@ -5,6 +5,7 @@ cd ..
 
 (
   cd server
+  # TODO: create migration rather than accepting its fate
   bun prisma db push --accept-data-loss
 )
 

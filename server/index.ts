@@ -48,7 +48,7 @@ const app = new Hono()
     return c.json({ error: "unknown error occured" }, 500);
   })
 
-  .get("/", (c) => c.text("Hello from Hono 🔥"))
+  .get("/", (c) => c.text("ut-bridge: Hello from Hono 🔥"))
 
   .route("/users", usersRouter)
   .route("/community", communityRouter)
