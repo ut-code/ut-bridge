@@ -1,5 +1,5 @@
 "use client";
-import { API_ENDPOINT, authCookie } from "@/client.ts";
+import { API_ENDPOINT } from "@/client.ts";
 import { parse } from "devalue";
 /*
 
@@ -30,10 +30,9 @@ export function ChatNotificationProvider({ children }: { children: React.ReactNo
     let src: EventSource;
 
     (async () => {
-      document.cookie = authCookie(idToken);
-
       const signal = ctrl.signal;
-      src = new EventSource(`${API_ENDPOINT}/chat/sse`, {
+      // there's really no other way to do this
+      src = new EventSource(`${API_ENDPOINT}/chat/sse?id-token=${idToken}`, {
         withCredentials: true,
       });
 

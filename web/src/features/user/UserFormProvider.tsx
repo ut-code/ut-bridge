@@ -6,6 +6,7 @@ import type { CreateUser } from "common/zod/schema";
 import type { CardUser } from "common/zod/schema";
 import { useRouter } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { useAuthContext } from "../auth/providers/AuthProvider.tsx";
 
 // Contextの型定義
 interface UserFormContextType {
@@ -41,6 +42,7 @@ export const UserFormProvider = ({
 }) => {
   const router = useRouter();
   const { me } = useUserContext();
+  const { idToken: Authorization } = useAuthContext();
 
   const [formData, setFormData] = useState<CreateUser>({
     id: "",
@@ -159,6 +161,7 @@ export const UserFormProvider = ({
     try {
       if (!me) return;
       const res = await client.community.$get({
+        header: { Authorization },
         query: {
           myId: me.id,
           marker: "favorite",
@@ -174,12 +177,13 @@ export const UserFormProvider = ({
     } catch (error) {
       console.error("お気に入りユーザーの取得に失敗しました", error);
     }
-  }, [me]);
+  }, [me, Authorization]);
 
   const refetchBlockedUsers = useCallback(async () => {
     try {
       if (!me) return;
       const res = await client.community.$get({
+        header: { Authorization },
         query: {
           myId: me.id,
           marker: "blocked",
@@ -195,7 +199,7 @@ export const UserFormProvider = ({
     } catch (error) {
       console.error("ブロックユーザーの取得に失敗しました", error);
     }
-  }, [me]);
+  }, [me, Authorization]);
 
   useEffect(() => {
     refetchFavoriteUsers();

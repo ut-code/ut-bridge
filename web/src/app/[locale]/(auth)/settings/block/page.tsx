@@ -1,11 +1,13 @@
 "use client";
 
 import { client } from "@/client";
+import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import UserCard from "@/features/user/UserCard.tsx";
 import { useUserFormContext } from "@/features/user/UserFormProvider";
 import { useTranslations } from "next-intl";
 
 export default function Page() {
+  const { idToken: Authorization } = useAuthContext();
   const { blockedUsers, refetchBlockedUsers } = useUserFormContext();
   const t = useTranslations("setting.block");
 
@@ -25,12 +27,15 @@ export default function Page() {
                   on={{
                     async favorite(id) {
                       await client.users.markers.blocked[":targetId"].$delete({
+                        header: { Authorization },
                         param: { targetId: id },
                       });
+
                       refetchBlockedUsers();
                     },
                     async unfavorite(id) {
                       await client.users.markers.favorite[":targetId"].$delete({
+                        header: { Authorization },
                         param: {
                           targetId: id,
                         },

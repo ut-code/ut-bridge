@@ -1,5 +1,4 @@
 "use client";
-import { authCookie } from "@/client.ts";
 import Loading from "@/components/Loading.tsx";
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "../config.ts";
@@ -19,11 +18,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [guid, setGUID] = useState<string | undefined>(undefined);
   const [displayName, setDisplayName] = useState<string | undefined>(undefined);
 
-  useEffect(() => {
-    if (idToken) {
-      document.cookie = authCookie(idToken);
-    }
-  }, [idToken]);
   useEffect(() => {
     const currentUser = auth.currentUser;
     if (currentUser) {

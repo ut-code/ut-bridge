@@ -1,4 +1,4 @@
-import { authCookie, client } from "@/client.ts";
+import { client } from "@/client.ts";
 import { signInWithPopup } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
@@ -10,8 +10,6 @@ async function login() {
     if (!result.user) throw new Error("Login Failed");
     const idToken = await result.user.getIdToken();
     console.log("got idToken of", idToken);
-    document.cookie = authCookie(idToken);
-
     const res = await client.users.exist.$get({
       query: { guid: result.user.uid },
     });
