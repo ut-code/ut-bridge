@@ -12,7 +12,7 @@ if (await prisma.university.findUnique({ where: { name: firstUniversity.name } }
 
 for (const lang of languages) {
   await prisma.language.create({
-    data: { name: lang.in_ja }, // TODO: make language accept more than one name
+    data: { jaName: lang.in_ja, enName: lang.in_en },
   });
 }
 
@@ -49,7 +49,7 @@ const seedCampuses = await prisma.campus.findMany();
 const seedLanguages = await prisma.language.findMany();
 
 for (const user of users) {
-  const newUser = await prisma.user.create({
+  await prisma.user.create({
     data: {
       id: user.id,
       name: user.name,
@@ -76,5 +76,4 @@ for (const user of users) {
       },
     },
   });
-  console.log(newUser);
 }
