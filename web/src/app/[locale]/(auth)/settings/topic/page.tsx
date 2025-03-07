@@ -1,6 +1,7 @@
 "use client";
 
 import { client } from "@/client";
+import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { useUserFormContext } from "@/features/user/UserFormProvider";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -8,6 +9,7 @@ import { useState } from "react";
 
 export default function Page() {
   const { formData, setFormData } = useUserFormContext();
+  const { idToken: Authorization } = useAuthContext();
   const router = useRouter();
   const t = useTranslations("setting");
 
@@ -45,7 +47,7 @@ export default function Page() {
       const body = {
         ...formData,
       };
-      const res = await client.users.me.$patch({ json: body });
+      const res = await client.users.me.$patch({ header: { Authorization }, json: body });
       if (!res.ok) {
         console.error(await res.text());
         throw new Error(`レスポンスステータス: ${res.status}`);

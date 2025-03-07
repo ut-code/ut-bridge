@@ -1,6 +1,7 @@
 "use client";
 import { client } from "@/client";
 import Loading from "@/components/Loading.tsx";
+import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { formatCardUser } from "@/features/format";
 import UserCard from "@/features/user/UserCard.tsx";
 import { useUserContext } from "@/features/user/userProvider.tsx";
@@ -83,6 +84,7 @@ export default function Page() {
   const usersPerPage = 15;
   const totalPages = Math.ceil(totalUsers / usersPerPage);
   const { me } = useUserContext();
+  const { idToken: Authorization } = useAuthContext();
 
   useEffect(() => {
     const ctl = new AbortController();
@@ -98,6 +100,7 @@ export default function Page() {
               searchQuery: query.search,
               marker: query.marker,
             },
+            header: { Authorization },
           },
           {
             init: {
@@ -120,7 +123,7 @@ export default function Page() {
     return () => {
       ctl.abort();
     };
-  }, [query.page, query.exchange, query.marker, query.search, me.id]);
+  }, [query.page, query.exchange, query.marker, query.search, me.id, Authorization]);
 
   useEffect(() => {
     // 🔹 検索ワードの変更後に 500ms 待ってリクエストを送る（デバウンス処理）
@@ -214,6 +217,7 @@ export default function Page() {
                       param: {
                         targetId: id,
                       },
+                      header: { Authorization },
                     });
                   },
                   async unfavorite(id) {
@@ -221,6 +225,7 @@ export default function Page() {
                       param: {
                         targetId: id,
                       },
+                      header: { Authorization },
                     });
                   },
                 }}

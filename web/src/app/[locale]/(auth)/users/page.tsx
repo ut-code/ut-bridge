@@ -1,6 +1,7 @@
 "use client";
 import { client } from "@/client";
 import Loading from "@/components/Loading.tsx";
+import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { formatUser } from "@/features/format";
 import { useUserContext } from "@/features/user/userProvider.tsx";
 import type { User } from "common/zod/schema";
@@ -11,6 +12,7 @@ import { useEffect, useState } from "react";
 
 export default function Page() {
   const [user, setUser] = useState<User | null>(null);
+  const { idToken: Authorization } = useAuthContext();
   const { me } = useUserContext();
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -25,6 +27,7 @@ export default function Page() {
         }
         const res = await client.users.$get({
           query: { id: id },
+          header: { Authorization },
         });
         const data = await res.json();
         if (data.length >= 2) throw new Error(`got too many users: got ${data.length}`);
@@ -43,7 +46,7 @@ export default function Page() {
     }
 
     fetchUser();
-  }, [router, id]);
+  }, [router, Authorization, id]);
 
   const [markSpinner, setMarkSpinner] = useState(false);
   const [chatButtonState, setChatButtonState] = useState<"idle" | "searching" | "creating" | "created">("idle");
@@ -62,7 +65,7 @@ export default function Page() {
         className={props.class}
         onClick={async () => {
           setMarkSpinner(true);
-          const args = { param: { targetId: user.id } };
+          const args = { param: { targetId: user.id }, header: { Authorization } };
           const resp =
             props.action === "favorite"
               ? await client.users.markers.favorite[":targetId"].$put(args)
@@ -138,6 +141,7 @@ export default function Page() {
                     param: {
                       user: user.id,
                     },
+                    header: { Authorization },
                   })
                 ).json();
                 console.log("previous chat rooms:", prevs);
@@ -152,6 +156,7 @@ export default function Page() {
                   json: {
                     members: [me.id, user.id],
                   },
+                  header: { Authorization },
                 });
                 const room = await res.json();
                 setChatButtonState("created");

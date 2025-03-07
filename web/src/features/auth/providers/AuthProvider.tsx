@@ -19,11 +19,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [displayName, setDisplayName] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    if (idToken) {
-      document.cookie = `ut-bridge-Authorization=${idToken};`;
-    }
-  }, [idToken]);
-  useEffect(() => {
     const currentUser = auth.currentUser;
     if (currentUser) {
       setDisplayName(currentUser.displayName ?? undefined);

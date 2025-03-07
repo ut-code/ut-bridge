@@ -18,11 +18,13 @@ export function UserProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
   const { guid } = useAuthContext();
   const [myData, setMyData] = useState<FullUser | null>(null);
+  const { idToken: Authorization } = useAuthContext();
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const res = await client.users.$get({
+          header: { Authorization },
           query: { guid },
         });
         ensure(res.ok, "User is not found in Database!");
@@ -37,7 +39,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
     };
 
     fetchUserData();
-  }, [router, guid]);
+  }, [router, guid, Authorization]);
 
   if (!myData) return <Loading stage="my info" />;
   return <UserContext.Provider value={{ me: myData }}>{children}</UserContext.Provider>;

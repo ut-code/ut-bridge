@@ -1,6 +1,7 @@
 "use client";
 
 import { client } from "@/client";
+import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { handlers } from "@/features/chat/state";
 import { useUserContext } from "@/features/user/userProvider";
 import { assert } from "@/lib";
@@ -24,6 +25,7 @@ export default function Page() {
   );
 }
 function MessageInput({ room }: { room: string }) {
+  const { idToken: Authorization } = useAuthContext();
   const [input, setInput] = useState<string>("");
   const [submitting, setSubmitting] = useState<boolean>(false);
   return (
@@ -36,6 +38,7 @@ function MessageInput({ room }: { room: string }) {
           setSubmitting(true);
           setInput("");
           await client.chat.rooms[":room"].messages.$post({
+            header: { Authorization },
             param: {
               room: room,
             },
@@ -62,8 +65,10 @@ function MessageInput({ room }: { room: string }) {
   );
 }
 function Load({ room }: { room: string }) {
+  const { idToken: Authorization } = useAuthContext();
   const m = use(async () => {
     const res = await client.chat.rooms[":room"].$get({
+      header: { Authorization },
       param: {
         room: room,
       },

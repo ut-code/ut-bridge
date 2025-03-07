@@ -1,5 +1,5 @@
 import type { Context } from "hono";
-import { getCookie, getSignedCookie, setSignedCookie } from "hono/cookie";
+import { getSignedCookie, setSignedCookie } from "hono/cookie";
 import { HTTPException } from "hono/http-exception";
 import { prisma } from "../config/prisma.ts";
 import { panic } from "../lib/env.ts";
@@ -17,17 +17,37 @@ export async function getGUIDFromIDToken(token: string) {
   return (await auth.verifyIdToken(token)).uid;
 }
 
-export async function getGUID(c: Context) {
-  const idToken = getCookie(c, "ut-bridge-Authorization");
-  if (!idToken)
-    throw new HTTPException(401, {
-      message: "cookie ut-bridge-Authorization not found",
-    });
+export type AuthenticatedContext = Context<
+  // biome-ignore lint: it defaults to any
+  any,
+  string,
+  {
+    in: {
+      header: {
+        Authorization: string;
+      };
+    };
+    out: {
+      header: {
+        Authorization: string;
+      };
+    };
+  }
+>;
 
-  return await getGUIDFromIDToken(idToken);
+export async function getGUID(c: AuthenticatedContext) {
+  const idToken = c.req.valid("header").Authorization;
+  if (idToken) return await getGUIDFromIDToken(idToken);
+
+  const cookie = c.req.query("id-token");
+  if (cookie) return await getGUIDFromIDToken(cookie);
+
+  throw new HTTPException(401, {
+    message: "header Authorization not found",
+  });
 }
 
-export async function getUserID(c: Context) {
+export async function getUserID(c: AuthenticatedContext) {
   const cached = await getSignedCookie(c, COOKIE_SIGN, "ut-bridge-Userid-Cache");
   if (cached) return cached;
 
