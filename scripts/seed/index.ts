@@ -55,7 +55,6 @@ for (const user of users) {
       name: user.name,
       gender: user.gender,
       isForeignStudent: user.isForeignStudent,
-      displayLanguage: user.displayLanguage,
       grade: user.grade,
       hobby: user.hobby,
       introduction: user.introduction,

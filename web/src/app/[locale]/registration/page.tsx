@@ -89,7 +89,6 @@ export default function Page() {
     name: "",
     gender: "male",
     isForeignStudent: false,
-    displayLanguage: "japanese",
     grade: "B1",
     universityId: "",
     divisionId: "",

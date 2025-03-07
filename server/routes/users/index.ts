@@ -78,7 +78,6 @@ const router = new Hono()
         name: body.name,
         gender: body.gender,
         isForeignStudent: body.isForeignStudent,
-        displayLanguage: body.displayLanguage,
         grade: body.grade,
         divisionId: body.divisionId,
         campusId: body.campusId,
