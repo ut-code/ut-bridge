@@ -404,11 +404,11 @@ const router = new Hono()
   )
 
   // IO: server -> client
-  .get("/sse", zValidator("cookie", z.object({ "ut-bridge-Authorization": z.string().jwt() })), async (c) => {
+  .get("/sse", async (c) => {
     return streamSSE(c, async (stream) => {
       let connected = true;
-      const id = 0;
-      const bc = new BroadcastChannel(`chat:${id}`);
+      const userId = await getUserID(c);
+      const bc = new BroadcastChannel(`chat:${userId}`);
 
       bc.onmessage = (_e) => {
         const ev: BroadcastEvent = _e.data;
