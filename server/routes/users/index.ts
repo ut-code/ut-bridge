@@ -13,7 +13,7 @@ const router = new Hono()
   .route("/me", me)
 
   .get("/", zValidator("query", z.object({ id: z.string().optional(), guid: z.string().optional() })), async (c) => {
-    const userId = getUserID(c);
+    const userId = await getUserID(c);
     if (!userId)
       throw new HTTPException(401, {
         message: "you need an account to query",
