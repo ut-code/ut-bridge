@@ -8,20 +8,19 @@ datasource db {
 }
 
 model User {
-  id               String          @id @default(uuid())
-  guid             String          @unique
+  id               String   @id @default(uuid())
+  guid             String   @unique
   imageUrl         String?
   name             String
   gender           Gender
   isForeignStudent Boolean
-  displayLanguage  DisplayLanguage
   grade            Grade
   hobby            String
   introduction     String
   divisionId       String
-  division         Division        @relation(fields: [divisionId], references: [id])
+  division         Division @relation(fields: [divisionId], references: [id])
   campusId         String
-  campus           Campus          @relation(fields: [campusId], references: [id])
+  campus           Campus   @relation(fields: [campusId], references: [id])
 
   motherLanguageId  String
   motherLanguage    Language                 @relation(fields: [motherLanguageId], references: [id])
@@ -104,7 +103,8 @@ model University {
 
 model Language {
   id            String                   @id @default(uuid())
-  name          String                   @unique()
+  jaName        String                   @unique()
+  enName        String                   @unique()
   fluentUsers   FluentLanguageOnUser[]
   learningUsers LearningLanguageOnUser[]
   User          User[]
@@ -132,11 +132,6 @@ enum Gender {
   male
   female
   other
-}
-
-enum DisplayLanguage {
-  japanese
-  english
 }
 
 enum Grade {
