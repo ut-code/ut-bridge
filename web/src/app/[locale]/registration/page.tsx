@@ -17,7 +17,7 @@ export default function Page() {
   const [divisions, setDivisions] = useState<{ id: string; name: string }[]>([]);
   const [universities, setUniversities] = useState<{ id: string; name: string }[]>([]);
   const [universityId, setUniversityId] = useState<string>("");
-  const [languages, setLanguages] = useState<{ id: string; name: string }[]>([]);
+  const [languages, setLanguages] = useState<{ id: string; jaName: string; enName: string }[]>([]);
   const [page, setPage] = useState<string>("former");
   const t = useTranslations();
   const [loadingState, setLoadingState] = useState<"idle" | "loading">("idle");
@@ -378,7 +378,7 @@ export default function Page() {
                   >
                     {languages.map((language) => (
                       <option key={language.id} value={language.id}>
-                        {language.name}
+                        {language.jaName}
                       </option>
                     ))}
                   </select>
@@ -396,7 +396,7 @@ export default function Page() {
                           onChange={handleChange}
                           className="accent-blue-500"
                         />
-                        <span>{language.name}</span>
+                        <span>{language.jaName}</span>
                       </label>
                     ))}
                   </div>
@@ -415,7 +415,7 @@ export default function Page() {
                           onChange={handleChange}
                           className="accent-blue-500"
                         />
-                        <span>{language.name}</span>
+                        <span>{language.jaName}</span>
                       </label>
                     ))}
                   </div>

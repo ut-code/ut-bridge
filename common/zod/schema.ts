@@ -13,7 +13,8 @@ export const IntroductionSchema = z.string().max(225, { message: "コメント�
 
 const LanguageSchema = z.object({
   id: z.string(),
-  name: z.string(),
+  jaName: z.string(),
+  enName: z.string(),
 });
 
 const FluentLanguageSchema = z.object({

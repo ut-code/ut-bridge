@@ -12,9 +12,9 @@ export function formatUser(user: FullUser): User {
     introduction: user.introduction,
     division: user.division.name,
     campus: user.campus.name,
-    motherLanguage: user.motherLanguage.name,
-    fluentLanguages: user.fluentLanguages.map((fl) => fl.language.name),
-    learningLanguages: user.learningLanguages.map((ll) => ll.language.name),
+    motherLanguage: user.motherLanguage.jaName,
+    fluentLanguages: user.fluentLanguages.map((fl) => fl.language.jaName),
+    learningLanguages: user.learningLanguages.map((ll) => ll.language.jaName),
     markedAs: user.markedAs[0]?.kind,
   };
 }
@@ -28,9 +28,9 @@ export function formatCardUser(user: FullCardUser): CardUser {
     isForeignStudent: user.isForeignStudent,
     grade: user.grade,
     campus: user.campus.name,
-    motherLanguage: user.motherLanguage.name,
-    fluentLanguages: user.fluentLanguages.map((fl) => fl.language.name),
-    learningLanguages: user.learningLanguages.map((ll) => ll.language.name),
+    motherLanguage: user.motherLanguage.jaName,
+    fluentLanguages: user.fluentLanguages.map((fl) => fl.language.jaName),
+    learningLanguages: user.learningLanguages.map((ll) => ll.language.jaName),
     marker: user.markedAs[0]?.kind,
   };
 }
