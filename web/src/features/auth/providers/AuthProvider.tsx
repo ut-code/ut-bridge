@@ -1,5 +1,5 @@
 "use client";
-import { API_ENDPOINT } from "@/client.ts";
+import { authCookie } from "@/client.ts";
 import Loading from "@/components/Loading.tsx";
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "../config.ts";
@@ -21,7 +21,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (idToken) {
-      document.cookie = `ut-bridge-Authorization=${idToken}; domain=${API_ENDPOINT}`;
+      document.cookie = authCookie(idToken);
     }
   }, [idToken]);
   useEffect(() => {
