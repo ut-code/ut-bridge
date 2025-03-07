@@ -30,7 +30,7 @@ export function ChatNotificationProvider({ children }: { children: React.ReactNo
     let src: EventSource;
 
     (async () => {
-      document.cookie = `ut-bridge-Authorization=${idToken}`;
+      document.cookie = `ut-bridge-Authorization=${idToken}; domain=${API_ENDPOINT}`;
 
       const signal = ctrl.signal;
       src = new EventSource(`${API_ENDPOINT}/chat/sse`, {

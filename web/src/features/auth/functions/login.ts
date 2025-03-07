@@ -1,4 +1,4 @@
-import { client } from "@/client.ts";
+import { API_ENDPOINT, client } from "@/client.ts";
 import { signInWithPopup } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
@@ -8,6 +8,7 @@ async function login() {
   try {
     const result = await signInWithPopup(auth, provider);
     if (!result.user) throw new Error("Login Failed");
+    document.cookie = `ut-bridge-Authorization=${await result.user.getIdToken()}; domain=${API_ENDPOINT}`;
 
     const res = await client.users.exist.$get({
       query: { guid: result.user.uid },
