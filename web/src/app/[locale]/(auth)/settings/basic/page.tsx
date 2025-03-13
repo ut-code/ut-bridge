@@ -1,6 +1,7 @@
 "use client";
 
 import { client } from "@/client";
+import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { upload } from "@/features/image/ImageUpload";
 import { useUserContext } from "@/features/user/userProvider";
 import { useTranslations } from "next-intl";
@@ -9,6 +10,7 @@ import { useEffect, useState } from "react";
 
 export default function Page() {
   const router = useRouter();
+  const { idToken: Authorization } = useAuthContext();
   const { me } = useUserContext();
   const t = useTranslations("setting");
   const [formData, setFormData] = useState<{
@@ -64,6 +66,7 @@ export default function Page() {
 
     try {
       const res = await client.users.me.$patch({
+        header: { Authorization },
         json: { ...formData, imageUrl },
       });
       if (!res.ok) {
