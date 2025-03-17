@@ -136,7 +136,7 @@ const router = new Hono()
     },
   )
   // ## room preview
-  .get("/rooms/preview", async (c) => {
+  .get("/rooms/preview", zValidator("header", z.object({ Authorization: z.string() })), async (c) => {
     const requester = await getUserID(c);
     const resp = await prisma.room.findMany({
       where: {
