@@ -60,7 +60,7 @@ export default function Page() {
         <Link href={"/settings"}>
           <ChevronLeft />
         </Link>
-        大学情報
+        {t("university.title")}
         <div className="w-6" />
       </div>
       <div className="max-w mx-10 my-5 p-4 sm:mx-0 sm:my-20">

@@ -70,7 +70,7 @@ export default function Page() {
         <Link href={"/settings"}>
           <ChevronLeft />
         </Link>
-        トピック
+        {t("topic.title")}
         <div className="w-6" />
       </div>
       <div className="max-w mx-10 my-5 p-4 sm:mx-0 sm:my-20">

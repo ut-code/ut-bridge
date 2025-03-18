@@ -82,7 +82,7 @@ export default function Page() {
         <Link href={"/settings"}>
           <ChevronLeft />
         </Link>
-        言語情報
+        {t("language.title")}
         <div className="w-6" />
       </div>
       <div className="max-w mx-10 my-5 p-4 sm:mx-0 sm:my-20">

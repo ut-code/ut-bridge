@@ -19,7 +19,7 @@ export default function Page() {
         <Link href={"/settings"}>
           <ChevronLeft />
         </Link>
-        ブロック
+        {t("title")}
         <div className="w-6" />
       </div>
       <div className="max-w my-10 p-4">
