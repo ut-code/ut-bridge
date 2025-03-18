@@ -1,6 +1,7 @@
 "use client";
 
 import { client } from "@/client";
+import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { useUserFormContext } from "@/features/user/UserFormProvider";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
@@ -10,6 +11,7 @@ import { useState } from "react";
 
 export default function Page() {
   const router = useRouter();
+  const { idToken: Authorization } = useAuthContext();
   const { formData, setFormData, universities, divisions, campuses } = useUserFormContext();
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const t = useTranslations("setting");
@@ -39,7 +41,7 @@ export default function Page() {
 
     try {
       const body = { ...formData };
-      const res = await client.users.me.$patch({ json: body });
+      const res = await client.users.me.$patch({ header: { Authorization }, json: body });
 
       if (!res.ok) throw new Error(`レスポンスステータス: ${res.status} - ${await res.text()}`);
 
