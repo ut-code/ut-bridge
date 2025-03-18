@@ -11,6 +11,7 @@ export const MarkerSchema = z.enum(["blocked", "favorite"]);
 export const HobbySchema = z.string().max(25, { message: "趣味は25文字以下です" });
 export const IntroductionSchema = z.string().max(225, { message: "コメントは225文字以下です" });
 const LanguageSchema = z.object({
+  id: z.string().uuid(),
   name: z.string(),
 });
 
@@ -18,10 +19,13 @@ const LanguageObjectSchema = z.object({
   language: LanguageSchema,
 });
 const DivisionSchema = z.object({
+  id: z.string().uuid(),
   name: z.string(),
 });
 const CampusSchema = z.object({
+  id: z.string().uuid(),
   name: z.string(),
+  universityId: z.string(),
 });
 
 const BaseUserSchema = z.object({
@@ -66,6 +70,15 @@ export const CreateUserSchema = BaseUserSchema.omit({ id: true }).extend({
   fluentLanguageIds: z.array(z.string().uuid()),
   learningLanguageIds: z.array(z.string().uuid()),
 });
+export const Part1RegistrationSchema = CreateUserSchema.omit({
+  hobby: true,
+  introduction: true,
+  isForeignStudent: true,
+  imageUrl: true,
+  motherLanguageId: true,
+  fluentLanguageIds: true,
+  learningLanguageIds: true,
+});
 export const SeedUserSchema = CreateUserSchema.partial();
 
 // type-only schemas because Omit<Omit<... is ugly as hell
@@ -73,14 +86,12 @@ export const SeedUserSchema = CreateUserSchema.partial();
 const StructuredCardUserSchema = StructuredUserSchema.omit({
   university: true,
   division: true,
-  campus: true,
   hobby: true,
   introduction: true,
 });
 const FlatCardUserSchema = FlatUserSchema.omit({
   university: true,
   division: true,
-  campus: true,
   hobby: true,
   introduction: true,
 });

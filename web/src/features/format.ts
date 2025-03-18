@@ -31,6 +31,8 @@ export function formatCardUser(user: StructuredCardUser): FlatCardUser {
     grade: user.grade,
     isForeignStudent: user.isForeignStudent,
 
+    campus: user.campus.name,
+
     motherLanguage: user.motherLanguage.name,
     fluentLanguages: user.fluentLanguages.map((fl) => fl.language.name),
     learningLanguages: user.learningLanguages.map((ll) => ll.language.name),

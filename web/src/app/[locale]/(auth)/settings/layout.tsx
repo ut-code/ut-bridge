@@ -4,7 +4,7 @@ import { UserFormProvider } from "@/features/setting/UserFormController.tsx";
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <UserFormProvider>
+      <UserFormProvider loadPreviousData>
         <div className="flex h-screen flex-row">
           <div className="center w-1/4 p-20">
             <SideNav />

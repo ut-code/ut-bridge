@@ -2,13 +2,15 @@
 import { client } from "@/client";
 import Loading from "@/components/Loading.tsx";
 import { ensure } from "@/lib.ts";
-import type { FullUser } from "common/zod/schema";
+import type { StructuredUser } from "common/zod/schema";
 import { useRouter } from "next/navigation";
 import { type ReactNode, createContext, useContext, useEffect, useState } from "react";
 import { useAuthContext } from "../auth/providers/AuthProvider.tsx";
 
-const UserContext = createContext<{ me: FullUser } | null>(null);
-export function useUserContext(): { me: FullUser } {
+export type MYDATA = Omit<StructuredUser, "university">;
+
+const UserContext = createContext<{ me: MYDATA } | null>(null);
+export function useUserContext(): { me: MYDATA } {
   const ctx = useContext(UserContext);
   if (!ctx) throw new Error("useUserContext: please use this within UserProvider. aborting...");
   return ctx;
@@ -17,7 +19,7 @@ export function useUserContext(): { me: FullUser } {
 export function UserProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
   const { guid } = useAuthContext();
-  const [myData, setMyData] = useState<FullUser | null>(null);
+  const [myData, setMyData] = useState<MYDATA | null>(null);
   const { idToken: Authorization } = useAuthContext();
 
   useEffect(() => {

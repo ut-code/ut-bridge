@@ -15,9 +15,10 @@ export default function Header() {
   // ロケールを考慮してパスを正規化する（/ja/login, /en/login → /login）
   const pathname = path.replace(/^\/(en|ja)\//, "/");
   const me =
-    pathname === "/registration" || pathname === "/login"
+    pathname.startsWith("/registration") || pathname === "/login"
       ? { imageUrl: "", name: "" }
-      : // eslint-disable-next-line react-hooks/rules-of-hooks
+      : // who the fuck did this
+        // eslint-disable-next-line react-hooks/rules-of-hooks
         useUserContext();
 
   return (

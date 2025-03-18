@@ -1,5 +1,5 @@
 import { zValidator } from "@hono/zod-validator";
-import { CreateUserSchema } from "common/zod/schema.ts";
+import { CreateUserSchema, type StructuredUser } from "common/zod/schema.ts";
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
 import { z } from "zod";
@@ -45,7 +45,7 @@ const router = new Hono()
           },
         },
       });
-      return c.json(users);
+      return c.json(users satisfies StructuredUser);
     },
   )
 

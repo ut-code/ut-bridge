@@ -17,6 +17,8 @@ model User {
   grade            Grade
   hobby            String
   introduction     String
+  // universityId     String
+  // university       University @relation(fields: [universityId], references: [university])
   divisionId       String
   division         Division @relation(fields: [divisionId], references: [id])
   campusId         String
