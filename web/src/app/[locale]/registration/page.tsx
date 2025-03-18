@@ -200,7 +200,7 @@ export default function Page() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           {page === "former" ? (
             <div>
-              <div className="px-15 sm:my-10">
+              <div className="px-5 sm:my-10 sm:px-15">
                 <h2 className="font-bold text-xl"> {t("setting.basic.title")}</h2>
                 <label
                   htmlFor="name"
@@ -262,7 +262,7 @@ export default function Page() {
                 </div>
               </div>
 
-              <div className="my-10 px-15">
+              <div className="my-10 px-5 sm:px-15">
                 <h2 className="font-bold text-xl">{t("setting.university.title")}</h2>
                 <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
                   {t("setting.university.univ")}
@@ -342,7 +342,7 @@ export default function Page() {
                   </select>
                 </label>
               </div>
-              <div className="flex justify-end px-15">
+              <div className="flex justify-end px-5 sm:px-15">
                 <button
                   type="button"
                   onClick={() => setPage("latter")}
@@ -354,7 +354,7 @@ export default function Page() {
             </div>
           ) : (
             <div>
-              <div className="px-15 sm:my-10">
+              <div className="px-5 sm:my-10 sm:px-15">
                 <h2 className="font-bold text-xl"> {t("setting.language.title")}</h2>
                 <label className="mt-5 flex flex-row justify-between sm:relative sm:my-4 sm:block sm:flex-none">
                   {t("setting.language.isForeign")}
@@ -423,7 +423,7 @@ export default function Page() {
                 </div>
               </div>
 
-              <div className="my-10 px-15">
+              <div className="my-10 px-5 sm:px-15">
                 <h2 className="font-bold text-xl">{t("setting.topic.title")}</h2>
                 <label
                   htmlFor="hobby"
@@ -458,7 +458,7 @@ export default function Page() {
                   />
                 </label>
               </div>
-              <div className="flex justify-between px-15">
+              <div className="flex justify-between px-5 sm:px-15">
                 <button
                   type="button"
                   onClick={() => setPage("former")}
