@@ -86,7 +86,10 @@ export default function Page() {
             />
           </label>
 
-          <label htmlFor="introduction" className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
+          <label
+            htmlFor="introduction"
+            className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between"
+          >
             {t("topic.introduction")}
 
             <textarea

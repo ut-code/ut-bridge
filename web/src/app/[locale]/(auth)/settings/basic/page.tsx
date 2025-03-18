@@ -124,7 +124,10 @@ export default function Page() {
             <div className={`flex h-40 w-40 items-center justify-center rounded-lg ${preview ? "" : "bg-gray-300"}`}>
               {preview && <img src={preview} alt="プレビュー" className="rounded-lg object-cover" />}
             </div>
-            <label htmlFor="image-upload" className="mt-5 flex h-10 cursor-pointer justify-center rounded bg-blue-400 px-4 py-2 text-white sm:mt-0 sm:flex-none">
+            <label
+              htmlFor="image-upload"
+              className="mt-5 flex h-10 cursor-pointer justify-center rounded bg-blue-400 px-4 py-2 text-white sm:mt-0 sm:flex-none"
+            >
               {t("basic.photoUpload")}
             </label>
           </div>
