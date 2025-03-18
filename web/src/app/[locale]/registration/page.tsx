@@ -83,13 +83,10 @@ export default function Page() {
   }, [universityId, router]);
 
   const [formData, setFormData] = useState<CreateUser>({
-    id: "",
     imageUrl: undefined,
-    guid: "",
     name: "",
     gender: "male",
     isForeignStudent: false,
-    displayLanguage: "japanese",
     grade: "B1",
     universityId: "",
     divisionId: "",
@@ -167,14 +164,13 @@ export default function Page() {
     setStatus("loading");
     try {
       if (!user) throw new Error("User is not found in Firebase!");
-      const body = {
+      const body: CreateUser = {
         ...formData,
-        id: self.crypto.randomUUID(),
-        guid: user.uid,
         imageUrl: file ? await upload(file) : undefined,
       };
 
-      const res = await client.users.$post({ json: body });
+      const idToken = await user.getIdToken(true);
+      const res = await client.users.$post({ json: body, header: { Authorization: idToken } });
       if (!res.ok) {
         console.error(await res.text());
         throw new Error(`レスポンスステータス: ${res.status}`);

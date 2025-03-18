@@ -24,7 +24,6 @@ const route = new Hono()
           name: body.name ?? undefined,
           gender: body.gender ?? undefined,
           isForeignStudent: body.isForeignStudent ?? undefined,
-          displayLanguage: body.displayLanguage ?? undefined,
           grade: body.grade ?? undefined,
           divisionId: body.divisionId ?? undefined,
           campusId: body.campusId ?? undefined,

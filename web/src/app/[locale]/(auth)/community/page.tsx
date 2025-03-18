@@ -6,7 +6,7 @@ import { formatCardUser } from "@/features/format";
 import UserCard from "@/features/user/UserCard.tsx";
 import { useUserContext } from "@/features/user/userProvider.tsx";
 import { Link, useRouter } from "@/i18n/navigation.ts";
-import { type CardUser, type Exchange, ExchangeSchema, MarkerSchema } from "common/zod/schema";
+import { type Exchange, ExchangeSchema, type FlatCardUser, MarkerSchema } from "common/zod/schema";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
@@ -72,7 +72,7 @@ export default function Page() {
   const t = useTranslations("community");
 
   // if null it's loading, if [] there's no more users
-  const [users, setUsers] = useState<CardUser[] | null>(null);
+  const [users, setUsers] = useState<FlatCardUser[] | null>(null);
   const [rawSearchQuery, setRawSearchQuery] = useState("");
   const setDebouncedSearchQuery = useCallback((val: string) => {
     const url = createQueriedURL({ search: val });

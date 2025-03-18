@@ -90,7 +90,7 @@ const router = new Hono().get(
           imageUrl: true,
           campus: { select: { name: true } },
           grade: true,
-          motherLanguage: true,
+          motherLanguage: { select: { name: true } },
           fluentLanguages: {
             select: { language: true },
           },
