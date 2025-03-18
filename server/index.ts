@@ -26,7 +26,7 @@ if (process.env.NODE_ENV === "development") {
 }
 
 const app = new Hono()
-  .use(cors("CORS_ALLOW_ORIGINS"))
+  .use(cors())
   // TODO(PERF):: delete this in production
   .use(async (c, next) => {
     const latency = Number.parseInt(env(c, "ARTIFICIAL_NETWORK_LATENCY", { fallback: "0" }));
