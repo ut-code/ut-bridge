@@ -2,8 +2,8 @@
 
 import { client } from "@/client";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
+import { useUserFormContext } from "@/features/setting/UserFormController.tsx";
 import UserCard from "@/features/user/UserCard.tsx";
-import { useUserFormContext } from "@/features/user/UserFormProvider";
 import { useTranslations } from "next-intl";
 
 export default function Page() {
@@ -25,21 +25,14 @@ export default function Page() {
                   link={`/users?id=${user.id}`}
                   user={user}
                   on={{
-                    async favorite(id) {
+                    async unblock(id) {
                       await client.users.markers.blocked[":targetId"].$delete({
-                        header: { Authorization },
-                        param: { targetId: id },
-                      });
-
-                      refetchBlockedUsers();
-                    },
-                    async unfavorite(id) {
-                      await client.users.markers.favorite[":targetId"].$delete({
                         header: { Authorization },
                         param: {
                           targetId: id,
                         },
                       });
+                      refetchBlockedUsers();
                     },
                   }}
                 />
