@@ -2,7 +2,7 @@
 
 import { client } from "@/client";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
-import { useUserFormContext } from "@/features/user/UserFormProvider";
+import { useUserFormContext } from "@/features/setting/UserFormController.tsx";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -10,7 +10,8 @@ import { useState } from "react";
 export default function Page() {
   const { idToken: Authorization } = useAuthContext();
   const router = useRouter();
-  const { formData, setFormData, languages } = useUserFormContext();
+  const ctx = useUserFormContext();
+  const { formData, languages } = ctx;
   const t = useTranslations("setting");
 
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -19,7 +20,7 @@ export default function Page() {
     const { name, value, type, checked, multiple } = e.target as HTMLInputElement;
     const { options } = e.target as HTMLSelectElement;
 
-    setFormData((prev) => {
+    ctx.setFormData((prev) => {
       // 複数選択の処理（言語選択）
       if (multiple) {
         const selectedValues = Array.from(options)
@@ -35,8 +36,8 @@ export default function Page() {
       // 言語の選択（チェックボックス）
       if (name === "fluentLanguageIds" || name === "learningLanguageIds") {
         const updatedLanguages = checked
-          ? [...prev[name], value] // 追加
-          : prev[name].filter((id) => id !== value); // 削除
+          ? [...(prev[name] ?? []), value] // 追加
+          : prev[name]?.filter((id) => id !== value); // 削除
 
         return {
           ...prev,
@@ -66,7 +67,7 @@ export default function Page() {
       }
 
       setStatus("success");
-      window.location.href = "/settings";
+      ctx.feedbackSuccess();
     } catch (error) {
       console.error("ユーザー登録に失敗しました", error);
       setStatus("error");
@@ -114,7 +115,7 @@ export default function Page() {
                   type="checkbox"
                   name="fluentLanguageIds"
                   value={language.id}
-                  checked={formData.fluentLanguageIds.includes(language.id)}
+                  checked={ctx.formData.fluentLanguageIds?.includes(language.id) ?? false}
                   onChange={handleChange}
                   className="accent-blue-500"
                 />
@@ -132,7 +133,7 @@ export default function Page() {
                   type="checkbox"
                   name="learningLanguageIds"
                   value={language.id}
-                  checked={formData.learningLanguageIds.includes(language.id)}
+                  checked={formData.learningLanguageIds?.includes(language.id) ?? false}
                   onChange={handleChange}
                   className="accent-blue-500"
                 />
