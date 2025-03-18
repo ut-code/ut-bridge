@@ -51,9 +51,9 @@ function MessageInput({ room }: { room: string }) {
           setSubmitting(false);
         }}
       >
-        <div className="flex w-full flex-row justify-around gap-2">
+        <div className="flex w-full flex-row justify-around gap-2 border-gray-300 border-t pt-4">
           <input
-            className="input input-bordered "
+            className="input input-bordered rounded-xl"
             value={input}
             onChange={(ev) => {
               setInput(ev.target.value);
