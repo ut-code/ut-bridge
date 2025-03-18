@@ -163,13 +163,13 @@ export const UserFormProvider = ({
       const res = await client.community.$get({
         header: { Authorization },
         query: {
-          myId: me.id,
+          except: me.id,
           marker: "favorite",
         },
       });
 
       if (!res.ok) {
-        throw new Error(`お気に入りユーザーの取得失敗: ${await res.text()}`);
+        throw new Error(await res.text());
       }
 
       const data = await res.json();
@@ -185,7 +185,7 @@ export const UserFormProvider = ({
       const res = await client.community.$get({
         header: { Authorization },
         query: {
-          myId: me.id,
+          except: me.id,
           marker: "blocked",
         },
       });
