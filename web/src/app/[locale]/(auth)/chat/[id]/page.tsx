@@ -6,6 +6,7 @@ import { handlers } from "@/features/chat/state";
 import { useUserContext } from "@/features/user/userProvider";
 import { assert } from "@/lib";
 import { use } from "@/react/useData";
+import { SendHorizontal } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -29,7 +30,7 @@ function MessageInput({ room }: { room: string }) {
   const [input, setInput] = useState<string>("");
   const [submitting, setSubmitting] = useState<boolean>(false);
   return (
-    <div className="flex flex-row justify-center">
+    <div className="">
       <form
         className="inline"
         onSubmit={async (ev) => {
@@ -50,16 +51,18 @@ function MessageInput({ room }: { room: string }) {
           setSubmitting(false);
         }}
       >
-        <input
-          className="input input-bordered "
-          value={input}
-          onChange={(ev) => {
-            setInput(ev.target.value);
-          }}
-        />
-        <button type="submit" className="btn btn-primary" disabled={submitting}>
-          送信
-        </button>
+        <div className="flex w-full flex-row justify-around gap-2">
+          <input
+            className="input input-bordered "
+            value={input}
+            onChange={(ev) => {
+              setInput(ev.target.value);
+            }}
+          />
+          <button type="submit" className="" disabled={submitting}>
+            <SendHorizontal color="#0b8bee"/>
+          </button>
+        </div>
       </form>
     </div>
   );
