@@ -7,6 +7,7 @@ import UserCard from "@/features/user/UserCard.tsx";
 import { useUserContext } from "@/features/user/userProvider.tsx";
 import { Link, useRouter } from "@/i18n/navigation.ts";
 import { type CardUser, type Exchange, ExchangeSchema, MarkerSchema } from "common/zod/schema";
+import { Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
@@ -139,7 +140,7 @@ export default function Page() {
 
   return (
     <>
-      <div className="flex flex-col-reverse items-center sm:flex-row sm:justify-between sm:px-30">
+      <div className="flex flex-col-reverse items-center gap-5 sm:flex-row sm:justify-between sm:px-30">
         <div className="mb-5 flex items-center sm:mb-0">
           <div className="filter">
             <input
@@ -187,15 +188,18 @@ export default function Page() {
           </div>
         </div>
 
-        <input
-          type="search"
-          id="user-search"
-          name="q"
-          placeholder={t("search")}
-          value={rawSearchQuery}
-          onChange={(e) => setRawSearchQuery(e.target.value)}
-          className="mb-5 w-full rounded-full border border-gray-400 bg-white p-2 pl-5 sm:mb-0 sm:w-1/4"
-        />
+        <div className="relative">
+          <Search className="-translate-y-1/2 absolute top-1/2 right-4 text-gray-500" size={20} />
+          <input
+            type="search"
+            id="user-search"
+            name="q"
+            placeholder={t("search")}
+            value={rawSearchQuery}
+            onChange={(e) => setRawSearchQuery(e.target.value)}
+            className="w-full rounded-full border border-gray-400 bg-white p-2 pr-10 pl-5"
+          />
+        </div>
       </div>
 
       {users === null ? (
