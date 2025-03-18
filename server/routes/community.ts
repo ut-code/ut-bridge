@@ -1,6 +1,6 @@
 import { zValidator } from "@hono/zod-validator";
 import type { Prisma } from "@prisma/client";
-import { MarkerSchema } from "common/zod/schema.ts";
+import { MarkerSchema, type StructuredCardUser } from "common/zod/schema.ts";
 import { Hono } from "hono";
 import { getUserID } from "server/auth/func.ts";
 import z from "zod";
@@ -88,7 +88,7 @@ const router = new Hono().get(
           gender: true,
           isForeignStudent: true,
           imageUrl: true,
-          campus: { select: { universityId: true, id: true, name: true } },
+          campus: { select: { university: true, id: true, name: true } },
           grade: true,
           motherLanguage: { select: { id: true, name: true } },
           fluentLanguages: {
@@ -110,7 +110,7 @@ const router = new Hono().get(
       prisma.user.count({ where: whereCondition }),
     ]);
 
-    return c.json({ users, totalUsers });
+    return c.json({ users: users satisfies StructuredCardUser[], totalUsers });
   },
 );
 

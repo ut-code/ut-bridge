@@ -25,16 +25,20 @@ const DivisionSchema = z.object({
 const CampusSchema = z.object({
   id: z.string().uuid(),
   name: z.string(),
-  universityId: z.string(),
+  university: z.object({
+    id: z.string().uuid(),
+    name: z.string(),
+  }),
 });
 
 const BaseUserSchema = z.object({
   id: z.string().uuid(),
   name: z.string(),
   gender: GenderEnum,
-  isForeignStudent: z.boolean(),
   imageUrl: z.string().optional(),
+  isForeignStudent: z.boolean(),
   grade: GradeSchema,
+
   hobby: HobbySchema,
   introduction: IntroductionSchema,
 });
@@ -51,7 +55,6 @@ const FlatUserSchema = BaseUserSchema.extend({
 });
 const StructuredUserSchema = BaseUserSchema.extend({
   imageUrl: z.string().nullable(), // prisma returns NULL
-  university: z.object({ name: z.string().uuid() }),
   campus: CampusSchema,
   division: DivisionSchema,
 
@@ -84,7 +87,6 @@ export const SeedUserSchema = CreateUserSchema.partial();
 // type-only schemas because Omit<Omit<... is ugly as hell
 // TODO: hobby も自己紹介もいらないの？
 const StructuredCardUserSchema = StructuredUserSchema.omit({
-  university: true,
   division: true,
   hobby: true,
   introduction: true,

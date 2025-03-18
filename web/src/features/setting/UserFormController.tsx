@@ -138,7 +138,7 @@ export const UserFormProvider = ({
             gender: me.gender,
             isForeignStudent: me.isForeignStudent,
             grade: me.grade,
-            universityId: me.campus.universityId,
+            universityId: me.campus.university.id,
             divisionId: me.division.id,
             campusId: me.campus.id,
             hobby: me.hobby,

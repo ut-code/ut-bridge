@@ -28,9 +28,26 @@ const router = new Hono()
           id,
           guid,
         },
-        include: {
+        select: {
+          id: true,
+          name: true,
+          gender: true,
+          imageUrl: true,
+          isForeignStudent: true,
+          grade: true,
+
+          hobby: true,
+          introduction: true,
+
+          campus: {
+            select: {
+              id: true,
+              name: true,
+              university: true,
+            },
+          },
           division: true,
-          campus: true,
+
           motherLanguage: true,
           fluentLanguages: {
             select: { language: true },
@@ -38,6 +55,7 @@ const router = new Hono()
           learningLanguages: {
             select: { language: true },
           },
+
           markedAs: {
             select: {
               kind: true,
@@ -45,7 +63,7 @@ const router = new Hono()
           },
         },
       });
-      return c.json(users satisfies StructuredUser);
+      return c.json(users satisfies StructuredUser[]);
     },
   )
 

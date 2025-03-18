@@ -11,7 +11,7 @@ export function formatUser(user: StructuredUser): FlatUser {
     introduction: user.introduction,
     isForeignStudent: user.isForeignStudent,
 
-    university: user.university.name,
+    university: user.campus.university.name,
     division: user.division.name,
     campus: user.campus.name,
 
