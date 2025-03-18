@@ -11,8 +11,9 @@ import { useEffect, useState } from "react";
 export default function Page() {
   return (
     <>
-      <h1>チャット画面</h1>
-      <Rooms />
+      <div className="w-full sm:w-1/4">
+        <Rooms />
+      </div>
     </>
   );
 }
@@ -43,7 +44,7 @@ function Rooms() {
   if (error) return <span className="text-error">{error}</span>;
 
   return (
-    <ul>
+    <ul className="divide divide-y divide-gray-300 p-2">
       {rooms.map((room) => (
         <li key={room.id}>
           <Room room={room} />
@@ -72,15 +73,17 @@ function Room({ room }: { room: RoomPreview }) {
   const firstMember = room.members.filter((m) => m.user.id !== me.id)[0]?.user ?? null;
 
   return (
-    <Link href={`/chat/${room.id}`} className="flex items-center space-x-4">
+    <Link href={`/chat/${room.id}`} className="flex h-full w-full items-center py-6">
+      <div className="flex w-1/3 items-center justify-center">
       <Image
         alt={firstMember?.name || "User"}
-        className="size-10 rounded-box"
+        className="rounded-full object-cover"
         src={firstMember?.imageUrl || "/default-profile.png"}
         width={40}
         height={40}
       />
-      <div className="list-col-grow">
+      </div>
+      <div className="w-2/3 list-col-grow pl-4">
         <div>{firstMember?.name || "Unknown User"}</div>
         <div className="font-semibold text-xs uppercase opacity-60">{room.messages[0]?.content || "No messages"}</div>
       </div>
