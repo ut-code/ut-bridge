@@ -60,7 +60,7 @@ function MessageInput({ room }: { room: string }) {
             }}
           />
           <button type="submit" className="" disabled={submitting}>
-            <SendHorizontal color="#0b8bee"/>
+            <SendHorizontal color="#0b8bee" />
           </button>
         </div>
       </form>

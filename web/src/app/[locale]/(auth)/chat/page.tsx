@@ -75,13 +75,13 @@ function Room({ room }: { room: RoomPreview }) {
   return (
     <Link href={`/chat/${room.id}`} className="flex h-full w-full items-center py-6">
       <div className="flex w-1/3 items-center justify-center">
-      <Image
-        alt={firstMember?.name || "User"}
-        className="rounded-full object-cover"
-        src={firstMember?.imageUrl || "/default-profile.png"}
-        width={40}
-        height={40}
-      />
+        <Image
+          alt={firstMember?.name || "User"}
+          className="rounded-full object-cover"
+          src={firstMember?.imageUrl || "/default-profile.png"}
+          width={40}
+          height={40}
+        />
       </div>
       <div className="w-2/3 list-col-grow pl-4">
         <div>{firstMember?.name || "Unknown User"}</div>
