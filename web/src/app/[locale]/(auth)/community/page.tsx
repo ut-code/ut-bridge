@@ -94,7 +94,7 @@ export default function Page() {
         const res = await client.community.$get(
           {
             query: {
-              myId: me.id,
+              except: me.id,
               page: query.page.toString(),
               exchangeQuery: query.exchange,
               searchQuery: query.search,
@@ -213,20 +213,22 @@ export default function Page() {
                 user={user}
                 on={{
                   async favorite(id) {
-                    await client.users.markers.favorite[":targetId"].$put({
+                    const resp = await client.users.markers.favorite[":targetId"].$put({
                       param: {
                         targetId: id,
                       },
                       header: { Authorization },
                     });
+                    if (!resp.ok) throw new Error(`Bad status: got ${resp.status} with text "${await resp.text()}"`);
                   },
                   async unfavorite(id) {
-                    await client.users.markers.favorite[":targetId"].$delete({
+                    const resp = await client.users.markers.favorite[":targetId"].$delete({
                       param: {
                         targetId: id,
                       },
                       header: { Authorization },
                     });
+                    if (!resp.ok) throw new Error(`Bad status: got ${resp.status} with text "${await resp.text()}"`);
                   },
                 }}
               />

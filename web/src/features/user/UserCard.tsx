@@ -7,7 +7,6 @@ type UserCardEvent = {
   favorite: (id: string) => Promise<void>;
   unfavorite: (id: string) => Promise<void>;
 };
-const DEV_EXTRA_QUERY_WAIT = 2000;
 
 export default function UserCard({
   user: init,
@@ -39,14 +38,16 @@ export default function UserCard({
             className="badge bg-transparent text-xl text-yellow-400"
             onClick={async () => {
               setFavoriteBtnLoading(true);
-              await on.unfavorite(user.id);
-              setUser({
-                ...user,
-                marker: undefined,
-              });
-              setTimeout(() => {
-                setFavoriteBtnLoading(false);
-              }, DEV_EXTRA_QUERY_WAIT);
+              try {
+                await on.unfavorite(user.id);
+                setUser({
+                  ...user,
+                  marker: undefined,
+                });
+              } catch (err) {
+                console.error("failed to unfavorite user");
+              }
+              setFavoriteBtnLoading(false);
             }}
           >
             ★
@@ -60,14 +61,16 @@ export default function UserCard({
             className="badge bg-transparent text-black-700 text-xl"
             onClick={async () => {
               setFavoriteBtnLoading(true);
-              await on.favorite(user.id);
-              setUser({
-                ...user,
-                marker: "favorite",
-              });
-              setTimeout(() => {
-                setFavoriteBtnLoading(false);
-              }, DEV_EXTRA_QUERY_WAIT);
+              try {
+                await on.favorite(user.id);
+                setUser({
+                  ...user,
+                  marker: "favorite",
+                });
+              } catch (err) {
+                console.error("failed to favorite user");
+              }
+              setFavoriteBtnLoading(false);
             }}
           >
             ★
