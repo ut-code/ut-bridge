@@ -30,6 +30,7 @@ const router = new Hono()
         members: z.array(z.string()),
       }),
     ),
+    zValidator("header", z.object({ Authorization: z.string() })),
     async (c) => {
       const { members, ...room } = c.req.valid("json");
       const { id: roomId } = await prisma.room.create({
@@ -51,6 +52,7 @@ const router = new Hono()
     "/rooms/:room",
     zValidator("param", z.object({ room: z.string() })),
     zValidator("json", z.object({ name: z.string() })),
+    zValidator("header", z.object({ Authorization: z.string() })),
     async (c) => {
       const userId = await getUserID(c);
       const roomId = c.req.valid("param").room;
@@ -75,6 +77,7 @@ const router = new Hono()
   .post(
     "/rooms/:room/members",
     zValidator("param", z.object({ room: z.string() })),
+    zValidator("header", z.object({ Authorization: z.string() })),
     zValidator(
       "json",
       z.object({
@@ -105,6 +108,7 @@ const router = new Hono()
   .delete(
     "/rooms/:room/members/:member",
     zValidator("param", z.object({ room: z.string(), member: z.string() })),
+    zValidator("header", z.object({ Authorization: z.string() })),
     async (c) => {
       const userId = await getUserID(c);
       const param = c.req.valid("param");
@@ -132,7 +136,7 @@ const router = new Hono()
     },
   )
   // ## room preview
-  .get("/rooms/preview", async (c) => {
+  .get("/rooms/preview", zValidator("header", z.object({ Authorization: z.string() })), async (c) => {
     const requester = await getUserID(c);
     const resp = await prisma.room.findMany({
       where: {
@@ -170,25 +174,31 @@ const router = new Hono()
     return c.json(resp, 200);
   })
   // ## room data
-  .get("/rooms/dmwith/:user", zValidator("param", z.object({ user: z.string() })), async (c) => {
-    const meId = await getUserID(c);
-    const { user } = c.req.valid("param");
-    const rooms = await prisma.room.findMany({
-      where: {
-        members: {
-          every: {
-            OR: [{ userId: user }, { userId: meId }],
+  .get(
+    "/rooms/dmwith/:user",
+    zValidator("param", z.object({ user: z.string() })),
+    zValidator("header", z.object({ Authorization: z.string() })),
+    async (c) => {
+      const meId = await getUserID(c);
+      const { user } = c.req.valid("param");
+      const rooms = await prisma.room.findMany({
+        where: {
+          members: {
+            every: {
+              OR: [{ userId: user }, { userId: meId }],
+            },
           },
         },
-      },
-      select: {
-        id: true,
-      },
-    });
-    return c.json(rooms);
-  })
+        select: {
+          id: true,
+        },
+      });
+      return c.json(rooms);
+    },
+  )
   .get(
     "/rooms/:room",
+    zValidator("header", z.object({ Authorization: z.string() })),
     zValidator(
       "param",
       z.object({
@@ -245,6 +255,7 @@ const router = new Hono()
         room: z.string().uuid(),
       }),
     ),
+    zValidator("header", z.object({ Authorization: z.string() })),
     zValidator(
       "json",
       z.object({
@@ -310,6 +321,7 @@ const router = new Hono()
         content: z.string(),
       }),
     ),
+    zValidator("header", z.object({ Authorization: z.string() })),
     async (c) => {
       const requester = await getUserID(c);
       // TODO(AUTH): make sure requester is in the room
@@ -357,6 +369,7 @@ const router = new Hono()
         room: z.string(),
       }),
     ),
+    zValidator("header", z.object({ Authorization: z.string() })),
     async (c) => {
       const requester = await getUserID(c);
       const { message: messageId, room } = c.req.valid("param");
@@ -391,11 +404,11 @@ const router = new Hono()
   )
 
   // IO: server -> client
-  .get("/sse", zValidator("cookie", z.object({ "ut-bridge-Authorization": z.string().jwt() })), async (c) => {
+  .get("/sse", async (c) => {
     return streamSSE(c, async (stream) => {
       let connected = true;
-      const id = 0;
-      const bc = new BroadcastChannel(`chat:${id}`);
+      const userId = await getUserID(c);
+      const bc = new BroadcastChannel(`chat:${userId}`);
 
       bc.onmessage = (_e) => {
         const ev: BroadcastEvent = _e.data;

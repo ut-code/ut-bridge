@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "pages:build": "bunx @cloudflare/next-on-pages",
+    "deploy": "bun run pages:build && wrangler pages deploy",
     "dev": "bun --env-file=../.env run next dev --port 5173",
     "build": "bun --env-file=../.env run next build",
     "start": "next start --port $PORT",
@@ -21,16 +23,17 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@cloudflare/next-on-pages": "^1.13.8",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4.0.6",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "common": "workspace:common",
     "daisyui": "^5.0.0-beta.8",
     "postcss": "^8",
-    "tailwindcss": "^4.0.6",
-    "typescript": "^5",
     "server": "workspace:server",
-    "common": "workspace:common"
+    "tailwindcss": "^4.0.6",
+    "typescript": "^5"
   }
 }

@@ -18,6 +18,7 @@ const router = new Hono().get(
       marker: MarkerSchema.optional(),
     }),
   ),
+  zValidator("header", z.object({ Authorization: z.string() })),
   async (c) => {
     const requester = await getUserID(c);
     const { page, exchangeQuery, searchQuery, marker: markerQuery } = c.req.valid("query");

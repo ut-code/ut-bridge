@@ -2,6 +2,7 @@
 
 import { client } from "@/client";
 import Loading from "@/components/Loading";
+import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { useUserContext } from "@/features/user/userProvider";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
@@ -20,11 +21,12 @@ function Rooms() {
   const [rooms, setRooms] = useState<RoomPreview[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { idToken } = useAuthContext();
 
   useEffect(() => {
     async function fetchRooms() {
       try {
-        const res = await client.chat.rooms.preview.$get();
+        const res = await client.chat.rooms.preview.$get({ header: { Authorization: idToken } });
         if (!res.ok) throw new Error("Failed to fetch rooms");
         const data = await res.json();
         setRooms(data);
@@ -35,7 +37,7 @@ function Rooms() {
       }
     }
     fetchRooms();
-  }, []);
+  }, [idToken]);
 
   if (loading) return <Loading stage="room.info" />;
   if (error) return <span className="text-error">{error}</span>;
