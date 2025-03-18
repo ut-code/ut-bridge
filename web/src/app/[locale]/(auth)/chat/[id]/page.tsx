@@ -154,7 +154,6 @@ function MessageList({
         <li key={m.id}>
           <div className={`chat ${m.senderId === me.id ? "chat-end" : "chat-start"}`}>
             <div className="chat-header">
-              {m.sender.name}
               <time className="text-xs opacity-50">{m.createdAt.toLocaleString()}</time>
             </div>
             <div className="chat-bubble">{m.content}</div>
