@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 
 export default function Page() {
-  const t = useTranslations("setting")
+  const t = useTranslations("setting");
   return (
     <>
       <div className="flex items-center justify-between border-gray-300 border-b p-4 text-xl sm:hidden">
