@@ -2,9 +2,9 @@
 
 import { client } from "@/client";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
-import { useUserFormContext } from "@/features/user/UserFormProvider";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
+import { useUserFormContext } from "@/features/setting/UserFormController.tsx";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -12,14 +12,15 @@ import { useState } from "react";
 export default function Page() {
   const router = useRouter();
   const { idToken: Authorization } = useAuthContext();
-  const { formData, setFormData, universities, divisions, campuses } = useUserFormContext();
+  const ctx = useUserFormContext();
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const t = useTranslations("setting");
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type, checked, multiple } = e.target as HTMLInputElement;
     const { options } = e.target as HTMLSelectElement;
 
-    setFormData((prev) => {
+    ctx.setFormData((prev) => {
       if (name === "universityId") {
         return { ...prev, universityId: value, campusId: "", divisionId: "" };
       }
@@ -40,13 +41,13 @@ export default function Page() {
     setStatus("loading");
 
     try {
-      const body = { ...formData };
+      const body = { ...ctx.formData };
       const res = await client.users.me.$patch({ header: { Authorization }, json: body });
 
       if (!res.ok) throw new Error(`レスポンスステータス: ${res.status} - ${await res.text()}`);
 
       setStatus("success");
-      window.location.href = "/settings";
+      ctx.feedbackSuccess();
     } catch (error) {
       console.error("ユーザー登録に失敗しました", error);
       setStatus("error");
@@ -63,6 +64,7 @@ export default function Page() {
         {t("university.title")}
         <div className="w-6" />
       </div>
+
       <div className="max-w mx-10 my-5 p-4 sm:mx-0 sm:my-20">
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
@@ -70,10 +72,10 @@ export default function Page() {
             <select
               name="universityId"
               onChange={handleChange}
-              value={formData.universityId}
+              value={ctx.formData.universityId}
               className="my-4 w-full rounded-xl border border-gray-200 bg-white p-2 sm:w-1/2"
             >
-              {universities.map((univ) => (
+              {ctx.universities.map((univ) => (
                 <option key={univ.id} value={univ.id}>
                   {univ.name}
                 </option>
@@ -86,12 +88,12 @@ export default function Page() {
             {t("university.divisions")}
             <select
               name="divisionId"
-              value={formData.divisionId}
+              value={ctx.formData.divisionId}
               onChange={handleChange}
               className="my-4 w-full rounded-xl border border-gray-200 bg-white p-2 sm:w-1/2"
-              disabled={!divisions.length}
+              disabled={!ctx.divisions.length}
             >
-              {divisions.map((division) => (
+              {ctx.divisions.map((division) => (
                 <option key={division.id} value={division.id}>
                   {division.name}
                 </option>
@@ -102,15 +104,14 @@ export default function Page() {
           {/* Campus Selection */}
           <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
             {t("university.campus")}
-
             <select
               name="campusId"
-              value={formData.campusId}
+              value={ctx.formData.campusId}
               onChange={handleChange}
               className="my-4 w-full rounded-xl border border-gray-200 bg-white p-2 sm:w-1/2"
-              disabled={!campuses.length}
+              disabled={!ctx.campuses.length}
             >
-              {campuses.map((campus) => (
+              {ctx.campuses.map((campus) => (
                 <option key={campus.id} value={campus.id}>
                   {campus.name}
                 </option>
@@ -123,7 +124,7 @@ export default function Page() {
             {t("university.grade")}
             <select
               name="grade"
-              value={formData.grade}
+              value={ctx.formData.grade}
               onChange={handleChange}
               className="my-4 w-full rounded-xl border border-gray-200 bg-white p-2 sm:w-1/2"
             >

@@ -37,7 +37,7 @@ const BaseUserSchema = z.object({
 
 // UserSchema は、 UI で表示する用のフラットなデータ
 export const UserSchema = BaseUserSchema.extend({
-  imageUrl: z.string().nullable(),
+  imageUrl: z.string().optional(),
   division: z.string(),
   campus: z.string(),
   motherLanguage: z.string(),
@@ -48,7 +48,7 @@ export const UserSchema = BaseUserSchema.extend({
 
 export const CreateUserSchema = BaseUserSchema.extend({
   guid: z.string(),
-  imageUrl: z.string().nullable(),
+  imageUrl: z.string().optional(),
   universityId: z.string(),
   divisionId: z.string(),
   campusId: z.string(),
