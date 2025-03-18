@@ -73,7 +73,15 @@
       "subTitle": "Blocked Users List",
       "noUser": "No blocked users."
     },
-    "other": { "title": "Other" },
+    "other": {
+      "title": "Other",
+      "privacy": {
+        "title": "Privacy Policy"
+      },
+      "terms": {
+        "title": "Terms and Conditions"
+      }
+    },
     "logout": "Logout"
   }
 }
