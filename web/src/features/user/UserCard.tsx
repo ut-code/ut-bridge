@@ -1,6 +1,6 @@
+import { Link } from "@/i18n/navigation.ts";
 import type { CardUser } from "common/zod/schema";
 import Image from "next/image";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 

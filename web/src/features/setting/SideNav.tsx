@@ -1,68 +1,72 @@
 "use client";
 import { useGoogleLogout } from "@/features/auth/functions/logout.ts";
 import { ChevronRight } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation.ts";
+import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 
 export default function SideNav() {
   const { logout } = useGoogleLogout();
-  const pathname = usePathname();
+  const path = usePathname();
+  const t = useTranslations("setting");
+  // ロケールを考慮してパスを正規化する（/ja/login, /en/login → /login）
+  const pathname = path.replace(/^\/(en|ja)\//, "/");
 
   return (
     <>
-      <h1 className="hidden font-bold text-3xl sm:block">設定画面</h1>
+      <h1 className="hidden font-bold text-3xl sm:block">{t("title")}</h1>
       <div className="m-5 flex flex-col gap-0.5 border-gray-300 sm:block sm:gap-0 sm:border-r">
         <Link
           href={"/settings/basic"}
           className={`flex items-center justify-between rounded-t-xl bg-neutral-50 p-4 px-8 text-xl sm:bg-transparent sm:px-4 ${pathname === "/settings/basic" ? "font-bold underline" : ""}`}
         >
-          基本情報
+          {t("basic.title")}
           <ChevronRight className="sm:hidden" />
         </Link>
         <Link
           href={"/settings/university"}
           className={`flex items-center justify-between bg-neutral-50 p-4 px-8 text-xl sm:bg-transparent sm:px-4 ${pathname === "/settings/university" ? "font-bold underline" : ""}`}
         >
-          大学情報
+          {t("university.title")}
           <ChevronRight className="sm:hidden" />
         </Link>
         <Link
           href={"/settings/language"}
           className={`flex items-center justify-between bg-neutral-50 p-4 px-8 text-xl sm:bg-transparent sm:px-4 ${pathname === "/settings/language" ? "font-bold underline" : ""}`}
         >
-          言語情報
+          {t("language.title")}
           <ChevronRight className="sm:hidden" />
         </Link>
         <Link
           href={"/settings/topic"}
           className={`flex items-center justify-between bg-neutral-50 p-4 px-8 text-xl sm:bg-transparent sm:px-4 ${pathname === "/settings/topic" ? "font-bold underline" : ""}`}
         >
-          トピック
+          {t("topic.title")}
           <ChevronRight className="sm:hidden" />
         </Link>
         <Link
           href={"/settings/favorite"}
           className={`flex items-center justify-between bg-neutral-50 p-4 px-8 text-xl sm:bg-transparent sm:px-4 ${pathname === "/settings/favorite" ? "font-bold underline" : ""}`}
         >
-          お気に入り
+          {t("favorite.title")}
           <ChevronRight className="sm:hidden" />
         </Link>
         <Link
           href={"/settings/block"}
           className={`flex items-center justify-between bg-neutral-50 p-4 px-8 text-xl sm:bg-transparent sm:px-4 ${pathname === "/settings/block" ? "font-bold underline" : ""}`}
         >
-          ブロック
+          {t("block.title")}
           <ChevronRight className="sm:hidden" />
         </Link>
         <Link
           href={"/settings/other"}
           className={`flex items-center justify-between rounded-b-xl bg-neutral-50 p-4 px-8 text-xl sm:bg-transparent sm:px-4 ${pathname === "/settings/other" ? "font-bold underline" : ""}`}
         >
-          その他
+          {t("other.title")}
           <ChevronRight className="sm:hidden" />
         </Link>
         <button type="button" className="btn btn-outline btn-error my-12 sm:my-3" onClick={logout}>
-          ログアウト
+          {t("logout")}
         </button>
       </div>
     </>

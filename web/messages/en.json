@@ -1,0 +1,79 @@
+{
+  "Login": {
+    "title": "Welcome!",
+    "loginButton": "Login with ECCS Account",
+    "info": "Please authenticate using your ECCS account ending with @g.ecc.u-tokyo.ac.jp",
+    "privacy": "Terms of Use and Privacy Policy here"
+  },
+  "registration": {
+    "title": "Registration"
+  },
+  "community": {
+    "title": "Community",
+    "favorite": "Favorites",
+    "filter": "Limit to local Students",
+    "search": "Search",
+    "nextButton": "Next",
+    "previousButton": "Previous"
+  },
+  "chat": { "title": "Chat" },
+  "setting": {
+    "title": "Settings",
+    "register": "Register",
+    "isRegister": "Registering...",
+    "success": "Success!",
+    "failed": "Failed...",
+    "basic": {
+      "title": "Basic",
+      "name": "Name",
+      "sex": "Gender",
+      "male": "Male",
+      "female": "Female",
+      "other": "Other",
+      "photo": "Photo",
+      "photoUpload": "Upload"
+    },
+    "university": {
+      "title": "University",
+      "univ": "University",
+      "campus": "Campus",
+      "divisions": "Faculty",
+      "grade": "Grade",
+      "gradeOptions": {
+        "B1": "B1",
+        "B2": "B2",
+        "B3": "B3",
+        "B4": "B4",
+        "M1": "M1",
+        "M2": "M2",
+        "D1": "D1",
+        "D2": "D2",
+        "D3": "D3"
+      }
+    },
+    "language": {
+      "title": "Language",
+      "isForeign": "Are you an international student?",
+      "motherLanguage": "Native Language",
+      "fluentLanguage": "Fluent Languages",
+      "learningLanguage": "Languages Being Learned"
+    },
+    "topic": {
+      "title": "Topics",
+      "hobby": "Hobbies",
+      "introduction": "Self-Introduction"
+    },
+    "favorite": {
+      "title": "Favorites",
+      "subTitle": "Favorite Users",
+      "noUser": "No favorite users."
+    },
+    "block": {
+      "title": "Blocked Users",
+      "subTitle": "Blocked Users List",
+      "noUser": "No blocked users."
+    },
+    "other": { "title": "Other" },
+    "logout": "Logout"
+  }
+}
