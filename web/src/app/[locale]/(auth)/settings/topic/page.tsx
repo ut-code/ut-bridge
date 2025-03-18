@@ -2,13 +2,13 @@
 
 import { client } from "@/client";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
-import { useUserFormContext } from "@/features/user/UserFormProvider";
+import { useUserFormContext } from "@/features/setting/UserFormController.tsx";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Page() {
-  const { formData, setFormData } = useUserFormContext();
+  const ctx = useUserFormContext();
   const { idToken: Authorization } = useAuthContext();
   const router = useRouter();
   const t = useTranslations("setting");
@@ -19,7 +19,7 @@ export default function Page() {
     const { name, value, type, checked, multiple } = e.target as HTMLInputElement;
     const { options } = e.target as HTMLSelectElement;
 
-    setFormData((prev) => {
+    ctx.setFormData((prev) => {
       // 複数選択の処理（言語選択）
       if (multiple) {
         const selectedValues = Array.from(options)
@@ -45,7 +45,7 @@ export default function Page() {
     setStatus("loading");
     try {
       const body = {
-        ...formData,
+        ...ctx.formData,
       };
       const res = await client.users.me.$patch({ header: { Authorization }, json: body });
       if (!res.ok) {
@@ -54,7 +54,7 @@ export default function Page() {
       }
 
       setStatus("success");
-      window.location.href = "/settings";
+      ctx.feedbackSuccess();
     } catch (error) {
       console.error("ユーザー登録に失敗しました", error);
       setStatus("error");
@@ -71,7 +71,7 @@ export default function Page() {
             id="hobby"
             name="hobby"
             rows={5}
-            value={formData.hobby ?? ""}
+            value={ctx.formData.hobby ?? ""}
             onChange={handleChange}
             required
             className="w-1/2 rounded-xl border border-gray-500 bg-white p-2"
@@ -85,7 +85,7 @@ export default function Page() {
             id="introduction"
             name="introduction"
             rows={5}
-            value={formData.introduction ?? ""}
+            value={ctx.formData.introduction ?? ""}
             onChange={handleChange}
             required
             className="w-1/2 rounded-xl border border-gray-500 bg-white p-2"

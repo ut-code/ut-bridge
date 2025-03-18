@@ -2,8 +2,8 @@
 
 import { client } from "@/client";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
+import { useUserFormContext } from "@/features/setting/UserFormController.tsx";
 import UserCard from "@/features/user/UserCard.tsx";
-import { useUserFormContext } from "@/features/user/UserFormProvider";
 import { useTranslations } from "next-intl";
 
 export default function Page() {
