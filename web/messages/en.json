@@ -1,5 +1,6 @@
 {
   "Login": {
+    "header": "Login",
     "title": "Welcome!",
     "loginButton": "Login with ECCS Account",
     "info": "Please authenticate using your ECCS account ending with @g.ecc.u-tokyo.ac.jp",
