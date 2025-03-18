@@ -84,7 +84,7 @@ export default function Page() {
 
   const [formData, setFormData] = useState<CreateUser>({
     id: "",
-    imageUrl: null,
+    imageUrl: undefined,
     guid: "",
     name: "",
     gender: "male",
@@ -167,17 +167,13 @@ export default function Page() {
     setStatus("loading");
     try {
       if (!user) throw new Error("User is not found in Firebase!");
-      let imageUrl = null;
-
-      if (file) {
-        imageUrl = await upload(file);
-      }
       const body = {
         ...formData,
         id: self.crypto.randomUUID(),
         guid: user.uid,
-        imageUrl: imageUrl,
+        imageUrl: file ? await upload(file) : undefined,
       };
+
       const res = await client.users.$post({ json: body });
       if (!res.ok) {
         console.error(await res.text());

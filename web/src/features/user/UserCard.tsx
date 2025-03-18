@@ -4,8 +4,10 @@ import Image from "next/image";
 import { useState } from "react";
 
 type UserCardEvent = {
-  favorite: (id: string) => Promise<void>;
-  unfavorite: (id: string) => Promise<void>;
+  favorite?: (id: string) => Promise<void>;
+  unfavorite?: (id: string) => Promise<void>;
+  // block?: (id: string) => Promise<void>;
+  unblock?: (id: string) => Promise<void>;
 };
 
 export default function UserCard({
@@ -39,6 +41,7 @@ export default function UserCard({
             onClick={async () => {
               setFavoriteBtnLoading(true);
               try {
+                if (!on.unfavorite) throw new Error("method `unfavorite` not given");
                 await on.unfavorite(user.id);
                 setUser({
                   ...user,
@@ -62,6 +65,7 @@ export default function UserCard({
             onClick={async () => {
               setFavoriteBtnLoading(true);
               try {
+                if (!on.favorite) throw new Error("method `favorite` not given");
                 await on.favorite(user.id);
                 setUser({
                   ...user,
