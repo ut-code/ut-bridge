@@ -1,6 +1,6 @@
 import type { FlatCardUser, FlatUser, StructuredCardUser, StructuredUser } from "common/zod/schema";
 
-export function formatUser(user: StructuredUser, locale: "ja" | "en"): FlatUser {
+export function formatUser(user: StructuredUser, locale: string): FlatUser {
   const getName = (obj: { jaName: string; enName: string }) => (locale === "ja" ? obj.jaName : obj.enName);
 
   return {
@@ -25,7 +25,7 @@ export function formatUser(user: StructuredUser, locale: "ja" | "en"): FlatUser 
   };
 }
 
-export function formatCardUser(user: StructuredCardUser, locale: "ja" | "en"): FlatCardUser {
+export function formatCardUser(user: StructuredCardUser, locale: string): FlatCardUser {
   const getName = (obj: { jaName: string; enName: string }) => (locale === "ja" ? obj.jaName : obj.enName);
 
   return {

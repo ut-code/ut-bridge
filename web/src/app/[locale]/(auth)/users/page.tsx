@@ -38,7 +38,7 @@ export default function Page() {
         if (!first) {
           throw new Error("User Not Found!");
         }
-        setUser(formatUser(first, locale === "ja" ? "ja" : "en"));
+        setUser(formatUser(first, locale));
       } catch (error) {
         console.error("Failed to fetch user:", error);
         router.push("/community");

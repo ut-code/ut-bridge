@@ -175,7 +175,7 @@ export const UserFormProvider = ({
       }
 
       const data = await res.json();
-      setFavoriteUsers(data.users.map((user) => formatCardUser(user, locale === "ja" ? "ja" : "en")));
+      setFavoriteUsers(data.users.map((user) => formatCardUser(user, locale)));
     } catch (error) {
       console.error("お気に入りユーザーの取得に失敗しました", error);
     }
@@ -197,7 +197,7 @@ export const UserFormProvider = ({
       }
 
       const data = await res.json();
-      setBlockedUsers(data.users.map((user) => formatCardUser(user, locale === "ja" ? "ja" : "en")));
+      setBlockedUsers(data.users.map((user) => formatCardUser(user, locale)));
     } catch (error) {
       console.error("ブロックユーザーの取得に失敗しました", error);
     }

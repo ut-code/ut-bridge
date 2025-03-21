@@ -112,7 +112,7 @@ export default function Page() {
         );
         const data = await res.json();
         const formattedUsers = data.users.map((user) => {
-          return formatCardUser(user, locale === "ja" ? "ja" : "en");
+          return formatCardUser(user, locale);
         });
         setUsers(formattedUsers);
         setTotalUsers(data.totalUsers);
