@@ -11,6 +11,7 @@ export default function Page() {
   const ctx = useUserFormContext();
   const t = useTranslations();
   const locale = useLocale();
+  console.log(ctx);
 
   return (
     <>
@@ -195,7 +196,7 @@ export default function Page() {
               </label>
             </div>
             <div className="flex justify-end px-15">
-              <button type="submit" className="btn borfer h-10 w-25 rounded-lg border-tBlue p-2 text-tBlue">
+              <button type="submit" className="btn h-10 w-25 rounded-lg border border-tBlue p-2 text-tBlue">
                 {t("community.nextButton")}
               </button>
             </div>
