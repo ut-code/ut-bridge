@@ -1,10 +1,14 @@
+"use client";
 import { AppIcon } from "@/components/AppIcon";
 import Header from "@/components/Header";
 import GoogleLoginButton from "@/features/auth/components/GoogleLoginButton";
+import { useGoogleSignIn } from "@/features/auth/functions/login";
 import { useTranslations } from "next-intl";
 
 export default function Login() {
   const t = useTranslations("Login");
+  const { signInWithGoogle, isLoading } = useGoogleSignIn();
+
   return (
     <>
       <Header />
@@ -16,12 +20,12 @@ export default function Login() {
             <AppIcon width={200} height={200} />
           </div>
           <div className="my-10">
-            <GoogleLoginButton />
+            <GoogleLoginButton onClick={signInWithGoogle} isLoading={isLoading} />
           </div>
+
           <p className="my-10 text-gray-500 text-sm">
             {t("info")}
             <br />
-            {/* TODO: 遷移先を利用規約ページに変更する */}
             <a href="/privacy" className="text-blue-500 underline">
               {t("privacy")}
             </a>
