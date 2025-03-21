@@ -4,7 +4,7 @@ import { useGoogleLogout } from "@/features/auth/functions/logout.ts";
 import { Link } from "@/i18n/navigation.ts";
 import { ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { blocks } from "./path-blocks.tsx";
+import { blocks } from "./path-blocks.ts";
 
 export default function PageNav() {
   const { logout } = useGoogleLogout();
@@ -16,7 +16,7 @@ export default function PageNav() {
       <div className="m-5 flex flex-col gap-0.5 border-gray-300">
         {blocks.map((block) => (
           <section key={block.title}>
-            <div className="divider mt-6 mb-4">{block.title}</div>
+            <div className="divider mt-6 mb-4">{t(block.title)}</div>
             {block.items.map((item, index, self) => (
               <Link
                 href={item.href}

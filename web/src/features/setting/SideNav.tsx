@@ -5,7 +5,7 @@ import { Link } from "@/i18n/navigation.ts";
 import { ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
-import { blocks } from "./path-blocks.tsx";
+import { blocks } from "./path-blocks.ts";
 
 export default function SideNav() {
   const { logout } = useGoogleLogout();
@@ -33,7 +33,7 @@ export default function SideNav() {
             ))}
           </section>
         ))}
-        <section className="flex flex-col p-4 px-8">
+        <section className="mt-8 flex flex-col px-8">
           <LanguageSwitcher className="w-full" />
           <button type="button" className="btn btn-outline btn-error my-3" onClick={logout}>
             {t("logout")}

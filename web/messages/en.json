@@ -20,6 +20,11 @@
   "chat": { "title": "Chat" },
   "setting": {
     "title": "Settings",
+    "headers": {
+      "info": "Information",
+      "users": "Users",
+      "other": "Other"
+    },
     "register": "Register",
     "isRegister": "Registering...",
     "success": "Success!",

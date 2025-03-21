@@ -1,6 +1,7 @@
 export const blocks: PathBlock[] = [
   {
-    title: "俺",
+    // 俺
+    title: "headers.info",
     items: [
       {
         href: "/settings/basic",
@@ -21,7 +22,8 @@ export const blocks: PathBlock[] = [
     ],
   },
   {
-    title: "俺以外",
+    // 俺以外
+    title: "headers.users",
     items: [
       {
         href: "/settings/favorite",
@@ -34,14 +36,15 @@ export const blocks: PathBlock[] = [
     ],
   },
   {
-    title: "そのた",
+    // その他
+    title: "headers.other",
     items: [
       {
-        href: "/settings/other/privacy",
+        href: "/settings/privacy",
         title: "other.privacy.title",
       },
       {
-        href: "/settings/other/terms",
+        href: "/settings/terms",
         title: "other.terms.title",
       },
     ],
