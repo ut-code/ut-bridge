@@ -1,4 +1,10 @@
 {
+  "catch": {
+    "upper": "Global Connections",
+    "lower": "From Your Campus",
+    "message": "Make Friends from Around the World on Your Campus",
+    "start": "Start"
+  },
   "Login": {
     "header": "Login",
     "title": "Welcome!",
