@@ -51,13 +51,15 @@ function MessageInput({ room }: { room: string }) {
           setSubmitting(false);
         }}
       >
-        <div className="flex w-full flex-row justify-around gap-2 border-gray-300 border-t p-4">
-          <input
-            className="input input-bordered rounded-xl"
+        <div className="fixed bottom-[64px] flex w-full flex-row justify-around gap-2 border-gray-300 border-t bg-tGray p-4 sm:bottom-0">
+          <textarea
+            className="h-auto max-h-[200px] min-h-[40px] w-full resize-none rounded-xl border border-gray-300 p-2 leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-500"
+            rows={1}
             value={input}
             onChange={(ev) => {
               setInput(ev.target.value);
             }}
+            style={{ resize: "none", overflow: "hidden", fieldSizing: "content" }}
           />
           <button type="submit" className="" disabled={submitting}>
             <SendHorizontal color="#0b8bee" />
@@ -147,8 +149,13 @@ function MessageList({
   }, [room]);
   const { me } = useUserContext();
 
+  const target = document.getElementById("scroll-bottom");
+  if (target) {
+    target.scrollIntoView(false);
+  }
+
   return (
-    <ul className="grow m-3">
+    <ul className="m-3 grow pb-[80px] sm:pb-0" id="scroll-bottom">
       {messages.map((m) => (
         // TODO: handle pictures
         <li key={m.id}>
@@ -156,7 +163,7 @@ function MessageList({
             <div className="chat-header">
               <time className="text-xs opacity-50">{m.createdAt.toLocaleString()}</time>
             </div>
-            <div className="chat-bubble">{m.content}</div>
+            <div className={`chat-bubble ${m.senderId === me.id ? "bg-blue-200" : "chat-start"}`}>{m.content}</div>
             {/* <div className="chat-footer opacity-50">Seen</div> */}
           </div>
         </li>
