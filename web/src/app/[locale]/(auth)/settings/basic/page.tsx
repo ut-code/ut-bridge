@@ -105,7 +105,9 @@ export default function Page() {
 
             <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" id="image-upload" />
             <div
-              className={`flex h-40 w-40 items-center justify-center rounded-lg ${imagePreviewURL ? "" : "bg-gray-300"}`}
+              className={`flex h-40 w-40 items-center justify-center rounded-lg ${
+                imagePreviewURL ? "" : "bg-gray-300"
+              }`}
             >
               {imagePreviewURL && <img src={imagePreviewURL} alt="プレビュー" className="rounded-lg object-cover" />}
             </div>
