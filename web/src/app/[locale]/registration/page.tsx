@@ -127,7 +127,6 @@ export default function Page() {
                   ))}
                 </select>
               </label>
-
               <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
                 {t("setting.university.divisions")}
                 <select

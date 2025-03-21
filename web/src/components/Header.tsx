@@ -13,9 +13,9 @@ export default function Header() {
   const t = useTranslations();
 
   // ロケールを考慮してパスを正規化する（/ja/login, /en/login → /login）
-  const pathname = path.replace(/^\/(en|ja)\//, "/");
+  const pathname = path.replace(/^\/(ja|en)/, "");
   const me =
-    pathname.startsWith("/registration") || pathname === "/login"
+    pathname.startsWith("/registration") || pathname === "/login" || pathname === ""
       ? { imageUrl: "", name: "" }
       : // who the fuck did this
         // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -29,7 +29,7 @@ export default function Header() {
       <Link href="/community" className="hidden cursor-pointer px-4 text-2xl text-white sm:block">
         UT-Bridge
       </Link>
-      {pathname === "/login" || pathname === "/registration" ? (
+      {pathname === "/login" || pathname === "/registration" || pathname === "" ? (
         <>
           <p className="absolute right-1/2 translate-x-1/2 font-bold text-white text-xl sm:hidden">
             {pathname === "/registration" ? "初期登録" : pathname === "/login" ? "ログイン" : ""}
@@ -74,15 +74,15 @@ export default function Header() {
             {pathname === "/"
               ? "ランディング"
               : pathname.startsWith("/registration")
-                ? "初期登録"
-                : pathname === "/login"
-                  ? "ログイン"
+                ? t("registration.title")
+                : pathname.endsWith("/login")
+                  ? t("Login.header")
                   : pathname === "/community" || pathname === "/users"
-                    ? "コミュニティ"
+                    ? t("community.title")
                     : pathname.startsWith("/chat")
-                      ? "チャット"
+                      ? t("chat.title")
                       : pathname.startsWith("/settings")
-                        ? "設定"
+                        ? t("setting.title")
                         : ""}
           </p>
           <div className="absolute right-4 flex items-center gap-4">

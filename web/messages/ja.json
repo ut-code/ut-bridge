@@ -1,5 +1,6 @@
 {
   "Login": {
+    "header": "ログイン",
     "title": "ようこそ！",
     "loginButton": "ECCSアカウントでログイン",
     "info": "末尾が@g.ecc.u-tokyo.ac.jpのECCSアカウントで認証してください",
@@ -73,7 +74,15 @@
       "subTitle": "ブロックしているユーザー",
       "noUser": "ブロックしているユーザーはいません。"
     },
-    "other": { "title": "その他" },
+    "other": {
+      "title": "その他",
+      "privacy": {
+        "title": "プライバシーポリシー"
+      },
+      "terms": {
+        "title": "利用規約"
+      }
+    },
     "logout": "ログアウト"
   }
 }

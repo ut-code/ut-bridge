@@ -1,6 +1,7 @@
 import { Link } from "@/i18n/navigation.ts";
 import type { FlatCardUser } from "common/zod/schema";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 type UserCardEvent = {
@@ -21,6 +22,7 @@ export default function UserCard({
 }) {
   const [user, setUser] = useState(init);
   const [favoriteBtnLoading, setFavoriteBtnLoading] = useState(false);
+  const pathname = usePathname();
 
   return (
     <div
@@ -28,7 +30,9 @@ export default function UserCard({
         user.markedAs === "blocked" && "bg-gray-300"
       }`}
     >
-      <div className="absolute top-0 left-0 h-[1px] w-full bg-gray-300 sm:hidden" />
+      <div
+        className={`absolute top-0 left-0 h-[1px] w-full bg-gray-300 sm:hidden ${pathname === "/community" && user.marker === "blocked" ? "hidden" : ""}`}
+      />
       {/* お気に入りボタン（右上に配置） */}
       <div className="absolute top-2 right-2 z-10">
         {favoriteBtnLoading ? (
