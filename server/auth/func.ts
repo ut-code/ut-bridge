@@ -36,7 +36,7 @@ export type AuthenticatedContext = Context<
 >;
 
 export async function getGUID(c: AuthenticatedContext) {
-  const idToken = c.req.valid("header").Authorization;
+  const idToken = c.req.valid("header")?.Authorization;
   if (idToken) return await getGUIDFromIDToken(idToken);
 
   const cookie = c.req.query("id-token");
