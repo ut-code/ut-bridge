@@ -1,5 +1,3 @@
-import LanguageSwitcher from "@/components/LanguageSelectar";
-
 export const blocks: PathBlock[] = [
   {
     title: "俺",
