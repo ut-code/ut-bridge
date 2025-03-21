@@ -17,10 +17,6 @@ export default function Page() {
         <form
           onSubmit={async (ev) => {
             ev.preventDefault();
-            if (ctx.imagePreviewURL) {
-              console.error("image is required"); // TODO: show it in the UI
-              return;
-            }
             const result = Part1RegistrationSchema.safeParse(ctx.formData);
             if (result.success) {
               await ctx.uploadImage();

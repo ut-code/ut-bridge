@@ -77,7 +77,6 @@ export const Part1RegistrationSchema = CreateUserSchema.omit({
   hobby: true,
   introduction: true,
   isForeignStudent: true,
-  imageUrl: true,
   motherLanguageId: true,
   fluentLanguageIds: true,
   learningLanguageIds: true,
