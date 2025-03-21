@@ -42,7 +42,8 @@ const router = new Hono()
           campus: {
             select: {
               id: true,
-              name: true,
+              jaName: true,
+              enName: true,
               university: true,
             },
           },
