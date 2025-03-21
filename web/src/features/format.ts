@@ -15,9 +15,9 @@ export function formatUser(user: StructuredUser): FlatUser {
     division: user.division.name,
     campus: user.campus.name,
 
-    motherLanguage: user.motherLanguage.name,
-    fluentLanguages: user.fluentLanguages.map((fl) => fl.language.name),
-    learningLanguages: user.learningLanguages.map((ll) => ll.language.name),
+    motherLanguage: user.motherLanguage.jaName,
+    fluentLanguages: user.fluentLanguages.map((fl) => fl.language.jaName),
+    learningLanguages: user.learningLanguages.map((ll) => ll.language.jaName),
 
     markedAs: user.markedAs[0]?.kind,
   };
@@ -33,9 +33,9 @@ export function formatCardUser(user: StructuredCardUser): FlatCardUser {
 
     campus: user.campus.name,
 
-    motherLanguage: user.motherLanguage.name,
-    fluentLanguages: user.fluentLanguages.map((fl) => fl.language.name),
-    learningLanguages: user.learningLanguages.map((ll) => ll.language.name),
+    motherLanguage: user.motherLanguage.jaName,
+    fluentLanguages: user.fluentLanguages.map((fl) => fl.language.jaName),
+    learningLanguages: user.learningLanguages.map((ll) => ll.language.jaName),
 
     markedAs: user.markedAs[0]?.kind,
   };

@@ -21,7 +21,7 @@ type UserFormContextType = {
   universities: { id: string; name: string }[];
   campuses: { id: string; name: string }[];
   divisions: { id: string; name: string }[];
-  languages: { id: string; name: string }[];
+  languages: { id: string; jaName: string; enName: string }[];
   favoriteUsers: FlatCardUser[];
   blockedUsers: FlatCardUser[];
   refetchFavoriteUsers: () => void;
@@ -60,7 +60,7 @@ export const UserFormProvider = ({
   const [universities, setUniversities] = useState<{ id: string; name: string }[]>([]);
   const [campuses, setCampuses] = useState<{ id: string; name: string }[]>([]);
   const [divisions, setDivisions] = useState<{ id: string; name: string }[]>([]);
-  const [languages, setLanguages] = useState<{ id: string; name: string }[]>([]);
+  const [languages, setLanguages] = useState<{ id: string; jaName: string; enName: string }[]>([]);
   const [favoriteUsers, setFavoriteUsers] = useState<FlatCardUser[]>([]);
   const [blockedUsers, setBlockedUsers] = useState<FlatCardUser[]>([]);
   const [loadingUniversitySpecificData, setLoadingUniversitySpecificData] = useState(false);

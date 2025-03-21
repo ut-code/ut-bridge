@@ -53,14 +53,16 @@ const router = new Hono().get(
         { campus: { name: { contains: searchQuery, mode: "insensitive" } } },
         {
           motherLanguage: {
-            name: { contains: searchQuery, mode: "insensitive" },
+            jaName: { contains: searchQuery, mode: "insensitive" },
+            enName: { contains: searchQuery, mode: "insensitive" },
           },
         },
         {
           fluentLanguages: {
             some: {
               language: {
-                name: { contains: searchQuery, mode: "insensitive" },
+                jaName: { contains: searchQuery, mode: "insensitive" },
+                enName: { contains: searchQuery, mode: "insensitive" },
               },
             },
           },
@@ -69,7 +71,8 @@ const router = new Hono().get(
           learningLanguages: {
             some: {
               language: {
-                name: { contains: searchQuery, mode: "insensitive" },
+                jaName: { contains: searchQuery, mode: "insensitive" },
+                enName: { contains: searchQuery, mode: "insensitive" },
               },
             },
           },
@@ -90,7 +93,7 @@ const router = new Hono().get(
           imageUrl: true,
           campus: { select: { university: true, id: true, name: true } },
           grade: true,
-          motherLanguage: { select: { id: true, name: true } },
+          motherLanguage: { select: { id: true, jaName: true, enName: true } },
           fluentLanguages: {
             select: { language: true },
           },
