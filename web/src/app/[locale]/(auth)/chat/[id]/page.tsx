@@ -16,7 +16,7 @@ export default function Page() {
 
   return (
     <div className="flex h-full">
-      <div className="m-5 flex-1">
+      <div className="flex-1">
         <div className="flex h-full flex-col">
           <Load room={roomId} />
           <MessageInput room={roomId} />
@@ -51,7 +51,7 @@ function MessageInput({ room }: { room: string }) {
           setSubmitting(false);
         }}
       >
-        <div className="flex w-full flex-row justify-around gap-2 border-gray-300 border-t pt-4">
+        <div className="flex w-full flex-row justify-around gap-2 border-gray-300 border-t p-4">
           <input
             className="input input-bordered rounded-xl"
             value={input}
@@ -148,7 +148,7 @@ function MessageList({
   const { me } = useUserContext();
 
   return (
-    <ul className="grow ">
+    <ul className="grow m-3">
       {messages.map((m) => (
         // TODO: handle pictures
         <li key={m.id}>
