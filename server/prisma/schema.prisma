@@ -105,7 +105,8 @@ model University {
 
 model Language {
   id            String                   @id @default(uuid())
-  name          String                   @unique()
+  jaName        String                   @unique()
+  enName        String                   @unique()
   fluentUsers   FluentLanguageOnUser[]
   learningUsers LearningLanguageOnUser[]
   User          User[]
