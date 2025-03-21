@@ -8,7 +8,7 @@ import { useUserContext } from "@/features/user/userProvider.tsx";
 import { Link, useRouter } from "@/i18n/navigation.ts";
 import { type Exchange, ExchangeSchema, type FlatCardUser, MarkerSchema } from "common/zod/schema";
 import { Search } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
@@ -71,6 +71,7 @@ export default function Page() {
   const router = useRouter();
   const query = useQuery();
   const t = useTranslations("community");
+  const locale = useLocale();
 
   // if null it's loading, if [] there's no more users
   const [users, setUsers] = useState<FlatCardUser[] | null>(null);
@@ -110,7 +111,9 @@ export default function Page() {
           },
         );
         const data = await res.json();
-        const formattedUsers = data.users.map(formatCardUser);
+        const formattedUsers = data.users.map((user) => {
+          return formatCardUser(user, locale === "ja" ? "ja" : "en");
+        });
         setUsers(formattedUsers);
         setTotalUsers(data.totalUsers);
       } catch (err) {
@@ -124,7 +127,7 @@ export default function Page() {
     return () => {
       ctl.abort();
     };
-  }, [query.page, query.exchange, query.marker, query.search, me.id, Authorization]);
+  }, [query.page, query.exchange, query.marker, query.search, me.id, Authorization, locale]);
 
   useEffect(() => {
     // 🔹 検索ワードの変更後に 500ms 待ってリクエストを送る（デバウンス処理）

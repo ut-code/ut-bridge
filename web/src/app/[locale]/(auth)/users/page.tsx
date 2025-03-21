@@ -5,6 +5,7 @@ import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { formatUser } from "@/features/format";
 import { useUserContext } from "@/features/user/userProvider.tsx";
 import type { FlatUser } from "common/zod/schema";
+import { useLocale } from "next-intl";
 import Image from "next/image";
 // import {Link} from "@/i18n/navigation.ts";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -18,6 +19,7 @@ export default function Page() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
+  const locale = useLocale();
 
   useEffect(() => {
     async function fetchUser() {
@@ -36,7 +38,7 @@ export default function Page() {
         if (!first) {
           throw new Error("User Not Found!");
         }
-        setUser(formatUser(first));
+        setUser(formatUser(first, locale === "ja" ? "ja" : "en"));
       } catch (error) {
         console.error("Failed to fetch user:", error);
         router.push("/community");
@@ -46,7 +48,7 @@ export default function Page() {
     }
 
     fetchUser();
-  }, [router, Authorization, id]);
+  }, [router, Authorization, id, locale]);
 
   const [markSpinner, setMarkSpinner] = useState(false);
   const [chatButtonState, setChatButtonState] = useState<"idle" | "searching" | "creating" | "created">("idle");
@@ -65,7 +67,10 @@ export default function Page() {
         className={props.class}
         onClick={async () => {
           setMarkSpinner(true);
-          const args = { param: { targetId: user.id }, header: { Authorization } };
+          const args = {
+            param: { targetId: user.id },
+            header: { Authorization },
+          };
           const resp =
             props.action === "favorite"
               ? await client.users.markers.favorite[":targetId"].$put(args)

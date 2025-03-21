@@ -4,6 +4,7 @@ import Loading from "@/components/Loading.tsx";
 import { formatCardUser } from "@/features/format";
 import { type MYDATA, useUserContext } from "@/features/user/userProvider";
 import type { CreateUser, FlatCardUser } from "common/zod/schema";
+import { useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { useAuthContext } from "../auth/providers/AuthProvider.tsx";
@@ -46,6 +47,7 @@ export const UserFormProvider = ({
   loadPreviousData: boolean;
 }) => {
   const router = useRouter();
+  const locale = useLocale();
   let me: MYDATA | null = null;
   // HELP: how do I optionally use another context? loadPreviousData will never change
   if (loadPreviousData) {
@@ -173,11 +175,11 @@ export const UserFormProvider = ({
       }
 
       const data = await res.json();
-      setFavoriteUsers(data.users.map(formatCardUser));
+      setFavoriteUsers(data.users.map((user) => formatCardUser(user, locale === "ja" ? "ja" : "en")));
     } catch (error) {
       console.error("お気に入りユーザーの取得に失敗しました", error);
     }
-  }, [me, Authorization]);
+  }, [me, Authorization, locale]);
 
   const refetchBlockedUsers = useCallback(async () => {
     try {
@@ -195,11 +197,11 @@ export const UserFormProvider = ({
       }
 
       const data = await res.json();
-      setBlockedUsers(data.users.map(formatCardUser));
+      setBlockedUsers(data.users.map((user) => formatCardUser(user, locale === "ja" ? "ja" : "en")));
     } catch (error) {
       console.error("ブロックユーザーの取得に失敗しました", error);
     }
-  }, [me, Authorization]);
+  }, [me, Authorization, locale]);
 
   useEffect(() => {
     refetchFavoriteUsers();
