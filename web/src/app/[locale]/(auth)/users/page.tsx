@@ -4,14 +4,14 @@ import Loading from "@/components/Loading.tsx";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { formatUser } from "@/features/format";
 import { useUserContext } from "@/features/user/userProvider.tsx";
-import type { User } from "common/zod/schema";
+import type { FlatUser } from "common/zod/schema";
 import Image from "next/image";
 // import {Link} from "@/i18n/navigation.ts";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Page() {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<FlatUser | null>(null);
   const { idToken: Authorization } = useAuthContext();
   const { me } = useUserContext();
   const [loading, setLoading] = useState(true);
@@ -108,13 +108,13 @@ export default function Page() {
         ) : (
           <div className="flex h-100 w-100 items-center justify-center rounded-full bg-gray-300">N/A</div>
         )}
-        <div>
+        <div className="w-full sm:w-auto">
           <div className="flex flex-col items-center sm:items-start">
             <p className="mb-4 font-bold text-5xl">{user.name}</p>
             <p className="my-4 text-2xl">{user.gender}</p>
             <p className="my-4 text-2xl">{user.isForeignStudent ? "留学生" : " "}</p>
           </div>
-          <div className="flex gap-10">
+          <div className="flex w-full justify-around sm:w-auto sm:justify-normal sm:gap-10">
             <span className="absolute w-15">
               {chatButtonState === "creating" ? (
                 <span>

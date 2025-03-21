@@ -405,9 +405,9 @@ const router = new Hono()
 
   // IO: server -> client
   .get("/sse", async (c) => {
+    const userId = await getUserID(c);
     return streamSSE(c, async (stream) => {
       let connected = true;
-      const userId = await getUserID(c);
       const bc = new BroadcastChannel(`chat:${userId}`);
 
       bc.onmessage = (_e) => {
@@ -426,7 +426,7 @@ const router = new Hono()
           data: "",
         };
         stream.writeSSE(pingEvent);
-        await Bun.sleep(8000);
+        await Bun.sleep(5000);
       }
     });
   });
@@ -470,7 +470,7 @@ type BroadcastEvents =
 
 type UserID = string;
 function broadcast<T extends string>(to: UserID[], event: BroadcastEvent<T>) {
-  for (const id in to) {
+  for (const id of to) {
     const bc = new BroadcastChannel(`chat:${id}`);
     bc.postMessage(event);
     bc.close();
