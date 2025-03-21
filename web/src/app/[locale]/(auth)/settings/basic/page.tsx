@@ -3,6 +3,8 @@
 import { client } from "@/client";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { upload } from "@/features/image/ImageUpload";
+import Link from "next/link";
+import { ChevronLeft } from "lucide-react";
 import { useUserFormContext } from "@/features/setting/UserFormController.tsx";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -61,59 +63,70 @@ export default function Page() {
   };
 
   return (
-    <div className="max-w my-20 p-4">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-        <label className="flex items-center justify-between">
-          {t("basic.name")}
-          <input
-            type="text"
-            name="name"
-            value={ctx.formData.name}
-            onChange={handleChange}
-            required
-            className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
-          />
-        </label>
-
-        <label className="flex items-center justify-between">
-          {t("basic.sex")}
-
-          <select
-            name="gender"
-            value={ctx.formData.gender}
-            onChange={handleChange}
-            className="my-4 w-1/2 rounded-xl border border-gray-500 bg-white p-2"
-          >
-            <option value="male"> {t("basic.male")}</option>
-            <option value="female"> {t("basic.female")}</option>
-            <option value="other"> {t("basic.other")}</option>
-          </select>
-        </label>
-
-        <div className="my-4 flex justify-between">
-          {t("basic.photo")}
-
-          <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" id="image-upload" />
-          <div
-            className={`flex h-40 w-40 items-center justify-center rounded-lg ${imagePreviewURL ? "" : "bg-gray-300"}`}
-          >
-            {imagePreviewURL && <img src={imagePreviewURL} alt="プレビュー" className="rounded-lg object-cover" />}
-          </div>
-          <label htmlFor="image-upload" className="h-10 cursor-pointer rounded bg-blue-500 px-4 py-2 text-white">
-            {t("basic.photoUpload")}
+    <>
+      <div className="flex items-center justify-between border-gray-300 border-b p-4 text-xl sm:hidden">
+        <Link href={"/settings"}>
+          <ChevronLeft />
+        </Link>
+        {t("basic.title")}
+        <div className="w-6" />
+      </div>
+      <div className="max-w mx-10 my-5 p-4 sm:mx-0 sm:my-20">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+          <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
+            {t("basic.name")}
+            <input
+              type="text"
+              name="name"
+              value={ctx.formData.name}
+              onChange={handleChange}
+              required
+              className="my-4 w-full rounded-xl border border-gray-200 bg-white p-2 sm:w-1/2"
+            />
           </label>
-        </div>
 
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            className="mt-15 w-50 rounded bg-blue-500 p-2 text-white"
-            disabled={status === "loading"}
-          >
-            {status === "loading" ? t("isRegister") : t("register")}
-          </button>
-        </div>
-      </form>
-    </div>
+          <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
+            {t("basic.sex")}
+
+            <select
+              name="gender"
+              value={ctx.formData.gender}
+              onChange={handleChange}
+              className="my-4 w-full rounded-xl border border-gray-200 bg-white p-2 sm:w-1/2"
+            >
+              <option value="male"> {t("basic.male")}</option>
+              <option value="female"> {t("basic.female")}</option>
+              <option value="other"> {t("basic.other")}</option>
+            </select>
+          </label>
+
+          <div className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
+            {t("basic.photo")}
+
+            <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" id="image-upload" />
+            <div
+              className={`flex h-40 w-40 items-center justify-center rounded-lg ${imagePreviewURL ? "" : "bg-gray-300"}`}
+            >
+              {imagePreviewURL && <img src={imagePreviewURL} alt="プレビュー" className="rounded-lg object-cover" />}
+            </div>
+            <label
+              htmlFor="image-upload"
+              className="mt-5 flex h-10 cursor-pointer justify-center rounded bg-blue-400 px-4 py-2 text-white sm:mt-0 sm:flex-none"
+            >
+              {t("basic.photoUpload")}
+            </label>
+          </div>
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              className="mt-15 w-1/2 rounded bg-blue-500 p-2 text-white sm:w-50"
+              disabled={status === "loading"}
+            >
+              {status === "loading" ? t("isRegister") : t("register")}
+            </button>
+          </div>
+        </form>
+      </div>
+    </>
   );
 }

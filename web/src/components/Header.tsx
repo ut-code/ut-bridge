@@ -73,15 +73,15 @@ export default function Header() {
             {pathname === "/"
               ? "ランディング"
               : pathname.startsWith("/registration")
-                ? "初期登録"
-                : pathname === "/login"
-                  ? "ログイン"
+                ? t("registration.title")
+                : pathname.endsWith("/login")
+                  ? t("Login.header")
                   : pathname === "/community" || pathname === "/users"
-                    ? "コミュニティ"
+                    ? t("community.title")
                     : pathname.startsWith("/chat")
-                      ? "チャット"
+                      ? t("chat.title")
                       : pathname.startsWith("/settings")
-                        ? "設定"
+                        ? t("setting.title")
                         : ""}
           </p>
           <div className="absolute right-4 flex items-center gap-4">
