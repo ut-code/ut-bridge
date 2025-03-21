@@ -3,7 +3,7 @@
 import { client } from "@/client";
 import { auth } from "@/features/auth/config";
 import { useUserFormContext } from "@/features/setting/UserFormController";
-import { useRouter } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { CreateUserSchema } from "common/zod/schema";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -65,7 +65,10 @@ export default function Page() {
                   onChange={ctx.handleChange}
                   className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                   disabled={!ctx.languages.length}
+                  defaultValue=""
+                  required
                 >
+                  <option value="" />
                   {ctx.languages.map((language) => (
                     <option key={language.id} value={language.id}>
                       {language.name}
@@ -148,9 +151,9 @@ export default function Page() {
               </label>
             </div>
             <div className="flex justify-between px-15">
-              <button type="submit" className="btn borfer h-10 w-25 rounded-lg border-tBlue p-2 text-tBlue">
+              <Link href="/registration" className="btn borfer h-10 w-25 rounded-lg border-tBlue p-2 text-tBlue">
                 {t("community.previousButton")}
-              </button>
+              </Link>
               {formStatus === "ready" ? (
                 <button type="submit" className="btn h-10 w-25 rounded-lg bg-tBlue p-2 text-white">
                   {t("setting.register")}
