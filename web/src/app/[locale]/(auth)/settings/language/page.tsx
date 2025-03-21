@@ -3,11 +3,10 @@
 import { client } from "@/client";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { useUserFormContext } from "@/features/setting/UserFormController.tsx";
-import { ChevronLeft } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { styles } from "../shared-class.ts";
 
 export default function Page() {
   const { idToken: Authorization } = useAuthContext();
@@ -78,92 +77,77 @@ export default function Page() {
   };
 
   return (
-    <>
-      <div className="flex items-center justify-between border-gray-300 border-b p-4 text-xl sm:hidden">
-        <Link href={"/settings"}>
-          <ChevronLeft />
-        </Link>
-        {t("language.title")}
-        <div className="w-6" />
-      </div>
-      <div className="max-w mx-10 my-5 p-4 sm:mx-0 sm:my-20">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          <label className="mt-5 flex flex-row justify-between sm:relative sm:my-4 sm:block sm:flex-none">
-            {t("language.isForeign")}
-            <input
-              type="checkbox"
-              name="isForeignStudent"
-              checked={formData.isForeignStudent}
-              onChange={handleChange}
-              className="checkbox checkbox-lg bg-white sm:absolute sm:right-[47%]"
-            />
-          </label>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+      <label className={styles.label}>
+        <span className={styles.labelSpan}>{t("language.isForeign")}</span>
+        <input
+          type="checkbox"
+          name="isForeignStudent"
+          checked={formData.isForeignStudent}
+          onChange={handleChange}
+          className={styles.inputCheckbox}
+        />
+      </label>
 
-          <label className="my-4 flex items-center justify-between">
-            {t("language.motherLanguage")}
-            <select
-              name="motherLanguageId"
-              value={formData.motherLanguageId}
-              onChange={handleChange}
-              className="my-4 w-1/2 rounded-xl border border-gray-200 bg-white p-2"
-              disabled={!languages.length}
-            >
-              {languages.map((language) => (
-                <option key={language.id} value={language.id}>
-                  {language.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <div className="flex flex-col">
-            <div className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
-              <p> {t("language.fluentLanguage")}</p>
-              <div className="flex w-1/2 flex-wrap gap-2">
-                {languages.map((language) => (
-                  <label key={language.id} className="flex items-center space-x-2">
-                    <input
-                      type="checkbox"
-                      name="fluentLanguageIds"
-                      value={language.id}
-                      checked={ctx.formData.fluentLanguageIds?.includes(language.id) ?? false}
-                      onChange={handleChange}
-                      className="accent-blue-500"
-                    />
-                    <span>{language.name}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-            <div className="mt-5 flex flex-col sm:mt-10 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-left sm:w-1/2"> {t("language.learningLanguage")}</p>
-              <div className=" flex w-1/2 flex-wrap gap-2">
-                {languages.map((language) => (
-                  <label key={language.id} className="flex items-center space-x-2">
-                    <input
-                      type="checkbox"
-                      name="learningLanguageIds"
-                      value={language.id}
-                      checked={formData.learningLanguageIds?.includes(language.id) ?? false}
-                      onChange={handleChange}
-                      className="accent-blue-500"
-                    />
-                    <span>{language.name}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
+      <label className={styles.label}>
+        <span className={styles.labelSpan}>{t("language.motherLanguage")}</span>
+        <select
+          name="motherLanguageId"
+          value={formData.motherLanguageId}
+          onChange={handleChange}
+          className={styles.inputSelect}
+          disabled={!languages.length}
+        >
+          {languages.map((language) => (
+            <option key={language.id} value={language.id}>
+              {language.name}
+            </option>
+          ))}
+        </select>
+      </label>
+      <div className="flex flex-col">
+        <div className={styles.label}>
+          <span className={styles.labelSpan}> {t("language.fluentLanguage")}</span>
+          <div className={styles.multiSelectCheckboxWrapper}>
+            {languages.map((language) => (
+              <label key={language.id} className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  name="fluentLanguageIds"
+                  value={language.id}
+                  checked={ctx.formData.fluentLanguageIds?.includes(language.id) ?? false}
+                  onChange={handleChange}
+                  className="checkbox"
+                />
+                <span>{language.name}</span>
+              </label>
+            ))}
           </div>
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              className="mt-15 w-1/2 rounded bg-blue-500 p-2 text-white sm:w-50"
-              disabled={status === "loading"}
-            >
-              {status === "loading" ? t("isRegister") : t("register")}
-            </button>
+        </div>
+        <div className={styles.label}>
+          <span className={styles.labelSpan}> {t("language.learningLanguage")}</span>
+          <div className={styles.multiSelectCheckboxWrapper}>
+            {languages.map((language) => (
+              <label key={language.id} className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  name="learningLanguageIds"
+                  value={language.id}
+                  checked={formData.learningLanguageIds?.includes(language.id) ?? false}
+                  onChange={handleChange}
+                  className="checkbox"
+                />
+                <span>{language.name}</span>
+              </label>
+            ))}
           </div>
-        </form>
+        </div>
       </div>
-    </>
+      <div className={styles.submitButtonWrapperDiv}>
+        <button type="submit" className={styles.submitButton} disabled={status === "loading"}>
+          {status === "loading" ? t("isRegister") : t("register")}
+        </button>
+      </div>
+    </form>
   );
 }

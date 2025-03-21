@@ -3,11 +3,10 @@
 import { client } from "@/client";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { useUserFormContext } from "@/features/setting/UserFormController.tsx";
-import { ChevronLeft } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { styles } from "../shared-class.ts";
 
 export default function Page() {
   const router = useRouter();
@@ -56,102 +55,81 @@ export default function Page() {
   };
 
   return (
-    <>
-      <div className="flex items-center justify-between border-gray-300 border-b p-4 text-xl sm:hidden">
-        <Link href={"/settings"}>
-          <ChevronLeft />
-        </Link>
-        {t("university.title")}
-        <div className="w-6" />
+    <form onSubmit={handleSubmit} className={styles.form}>
+      <label className={styles.label}>
+        <span className={styles.labelSpan}>{t("university.univ")}</span>
+        <select
+          name="universityId"
+          onChange={handleChange}
+          value={ctx.formData.universityId}
+          className={styles.inputSelect}
+        >
+          {ctx.universities.map((univ) => (
+            <option key={univ.id} value={univ.id}>
+              {univ.name}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      {/* Division Selection */}
+      <label className={styles.label}>
+        <span className={styles.labelSpan}>{t("university.divisions")}</span>
+        <select
+          name="divisionId"
+          value={ctx.formData.divisionId}
+          onChange={handleChange}
+          className={styles.inputSelect}
+          disabled={!ctx.divisions.length}
+        >
+          {ctx.divisions.map((division) => (
+            <option key={division.id} value={division.id}>
+              {division.name}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      {/* Campus Selection */}
+      <label className={styles.label}>
+        <span className={styles.labelSpan}>{t("university.campus")}</span>
+        <select
+          name="campusId"
+          value={ctx.formData.campusId}
+          onChange={handleChange}
+          className={styles.inputSelect}
+          disabled={!ctx.campuses.length}
+        >
+          {ctx.campuses.map((campus) => (
+            <option key={campus.id} value={campus.id}>
+              {campus.name}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      {/* Grade Selection */}
+      <label className={styles.label}>
+        <span className={styles.labelSpan}>{t("university.grade")}</span>
+        <select name="grade" value={ctx.formData.grade} onChange={handleChange} className={styles.inputSelect}>
+          <option value="B1">学部1年</option>
+          <option value="B2">学部2年</option>
+          <option value="B3">学部3年</option>
+          <option value="B4">学部4年</option>
+          <option value="M1">修士1年</option>
+          <option value="M2">修士2年</option>
+          <option value="D1">博士1年</option>
+          <option value="D2">博士2年</option>
+          <option value="D3">博士3年</option>
+        </select>
+      </label>
+
+      {/* Submit Button */}
+      <div className={styles.submitButtonWrapperDiv}>
+        <button type="submit" className={styles.submitButton} disabled={status === "loading"}>
+          {status === "loading" ? t("isRegister") : t("register")}
+        </button>
       </div>
-
-      <div className="max-w mx-10 my-5 p-4 sm:mx-0 sm:my-20">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
-            {t("university.univ")}
-            <select
-              name="universityId"
-              onChange={handleChange}
-              value={ctx.formData.universityId}
-              className="my-4 w-full rounded-xl border border-gray-200 bg-white p-2 sm:w-1/2"
-            >
-              {ctx.universities.map((univ) => (
-                <option key={univ.id} value={univ.id}>
-                  {univ.name}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          {/* Division Selection */}
-          <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
-            {t("university.divisions")}
-            <select
-              name="divisionId"
-              value={ctx.formData.divisionId}
-              onChange={handleChange}
-              className="my-4 w-full rounded-xl border border-gray-200 bg-white p-2 sm:w-1/2"
-              disabled={!ctx.divisions.length}
-            >
-              {ctx.divisions.map((division) => (
-                <option key={division.id} value={division.id}>
-                  {division.name}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          {/* Campus Selection */}
-          <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
-            {t("university.campus")}
-            <select
-              name="campusId"
-              value={ctx.formData.campusId}
-              onChange={handleChange}
-              className="my-4 w-full rounded-xl border border-gray-200 bg-white p-2 sm:w-1/2"
-              disabled={!ctx.campuses.length}
-            >
-              {ctx.campuses.map((campus) => (
-                <option key={campus.id} value={campus.id}>
-                  {campus.name}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          {/* Grade Selection */}
-          <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
-            {t("university.grade")}
-            <select
-              name="grade"
-              value={ctx.formData.grade}
-              onChange={handleChange}
-              className="my-4 w-full rounded-xl border border-gray-200 bg-white p-2 sm:w-1/2"
-            >
-              <option value="B1">学部1年</option>
-              <option value="B2">学部2年</option>
-              <option value="B3">学部3年</option>
-              <option value="B4">学部4年</option>
-              <option value="M1">修士1年</option>
-              <option value="M2">修士2年</option>
-              <option value="D1">博士1年</option>
-              <option value="D2">博士2年</option>
-              <option value="D3">博士3年</option>
-            </select>
-          </label>
-
-          {/* Submit Button */}
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              className="mt-15 w-1/2 rounded bg-blue-500 p-2 text-white sm:w-50"
-              disabled={status === "loading"}
-            >
-              {status === "loading" ? t("isRegister") : t("register")}
-            </button>
-          </div>
-        </form>
-      </div>
-    </>
+    </form>
   );
 }
