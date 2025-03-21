@@ -4,14 +4,14 @@ import Loading from "@/components/Loading.tsx";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { formatUser } from "@/features/format";
 import { useUserContext } from "@/features/user/userProvider.tsx";
-import type { User } from "common/zod/schema";
+import type { FlatUser } from "common/zod/schema";
 import Image from "next/image";
 // import {Link} from "@/i18n/navigation.ts";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Page() {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<FlatUser | null>(null);
   const { idToken: Authorization } = useAuthContext();
   const { me } = useUserContext();
   const [loading, setLoading] = useState(true);

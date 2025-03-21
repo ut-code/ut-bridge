@@ -1,8 +1,8 @@
 "use client";
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import LanguageSwitcher from "@/components/LanguageSelectar";
 import { Link } from "@/i18n/navigation.ts";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 export default function Page() {

@@ -1,7 +1,7 @@
 "use client";
 import { useGoogleLogout } from "@/features/auth/functions/logout.ts";
-import { ChevronRight } from "lucide-react";
 import { Link } from "@/i18n/navigation.ts";
+import { ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 

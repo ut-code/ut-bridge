@@ -5,8 +5,8 @@ import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { useUserFormContext } from "@/features/setting/UserFormController.tsx";
 import UserCard from "@/features/user/UserCard.tsx";
 import { ChevronLeft } from "lucide-react";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 
 export default function Page() {
   const { idToken: Authorization } = useAuthContext();

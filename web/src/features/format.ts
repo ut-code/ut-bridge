@@ -1,37 +1,42 @@
-import type { CardUser, FullCardUser, FullUser, User } from "common/zod/schema";
+import type { FlatCardUser, FlatUser, StructuredCardUser, StructuredUser } from "common/zod/schema";
 
-export function formatUser(user: FullUser): User {
+export function formatUser(user: StructuredUser): FlatUser {
   return {
     id: user.id,
-    imageUrl: user.imageUrl ?? undefined,
     name: user.name,
     gender: user.gender,
-    isForeignStudent: user.isForeignStudent,
-    displayLanguage: user.displayLanguage,
+    imageUrl: user.imageUrl ?? undefined,
     grade: user.grade,
     hobby: user.hobby,
     introduction: user.introduction,
+    isForeignStudent: user.isForeignStudent,
+
+    university: user.campus.university.name,
     division: user.division.name,
     campus: user.campus.name,
+
     motherLanguage: user.motherLanguage.name,
     fluentLanguages: user.fluentLanguages.map((fl) => fl.language.name),
     learningLanguages: user.learningLanguages.map((ll) => ll.language.name),
+
     markedAs: user.markedAs[0]?.kind,
   };
 }
-
-export function formatCardUser(user: FullCardUser): CardUser {
+export function formatCardUser(user: StructuredCardUser): FlatCardUser {
   return {
     id: user.id,
-    imageUrl: user.imageUrl,
     name: user.name,
-    gender: user.gender, //TODO:prismaのenumと定義したenumが大文字とかで違うため、このようにした
-    isForeignStudent: user.isForeignStudent,
+    gender: user.gender,
+    imageUrl: user.imageUrl ?? undefined,
     grade: user.grade,
+    isForeignStudent: user.isForeignStudent,
+
     campus: user.campus.name,
+
     motherLanguage: user.motherLanguage.name,
     fluentLanguages: user.fluentLanguages.map((fl) => fl.language.name),
     learningLanguages: user.learningLanguages.map((ll) => ll.language.name),
-    marker: user.markedAs[0]?.kind,
+
+    markedAs: user.markedAs[0]?.kind,
   };
 }
