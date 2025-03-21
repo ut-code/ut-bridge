@@ -50,7 +50,12 @@ const router = new Hono().get(
     if (searchQuery) {
       whereCondition.OR = [
         { name: { contains: searchQuery, mode: "insensitive" } },
-        { campus: { name: { contains: searchQuery, mode: "insensitive" } } },
+        {
+          campus: {
+            jaName: { contains: searchQuery, mode: "insensitive" },
+            enName: { contains: searchQuery, mode: "insensitive" },
+          },
+        },
         {
           motherLanguage: {
             jaName: { contains: searchQuery, mode: "insensitive" },
@@ -91,7 +96,9 @@ const router = new Hono().get(
           gender: true,
           isForeignStudent: true,
           imageUrl: true,
-          campus: { select: { university: true, id: true, name: true } },
+          campus: {
+            select: { university: true, id: true, jaName: true, enName: true },
+          },
           grade: true,
           motherLanguage: { select: { id: true, jaName: true, enName: true } },
           fluentLanguages: {

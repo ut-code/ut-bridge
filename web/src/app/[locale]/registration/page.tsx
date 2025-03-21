@@ -3,17 +3,19 @@
 import { useUserFormContext } from "@/features/setting/UserFormController";
 import { Part1RegistrationSchema } from "common/zod/schema";
 import { useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 
 export default function Page() {
   const router = useRouter();
   const ctx = useUserFormContext();
   const t = useTranslations();
+  const locale = useLocale();
 
   return (
     <>
       <div className="my-5 p-4 sm:mx-60 sm:my-20">
-        <h1 className="mx-5 mb-8 font-bold text-3xl sm:mx-0"> {t("registration.title")}</h1>
+        <h1 className="mx-5 mb-8 font-bold text-3xl sm:mx-0">{t("registration.title")}</h1>
         <form
           onSubmit={async (ev) => {
             ev.preventDefault();
@@ -79,7 +81,9 @@ export default function Page() {
                 />
 
                 <div
-                  className={`flex h-40 w-40 items-center justify-center rounded-lg ${ctx.imagePreviewURL ? "" : "bg-gray-300"}`}
+                  className={`flex h-40 w-40 items-center justify-center rounded-lg ${
+                    ctx.imagePreviewURL ? "" : "bg-gray-300"
+                  }`}
                 >
                   {ctx.imagePreviewURL ? (
                     <img src={ctx.imagePreviewURL} alt="プレビュー" className="rounded-lg object-cover" />
@@ -118,7 +122,7 @@ export default function Page() {
                   <option value="" disabled className="select" />
                   {ctx.universities.map((univ) => (
                     <option key={univ.id} value={univ.id} className="select">
-                      {univ.name}
+                      {locale === "ja" ? univ.jaName : univ.enName}
                     </option>
                   ))}
                 </select>
@@ -139,7 +143,7 @@ export default function Page() {
                   </option>
                   {ctx.divisions.map((division) => (
                     <option key={division.id} value={division.id}>
-                      {division.name}
+                      {locale === "ja" ? division.jaName : division.enName}
                     </option>
                   ))}
                 </select>
@@ -160,7 +164,7 @@ export default function Page() {
                   </option>
                   {ctx.campuses.map((campus) => (
                     <option key={campus.id} value={campus.id}>
-                      {campus.name}
+                      {locale === "ja" ? campus.jaName : campus.enName}
                     </option>
                   ))}
                 </select>

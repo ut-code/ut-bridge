@@ -18,9 +18,9 @@ type UserFormContextType = {
   imagePreviewURL: string | null;
   uploadImage: () => Promise<void>;
   feedbackSuccess: () => void;
-  universities: { id: string; name: string }[];
-  campuses: { id: string; name: string }[];
-  divisions: { id: string; name: string }[];
+  universities: { id: string; jaName: string; enName: string }[];
+  campuses: { id: string; jaName: string; enName: string }[];
+  divisions: { id: string; jaName: string; enName: string }[];
   languages: { id: string; jaName: string; enName: string }[];
   favoriteUsers: FlatCardUser[];
   blockedUsers: FlatCardUser[];
@@ -57,9 +57,9 @@ export const UserFormProvider = ({
   const [image, setImage] = useState<File | null>(null);
   const [imagePreviewURL, setImagePreviewURL] = useState<string | null>(null);
 
-  const [universities, setUniversities] = useState<{ id: string; name: string }[]>([]);
-  const [campuses, setCampuses] = useState<{ id: string; name: string }[]>([]);
-  const [divisions, setDivisions] = useState<{ id: string; name: string }[]>([]);
+  const [universities, setUniversities] = useState<{ id: string; jaName: string; enName: string }[]>([]);
+  const [campuses, setCampuses] = useState<{ id: string; jaName: string; enName: string }[]>([]);
+  const [divisions, setDivisions] = useState<{ id: string; jaName: string; enName: string }[]>([]);
   const [languages, setLanguages] = useState<{ id: string; jaName: string; enName: string }[]>([]);
   const [favoriteUsers, setFavoriteUsers] = useState<FlatCardUser[]>([]);
   const [blockedUsers, setBlockedUsers] = useState<FlatCardUser[]>([]);

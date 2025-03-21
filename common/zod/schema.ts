@@ -21,14 +21,17 @@ const LanguageObjectSchema = z.object({
 });
 const DivisionSchema = z.object({
   id: z.string().uuid(),
-  name: z.string(),
+  jaName: z.string(),
+  enName: z.string(),
 });
 const CampusSchema = z.object({
   id: z.string().uuid(),
-  name: z.string(),
+  jaName: z.string(),
+  enName: z.string(),
   university: z.object({
     id: z.string().uuid(),
-    name: z.string(),
+    jaName: z.string(),
+    enName: z.string(),
   }),
 });
 

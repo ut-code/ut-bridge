@@ -82,7 +82,8 @@ model Belongs {
 
 model Division {
   id           String     @id @default(uuid(7))
-  name         String     @unique
+  jaName       String     @unique
+  enName       String     @unique
   universityId String
   university   University @relation(fields: [universityId], references: [id])
   users        User[]
@@ -90,7 +91,8 @@ model Division {
 
 model Campus {
   id           String     @id @default(uuid(7))
-  name         String     @unique
+  jaName       String     @unique
+  enName       String     @unique
   universityId String
   university   University @relation(fields: [universityId], references: [id])
   users        User[]
@@ -98,7 +100,8 @@ model Campus {
 
 model University {
   id       String     @id @default(uuid(7))
-  name     String     @unique
+  jaName   String     @unique
+  enName   String     @unique
   division Division[]
   campus   Campus[]
 }
