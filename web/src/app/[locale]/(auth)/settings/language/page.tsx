@@ -115,25 +115,27 @@ export default function Page() {
               ))}
             </select>
           </label>
-          <div className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
-            <p> {t("language.fluentLanguage")}</p>
-            <div className="flex w-1/2 flex-wrap gap-2">
-              {languages.map((language) => (
-                <label key={language.id} className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    name="fluentLanguageIds"
-                    value={language.id}
-                    checked={ctx.formData.fluentLanguageIds?.includes(language.id) ?? false}
-                    onChange={handleChange}
-                    className="accent-blue-500"
-                  />
-                  <span>{language.name}</span>
-                </label>
-              ))}
+          <div className="flex flex-col">
+            <div className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
+              <p> {t("language.fluentLanguage")}</p>
+              <div className="flex w-1/2 flex-wrap gap-2">
+                {languages.map((language) => (
+                  <label key={language.id} className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      name="fluentLanguageIds"
+                      value={language.id}
+                      checked={ctx.formData.fluentLanguageIds?.includes(language.id) ?? false}
+                      onChange={handleChange}
+                      className="accent-blue-500"
+                    />
+                    <span>{language.name}</span>
+                  </label>
+                ))}
+              </div>
             </div>
             <div className="mt-5 flex flex-col sm:mt-10 sm:flex-row sm:items-center sm:justify-between">
-              <p className="w-1/2 text-left"> {t("language.learningLanguage")}</p>
+              <p className="text-left sm:w-1/2"> {t("language.learningLanguage")}</p>
               <div className=" flex w-1/2 flex-wrap gap-2">
                 {languages.map((language) => (
                   <label key={language.id} className="flex items-center space-x-2">
@@ -149,16 +151,16 @@ export default function Page() {
                   </label>
                 ))}
               </div>
-              <div className="flex justify-end">
-                <button
-                  type="submit"
-                  className="mt-15 w-1/2 rounded bg-blue-500 p-2 text-white sm:w-50"
-                  disabled={status === "loading"}
-                >
-                  {status === "loading" ? t("isRegister") : t("register")}
-                </button>
-              </div>
             </div>
+          </div>
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              className="mt-15 w-1/2 rounded bg-blue-500 p-2 text-white sm:w-50"
+              disabled={status === "loading"}
+            >
+              {status === "loading" ? t("isRegister") : t("register")}
+            </button>
           </div>
         </form>
       </div>
