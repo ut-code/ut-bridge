@@ -26,10 +26,11 @@ if (process.env.NODE_ENV === "development") {
 }
 
 const app = new Hono()
-  .use(cors("CORS_ALLOW_ORIGINS"))
+  .use(cors())
   // TODO(PERF):: delete this in production
   .use(async (c, next) => {
-    await Bun.sleep(Number.parseInt(env(c, "ARTIFICIAL_NETWORK_LATENCY")));
+    const latency = Number.parseInt(env(c, "ARTIFICIAL_NETWORK_LATENCY", { fallback: "0" }));
+    await Bun.sleep(latency);
     await next();
   })
   .onError((err, c) => {
@@ -47,7 +48,7 @@ const app = new Hono()
     return c.json({ error: "unknown error occured" }, 500);
   })
 
-  .get("/", (c) => c.text("Hello from Hono 🔥"))
+  .get("/", (c) => c.text("ut-bridge: Hello from Hono 🔥"))
 
   .route("/users", usersRouter)
   .route("/community", communityRouter)

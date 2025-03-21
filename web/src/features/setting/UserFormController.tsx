@@ -1,16 +1,18 @@
 "use client";
 import { client } from "@/client";
+import Loading from "@/components/Loading.tsx";
 import { formatCardUser } from "@/features/format";
 import { useUserContext } from "@/features/user/userProvider";
 import type { CreateUser } from "common/zod/schema";
 import type { CardUser } from "common/zod/schema";
 import { useRouter } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { useAuthContext } from "../auth/providers/AuthProvider.tsx";
 
-// Contextの型定義
-interface UserFormContextType {
-  formData: CreateUser;
-  setFormData: React.Dispatch<React.SetStateAction<CreateUser>>;
+type UserFormContextType = {
+  formData: Partial<CreateUser>;
+  setFormData: React.Dispatch<React.SetStateAction<Partial<CreateUser>>>;
+  feedbackSuccess: () => void;
   universities: { id: string; name: string }[];
   campuses: { id: string; name: string }[];
   divisions: { id: string; name: string }[];
@@ -19,12 +21,10 @@ interface UserFormContextType {
   blockedUsers: CardUser[];
   refetchFavoriteUsers: () => void;
   refetchBlockedUsers: () => void;
-}
+};
 
-// Contextの作成
 const UserFormContext = createContext<UserFormContextType | undefined>(undefined);
 
-// Contextを利用するカスタムフック
 export const useUserFormContext = () => {
   const context = useContext(UserFormContext);
   if (!context) {
@@ -33,7 +33,6 @@ export const useUserFormContext = () => {
   return context;
 };
 
-// Provider コンポーネント
 export const UserFormProvider = ({
   children,
 }: {
@@ -41,24 +40,9 @@ export const UserFormProvider = ({
 }) => {
   const router = useRouter();
   const { me } = useUserContext();
+  const { idToken: Authorization } = useAuthContext();
 
-  const [formData, setFormData] = useState<CreateUser>({
-    id: "",
-    imageUrl: null,
-    guid: "",
-    name: "",
-    gender: "male",
-    isForeignStudent: false,
-    grade: "B1",
-    universityId: "",
-    divisionId: "",
-    campusId: "",
-    hobby: "",
-    introduction: "",
-    motherLanguageId: "",
-    fluentLanguageIds: [],
-    learningLanguageIds: [],
-  });
+  const [formData, setFormData] = useState<Partial<CreateUser>>({ id: "" });
 
   const [universities, setUniversities] = useState<{ id: string; name: string }[]>([]);
   const [campuses, setCampuses] = useState<{ id: string; name: string }[]>([]);
@@ -75,10 +59,10 @@ export const UserFormProvider = ({
 
         if (!universityRes.ok || !languageRes.ok) {
           throw new Error(
-            `データ取得に失敗しました: ${JSON.stringify({
-              university: await universityRes.text(),
-              language: await languageRes.text(),
-            })}`,
+            `データ取得に失敗しました: {
+              university: ${await universityRes.text()}
+              language: ${await languageRes.text()}
+            }`,
           );
         }
 
@@ -103,9 +87,7 @@ export const UserFormProvider = ({
         }
 
         setFormData({
-          id: me.id,
-          imageUrl: me.imageUrl,
-          guid: "",
+          imageUrl: me.imageUrl ?? undefined,
           name: me.name,
           gender: me.gender,
           isForeignStudent: me.isForeignStudent,
@@ -116,8 +98,8 @@ export const UserFormProvider = ({
           hobby: me.hobby,
           introduction: me.introduction,
           motherLanguageId: me.motherLanguageId,
-          fluentLanguageIds: me.fluentLanguages.map((lang: { language: { id: string } }) => lang.language.id),
-          learningLanguageIds: me.learningLanguages.map((lang: { language: { id: string } }) => lang.language.id),
+          fluentLanguageIds: me.fluentLanguages.map((entry) => entry.language.id),
+          learningLanguageIds: me.learningLanguages.map((entry) => entry.language.id),
         });
       } catch (err) {
         console.error("ユーザー情報の取得に失敗しました", err);
@@ -157,14 +139,15 @@ export const UserFormProvider = ({
     try {
       if (!me) return;
       const res = await client.community.$get({
+        header: { Authorization },
         query: {
-          myId: me.id,
+          except: me.id,
           marker: "favorite",
         },
       });
 
       if (!res.ok) {
-        throw new Error(`お気に入りユーザーの取得失敗: ${await res.text()}`);
+        throw new Error(await res.text());
       }
 
       const data = await res.json();
@@ -172,14 +155,15 @@ export const UserFormProvider = ({
     } catch (error) {
       console.error("お気に入りユーザーの取得に失敗しました", error);
     }
-  }, [me]);
+  }, [me, Authorization]);
 
   const refetchBlockedUsers = useCallback(async () => {
     try {
       if (!me) return;
       const res = await client.community.$get({
+        header: { Authorization },
         query: {
-          myId: me.id,
+          except: me.id,
           marker: "blocked",
         },
       });
@@ -193,16 +177,23 @@ export const UserFormProvider = ({
     } catch (error) {
       console.error("ブロックユーザーの取得に失敗しました", error);
     }
-  }, [me]);
+  }, [me, Authorization]);
 
   useEffect(() => {
     refetchFavoriteUsers();
     refetchBlockedUsers();
   }, [refetchFavoriteUsers, refetchBlockedUsers]);
 
+  const feedbackSuccess = useCallback(() => {
+    console.log("TODO: make it into the UI");
+    console.log("SUCCESSFULLY SUBMITTED!!!");
+  }, []);
+
+  if (formData.id === "") return <Loading stage="formdata" />;
   return (
     <UserFormContext.Provider
       value={{
+        feedbackSuccess,
         formData,
         setFormData,
         universities,

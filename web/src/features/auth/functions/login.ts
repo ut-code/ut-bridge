@@ -8,7 +8,9 @@ async function login() {
   try {
     const result = await signInWithPopup(auth, provider);
     if (!result.user) throw new Error("Login Failed");
-
+    const idToken = await result.user.getIdToken();
+    console.log("your guid is", result.user.uid);
+    console.log("got idToken of", idToken);
     const res = await client.users.exist.$get({
       query: { guid: result.user.uid },
     });

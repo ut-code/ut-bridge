@@ -1,11 +1,13 @@
 "use client";
 import { client } from "@/client";
 import Loading from "@/components/Loading.tsx";
+import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { formatCardUser } from "@/features/format";
 import UserCard from "@/features/user/UserCard.tsx";
 import { useUserContext } from "@/features/user/userProvider.tsx";
 import { Link, useRouter } from "@/i18n/navigation.ts";
 import { type CardUser, type Exchange, ExchangeSchema, MarkerSchema } from "common/zod/schema";
+import { Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
@@ -83,6 +85,7 @@ export default function Page() {
   const usersPerPage = 15;
   const totalPages = Math.ceil(totalUsers / usersPerPage);
   const { me } = useUserContext();
+  const { idToken: Authorization } = useAuthContext();
 
   useEffect(() => {
     const ctl = new AbortController();
@@ -92,12 +95,13 @@ export default function Page() {
         const res = await client.community.$get(
           {
             query: {
-              myId: me.id,
+              except: me.id,
               page: query.page.toString(),
               exchangeQuery: query.exchange,
               searchQuery: query.search,
               marker: query.marker,
             },
+            header: { Authorization },
           },
           {
             init: {
@@ -120,7 +124,7 @@ export default function Page() {
     return () => {
       ctl.abort();
     };
-  }, [query.page, query.exchange, query.marker, query.search, me.id]);
+  }, [query.page, query.exchange, query.marker, query.search, me.id, Authorization]);
 
   useEffect(() => {
     // 🔹 検索ワードの変更後に 500ms 待ってリクエストを送る（デバウンス処理）
@@ -136,7 +140,7 @@ export default function Page() {
 
   return (
     <>
-      <div className="flex flex-col-reverse items-center sm:flex-row sm:justify-between sm:px-30">
+      <div className="flex flex-col-reverse items-center gap-5 sm:flex-row sm:justify-between sm:px-30">
         <div className="mb-5 flex items-center sm:mb-0">
           <div className="filter">
             <input
@@ -184,15 +188,18 @@ export default function Page() {
           </div>
         </div>
 
-        <input
-          type="search"
-          id="user-search"
-          name="q"
-          placeholder={t("search")}
-          value={rawSearchQuery}
-          onChange={(e) => setRawSearchQuery(e.target.value)}
-          className="mb-5 w-full rounded-full border border-gray-400 bg-white p-2 pl-5 sm:mb-0 sm:w-1/4"
-        />
+        <div className="relative">
+          <Search className="-translate-y-1/2 absolute top-1/2 right-4 text-gray-500" size={20} />
+          <input
+            type="search"
+            id="user-search"
+            name="q"
+            placeholder={t("search")}
+            value={rawSearchQuery}
+            onChange={(e) => setRawSearchQuery(e.target.value)}
+            className="w-full rounded-full border border-gray-400 bg-white p-2 pr-10 pl-5"
+          />
+        </div>
       </div>
 
       {users === null ? (
@@ -210,18 +217,22 @@ export default function Page() {
                 user={user}
                 on={{
                   async favorite(id) {
-                    await client.users.markers.favorite[":targetId"].$put({
+                    const resp = await client.users.markers.favorite[":targetId"].$put({
                       param: {
                         targetId: id,
                       },
+                      header: { Authorization },
                     });
+                    if (!resp.ok) throw new Error(`Bad status: got ${resp.status} with text "${await resp.text()}"`);
                   },
                   async unfavorite(id) {
-                    await client.users.markers.favorite[":targetId"].$delete({
+                    const resp = await client.users.markers.favorite[":targetId"].$delete({
                       param: {
                         targetId: id,
                       },
+                      header: { Authorization },
                     });
+                    if (!resp.ok) throw new Error(`Bad status: got ${resp.status} with text "${await resp.text()}"`);
                   },
                 }}
               />

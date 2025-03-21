@@ -11,16 +11,17 @@ const router = new Hono().get(
   zValidator(
     "query",
     z.object({
-      myId: z.string(),
+      except: z.string().optional(),
       page: z.coerce.number().default(1),
       exchangeQuery: z.enum(["exchange", "japanese", "all"]).default("all"),
       searchQuery: z.string().default(""),
       marker: MarkerSchema.optional(),
     }),
   ),
+  zValidator("header", z.object({ Authorization: z.string() })),
   async (c) => {
     const requester = await getUserID(c);
-    const { page, exchangeQuery, searchQuery, marker: markerQuery } = c.req.valid("query");
+    const { except, page, exchangeQuery, searchQuery, marker: markerQuery } = c.req.valid("query");
     const take = 15; //TODO: web側で指定できるようにする
     const skip = (page - 1) * take;
 
@@ -31,6 +32,9 @@ const router = new Hono().get(
       whereCondition.isForeignStudent = true;
     } else if (exchangeQuery === "japanese") {
       whereCondition.isForeignStudent = false;
+    }
+    if (except) {
+      whereCondition.id = { not: except };
     }
 
     if (markerQuery) {

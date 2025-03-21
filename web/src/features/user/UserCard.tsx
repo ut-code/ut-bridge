@@ -1,13 +1,15 @@
 import { Link } from "@/i18n/navigation.ts";
 import type { CardUser } from "common/zod/schema";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 type UserCardEvent = {
-  favorite: (id: string) => Promise<void>;
-  unfavorite: (id: string) => Promise<void>;
+  favorite?: (id: string) => Promise<void>;
+  unfavorite?: (id: string) => Promise<void>;
+  // block?: (id: string) => Promise<void>;
+  unblock?: (id: string) => Promise<void>;
 };
-const DEV_EXTRA_QUERY_WAIT = 2000;
 
 export default function UserCard({
   user: init,
@@ -20,14 +22,17 @@ export default function UserCard({
 }) {
   const [user, setUser] = useState(init);
   const [favoriteBtnLoading, setFavoriteBtnLoading] = useState(false);
+  const pathname = usePathname();
 
   return (
     <div
       className={`relative flex h-36 w-full items-center rounded-2xl sm:h-62 sm:bg-white ${
-        user.marker === "blocked" && "bg-gray-300"
+        pathname !== "/settings/block" && user.marker === "blocked" && "bg-gray-300"
       }`}
     >
-      <div className="absolute top-0 left-0 h-[1px] w-full bg-gray-300 sm:hidden" />
+      <div
+        className={`absolute top-0 left-0 h-[1px] w-full bg-gray-300 sm:hidden ${pathname === "/community" && user.marker === "blocked" ? "hidden" : ""}`}
+      />
       {/* お気に入りボタン（右上に配置） */}
       <div className="absolute top-2 right-2 z-10">
         {favoriteBtnLoading ? (
@@ -39,14 +44,17 @@ export default function UserCard({
             className="badge bg-transparent text-xl text-yellow-400"
             onClick={async () => {
               setFavoriteBtnLoading(true);
-              await on.unfavorite(user.id);
-              setUser({
-                ...user,
-                marker: undefined,
-              });
-              setTimeout(() => {
-                setFavoriteBtnLoading(false);
-              }, DEV_EXTRA_QUERY_WAIT);
+              try {
+                if (!on.unfavorite) throw new Error("method `unfavorite` not given");
+                await on.unfavorite(user.id);
+                setUser({
+                  ...user,
+                  marker: undefined,
+                });
+              } catch (err) {
+                console.error("failed to unfavorite user");
+              }
+              setFavoriteBtnLoading(false);
             }}
           >
             ★
@@ -60,14 +68,17 @@ export default function UserCard({
             className="badge bg-transparent text-black-700 text-xl"
             onClick={async () => {
               setFavoriteBtnLoading(true);
-              await on.favorite(user.id);
-              setUser({
-                ...user,
-                marker: "favorite",
-              });
-              setTimeout(() => {
-                setFavoriteBtnLoading(false);
-              }, DEV_EXTRA_QUERY_WAIT);
+              try {
+                if (!on.favorite) throw new Error("method `favorite` not given");
+                await on.favorite(user.id);
+                setUser({
+                  ...user,
+                  marker: "favorite",
+                });
+              } catch (err) {
+                console.error("failed to favorite user");
+              }
+              setFavoriteBtnLoading(false);
             }}
           >
             ★

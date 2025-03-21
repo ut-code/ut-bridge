@@ -3,7 +3,7 @@ import type { CardUser, FullCardUser, FullUser, User } from "common/zod/schema";
 export function formatUser(user: FullUser): User {
   return {
     id: user.id,
-    imageUrl: user.imageUrl,
+    imageUrl: user.imageUrl ?? undefined,
     name: user.name,
     gender: user.gender,
     isForeignStudent: user.isForeignStudent,

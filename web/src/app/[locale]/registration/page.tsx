@@ -84,7 +84,7 @@ export default function Page() {
 
   const [formData, setFormData] = useState<CreateUser>({
     id: "",
-    imageUrl: null,
+    imageUrl: undefined,
     guid: "",
     name: "",
     gender: "male",
@@ -166,17 +166,13 @@ export default function Page() {
     setStatus("loading");
     try {
       if (!user) throw new Error("User is not found in Firebase!");
-      let imageUrl = null;
-
-      if (file) {
-        imageUrl = await upload(file);
-      }
       const body = {
         ...formData,
         id: self.crypto.randomUUID(),
         guid: user.uid,
-        imageUrl: imageUrl,
+        imageUrl: file ? await upload(file) : undefined,
       };
+
       const res = await client.users.$post({ json: body });
       if (!res.ok) {
         console.error(await res.text());
@@ -199,7 +195,7 @@ export default function Page() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           {page === "former" ? (
             <div>
-              <div className="px-15 sm:my-10">
+              <div className="px-5 sm:my-10 sm:px-15">
                 <h2 className="font-bold text-xl"> {t("setting.basic.title")}</h2>
                 <label
                   htmlFor="name"
@@ -214,7 +210,7 @@ export default function Page() {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
+                    className="my-4 w-full rounded-xl border border-gray-200 bg-white p-2 sm:w-1/2"
                   />
                 </label>
 
@@ -229,7 +225,7 @@ export default function Page() {
                     name="gender"
                     value={formData.gender}
                     onChange={handleChange}
-                    className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
+                    className="my-4 w-full rounded-xl border border-gray-200 bg-white p-2 sm:w-1/2"
                   >
                     <option value="male"> {t("setting.basic.male")}</option>
                     <option value="female"> {t("setting.basic.female")}</option>
@@ -261,7 +257,7 @@ export default function Page() {
                 </div>
               </div>
 
-              <div className="my-10 px-15">
+              <div className="my-10 px-5 sm:px-15">
                 <h2 className="font-bold text-xl">{t("setting.university.title")}</h2>
                 <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
                   {t("setting.university.univ")}
@@ -269,7 +265,7 @@ export default function Page() {
                     name="universityId"
                     onChange={handleChange}
                     value={formData.universityId}
-                    className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
+                    className="my-4 w-full rounded-xl border border-gray-200 bg-white p-2 sm:w-1/2"
                   >
                     <option disabled={true} className="select" />
                     {universities.map((univ) => (
@@ -286,7 +282,7 @@ export default function Page() {
                     name="divisionId"
                     value={formData.divisionId}
                     onChange={handleChange}
-                    className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
+                    className="my-4 w-full rounded-xl border border-gray-200 bg-white p-2 sm:w-1/2"
                     disabled={loadingState === "loading"}
                   >
                     <option disabled={true} className="select">
@@ -306,7 +302,7 @@ export default function Page() {
                     name="campusId"
                     value={formData.campusId}
                     onChange={handleChange}
-                    className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
+                    className="my-4 w-full rounded-xl border border-gray-200 bg-white p-2 sm:w-1/2"
                     disabled={loadingState === "loading"}
                   >
                     <option disabled={true} className="select">
@@ -327,7 +323,7 @@ export default function Page() {
                     name="grade"
                     value={formData.grade}
                     onChange={handleChange}
-                    className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
+                    className="my-4 w-full rounded-xl border border-gray-200 bg-white p-2 sm:w-1/2"
                   >
                     <option value="B1"> {t("setting.university.gradeOptions.B1")}</option>
                     <option value="B2"> {t("setting.university.gradeOptions.B2")}</option>
@@ -341,7 +337,7 @@ export default function Page() {
                   </select>
                 </label>
               </div>
-              <div className="flex justify-end px-15">
+              <div className="flex justify-end px-5 sm:px-15">
                 <button
                   type="button"
                   onClick={() => setPage("latter")}
@@ -353,7 +349,7 @@ export default function Page() {
             </div>
           ) : (
             <div>
-              <div className="px-15 sm:my-10">
+              <div className="px-5 sm:my-10 sm:px-15">
                 <h2 className="font-bold text-xl"> {t("setting.language.title")}</h2>
                 <label className="mt-5 flex flex-row justify-between sm:relative sm:my-4 sm:block sm:flex-none">
                   {t("setting.language.isForeign")}
@@ -373,7 +369,7 @@ export default function Page() {
                     name="motherLanguageId"
                     value={formData.motherLanguageId}
                     onChange={handleChange}
-                    className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
+                    className="my-4 w-full rounded-xl border border-gray-200 bg-white p-2 sm:w-1/2"
                     disabled={!languages.length}
                   >
                     {languages.map((language) => (
@@ -422,7 +418,7 @@ export default function Page() {
                 </div>
               </div>
 
-              <div className="my-10 px-15">
+              <div className="my-10 px-5 sm:px-15">
                 <h2 className="font-bold text-xl">{t("setting.topic.title")}</h2>
                 <label
                   htmlFor="hobby"
@@ -437,7 +433,7 @@ export default function Page() {
                     value={formData.hobby ?? ""}
                     onChange={handleChange}
                     required
-                    className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
+                    className="my-4 w-full rounded-xl border border-gray-200 bg-white p-2 sm:w-1/2"
                   />
                 </label>
 
@@ -453,11 +449,11 @@ export default function Page() {
                     value={formData.introduction ?? ""}
                     onChange={handleChange}
                     required
-                    className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
+                    className="my-4 w-full rounded-xl border border-gray-200 bg-white p-2 sm:w-1/2"
                   />
                 </label>
               </div>
-              <div className="flex justify-between px-15">
+              <div className="flex justify-between px-5 sm:px-15">
                 <button
                   type="button"
                   onClick={() => setPage("former")}
