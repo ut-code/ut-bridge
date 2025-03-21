@@ -20,6 +20,11 @@
   "chat": { "title": "チャット" },
   "setting": {
     "title": "設定",
+    "headers": {
+      "info": "情報",
+      "users": "ユーザー",
+      "other": "その他"
+    },
     "register": "登録",
     "isRegister": "登録中...",
     "success": "成功しました",

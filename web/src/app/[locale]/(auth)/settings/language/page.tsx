@@ -94,14 +94,16 @@ export default function Page() {
       <div className="max-w mx-10 my-5 p-4 sm:mx-0 sm:my-20">
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <label className="mt-5 flex flex-row justify-between sm:relative sm:my-4 sm:block sm:flex-none">
-            {t("language.isForeign")}
-            <input
-              type="checkbox"
-              name="isForeignStudent"
-              checked={formData.isForeignStudent}
-              onChange={handleChange}
-              className="checkbox checkbox-lg bg-white sm:absolute sm:right-[47%]"
-            />
+            <span className="inline-block w-1/2">{t("language.isForeign")}</span>
+            <span className="w-1/2">
+              <input
+                type="checkbox"
+                name="isForeignStudent"
+                checked={formData.isForeignStudent}
+                onChange={handleChange}
+                className="checkbox checkbox-lg mx-4 bg-white"
+              />
+            </span>
           </label>
 
           <label className="my-4 flex items-center justify-between">
@@ -132,7 +134,7 @@ export default function Page() {
                       value={language.id}
                       checked={ctx.formData.fluentLanguageIds?.includes(language.id) ?? false}
                       onChange={handleChange}
-                      className="accent-blue-500"
+                      className="checkbox"
                     />
                     <span>{locale === "ja" ? language.jaName : language.enName}</span>
                   </label>
@@ -150,7 +152,7 @@ export default function Page() {
                       value={language.id}
                       checked={formData.learningLanguageIds?.includes(language.id) ?? false}
                       onChange={handleChange}
-                      className="accent-blue-500"
+                      className="checkbox"
                     />
                     <span>{locale === "ja" ? language.jaName : language.enName}</span>
                   </label>
