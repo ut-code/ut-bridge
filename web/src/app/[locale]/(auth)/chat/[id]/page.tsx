@@ -53,13 +53,12 @@ function MessageInput({ room }: { room: string }) {
       >
         <div className="fixed bottom-[64px] flex w-full flex-row justify-around gap-2 border-gray-300 border-t bg-tGray p-4 sm:bottom-0">
           <textarea
-            className="h-auto max-h-[200px] min-h-[40px] w-full resize-none rounded-xl border border-gray-300 p-2 leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="field-sizing-content h-auto max-h-[200px] min-h-[40px] w-full resize-none rounded-xl border border-gray-300 p-2 leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-500"
             rows={1}
             value={input}
             onChange={(ev) => {
               setInput(ev.target.value);
             }}
-            style={{ resize: "none", overflow: "hidden", fieldSizing: "content" }}
           />
           <button type="submit" className="" disabled={submitting}>
             <SendHorizontal color="#0b8bee" />
