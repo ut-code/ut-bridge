@@ -6,7 +6,6 @@ import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { formatUser } from "@/features/format";
 import { useUserContext } from "@/features/user/userProvider.tsx";
 import type { FlatUser } from "common/zod/schema";
-import { useLocale } from "next-intl";
 import { useLocale, useTranslations } from "next-intl";
 // import {Link} from "@/i18n/navigation.ts";
 import { useRouter, useSearchParams } from "next/navigation";
