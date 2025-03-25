@@ -1,7 +1,6 @@
 "use client";
 import { client } from "@/client";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
-import { useUserContext } from "@/features/user/userProvider";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -11,18 +10,11 @@ function Page() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const router = useRouter();
   const t = useTranslations("setting.delete");
-  const { me } = useUserContext();
   const { idToken: Authorization } = useAuthContext();
 
   const handleDelete = async () => {
-    if (!me?.id) {
-      console.error("User ID is undefined.");
-      return;
-    }
-
     setIsSubmitting(true);
     const result = await client.users.me.$delete({
-      query: { id: me.id },
       header: { Authorization },
     });
 
