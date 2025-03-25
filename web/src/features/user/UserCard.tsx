@@ -3,6 +3,7 @@ import type { FlatCardUser } from "common/zod/schema";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useState } from "react";
+import { AiFillEyeInvisible, AiFillStar, AiOutlineStar } from "react-icons/ai";
 
 type UserCardEvent = {
   favorite?: (id: string) => Promise<void>;
@@ -56,13 +57,13 @@ export default function UserCard({
               setFavoriteBtnLoading(false);
             }}
           >
-            ★
+            <AiFillStar />
           </button>
         ) : user.markedAs === "blocked" ? (
           <button
             type="button"
             aria-label="block"
-            className="badge border-none bg-transparent text-xl text-yellow-400"
+            className="badge border-none bg-transparent text-red-400 text-xl"
             onClick={async () => {
               setFavoriteBtnLoading(true);
               try {
@@ -78,7 +79,7 @@ export default function UserCard({
               setFavoriteBtnLoading(false);
             }}
           >
-            🚫
+            <AiFillEyeInvisible />
           </button>
         ) : (
           <button
@@ -100,7 +101,7 @@ export default function UserCard({
               setFavoriteBtnLoading(false);
             }}
           >
-            ★
+            <AiOutlineStar />
           </button>
         )}
       </div>
