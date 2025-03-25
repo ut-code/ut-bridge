@@ -65,16 +65,11 @@ const route = new Hono()
     },
   )
 
-  .delete(
-    "/",
-    zValidator("param", z.object({ id: z.string() })),
-    zValidator("header", z.object({ Authorization: z.string() })),
-    async (c) => {
-      const userId = await getUserID(c);
-      const deletedUser = await prisma.user.delete({
-        where: { id: userId },
-      });
-      return c.json(deletedUser);
-    },
-  );
+  .delete("/", zValidator("header", z.object({ Authorization: z.string() })), async (c) => {
+    const userId = await getUserID(c);
+    const deletedUser = await prisma.user.delete({
+      where: { id: userId },
+    });
+    return c.json(deletedUser);
+  });
 export default route;
