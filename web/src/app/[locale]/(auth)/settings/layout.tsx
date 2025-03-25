@@ -32,6 +32,7 @@ function getTransition(pathname: string) {
       return "basic.title";
   }
 }
+
 export default function Layout({ children }: { children: React.ReactNode }) {
   const t = useTranslations("setting");
   // ロケールを考慮してパスを正規化する（/ja/login, /en/login → /login）
@@ -47,14 +48,16 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div className="hidden sm:block">
             <SideNav />
           </div>
-          <div className="flex items-center justify-between border-gray-300 border-b p-4 text-xl sm:hidden">
-            <Link href={"/settings"}>
-              <ChevronLeft />
-            </Link>
-            {title}
-            <div className="w-6" />
-          </div>
-          <div className="w-full p-8 sm:mt-30 md:mr-8 xl:mr-24">{children}</div>
+          {pathname !== "" && (
+            <div className="flex items-center justify-between border-gray-300 border-b p-4 text-xl sm:hidden">
+              <Link href={"/settings"}>
+                <ChevronLeft />
+              </Link>
+              {title}
+              <div className="w-6" />
+            </div>
+          )}
+          <main className="w-full p-8 sm:mt-30 md:mr-8 xl:mr-24">{children}</main>
         </div>
       </UserFormProvider>
     </>
