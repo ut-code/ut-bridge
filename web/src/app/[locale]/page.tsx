@@ -25,7 +25,7 @@ export default function Home() {
           <p className="my-4 text-center text-xl xl:text-3xl">{t("catch.message")}</p>
           <Link
             href={"/login"}
-            className="my-2 cursor-pointer rounded-full bg-tBlue px-10 py-1 text-center text-white text-xl xl:my-4 xl:px-20 xl:py-3 xl:text-3xl"
+            className="my-2 cursor-pointer rounded-full bg-tBlue px-20 py-3 text-center text-3xl text-white xl:my-4"
           >
             {t("catch.start")}
           </Link>
