@@ -26,9 +26,9 @@ export default function Login() {
           <p className="my-10 text-gray-500 text-sm">
             {t("info")}
             <br />
-            <a href="/privacy" className="text-blue-500 underline">
+            {/* <a href="/privacy" className="text-blue-500 underline">
               {t("privacy")}
-            </a>
+            </a> */}
           </p>
         </div>
       </div>
