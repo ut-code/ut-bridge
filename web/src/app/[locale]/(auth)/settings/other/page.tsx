@@ -2,8 +2,8 @@
 
 import LanguageSwitcher from "@/components/LanguageSelectar";
 import { Link } from "@/i18n/navigation.ts";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 
 export default function Page() {
   const t = useTranslations("setting");
@@ -11,7 +11,7 @@ export default function Page() {
     <>
       <div className="flex items-center justify-between border-gray-300 border-b p-4 text-xl sm:hidden">
         <Link href={"/settings"}>
-          <ChevronLeft />
+          <AiOutlineLeft />
         </Link>
         {t("other.title")}
         <div className="w-6" />
@@ -25,14 +25,14 @@ export default function Page() {
           className="flex items-center justify-between rounded-t-xl bg-neutral-50 p-3 px-6 text-gray-800 text-md sm:p-4 sm:pr-8 sm:pl-12 sm:text-lg"
         >
           {t("other.privacy.title")}
-          <ChevronRight />
+          <AiOutlineRight />
         </Link>
         <Link
           href={"/settings/other/terms"}
           className="flex items-center justify-between rounded-b-xl bg-neutral-50 p-3 px-6 text-gray-800 text-md sm:p-4 sm:pr-8 sm:pl-12 sm:text-lg"
         >
           {t("other.terms.title")}
-          <ChevronRight />
+          <AiOutlineRight />
         </Link>
       </div>
     </>

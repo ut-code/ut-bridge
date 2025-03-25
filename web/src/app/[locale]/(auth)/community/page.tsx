@@ -7,10 +7,10 @@ import UserCard from "@/features/user/UserCard.tsx";
 import { useUserContext } from "@/features/user/userProvider.tsx";
 import { Link, useRouter } from "@/i18n/navigation.ts";
 import { type Exchange, ExchangeSchema, type FlatCardUser, MarkerSchema } from "common/zod/schema";
-import { Search } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { AiOutlineSearch } from "react-icons/ai";
 
 function useQuery() {
   const query = useSearchParams();
@@ -192,7 +192,7 @@ export default function Page() {
         </div>
 
         <div className="relative">
-          <Search className="-translate-y-1/2 absolute top-1/2 right-4 text-gray-500" size={20} />
+          <AiOutlineSearch className="-translate-y-1/2 absolute top-1/2 right-4 text-gray-500" size={20} />
           <input
             type="search"
             id="user-search"

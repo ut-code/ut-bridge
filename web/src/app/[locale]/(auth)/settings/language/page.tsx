@@ -3,11 +3,11 @@
 import { client } from "@/client";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { useUserFormContext } from "@/features/setting/UserFormController.tsx";
-import { ChevronLeft } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { AiOutlineLeft } from "react-icons/ai";
 
 export default function Page() {
   const { idToken: Authorization } = useAuthContext();
@@ -86,7 +86,7 @@ export default function Page() {
     <>
       <div className="flex items-center justify-between border-gray-300 border-b p-4 text-xl sm:hidden">
         <Link href={"/settings"}>
-          <ChevronLeft />
+          <AiOutlineLeft />
         </Link>
         {t("language.title")}
         <div className="w-6" />
