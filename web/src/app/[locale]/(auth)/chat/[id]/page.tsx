@@ -1,6 +1,7 @@
 "use client";
 
 import { client } from "@/client";
+import Loading from "@/components/Loading";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { handlers } from "@/features/chat/state";
 import { useUserContext } from "@/features/user/userProvider";
@@ -81,7 +82,7 @@ function Load({ room }: { room: string }) {
     if ("error" in json) throw new Error(json.error);
     return json;
   });
-  if (m.loading) return <span className="loading loading-xl flex-1" />;
+  if (m.loading) return <Loading stage={"room"} />;
   if (m.error) {
     console.error(m.error);
     return <span className="text-error">something went wrong</span>;

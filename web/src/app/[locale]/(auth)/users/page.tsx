@@ -124,13 +124,13 @@ export default function Page() {
               {chatButtonState === "creating" ? (
                 <span>
                   <span className="loading loading-spinner absolute" />
-                  作成中...
+                  {/* 作成中... */}
                 </span>
               ) : (
                 chatButtonState === "searching" && (
                   <span>
                     <span className="loading loading-spinner " />
-                    探し中...
+                    {/* 探し中... */}
                   </span>
                 )
               )}
