@@ -8,3 +8,9 @@
   --color-tGray: #f4f4f4;
   --color-focus: #196aab;
 }
+
+@plugin "daisyui/theme" {
+  /* biome-ignore lint: daisyui */
+  name: "light";
+  --color-primary: #0b8bee;
+}
