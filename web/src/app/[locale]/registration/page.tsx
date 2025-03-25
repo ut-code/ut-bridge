@@ -1,5 +1,6 @@
 "use client";
 
+import Avatar from "@/components/Avatar";
 import { useUserFormContext } from "@/features/setting/UserFormController";
 import { Part1RegistrationSchema } from "common/zod/schema";
 import { useTranslations } from "next-intl";
@@ -15,6 +16,8 @@ export default function Page() {
   console.log(ctx);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const [btnDisabled, setBtnDisabled] = useState(false);
+
   return (
     <>
       <div className="my-5 p-4 sm:mx-60 sm:my-20">
@@ -25,6 +28,7 @@ export default function Page() {
             setIsSubmitting(true);
             const result = Part1RegistrationSchema.safeParse(ctx.formData);
             if (result.success) {
+              setBtnDisabled(true);
               await ctx.uploadImage();
               router.push("./registration/step2");
               setIsSubmitting(false);
@@ -86,15 +90,7 @@ export default function Page() {
                   id="image-upload"
                 />
 
-                <div
-                  className={`flex h-40 w-40 items-center justify-center rounded-lg ${
-                    ctx.imagePreviewURL ? "" : "bg-gray-300"
-                  }`}
-                >
-                  {ctx.imagePreviewURL ? (
-                    <img src={ctx.imagePreviewURL} alt="プレビュー" className="rounded-lg object-cover" />
-                  ) : null}
-                </div>
+                <Avatar size={160} src={ctx.imagePreviewURL} alt="プレビュー" />
 
                 <label
                   // biome-ignore lint: shut up it's for good
@@ -210,7 +206,6 @@ export default function Page() {
                   <span className="h-5 w-5 animate-spin rounded-full border-2 border-tBlue border-t-transparent" />
                 ) : (
                   t("community.nextButton")
-                )}
               </button>
             </div>
           </div>

@@ -1,12 +1,12 @@
 "use client";
 import { client } from "@/client";
+import Avatar from "@/components/Avatar";
 import Loading from "@/components/Loading.tsx";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { formatUser } from "@/features/format";
 import { useUserContext } from "@/features/user/userProvider.tsx";
 import type { FlatUser } from "common/zod/schema";
 import { useLocale, useTranslations } from "next-intl";
-import Image from "next/image";
 // import {Link} from "@/i18n/navigation.ts";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -103,24 +103,16 @@ export default function Page() {
   return (
     <div className="rounded-3xl p-16 sm:m-16 sm:bg-white">
       <div className="mb-10 flex flex-col items-center sm:flex-row sm:justify-around">
-        {user.imageUrl ? (
-          <Image
-            src={user.imageUrl}
-            alt={user.name ?? "User"}
-            width={48}
-            height={48}
-            className="h-12 w-12 rounded-full"
-          />
-        ) : (
-          <div className="flex h-100 w-100 items-center justify-center rounded-full bg-gray-300">N/A</div>
-        )}
+        <div className="">
+          <Avatar src={user.imageUrl} alt={user.name} size={300} className="h-12 w-12 rounded-full" />
+        </div>
         <div className="w-full sm:w-auto">
           <div className="flex flex-col items-center sm:items-start">
             <p className="mb-4 font-bold text-5xl">{user.name}</p>
             <p className="my-4 text-2xl">{t(`users.${user.gender}`)}</p>
             <p className="my-4 text-2xl">{user.isForeignStudent ? t("users.foreignStudent") : " "}</p>
           </div>
-          <div className="flex w-full justify-around sm:w-auto sm:justify-normal sm:gap-10 ">
+          <div className="flex w-full flex-wrap justify-around sm:w-auto sm:justify-normal sm:gap-10 ">
             <span className="absolute w-15">
               {chatButtonState === "creating" ? (
                 <span>
@@ -181,7 +173,7 @@ export default function Page() {
             </MarkerButton>
             <MarkerButton
               if={user.markedAs === "favorite"}
-              class={"btn h-10 w-30 w-30 bg-tYellow text-white"}
+              class={"btn h-10 w-30 bg-tYellow text-white"}
               action="unfavorite"
             >
               {t("users.removeFavoriteButton")}

@@ -6,8 +6,6 @@ export const styles = {
   inputSelect: "select my-4 min-w-1/3 max-w-40 md:max-w-none",
   inputCheckbox: "checkbox checkbox-lg mx-4 bg-white",
   inputTextarea: "my-4 w-auto textarea rounded-xl border border-gray-200 bg-white p-2 sm:w-1/2",
-  imagePreviewWrapper: "flex-1 h-40 w-full items-center justify-center rounded-lg ",
-  imagePreviewImg: "block rounded-lg object-cover",
   imageUploadButton: "btn btn-primary btn-outline mt-5 h-10 justify-center px-4 py-2 sm:mt-0",
   submitButtonWrapperDiv: "flex justify-end",
   submitButton: "mt-15 btn btn-primary p-2 w-1/2 sm:w-50 mb-5",

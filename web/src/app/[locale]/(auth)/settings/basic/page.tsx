@@ -1,6 +1,7 @@
 "use client";
 
 import { client } from "@/client";
+import Avatar from "@/components/Avatar";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { upload } from "@/features/image/ImageUpload";
 import { useUserFormContext } from "@/features/setting/UserFormController.tsx";
@@ -75,7 +76,6 @@ export default function Page() {
             className={styles.inputText}
           />
         </label>
-
         <label className={styles.label}>
           <span className={styles.labelSpan}>{t("basic.sex")}</span>
 
@@ -85,7 +85,6 @@ export default function Page() {
             <option value="other"> {t("basic.other")}</option>
           </select>
         </label>
-
         <div className={styles.label}>
           <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" id="image-upload" />
           <span className={styles.labelSpan}>{t("basic.photo")}</span>
@@ -93,9 +92,7 @@ export default function Page() {
             {t("basic.photoUpload")}
           </label>
         </div>
-        <div className={`${styles.imagePreviewWrapper} ${imagePreviewURL ? "" : "bg-gray-300"}`}>
-          {imagePreviewURL ? <img src={imagePreviewURL} alt="プレビュー" className={styles.imagePreviewImg} /> : null}
-        </div>
+        <Avatar src={imagePreviewURL} size={160} />
         <div className={styles.submitButtonWrapperDiv}>
           <button type="submit" className={styles.submitButton} disabled={status === "loading"}>
             {status === "loading" ? t("isRegister") : t("register")}
