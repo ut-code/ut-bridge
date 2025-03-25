@@ -2,21 +2,21 @@
 import { useUserContext } from "@/features/user/userProvider.tsx";
 import { Link } from "@/i18n/navigation.ts";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { AppIcon } from "./AppIcon.tsx";
+import Avatar from "./Avatar.tsx";
 
-export default function Header() {
+export default function Header({ title }: { title: string }) {
   const router = useRouter();
-  const path = usePathname();
   const t = useTranslations();
+  const path = usePathname();
 
   // ロケールを考慮してパスを正規化する（/ja/login, /en/login → /login）
   const pathname = path.replace(/^\/(ja|en)/, "");
-  const me =
+  const { me } =
     pathname.startsWith("/registration") || pathname === "/login" || pathname === ""
-      ? { imageUrl: "", name: "" }
+      ? { me: null }
       : // who the fuck did this
         // eslint-disable-next-line react-hooks/rules-of-hooks
         useUserContext();
@@ -76,36 +76,10 @@ export default function Header() {
           >
             {t("setting.title")}
           </button>
-          <p className="absolute right-1/2 translate-x-1/2 font-bold text-white text-xl sm:hidden">
-            {pathname === "/"
-              ? "ランディング"
-              : pathname.startsWith("/registration")
-                ? t("registration.title")
-                : pathname.endsWith("/login")
-                  ? t("Login.header")
-                  : pathname === "/community" || pathname === "/users"
-                    ? t("community.title")
-                    : pathname.startsWith("/chat")
-                      ? t("chat.title")
-                      : pathname.startsWith("/settings")
-                        ? t("setting.title")
-                        : ""}
-          </p>
+          <p className="absolute right-1/2 translate-x-1/2 font-bold text-white text-xl sm:hidden">{title}</p>
           <div className="absolute right-4 flex items-center gap-4">
-            <div>
-              {"imageUrl" in me ? (
-                <Image
-                  src={me.imageUrl}
-                  alt={me.name ?? "User"}
-                  width={60}
-                  height={60}
-                  className="rounded-full object-cover"
-                />
-              ) : (
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-300">No Image</div>
-              )}
-            </div>
-            {"name" in me && <p className="hidden text-white text-xl sm:block">{me.name}</p>}
+            <Avatar size={40} src={me?.imageUrl} />
+            {me?.name && <p className="hidden text-white text-xl sm:block">{me.name}</p>}
           </div>
         </>
       )}

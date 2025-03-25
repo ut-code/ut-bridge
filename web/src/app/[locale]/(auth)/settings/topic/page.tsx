@@ -3,11 +3,10 @@
 import { client } from "@/client";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { useUserFormContext } from "@/features/setting/UserFormController.tsx";
-import { ChevronLeft } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { styles } from "../shared-class.ts";
 
 export default function Page() {
   const ctx = useUserFormContext();
@@ -65,58 +64,38 @@ export default function Page() {
   };
 
   return (
-    <>
-      <div className="flex items-center justify-between border-gray-300 border-b p-4 text-xl sm:hidden">
-        <Link href={"/settings"}>
-          <ChevronLeft />
-        </Link>
-        {t("topic.title")}
-        <div className="w-6" />
+    <form onSubmit={handleSubmit} className={styles.form}>
+      <label htmlFor="hobby" className={styles.label}>
+        <span className={styles.labelSpan}>{t("topic.hobby")}</span>
+        <textarea
+          id="hobby"
+          name="hobby"
+          rows={5}
+          value={ctx.formData.hobby ?? ""}
+          onChange={handleChange}
+          required
+          className={styles.inputTextarea}
+        />
+      </label>
+
+      <label htmlFor="introduction" className={styles.label}>
+        <span className={styles.labelSpan}>{t("topic.introduction")}</span>
+        <textarea
+          id="introduction"
+          name="introduction"
+          rows={5}
+          value={ctx.formData.introduction ?? ""}
+          onChange={handleChange}
+          required
+          className={styles.inputTextarea}
+        />
+      </label>
+
+      <div className={styles.submitButtonWrapperDiv}>
+        <button type="submit" className={styles.submitButton} disabled={status === "loading"}>
+          {status === "loading" ? t("isRegister") : t("register")}
+        </button>
       </div>
-
-      <div className="max-w mx-10 my-5 p-4 sm:mx-0 sm:my-20">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          <label htmlFor="hobby" className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
-            {t("topic.hobby")}
-            <textarea
-              id="hobby"
-              name="hobby"
-              rows={5}
-              value={ctx.formData.hobby ?? ""}
-              onChange={handleChange}
-              required
-              className="my-4 w-full rounded-xl border border-gray-200 bg-white p-2 sm:w-1/2"
-            />
-          </label>
-
-          <label
-            htmlFor="introduction"
-            className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between"
-          >
-            {t("topic.introduction")}
-
-            <textarea
-              id="introduction"
-              name="introduction"
-              rows={5}
-              value={ctx.formData.introduction ?? ""}
-              onChange={handleChange}
-              required
-              className="my-4 w-full rounded-xl border border-gray-200 bg-white p-2 sm:w-1/2"
-            />
-          </label>
-
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              className="mt-15 w-1/2 rounded bg-blue-500 p-2 text-white sm:w-50"
-              disabled={status === "loading"}
-            >
-              {status === "loading" ? t("isRegister") : t("register")}
-            </button>
-          </div>
-        </form>
-      </div>
-    </>
+    </form>
   );
 }

@@ -3,7 +3,7 @@
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 
-export default function LanguageSwitcher() {
+export default function LanguageSwitcher({ className }: { className?: string }) {
   const router = useRouter();
   const pathname = usePathname();
   const currentLocale = useLocale();
@@ -21,7 +21,11 @@ export default function LanguageSwitcher() {
   };
 
   return (
-    <select value={currentLocale} onChange={(e) => changeLanguage(e.target.value)} className="rounded border px-2 py-1">
+    <select
+      value={currentLocale}
+      onChange={(e) => changeLanguage(e.target.value)}
+      className={`select w-30 ${className}`}
+    >
       <option value="en">English</option>
       <option value="ja">日本語</option>
       {/* <option value="zh">中文</option> */}

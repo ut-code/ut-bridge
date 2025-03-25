@@ -1,18 +1,26 @@
 "use client";
-import { Link } from "@/i18n/navigation";
-import { MessageSquareText, Settings, Users } from "lucide-react";
-
+import { Link, usePathname } from "@/i18n/navigation";
+import { AiFillMessage, AiFillSetting, AiOutlineMessage, AiOutlineSetting, AiOutlineTeam } from "react-icons/ai";
 export default function Footer() {
+  const path = usePathname().replace(/^\/(ja|en)/, "");
   return (
     <footer className="flex h-16 w-full items-center justify-around bg-tBlue sm:hidden">
       <Link href={"/community"}>
-        <Users color="white" size={30} />
+        <AiOutlineTeam size={30} strokeWidth={path.startsWith("/community") ? 35 : 0} color="white" fill="white" />
       </Link>
       <Link href={"/chat"}>
-        <MessageSquareText color="white" size={30} />
+        {path.startsWith("/chat") ? (
+          <AiFillMessage size={30} fill="white" />
+        ) : (
+          <AiOutlineMessage size={30} fill="white" />
+        )}
       </Link>
       <Link href={"/settings"}>
-        <Settings color="white" size={30} />
+        {path.startsWith("/settings") ? (
+          <AiFillSetting size={30} fill="white" />
+        ) : (
+          <AiOutlineSetting size={30} fill="white" />
+        )}
       </Link>
     </footer>
   );

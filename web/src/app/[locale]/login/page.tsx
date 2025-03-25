@@ -11,7 +11,7 @@ export default function Login() {
 
   return (
     <>
-      <Header />
+      <Header title={t("header")} />
       <div className="flex h-screen justify-center sm:items-center">
         <div className="p-6 text-center sm:rounded-lg sm:border sm:shadow-md">
           <p className="mt-10 sm:hidden">UT-Bridge</p>
@@ -26,9 +26,9 @@ export default function Login() {
           <p className="my-10 text-gray-500 text-sm">
             {t("info")}
             <br />
-            <a href="/privacy" className="text-blue-500 underline">
+            {/* <a href="/privacy" className="text-blue-500 underline">
               {t("privacy")}
-            </a>
+            </a> */}
           </p>
         </div>
       </div>

@@ -114,18 +114,18 @@ export default function Page() {
             <p className="my-4 text-2xl">{user.gender}</p>
             <p className="my-4 text-2xl">{user.isForeignStudent ? "留学生" : " "}</p>
           </div>
-          <div className="flex w-full justify-around sm:w-auto sm:justify-normal sm:gap-10">
+          <div className="flex w-full justify-around sm:w-auto sm:justify-normal sm:gap-10 ">
             <span className="absolute w-15">
               {chatButtonState === "creating" ? (
                 <span>
                   <span className="loading loading-spinner absolute" />
-                  作成中...
+                  {/* 作成中... */}
                 </span>
               ) : (
                 chatButtonState === "searching" && (
                   <span>
                     <span className="loading loading-spinner " />
-                    探し中...
+                    {/* 探し中... */}
                   </span>
                 )
               )}
@@ -162,23 +162,23 @@ export default function Page() {
                 setChatButtonState("created");
                 router.push(`/chat/${room.id}`);
               }}
-              className="btn flex h-25 w-25 items-center justify-center rounded-full bg-blue-500 text-white"
+              className="btn flex h-10 w-30 items-center justify-center bg-blue-500 text-white"
             >
               チャット
             </button>
             <MarkerButton
               if={user.markedAs !== "favorite"}
-              class={"btn h-25 w-25 rounded-full text-yellow-500"}
+              class={"btn h-10 w-30 border-yellow-500 text-yellow-500"}
               action="favorite"
             >
               お気に入り
             </MarkerButton>
             <MarkerButton
               if={user.markedAs === "favorite"}
-              class={"btn h-25 w-25 rounded-full bg-yellow-400 text-white"}
+              class={"btn h-10 w-30 w-30 bg-yellow-500 text-white"}
               action="unfavorite"
             >
-              お気に入りを解除する
+              お気に入りを解除
             </MarkerButton>
           </div>
         </div>

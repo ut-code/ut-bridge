@@ -11,8 +11,9 @@ import { useEffect, useState } from "react";
 export default function Page() {
   return (
     <>
-      <h1>チャット画面</h1>
-      <Rooms />
+      <div className="w-full">
+        <Rooms />
+      </div>
     </>
   );
 }
@@ -26,7 +27,9 @@ function Rooms() {
   useEffect(() => {
     async function fetchRooms() {
       try {
-        const res = await client.chat.rooms.preview.$get({ header: { Authorization: idToken } });
+        const res = await client.chat.rooms.preview.$get({
+          header: { Authorization: idToken },
+        });
         if (!res.ok) throw new Error("Failed to fetch rooms");
         const data = await res.json();
         setRooms(data);
@@ -41,6 +44,7 @@ function Rooms() {
 
   if (loading) return <Loading stage="room.info" />;
   if (error) return <span className="text-error">{error}</span>;
+  if (rooms.length === 0) return <p>ユーザーページから、チャットを始めましょう！</p>;
 
   return (
     <ul>
@@ -72,18 +76,22 @@ function Room({ room }: { room: RoomPreview }) {
   const firstMember = room.members.filter((m) => m.user.id !== me.id)[0]?.user ?? null;
 
   return (
-    <Link href={`/chat/${room.id}`} className="flex items-center space-x-4">
-      <Image
-        alt={firstMember?.name || "User"}
-        className="size-10 rounded-box"
-        src={firstMember?.imageUrl || "/default-profile.png"}
-        width={40}
-        height={40}
-      />
-      <div className="list-col-grow">
-        <div>{firstMember?.name || "Unknown User"}</div>
-        <div className="font-semibold text-xs uppercase opacity-60">{room.messages[0]?.content || "No messages"}</div>
-      </div>
-    </Link>
+    <div className="border-gray-300 border-b">
+      <Link href={`/chat/${room.id}`} className="flex h-full w-full items-center p-5">
+        <div className="flex items-center justify-center">
+          <Image
+            alt={firstMember?.name || "User"}
+            className="rounded-full object-cover"
+            src={firstMember?.imageUrl || "/default-profile.png"}
+            width={40}
+            height={40}
+          />
+        </div>
+        <div className=" list-col-grow pl-4">
+          <div>{firstMember?.name || "Unknown User"}</div>
+          <div className="font-semibold text-xs uppercase opacity-60">{room.messages[0]?.content || "No messages"}</div>
+        </div>
+      </Link>
+    </div>
   );
 }
