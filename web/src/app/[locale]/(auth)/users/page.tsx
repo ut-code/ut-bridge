@@ -1,5 +1,6 @@
 "use client";
 import { client } from "@/client";
+import Avatar from "@/components/Avatar";
 import Loading from "@/components/Loading.tsx";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { formatUser } from "@/features/format";
@@ -103,13 +104,7 @@ export default function Page() {
     <div className="rounded-3xl p-16 sm:m-16 sm:bg-white">
       <div className="mb-10 flex flex-col items-center sm:flex-row sm:justify-around">
         {user.imageUrl ? (
-          <Image
-            src={user.imageUrl}
-            alt={user.name ?? "User"}
-            width={48}
-            height={48}
-            className="h-12 w-12 rounded-full"
-          />
+          <Avatar src={user.imageUrl} alt={user.name} size={300} className="h-12 w-12 rounded-full" />
         ) : (
           <div className="flex h-100 w-100 items-center justify-center rounded-full bg-gray-300">N/A</div>
         )}

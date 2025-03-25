@@ -1,6 +1,7 @@
+import Avatar from "@/components/Avatar";
 import { Link } from "@/i18n/navigation.ts";
 import type { FlatCardUser } from "common/zod/schema";
-import Image from "next/image";
+
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
@@ -90,17 +91,7 @@ export default function UserCard({
       <Link href={link} className="h-full w-full sm:p-4">
         <div className="flex h-full flex-row items-center">
           <div className="flex w-1/3 items-center justify-center">
-            {user.imageUrl ? (
-              <Image
-                src={user.imageUrl}
-                alt={user.name ?? "User"}
-                width={80}
-                height={80}
-                className="rounded-full object-cover"
-              />
-            ) : (
-              <div className="flex h-30 w-30 items-center justify-center rounded-full bg-gray-300">No Image</div>
-            )}
+            <Avatar src={user.imageUrl} size={80} alt={user.name} />
           </div>
 
           <div className="w-2/3 pl-4">

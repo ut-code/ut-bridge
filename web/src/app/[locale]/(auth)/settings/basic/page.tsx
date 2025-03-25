@@ -1,6 +1,7 @@
 "use client";
 
 import { client } from "@/client";
+import Avatar from "@/components/Avatar";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { upload } from "@/features/image/ImageUpload";
 import { useUserFormContext } from "@/features/setting/UserFormController.tsx";
@@ -104,13 +105,7 @@ export default function Page() {
             {t("basic.photo")}
 
             <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" id="image-upload" />
-            <div
-              className={`flex h-40 w-40 items-center justify-center rounded-lg ${
-                imagePreviewURL ? "" : "bg-gray-300"
-              }`}
-            >
-              {imagePreviewURL && <img src={imagePreviewURL} alt="プレビュー" className="rounded-lg object-cover" />}
-            </div>
+            <Avatar src={imagePreviewURL} size={320} />
             <label
               htmlFor="image-upload"
               className="mt-5 flex h-10 cursor-pointer justify-center rounded bg-blue-400 px-4 py-2 text-white sm:mt-0 sm:flex-none"

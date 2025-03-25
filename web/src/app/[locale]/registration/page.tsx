@@ -1,10 +1,12 @@
 "use client";
 
+import Avatar from "@/components/Avatar";
 import { useUserFormContext } from "@/features/setting/UserFormController";
 import { Part1RegistrationSchema } from "common/zod/schema";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function Page() {
   const router = useRouter();
@@ -12,6 +14,8 @@ export default function Page() {
   const t = useTranslations();
   const locale = useLocale();
   console.log(ctx);
+
+  const [btnDisabled, setBtnDisabled] = useState(false);
 
   return (
     <>
@@ -22,8 +26,12 @@ export default function Page() {
             ev.preventDefault();
             const result = Part1RegistrationSchema.safeParse(ctx.formData);
             if (result.success) {
+              setBtnDisabled(true);
               await ctx.uploadImage();
               router.push("./registration/step2");
+              setTimeout(() => {
+                setBtnDisabled(false);
+              }, 3000);
             } else {
               console.error("failed to parse part1", result.error);
             }
@@ -81,15 +89,7 @@ export default function Page() {
                   id="image-upload"
                 />
 
-                <div
-                  className={`flex h-40 w-40 items-center justify-center rounded-lg ${
-                    ctx.imagePreviewURL ? "" : "bg-gray-300"
-                  }`}
-                >
-                  {ctx.imagePreviewURL ? (
-                    <img src={ctx.imagePreviewURL} alt="プレビュー" className="rounded-lg object-cover" />
-                  ) : null}
-                </div>
+                <Avatar size={160} src={ctx.imagePreviewURL} alt="プレビュー" />
 
                 <label
                   // biome-ignore lint: shut up it's for good
@@ -196,7 +196,11 @@ export default function Page() {
               </label>
             </div>
             <div className="flex justify-end px-15">
-              <button type="submit" className="btn h-10 w-25 rounded-lg border border-tBlue p-2 text-tBlue">
+              <button
+                type="submit"
+                disabled={btnDisabled}
+                className="btn h-10 w-25 rounded-lg border border-tBlue p-2 text-tBlue"
+              >
                 {t("community.nextButton")}
               </button>
             </div>
