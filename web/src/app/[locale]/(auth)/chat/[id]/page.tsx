@@ -6,9 +6,9 @@ import { handlers } from "@/features/chat/state";
 import { useUserContext } from "@/features/user/userProvider";
 import { assert } from "@/lib";
 import { use } from "@/react/useData";
-import { SendHorizontal } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { AiOutlineSend } from "react-icons/ai";
 
 export default function Page() {
   const roomId = useParams().id as string;
@@ -61,7 +61,7 @@ function MessageInput({ room }: { room: string }) {
             }}
           />
           <button type="submit" className="" disabled={submitting}>
-            <SendHorizontal color="#0b8bee" />
+            <AiOutlineSend size={30} color="#0b8bee" />
           </button>
         </div>
       </form>
