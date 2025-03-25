@@ -100,7 +100,7 @@ export default function Page() {
               page: query.page.toString(),
               exchangeQuery: query.exchange,
               searchQuery: query.search,
-              marker: query.marker,
+              marker: query.marker === "favorite" ? "favorite" : "notBlocked",
             },
             header: { Authorization },
           },
@@ -232,6 +232,13 @@ export default function Page() {
                         targetId: id,
                       },
                       header: { Authorization },
+                    });
+                    if (!resp.ok) throw new Error(`Bad status: got ${resp.status} with text "${await resp.text()}"`);
+                  },
+                  async unblock(id) {
+                    const resp = await client.users.markers.blocked[":targetId"].$delete({
+                      header: { Authorization },
+                      param: { targetId: id },
                     });
                     if (!resp.ok) throw new Error(`Bad status: got ${resp.status} with text "${await resp.text()}"`);
                   },
