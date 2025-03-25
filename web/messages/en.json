@@ -15,6 +15,28 @@
   "registration": {
     "title": "Registration"
   },
+  "users": {
+    "male": "Male",
+    "female": "Female",
+    "other": "Other",
+    "foreignStudent": "",
+    "chatButton": "Chat",
+    "favoriteButton": "Favorite",
+    "removeFavoriteButton": "Remove favorite",
+    "universityInformation": "University",
+    "campus": "Campus",
+    "divisions": "Faculty",
+    "grade": "Grade",
+    "language": "Language",
+    "motherLanguage": "Native Language",
+    "fluentLanguage": "Fluent Languages",
+    "learningLanguage": "Learning Language",
+    "topic": "Topics",
+    "hobby": "Hobbies",
+    "introduction": "Self-Introduction",
+    "blockButton": "Block",
+    "removeBlockButton": "Remove block"
+  },
   "community": {
     "title": "Community",
     "favorite": "Favorites",
