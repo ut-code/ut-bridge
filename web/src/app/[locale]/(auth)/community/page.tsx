@@ -140,58 +140,56 @@ export default function Page() {
       clearTimeout(timeoutId);
     };
   }, [rawSearchQuery, router, setDebouncedSearchQuery]);
+  const [isFavoriteChecked, setIsFavoriteChecked] = useState(false);
+  const [isExchangeChecked, setIsExchangeChecked] = useState(query.exchange !== "all");
 
   return (
     <>
       <div className="flex flex-col-reverse items-center gap-5 sm:flex-row sm:justify-between sm:px-30">
         <div className="mb-5 flex items-center sm:mb-0">
-          <div className="filter">
-            <input
-              className="btn filter-reset"
-              type="radio"
-              name="metaframeworks"
-              aria-label="All"
-              onInput={() => {
-                router.push(
-                  createQueriedURL({
-                    marker: "clear",
-                  }),
-                );
-              }}
-            />
-
-            <input
-              className="btn mx-4 rounded-xl bg-white"
-              type="radio"
-              name="favorite"
-              aria-label={t("favorite")}
-              onInput={() => {
-                router.push(
-                  createQueriedURL({
-                    marker: "favorite",
-                  }),
-                );
-              }}
-            />
-          </div>
           <div>
-            <input
-              id="exchange-language"
-              type="checkbox"
-              className="btn rounded-xl bg-white"
-              checked={query.exchange !== "all"}
-              aria-label={t("filter")}
-              onChange={(ev) => {
-                const filtered = ev.target.checked;
+            <button
+              type="button"
+              className={`btn mx-4 rounded-xl ${
+                isFavoriteChecked ? " bg-tYellow text-white " : "bg-white text-tYellow"
+              }`}
+              onClick={() => {
+                const newChecked = !isFavoriteChecked;
+                setIsFavoriteChecked(newChecked);
+                router.push(
+                  createQueriedURL({
+                    marker: newChecked ? "favorite" : "clear",
+                  }),
+                );
+              }}
+            >
+              {t("favorite")}
+            </button>
+          </div>
+
+          <div>
+            <button
+              type="button"
+              className={`btn rounded-xl border ${isExchangeChecked ? " bg-tBlue text-white " : "bg-white text-tBlue"}`}
+              onClick={() => {
+                const newChecked = !isExchangeChecked;
+                setIsExchangeChecked(newChecked);
+
                 const amIForeignStudent = me.isForeignStudent;
                 const filterQuery = amIForeignStudent ? "japanese" : "exchange";
-                router.push(createQueriedURL({ exchange: filtered ? filterQuery : "all" }));
+                router.push(
+                  createQueriedURL({
+                    exchange: newChecked ? filterQuery : "all",
+                  }),
+                );
               }}
-            />
+            >
+              {t("filter")}
+            </button>
           </div>
         </div>
 
-        <div className="relative">
+        <div className="relative w-90">
           <AiOutlineSearch className="-translate-y-1/2 absolute top-1/2 right-4 text-gray-500" size={20} />
           <input
             type="search"
@@ -244,31 +242,39 @@ export default function Page() {
         </ul>
       )}
 
-      <div className="m-6 mb-6 flex items-center justify-between gap-6 px-10 py-8 md:px-20">
-        <div className="w-auto">
-          {query.page > 1 && (
+      <div className="mb-6 flex items-center justify-between gap-6 py-8 md:px-20">
+        <div className="w-auto text-left">
+          {query.page > 1 ? (
             <Link
-              href={createQueriedURL({
-                page: query.page - 1,
-              })}
+              href={createQueriedURL({ page: query.page - 1 })}
               className="rounded bg-blue-200 px-6 py-3 hover:bg-blue-300"
+            >
+              {t("previousButton")}
+            </Link>
+          ) : (
+            <Link
+              href={createQueriedURL({ page: query.page - 1 })}
+              className="invisible rounded bg-blue-200 px-6 py-3 hover:bg-blue-300"
             >
               {t("previousButton")}
             </Link>
           )}
         </div>
 
-        <span className="text-center text-gray-700 text-lg">
-          {totalUsers > 0 && `Page ${query.page} of ${totalPages}`}
-        </span>
+        <span className="text-center text-gray-700 text-lg">{totalUsers > 0 && `${query.page} / ${totalPages}`}</span>
 
-        <div className="w-auto">
-          {query.page < totalPages && (
+        <div className="w-auto text-right">
+          {query.page < totalPages ? (
             <Link
-              href={createQueriedURL({
-                page: query.page + 1,
-              })}
+              href={createQueriedURL({ page: query.page + 1 })}
               className="rounded bg-blue-200 px-6 py-3 hover:bg-blue-300"
+            >
+              {t("nextButton")}
+            </Link>
+          ) : (
+            <Link
+              href={createQueriedURL({ page: query.page + 1 })}
+              className="invisible rounded bg-blue-200 px-6 py-3 hover:bg-blue-300"
             >
               {t("nextButton")}
             </Link>
