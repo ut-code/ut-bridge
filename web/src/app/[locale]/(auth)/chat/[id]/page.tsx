@@ -6,6 +6,7 @@ import { handlers } from "@/features/chat/state";
 import { useUserContext } from "@/features/user/userProvider";
 import { assert } from "@/lib";
 import { use } from "@/react/useData";
+import { SendHorizontal } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -15,7 +16,7 @@ export default function Page() {
 
   return (
     <div className="flex h-full">
-      <div className="m-5 flex-1">
+      <div className="flex-1">
         <div className="flex h-full flex-col">
           <Load room={roomId} />
           <MessageInput room={roomId} />
@@ -29,7 +30,7 @@ function MessageInput({ room }: { room: string }) {
   const [input, setInput] = useState<string>("");
   const [submitting, setSubmitting] = useState<boolean>(false);
   return (
-    <div className="flex flex-row justify-center">
+    <div className="">
       <form
         className="inline"
         onSubmit={async (ev) => {
@@ -50,16 +51,19 @@ function MessageInput({ room }: { room: string }) {
           setSubmitting(false);
         }}
       >
-        <input
-          className="input input-bordered "
-          value={input}
-          onChange={(ev) => {
-            setInput(ev.target.value);
-          }}
-        />
-        <button type="submit" className="btn btn-primary" disabled={submitting}>
-          送信
-        </button>
+        <div className="fixed bottom-[64px] flex w-full flex-row justify-around gap-2 border-gray-300 border-t bg-white p-4 sm:bottom-0">
+          <textarea
+            className="field-sizing-content h-auto max-h-[200px] min-h-[40px] w-full resize-none rounded-xl border border-gray-300 p-2 leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-500"
+            rows={1}
+            value={input}
+            onChange={(ev) => {
+              setInput(ev.target.value);
+            }}
+          />
+          <button type="submit" className="" disabled={submitting}>
+            <SendHorizontal color="#0b8bee" />
+          </button>
+        </div>
       </form>
     </div>
   );
@@ -144,17 +148,21 @@ function MessageList({
   }, [room]);
   const { me } = useUserContext();
 
+  const target = document.getElementById("scroll-bottom");
+  if (target) {
+    target.scrollIntoView(false);
+  }
+
   return (
-    <ul className="grow ">
+    <ul className="m-3 grow pb-[80px] sm:pb-0" id="scroll-bottom">
       {messages.map((m) => (
         // TODO: handle pictures
         <li key={m.id}>
           <div className={`chat ${m.senderId === me.id ? "chat-end" : "chat-start"}`}>
             <div className="chat-header">
-              {m.sender.name}
               <time className="text-xs opacity-50">{m.createdAt.toLocaleString()}</time>
             </div>
-            <div className="chat-bubble">{m.content}</div>
+            <div className={`chat-bubble ${m.senderId === me.id ? "bg-blue-200" : "chat-start"}`}>{m.content}</div>
             {/* <div className="chat-footer opacity-50">Seen</div> */}
           </div>
         </li>

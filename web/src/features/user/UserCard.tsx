@@ -1,5 +1,6 @@
 import { Link } from "@/i18n/navigation.ts";
 import type { FlatCardUser } from "common/zod/schema";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -23,6 +24,7 @@ export default function UserCard({
   const [user, setUser] = useState(init);
   const [favoriteBtnLoading, setFavoriteBtnLoading] = useState(false);
   const pathname = usePathname();
+  const t = useTranslations("setting.language");
 
   return (
     <div
@@ -32,7 +34,9 @@ export default function UserCard({
     >
       {/* FIXME */}
       <div
-        className={`absolute top-0 left-0 h-[1px] w-full bg-gray-300 sm:hidden ${pathname === "/community" && user.markedAs === "blocked" ? "hidden" : ""}`}
+        className={`absolute top-0 left-0 h-[1px] w-full bg-gray-300 sm:hidden ${
+          pathname === "/community" && user.markedAs === "blocked" ? "hidden" : ""
+        }`}
       />
       {/* お気に入りボタン（右上に配置） */}
       <div className="absolute top-2 right-2 z-10">
@@ -107,10 +111,10 @@ export default function UserCard({
             <h2 className="truncate font-semibold text-lg">{user.name ?? "Unknown"}</h2>
             <p className="text-sm">{user.campus ?? "Unknown"}</p>
             <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-sm">
-              使える言語: {user.fluentLanguages.join(", ") || "None"}
+              {t("canSpeak")}: {user.fluentLanguages.join(", ") || "None"}
             </p>
             <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-sm">
-              学びたい言語: {user.learningLanguages.join(", ") || "None"}
+              {t("learningLanguage")}: {user.learningLanguages.join(", ") || "None"}
             </p>
           </div>
         </div>
