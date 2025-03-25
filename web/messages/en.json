@@ -43,7 +43,8 @@
     "filter": "Limit to local Students",
     "search": "Search",
     "nextButton": "Next",
-    "previousButton": "Previous"
+    "previousButton": "Previous",
+    "noUser": "No Users Found"
   },
   "chat": { "title": "Chat" },
   "setting": {

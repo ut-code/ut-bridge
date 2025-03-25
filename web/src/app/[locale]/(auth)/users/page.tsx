@@ -168,20 +168,20 @@ export default function Page() {
                 setChatButtonState("created");
                 router.push(`/chat/${room.id}`);
               }}
-              className="btn flex h-10 w-30 items-center justify-center bg-blue-500 text-white"
+              className="btn flex h-10 w-30 items-center justify-center bg-tBlue text-white"
             >
               {t("users.chatButton")}
             </button>
             <MarkerButton
               if={user.markedAs !== "favorite"}
-              class={"btn h-10 w-30 border-yellow-500 text-yellow-500"}
+              class={"btn h-10 w-30 border-tYellow bg-white text-tYellow"}
               action="favorite"
             >
               {t("users.favoriteButton")}
             </MarkerButton>
             <MarkerButton
               if={user.markedAs === "favorite"}
-              class={"btn h-10 w-30 w-30 bg-yellow-500 text-white"}
+              class={"btn h-10 w-30 w-30 bg-tYellow text-white"}
               action="unfavorite"
             >
               {t("users.removeFavoriteButton")}

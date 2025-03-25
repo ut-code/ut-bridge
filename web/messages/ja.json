@@ -21,7 +21,8 @@
     "filter": "留学生に限定",
     "search": "検索",
     "nextButton": "次へ",
-    "previousButton": "前へ"
+    "previousButton": "前へ",
+    "noUser": "ユーザーが見つかりませんでした。"
   },
   "users": {
     "male": "男性",
