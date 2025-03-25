@@ -62,7 +62,7 @@ export default function Page() {
           {
             title: "09. お問い合わせ窓口",
             content:
-              "個人情報の取扱いに関するお問い合わせは、以下の連絡先までご連絡ください。\n\n📧 contact@utcode.net",
+              "個人情報の取扱いに関するお問い合わせは、以下の連絡先までご連絡ください。\n\n📧 contact[@]utcode.net",
           },
         ].map(({ title, content, list }) => (
           <section key={title} className="space-y-2">
