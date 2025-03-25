@@ -2,8 +2,8 @@ import Avatar from "@/components/Avatar";
 import { Link } from "@/i18n/navigation.ts";
 import type { FlatCardUser } from "common/zod/schema";
 import { useTranslations } from "next-intl";
-import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { AiFillEyeInvisible, AiFillStar, AiOutlineStar } from "react-icons/ai";
 
 type UserCardEvent = {
   favorite?: (id: string) => Promise<void>;
@@ -23,7 +23,6 @@ export default function UserCard({
 }) {
   const [user, setUser] = useState(init);
   const [favoriteBtnLoading, setFavoriteBtnLoading] = useState(false);
-  const pathname = usePathname();
   const t = useTranslations("setting.language");
 
   return (
@@ -33,11 +32,7 @@ export default function UserCard({
       }`}
     >
       {/* FIXME */}
-      <div
-        className={`absolute top-0 left-0 h-[1px] w-full bg-gray-300 sm:hidden ${
-          pathname === "/community" && user.markedAs === "blocked" ? "hidden" : ""
-        }`}
-      />
+      <div className={"absolute top-0 left-0 h-[1px] w-full bg-gray-300 sm:hidden"} />
       {/* お気に入りボタン（右上に配置） */}
       <div className="absolute top-2 right-2 z-10">
         {favoriteBtnLoading ? (
@@ -46,7 +41,7 @@ export default function UserCard({
           <button
             type="button"
             aria-label="marked as favorite"
-            className="badge bg-transparent text-xl text-yellow-400"
+            className="badge border-none bg-transparent text-xl text-yellow-400"
             onClick={async () => {
               setFavoriteBtnLoading(true);
               try {
@@ -62,15 +57,35 @@ export default function UserCard({
               setFavoriteBtnLoading(false);
             }}
           >
-            ★
+            <AiFillStar />
           </button>
         ) : user.markedAs === "blocked" ? (
-          "blocked (todo: make it a button to unblock)"
+          <button
+            type="button"
+            aria-label="block"
+            className="badge border-none bg-transparent text-red-400 text-xl"
+            onClick={async () => {
+              setFavoriteBtnLoading(true);
+              try {
+                if (!on.unblock) throw new Error("method `unblock` not given");
+                await on.unblock(user.id);
+                setUser({
+                  ...user,
+                  markedAs: undefined,
+                });
+              } catch (err) {
+                console.error("failed to unblock user");
+              }
+              setFavoriteBtnLoading(false);
+            }}
+          >
+            <AiFillEyeInvisible />
+          </button>
         ) : (
           <button
             type="button"
             aria-label="mark as favorite"
-            className="badge bg-transparent text-black-700 text-xl"
+            className="badge border-none bg-transparent text-black-700 text-xl"
             onClick={async () => {
               setFavoriteBtnLoading(true);
               try {
@@ -86,7 +101,7 @@ export default function UserCard({
               setFavoriteBtnLoading(false);
             }}
           >
-            ★
+            <AiOutlineStar />
           </button>
         )}
       </div>

@@ -15,7 +15,7 @@ const router = new Hono().get(
       page: z.coerce.number().default(1),
       exchangeQuery: z.enum(["exchange", "japanese", "all"]).default("all"),
       searchQuery: z.string().default(""),
-      marker: MarkerSchema.optional(),
+      marker: z.union([MarkerSchema, z.literal("notBlocked")]).optional(),
     }),
   ),
   zValidator("header", z.object({ Authorization: z.string() })),
@@ -37,11 +37,18 @@ const router = new Hono().get(
       whereCondition.id = { not: except };
     }
 
-    if (markerQuery) {
+    if (markerQuery === "favorite" || markerQuery === "blocked") {
       whereCondition.markedAs = {
         some: {
           actorId: requester,
           kind: markerQuery,
+        },
+      };
+    } else if (markerQuery === "notBlocked") {
+      whereCondition.markedAs = {
+        none: {
+          actorId: requester,
+          kind: "blocked",
         },
       };
     }
