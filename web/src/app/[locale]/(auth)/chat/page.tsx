@@ -44,6 +44,7 @@ function Rooms() {
 
   if (loading) return <Loading stage="room.info" />;
   if (error) return <span className="text-error">{error}</span>;
+  if (rooms.length === 0) return <p>ユーザーページから、チャットを始めましょう！</p>;
 
   return (
     <ul>
