@@ -51,7 +51,7 @@ function MessageInput({ room }: { room: string }) {
           setSubmitting(false);
         }}
       >
-        <div className="fixed bottom-[64px] flex w-full flex-row justify-around gap-2 border-gray-300 border-t bg-tGray p-4 sm:bottom-0">
+        <div className="fixed bottom-[64px] flex w-full flex-row justify-around gap-2 border-gray-300 border-t bg-white p-4 sm:bottom-0">
           <textarea
             className="field-sizing-content h-auto max-h-[200px] min-h-[40px] w-full resize-none rounded-xl border border-gray-300 p-2 leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-500"
             rows={1}

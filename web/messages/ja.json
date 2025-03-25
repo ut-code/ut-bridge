@@ -63,7 +63,8 @@
       "isForeign": "留学生ですか？",
       "motherLanguage": "母国語",
       "fluentLanguage": "流暢に話せる言語",
-      "learningLanguage": "勉強している言語"
+      "learningLanguage": "学びたい言語",
+      "canSpeak": "話せる言語"
     },
     "topic": {
       "title": "トピック",

@@ -63,7 +63,8 @@
       "isForeign": "Are you an international student?",
       "motherLanguage": "Native Language",
       "fluentLanguage": "Fluent Languages",
-      "learningLanguage": "Languages Being Learned"
+      "learningLanguage": "Learning Language",
+      "canSpeak": "Spoken Languages"
     },
     "topic": {
       "title": "Topics",
