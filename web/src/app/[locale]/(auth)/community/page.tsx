@@ -207,7 +207,7 @@ export default function Page() {
         <Loading stage="community.users" />
       ) : users.length === 0 ? (
         <div className="flex">
-          <span className="mt-10 flex-1 text-center text-gray-400 text-lg">No users found</span>
+          <span className="mt-10 flex-1 text-center text-gray-400 text-lg">{t("noUser")}</span>
         </div>
       ) : (
         <ul className="grid grid-cols-1 sm:m-5 sm:grid-cols-1 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
