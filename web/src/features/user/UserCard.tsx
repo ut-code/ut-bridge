@@ -46,7 +46,7 @@ export default function UserCard({
           <button
             type="button"
             aria-label="marked as favorite"
-            className="badge bg-transparent text-xl text-yellow-400"
+            className="badge border-none bg-transparent text-xl text-yellow-400"
             onClick={async () => {
               setFavoriteBtnLoading(true);
               try {
@@ -70,7 +70,7 @@ export default function UserCard({
           <button
             type="button"
             aria-label="mark as favorite"
-            className="badge bg-transparent text-black-700 text-xl"
+            className="badge border-none bg-transparent text-black-700 text-xl"
             onClick={async () => {
               setFavoriteBtnLoading(true);
               try {
