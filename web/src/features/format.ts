@@ -17,7 +17,7 @@ export function formatUser(user: StructuredUser, locale: string): FlatUser {
     division: getName(user.division),
     campus: getName(user.campus),
 
-    motherLanguage: user.motherLanguage.jaName,
+    motherLanguage: getName(user.motherLanguage),
     fluentLanguages: user.fluentLanguages.map((fl) => getName(fl.language)),
     learningLanguages: user.learningLanguages.map((ll) => getName(ll.language)),
 
