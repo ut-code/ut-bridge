@@ -16,8 +16,6 @@ export default function Page() {
   console.log(ctx);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [btnDisabled, setBtnDisabled] = useState(false);
-
   return (
     <>
       <div className="my-5 p-4 sm:mx-60 sm:my-20">
@@ -28,7 +26,6 @@ export default function Page() {
             setIsSubmitting(true);
             const result = Part1RegistrationSchema.safeParse(ctx.formData);
             if (result.success) {
-              setBtnDisabled(true);
               await ctx.uploadImage();
               router.push("./registration/step2");
               setIsSubmitting(false);
@@ -206,6 +203,7 @@ export default function Page() {
                   <span className="h-5 w-5 animate-spin rounded-full border-2 border-tBlue border-t-transparent" />
                 ) : (
                   t("community.nextButton")
+                )}
               </button>
             </div>
           </div>
