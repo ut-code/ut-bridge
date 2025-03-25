@@ -27,6 +27,8 @@ function getTransition(pathname: string) {
       return "other.privacy.title";
     case "/terms":
       return "other.terms.title";
+    case "/delete":
+      return "delete.title";
     default:
       console.error("got unexpected pathname:", pathname);
       return "basic.title";

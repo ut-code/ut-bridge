@@ -118,6 +118,14 @@
         "title": "Terms and Conditions"
       }
     },
-    "logout": "Logout"
+    "logout": "Logout",
+    "delete": {
+      "title": "Delete Account",
+      "content": "Once you delete your account, all data will be permanently removed and cannot be recovered.",
+      "button": "Delete Account",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "modal": "Are you sure you want to delete your account?"
+    }
   }
 }

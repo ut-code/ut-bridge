@@ -2,12 +2,12 @@
 
 export default function Page() {
   return (
-    <div className="px-4 py-10 sm:px-6 md:px-8 dark:from-zinc-900 dark:to-zinc-800">
-      <div className="mx-auto max-w-3xl space-y-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-xl sm:p-8 dark:border-zinc-700 dark:bg-zinc-900">
+    <div className="px-4 py-10 sm:px-6 md:px-8 ">
+      <div className="mx-auto max-w-3xl space-y-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-xl sm:p-8 ">
         <div className="flex items-center gap-3">
-          <h1 className="font-bold text-2xl text-gray-800 sm:text-3xl dark:text-white">プライバシーポリシー</h1>
+          <h1 className="font-bold text-2xl text-gray-800 sm:text-3xl">プライバシーポリシー</h1>
         </div>
-        <p className="text-base text-gray-600 sm:text-lg dark:text-gray-300">
+        <p className="text-base text-gray-600 sm:text-lg">
           本サービスにおけるユーザーの個人情報の取扱いについて、以下のとおりプライバシーポリシー（以下、「本ポリシー」といいます。）を定めます。
         </p>
 
@@ -66,10 +66,10 @@ export default function Page() {
           },
         ].map(({ title, content, list }) => (
           <section key={title} className="space-y-2">
-            <h3 className="font-semibold text-blue-700 text-lg sm:text-xl dark:text-blue-400">{title}</h3>
-            <p className="whitespace-pre-line text-base text-gray-700 sm:text-lg dark:text-gray-300">{content}</p>
+            <h3 className="font-semibold text-blue-700 text-lg sm:text-xl ">{title}</h3>
+            <p className="whitespace-pre-line text-base text-gray-700 sm:text-lg ">{content}</p>
             {list && (
-              <ul className="list-disc pl-4 text-base text-gray-600 sm:text-lg dark:text-gray-300">
+              <ul className="list-disc pl-4 text-base text-gray-600 sm:text-lg ">
                 {list.map((item) => (
                   <li key={item}>{item}</li>
                 ))}

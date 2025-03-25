@@ -67,7 +67,7 @@ const route = new Hono()
 
   .delete(
     "/",
-    zValidator("param", z.object({ id: z.string() })),
+    zValidator("query", z.object({ id: z.string() })),
     zValidator("header", z.object({ Authorization: z.string() })),
     async (c) => {
       const userId = await getUserID(c);

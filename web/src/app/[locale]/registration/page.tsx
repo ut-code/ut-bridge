@@ -5,6 +5,7 @@ import { Part1RegistrationSchema } from "common/zod/schema";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function Page() {
   const router = useRouter();
@@ -12,6 +13,7 @@ export default function Page() {
   const t = useTranslations();
   const locale = useLocale();
   console.log(ctx);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   return (
     <>
@@ -20,12 +22,15 @@ export default function Page() {
         <form
           onSubmit={async (ev) => {
             ev.preventDefault();
+            setIsSubmitting(true);
             const result = Part1RegistrationSchema.safeParse(ctx.formData);
             if (result.success) {
               await ctx.uploadImage();
               router.push("./registration/step2");
+              setIsSubmitting(false);
             } else {
               console.error("failed to parse part1", result.error);
+              setIsSubmitting(false);
             }
           }}
           className="flex flex-col gap-3"
@@ -196,8 +201,16 @@ export default function Page() {
               </label>
             </div>
             <div className="flex justify-end px-15">
-              <button type="submit" className="btn h-10 w-25 rounded-lg border border-tBlue p-2 text-tBlue">
-                {t("community.nextButton")}
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="btn h-10 w-25 rounded-lg border border-tBlue p-2 text-tBlue"
+              >
+                {isSubmitting ? (
+                  <span className="h-5 w-5 animate-spin rounded-full border-2 border-tBlue border-t-transparent" />
+                ) : (
+                  t("community.nextButton")
+                )}
               </button>
             </div>
           </div>

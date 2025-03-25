@@ -47,6 +47,7 @@ export const blocks: PathBlock[] = [
         href: "/settings/terms",
         title: "other.terms.title",
       },
+      { href: "/settings/delete", title: "delete.title" },
     ],
   },
 ];
