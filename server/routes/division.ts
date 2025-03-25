@@ -12,7 +12,8 @@ const router = new Hono().get("/", zValidator("query", z.object({ id: z.string()
     },
     select: {
       id: true,
-      name: true,
+      jaName: true,
+      enName: true,
     },
   });
   return c.json(divisions);

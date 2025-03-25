@@ -12,7 +12,8 @@ export const HobbySchema = z.string().max(25, { message: "趣味は25文字以�
 export const IntroductionSchema = z.string().max(225, { message: "コメントは225文字以下です" });
 const LanguageSchema = z.object({
   id: z.string().uuid(),
-  name: z.string(),
+  jaName: z.string(),
+  enName: z.string(),
 });
 
 const LanguageObjectSchema = z.object({
@@ -20,14 +21,17 @@ const LanguageObjectSchema = z.object({
 });
 const DivisionSchema = z.object({
   id: z.string().uuid(),
-  name: z.string(),
+  jaName: z.string(),
+  enName: z.string(),
 });
 const CampusSchema = z.object({
   id: z.string().uuid(),
-  name: z.string(),
+  jaName: z.string(),
+  enName: z.string(),
   university: z.object({
     id: z.string().uuid(),
-    name: z.string(),
+    jaName: z.string(),
+    enName: z.string(),
   }),
 });
 

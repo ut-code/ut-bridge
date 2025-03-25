@@ -3,7 +3,7 @@
 import { client } from "@/client";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { useUserFormContext } from "@/features/setting/UserFormController.tsx";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { styles } from "../shared-class.ts";
@@ -13,6 +13,8 @@ export default function Page() {
   const router = useRouter();
   const ctx = useUserFormContext();
   const { formData, languages } = ctx;
+  const locale = useLocale();
+  console.log(ctx);
   const t = useTranslations("setting");
 
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -61,7 +63,10 @@ export default function Page() {
       const body = {
         ...formData,
       };
-      const res = await client.users.me.$patch({ header: { Authorization }, json: body });
+      const res = await client.users.me.$patch({
+        header: { Authorization },
+        json: body,
+      });
       if (!res.ok) {
         console.error(await res.text());
         throw new Error(`レスポンスステータス: ${res.status}`);
@@ -100,29 +105,27 @@ export default function Page() {
         >
           {languages.map((language) => (
             <option key={language.id} value={language.id}>
-              {language.name}
+              {locale === "ja" ? language.jaName : language.enName}
             </option>
           ))}
         </select>
       </label>
-      <div className="flex flex-col">
-        <div className={styles.label}>
-          <span className={styles.labelSpan}> {t("language.fluentLanguage")}</span>
-          <div className={styles.multiSelectCheckboxWrapper}>
-            {languages.map((language) => (
-              <label key={language.id} className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  name="fluentLanguageIds"
-                  value={language.id}
-                  checked={ctx.formData.fluentLanguageIds?.includes(language.id) ?? false}
-                  onChange={handleChange}
-                  className="checkbox"
-                />
-                <span>{language.name}</span>
-              </label>
-            ))}
-          </div>
+      <div className={styles.label}>
+        <span className={styles.labelSpan}> {t("language.fluentLanguage")}</span>
+        <div className={styles.multiSelectCheckboxWrapper}>
+          {languages.map((language) => (
+            <label key={language.id} className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                name="fluentLanguageIds"
+                value={language.id}
+                checked={ctx.formData.fluentLanguageIds?.includes(language.id) ?? false}
+                onChange={handleChange}
+                className="checkbox"
+              />
+              <span>{locale === "ja" ? language.jaName : language.enName}</span>
+            </label>
+          ))}
         </div>
         <div className={styles.label}>
           <span className={styles.labelSpan}> {t("language.learningLanguage")}</span>
@@ -137,7 +140,7 @@ export default function Page() {
                   onChange={handleChange}
                   className="checkbox"
                 />
-                <span>{language.name}</span>
+                <span>{locale === "ja" ? language.jaName : language.enName}</span>
               </label>
             ))}
           </div>

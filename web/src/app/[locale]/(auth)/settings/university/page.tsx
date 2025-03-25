@@ -3,7 +3,7 @@
 import { client } from "@/client";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { useUserFormContext } from "@/features/setting/UserFormController.tsx";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { styles } from "../shared-class.ts";
@@ -12,6 +12,7 @@ export default function Page() {
   const router = useRouter();
   const { idToken: Authorization } = useAuthContext();
   const ctx = useUserFormContext();
+  const locale = useLocale();
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const t = useTranslations("setting");
 
@@ -41,7 +42,10 @@ export default function Page() {
 
     try {
       const body = { ...ctx.formData };
-      const res = await client.users.me.$patch({ header: { Authorization }, json: body });
+      const res = await client.users.me.$patch({
+        header: { Authorization },
+        json: body,
+      });
 
       if (!res.ok) throw new Error(`レスポンスステータス: ${res.status} - ${await res.text()}`);
 
@@ -66,7 +70,7 @@ export default function Page() {
         >
           {ctx.universities.map((univ) => (
             <option key={univ.id} value={univ.id}>
-              {univ.name}
+              {locale === "ja" ? univ.jaName : univ.enName}
             </option>
           ))}
         </select>
@@ -84,7 +88,7 @@ export default function Page() {
         >
           {ctx.divisions.map((division) => (
             <option key={division.id} value={division.id}>
-              {division.name}
+              {locale === "ja" ? division.jaName : division.enName}
             </option>
           ))}
         </select>
@@ -102,7 +106,7 @@ export default function Page() {
         >
           {ctx.campuses.map((campus) => (
             <option key={campus.id} value={campus.id}>
-              {campus.name}
+              {locale === "ja" ? campus.jaName : campus.enName}
             </option>
           ))}
         </select>
@@ -112,19 +116,18 @@ export default function Page() {
       <label className={styles.label}>
         <span className={styles.labelSpan}>{t("university.grade")}</span>
         <select name="grade" value={ctx.formData.grade} onChange={handleChange} className={styles.inputSelect}>
-          <option value="B1">学部1年</option>
-          <option value="B2">学部2年</option>
-          <option value="B3">学部3年</option>
-          <option value="B4">学部4年</option>
-          <option value="M1">修士1年</option>
-          <option value="M2">修士2年</option>
-          <option value="D1">博士1年</option>
-          <option value="D2">博士2年</option>
-          <option value="D3">博士3年</option>
+          <option value="B1">{t("university.gradeOptions.B1")}</option>
+          <option value="B2">{t("university.gradeOptions.B2")}</option>
+          <option value="B3">{t("university.gradeOptions.B3")}</option>
+          <option value="B4">{t("university.gradeOptions.B4")}</option>
+          <option value="M1">{t("university.gradeOptions.M1")}</option>
+          <option value="M2">{t("university.gradeOptions.M2")}</option>
+          <option value="D1">{t("university.gradeOptions.D1")}</option>
+          <option value="D2">{t("university.gradeOptions.D2")}</option>
+          <option value="D3">{t("university.gradeOptions.D3")}</option>
         </select>
       </label>
 
-      {/* Submit Button */}
       <div className={styles.submitButtonWrapperDiv}>
         <button type="submit" className={styles.submitButton} disabled={status === "loading"}>
           {status === "loading" ? t("isRegister") : t("register")}
