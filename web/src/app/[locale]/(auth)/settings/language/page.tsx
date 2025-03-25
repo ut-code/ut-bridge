@@ -4,7 +4,7 @@ import { client } from "@/client";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { useUserFormContext } from "@/features/setting/UserFormController.tsx";
 import { ChevronLeft } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -14,6 +14,8 @@ export default function Page() {
   const router = useRouter();
   const ctx = useUserFormContext();
   const { formData, languages } = ctx;
+  const locale = useLocale();
+  console.log(ctx);
   const t = useTranslations("setting");
 
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -62,7 +64,10 @@ export default function Page() {
       const body = {
         ...formData,
       };
-      const res = await client.users.me.$patch({ header: { Authorization }, json: body });
+      const res = await client.users.me.$patch({
+        header: { Authorization },
+        json: body,
+      });
       if (!res.ok) {
         console.error(await res.text());
         throw new Error(`レスポンスステータス: ${res.status}`);
@@ -110,7 +115,7 @@ export default function Page() {
             >
               {languages.map((language) => (
                 <option key={language.id} value={language.id}>
-                  {language.name}
+                  {locale === "ja" ? language.jaName : language.enName}
                 </option>
               ))}
             </select>
@@ -129,7 +134,7 @@ export default function Page() {
                       onChange={handleChange}
                       className="accent-blue-500"
                     />
-                    <span>{language.name}</span>
+                    <span>{locale === "ja" ? language.jaName : language.enName}</span>
                   </label>
                 ))}
               </div>
@@ -147,7 +152,7 @@ export default function Page() {
                       onChange={handleChange}
                       className="accent-blue-500"
                     />
-                    <span>{language.name}</span>
+                    <span>{locale === "ja" ? language.jaName : language.enName}</span>
                   </label>
                 ))}
               </div>

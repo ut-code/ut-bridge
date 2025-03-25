@@ -1,3 +1,4 @@
+import { useLocale } from "next-intl";
 import "../tailwind.css";
 
 export const runtime = "edge";
@@ -6,8 +7,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = useLocale();
   return (
-    <html lang="ja" className="h-full" data-theme="light">
+    <html className="h-full" data-theme="light" lang={locale}>
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />

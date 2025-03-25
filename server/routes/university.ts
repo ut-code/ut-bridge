@@ -5,7 +5,8 @@ const router = new Hono().get("/", async (c) => {
   const universities = await prisma.university.findMany({
     select: {
       id: true,
-      name: true,
+      jaName: true,
+      enName: true,
     },
   });
   return c.json(universities);

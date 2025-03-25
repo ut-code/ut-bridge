@@ -1,6 +1,8 @@
 import type { FlatCardUser, FlatUser, StructuredCardUser, StructuredUser } from "common/zod/schema";
 
-export function formatUser(user: StructuredUser): FlatUser {
+export function formatUser(user: StructuredUser, locale: string): FlatUser {
+  const getName = (obj: { jaName: string; enName: string }) => (locale === "ja" ? obj.jaName : obj.enName);
+
   return {
     id: user.id,
     name: user.name,
@@ -11,18 +13,21 @@ export function formatUser(user: StructuredUser): FlatUser {
     introduction: user.introduction,
     isForeignStudent: user.isForeignStudent,
 
-    university: user.campus.university.name,
-    division: user.division.name,
-    campus: user.campus.name,
+    university: getName(user.campus.university),
+    division: getName(user.division),
+    campus: getName(user.campus),
 
-    motherLanguage: user.motherLanguage.name,
-    fluentLanguages: user.fluentLanguages.map((fl) => fl.language.name),
-    learningLanguages: user.learningLanguages.map((ll) => ll.language.name),
+    motherLanguage: user.motherLanguage.jaName,
+    fluentLanguages: user.fluentLanguages.map((fl) => getName(fl.language)),
+    learningLanguages: user.learningLanguages.map((ll) => getName(ll.language)),
 
     markedAs: user.markedAs[0]?.kind,
   };
 }
-export function formatCardUser(user: StructuredCardUser): FlatCardUser {
+
+export function formatCardUser(user: StructuredCardUser, locale: string): FlatCardUser {
+  const getName = (obj: { jaName: string; enName: string }) => (locale === "ja" ? obj.jaName : obj.enName);
+
   return {
     id: user.id,
     name: user.name,
@@ -31,11 +36,11 @@ export function formatCardUser(user: StructuredCardUser): FlatCardUser {
     grade: user.grade,
     isForeignStudent: user.isForeignStudent,
 
-    campus: user.campus.name,
+    campus: getName(user.campus),
 
-    motherLanguage: user.motherLanguage.name,
-    fluentLanguages: user.fluentLanguages.map((fl) => fl.language.name),
-    learningLanguages: user.learningLanguages.map((ll) => ll.language.name),
+    motherLanguage: user.motherLanguage.jaName,
+    fluentLanguages: user.fluentLanguages.map((fl) => getName(fl.language)),
+    learningLanguages: user.learningLanguages.map((ll) => getName(ll.language)),
 
     markedAs: user.markedAs[0]?.kind,
   };

@@ -6,6 +6,7 @@ import { useUserFormContext } from "@/features/setting/UserFormController";
 import { Link, useRouter } from "@/i18n/navigation";
 import { CreateUserSchema } from "common/zod/schema";
 import { useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 import { useState } from "react";
 
 export default function Page() {
@@ -14,6 +15,7 @@ export default function Page() {
   const [formStatus, setFormStatus] = useState<"ready" | "loading" | "success" | "error">("ready");
   const ctx = useUserFormContext();
   const router = useRouter();
+  const locale = useLocale();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,7 +25,10 @@ export default function Page() {
       const body = CreateUserSchema.parse(ctx.formData);
 
       const idToken = await fbUser.getIdToken(true);
-      const res = await client.users.$post({ json: body, header: { Authorization: idToken } });
+      const res = await client.users.$post({
+        json: body,
+        header: { Authorization: idToken },
+      });
       if (!res.ok) {
         console.error(await res.text());
         throw new Error(`レスポンスステータス: ${res.status}`);
@@ -40,11 +45,11 @@ export default function Page() {
   return (
     <>
       <div className="my-5 p-4 sm:mx-60 sm:my-20">
-        <h1 className="mx-5 mb-8 font-bold text-3xl sm:mx-0"> {t("registration.title")}</h1>
+        <h1 className="mx-5 mb-8 font-bold text-3xl sm:mx-0">{t("registration.title")}</h1>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <div>
             <div className="px-15 sm:my-10">
-              <h2 className="font-bold text-xl"> {t("setting.language.title")}</h2>
+              <h2 className="font-bold text-xl">{t("setting.language.title")}</h2>
               <label className="mt-5 flex flex-row justify-between sm:relative sm:my-4 sm:block sm:flex-none">
                 {t("setting.language.isForeign")}
 
@@ -71,7 +76,7 @@ export default function Page() {
                   <option value="" />
                   {ctx.languages.map((language) => (
                     <option key={language.id} value={language.id}>
-                      {language.name}
+                      {locale === "ja" ? language.jaName : language.enName}
                     </option>
                   ))}
                 </select>
@@ -89,7 +94,7 @@ export default function Page() {
                         onChange={ctx.handleChange}
                         className="accent-blue-500"
                       />
-                      <span>{language.name}</span>
+                      <span>{locale === "ja" ? language.jaName : language.enName}</span>
                     </label>
                   ))}
                 </div>
@@ -108,7 +113,7 @@ export default function Page() {
                         onChange={ctx.handleChange}
                         className="accent-blue-500"
                       />
-                      <span>{language.name}</span>
+                      <span>{locale === "ja" ? language.jaName : language.enName}</span>
                     </label>
                   ))}
                 </div>
@@ -151,7 +156,7 @@ export default function Page() {
               </label>
             </div>
             <div className="flex justify-between px-15">
-              <Link href="/registration" className="btn borfer h-10 w-25 rounded-lg border-tBlue p-2 text-tBlue">
+              <Link href="/registration" className="btn h-10 w-25 rounded-lg border border-tBlue p-2 text-tBlue">
                 {t("community.previousButton")}
               </Link>
               {formStatus === "ready" ? (
