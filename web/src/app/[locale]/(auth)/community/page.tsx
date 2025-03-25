@@ -100,7 +100,7 @@ export default function Page() {
               page: query.page.toString(),
               exchangeQuery: query.exchange,
               searchQuery: query.search,
-              marker: query.marker,
+              marker: query.marker === "favorite" ? "favorite" : "notBlocked",
             },
             header: { Authorization },
           },
@@ -185,7 +185,11 @@ export default function Page() {
                 const filtered = ev.target.checked;
                 const amIForeignStudent = me.isForeignStudent;
                 const filterQuery = amIForeignStudent ? "japanese" : "exchange";
-                router.push(createQueriedURL({ exchange: filtered ? filterQuery : "all" }));
+                router.push(
+                  createQueriedURL({
+                    exchange: filtered ? filterQuery : "all",
+                  }),
+                );
               }}
             />
           </div>
