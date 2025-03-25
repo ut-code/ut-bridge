@@ -140,7 +140,7 @@ export default function Page() {
       clearTimeout(timeoutId);
     };
   }, [rawSearchQuery, router, setDebouncedSearchQuery]);
-  const [isFavoriteChecked, setIsFavoriteChecked] = useState(false);
+  const [isFavoriteChecked, setIsFavoriteChecked] = useState(query.marker === "favorite");
   const [isExchangeChecked, setIsExchangeChecked] = useState(query.exchange !== "all");
 
   return (
