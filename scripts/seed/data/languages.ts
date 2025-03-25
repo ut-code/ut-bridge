@@ -6,7 +6,7 @@ export type Language = {
 export const languages: Language[] = [
   { in_ja: "日本語", in_en: "Japanese" },
   { in_ja: "英語", in_en: "English" },
-  { in_ja: "中国語", in_en: "Mandarin Chinese" },
+  { in_ja: "中国語", in_en: "Chinese" },
   { in_ja: "スペイン語", in_en: "Spanish" },
   { in_ja: "ヒンディー語", in_en: "Hindi" },
   { in_ja: "アラビア語", in_en: "Arabic" },

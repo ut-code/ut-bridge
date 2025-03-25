@@ -1,6 +1,6 @@
 import { zValidator } from "@hono/zod-validator";
 import type { Prisma } from "@prisma/client";
-import { MarkerSchema } from "common/zod/schema.ts";
+import { MarkerSchema, type StructuredCardUser } from "common/zod/schema.ts";
 import { Hono } from "hono";
 import { getUserID } from "server/auth/func.ts";
 import z from "zod";
@@ -11,7 +11,7 @@ const router = new Hono().get(
   zValidator(
     "query",
     z.object({
-      myId: z.string(),
+      except: z.string().optional(),
       page: z.coerce.number().default(1),
       exchangeQuery: z.enum(["exchange", "japanese", "all"]).default("all"),
       searchQuery: z.string().default(""),
@@ -21,7 +21,7 @@ const router = new Hono().get(
   zValidator("header", z.object({ Authorization: z.string() })),
   async (c) => {
     const requester = await getUserID(c);
-    const { page, exchangeQuery, searchQuery, marker: markerQuery } = c.req.valid("query");
+    const { except, page, exchangeQuery, searchQuery, marker: markerQuery } = c.req.valid("query");
     const take = 15; //TODO: web側で指定できるようにする
     const skip = (page - 1) * take;
 
@@ -32,6 +32,9 @@ const router = new Hono().get(
       whereCondition.isForeignStudent = true;
     } else if (exchangeQuery === "japanese") {
       whereCondition.isForeignStudent = false;
+    }
+    if (except) {
+      whereCondition.id = { not: except };
     }
 
     if (markerQuery) {
@@ -47,17 +50,24 @@ const router = new Hono().get(
     if (searchQuery) {
       whereCondition.OR = [
         { name: { contains: searchQuery, mode: "insensitive" } },
-        { campus: { name: { contains: searchQuery, mode: "insensitive" } } },
+        {
+          campus: {
+            jaName: { contains: searchQuery, mode: "insensitive" },
+            enName: { contains: searchQuery, mode: "insensitive" },
+          },
+        },
         {
           motherLanguage: {
-            name: { contains: searchQuery, mode: "insensitive" },
+            jaName: { contains: searchQuery, mode: "insensitive" },
+            enName: { contains: searchQuery, mode: "insensitive" },
           },
         },
         {
           fluentLanguages: {
             some: {
               language: {
-                name: { contains: searchQuery, mode: "insensitive" },
+                jaName: { contains: searchQuery, mode: "insensitive" },
+                enName: { contains: searchQuery, mode: "insensitive" },
               },
             },
           },
@@ -66,7 +76,8 @@ const router = new Hono().get(
           learningLanguages: {
             some: {
               language: {
-                name: { contains: searchQuery, mode: "insensitive" },
+                jaName: { contains: searchQuery, mode: "insensitive" },
+                enName: { contains: searchQuery, mode: "insensitive" },
               },
             },
           },
@@ -85,9 +96,11 @@ const router = new Hono().get(
           gender: true,
           isForeignStudent: true,
           imageUrl: true,
-          campus: { select: { name: true } },
+          campus: {
+            select: { university: true, id: true, jaName: true, enName: true },
+          },
           grade: true,
-          motherLanguage: true,
+          motherLanguage: { select: { id: true, jaName: true, enName: true } },
           fluentLanguages: {
             select: { language: true },
           },
@@ -107,7 +120,7 @@ const router = new Hono().get(
       prisma.user.count({ where: whereCondition }),
     ]);
 
-    return c.json({ users, totalUsers });
+    return c.json({ users: users satisfies StructuredCardUser[], totalUsers });
   },
 );
 

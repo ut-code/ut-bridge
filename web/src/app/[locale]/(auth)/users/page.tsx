@@ -4,20 +4,22 @@ import Loading from "@/components/Loading.tsx";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { formatUser } from "@/features/format";
 import { useUserContext } from "@/features/user/userProvider.tsx";
-import type { User } from "common/zod/schema";
+import type { FlatUser } from "common/zod/schema";
+import { useLocale } from "next-intl";
 import Image from "next/image";
 // import {Link} from "@/i18n/navigation.ts";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Page() {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<FlatUser | null>(null);
   const { idToken: Authorization } = useAuthContext();
   const { me } = useUserContext();
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
+  const locale = useLocale();
 
   useEffect(() => {
     async function fetchUser() {
@@ -36,7 +38,7 @@ export default function Page() {
         if (!first) {
           throw new Error("User Not Found!");
         }
-        setUser(formatUser(first));
+        setUser(formatUser(first, locale));
       } catch (error) {
         console.error("Failed to fetch user:", error);
         router.push("/community");
@@ -46,7 +48,7 @@ export default function Page() {
     }
 
     fetchUser();
-  }, [router, Authorization, id]);
+  }, [router, Authorization, id, locale]);
 
   const [markSpinner, setMarkSpinner] = useState(false);
   const [chatButtonState, setChatButtonState] = useState<"idle" | "searching" | "creating" | "created">("idle");
@@ -65,7 +67,10 @@ export default function Page() {
         className={props.class}
         onClick={async () => {
           setMarkSpinner(true);
-          const args = { param: { targetId: user.id }, header: { Authorization } };
+          const args = {
+            param: { targetId: user.id },
+            header: { Authorization },
+          };
           const resp =
             props.action === "favorite"
               ? await client.users.markers.favorite[":targetId"].$put(args)
@@ -108,13 +113,13 @@ export default function Page() {
         ) : (
           <div className="flex h-100 w-100 items-center justify-center rounded-full bg-gray-300">N/A</div>
         )}
-        <div>
+        <div className="w-full sm:w-auto">
           <div className="flex flex-col items-center sm:items-start">
             <p className="mb-4 font-bold text-5xl">{user.name}</p>
             <p className="my-4 text-2xl">{user.gender}</p>
             <p className="my-4 text-2xl">{user.isForeignStudent ? "留学生" : " "}</p>
           </div>
-          <div className="flex gap-10">
+          <div className="flex w-full justify-around sm:w-auto sm:justify-normal sm:gap-10">
             <span className="absolute w-15">
               {chatButtonState === "creating" ? (
                 <span>

@@ -8,20 +8,21 @@ datasource db {
 }
 
 model User {
-  id               String          @id @default(uuid())
-  guid             String          @unique
+  id               String   @id @default(uuid())
+  guid             String   @unique
   imageUrl         String?
   name             String
   gender           Gender
   isForeignStudent Boolean
-  displayLanguage  DisplayLanguage
   grade            Grade
   hobby            String
   introduction     String
+  // universityId     String
+  // university       University @relation(fields: [universityId], references: [university])
   divisionId       String
-  division         Division        @relation(fields: [divisionId], references: [id])
+  division         Division @relation(fields: [divisionId], references: [id])
   campusId         String
-  campus           Campus          @relation(fields: [campusId], references: [id])
+  campus           Campus   @relation(fields: [campusId], references: [id])
 
   motherLanguageId  String
   motherLanguage    Language                 @relation(fields: [motherLanguageId], references: [id])
@@ -81,7 +82,8 @@ model Belongs {
 
 model Division {
   id           String     @id @default(uuid(7))
-  name         String     @unique
+  jaName       String     @unique
+  enName       String     @unique
   universityId String
   university   University @relation(fields: [universityId], references: [id])
   users        User[]
@@ -89,7 +91,8 @@ model Division {
 
 model Campus {
   id           String     @id @default(uuid(7))
-  name         String     @unique
+  jaName       String     @unique
+  enName       String     @unique
   universityId String
   university   University @relation(fields: [universityId], references: [id])
   users        User[]
@@ -97,14 +100,16 @@ model Campus {
 
 model University {
   id       String     @id @default(uuid(7))
-  name     String     @unique
+  jaName   String     @unique
+  enName   String     @unique
   division Division[]
   campus   Campus[]
 }
 
 model Language {
   id            String                   @id @default(uuid())
-  name          String                   @unique()
+  jaName        String                   @unique()
+  enName        String                   @unique()
   fluentUsers   FluentLanguageOnUser[]
   learningUsers LearningLanguageOnUser[]
   User          User[]
@@ -132,11 +137,6 @@ enum Gender {
   male
   female
   other
-}
-
-enum DisplayLanguage {
-  japanese
-  english
 }
 
 enum Grade {

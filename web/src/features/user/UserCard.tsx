@@ -1,57 +1,66 @@
 import { Link } from "@/i18n/navigation.ts";
-import type { CardUser } from "common/zod/schema";
+import type { FlatCardUser } from "common/zod/schema";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 type UserCardEvent = {
-  favorite: (id: string) => Promise<void>;
-  unfavorite: (id: string) => Promise<void>;
+  favorite?: (id: string) => Promise<void>;
+  unfavorite?: (id: string) => Promise<void>;
+  // block?: (id: string) => Promise<void>;
+  unblock?: (id: string) => Promise<void>;
 };
-const DEV_EXTRA_QUERY_WAIT = 2000;
 
 export default function UserCard({
   user: init,
   on,
   link,
 }: {
-  user: CardUser;
+  user: FlatCardUser;
   on: UserCardEvent;
   link: string;
 }) {
   const [user, setUser] = useState(init);
   const [favoriteBtnLoading, setFavoriteBtnLoading] = useState(false);
+  const pathname = usePathname();
 
   return (
     <div
       className={`relative flex h-36 w-full items-center rounded-2xl sm:h-62 sm:bg-white ${
-        user.marker === "blocked" && "bg-gray-300"
+        user.markedAs === "blocked" && "bg-gray-300"
       }`}
     >
-      <div className="absolute top-0 left-0 h-[1px] w-full bg-gray-300 sm:hidden" />
+      {/* FIXME */}
+      <div
+        className={`absolute top-0 left-0 h-[1px] w-full bg-gray-300 sm:hidden ${pathname === "/community" && user.markedAs === "blocked" ? "hidden" : ""}`}
+      />
       {/* お気に入りボタン（右上に配置） */}
       <div className="absolute top-2 right-2 z-10">
         {favoriteBtnLoading ? (
           <span className="loading loading-ring" />
-        ) : user.marker === "favorite" ? (
+        ) : user.markedAs === "favorite" ? (
           <button
             type="button"
             aria-label="marked as favorite"
             className="badge bg-transparent text-xl text-yellow-400"
             onClick={async () => {
               setFavoriteBtnLoading(true);
-              await on.unfavorite(user.id);
-              setUser({
-                ...user,
-                marker: undefined,
-              });
-              setTimeout(() => {
-                setFavoriteBtnLoading(false);
-              }, DEV_EXTRA_QUERY_WAIT);
+              try {
+                if (!on.unfavorite) throw new Error("method `unfavorite` not given");
+                await on.unfavorite(user.id);
+                setUser({
+                  ...user,
+                  markedAs: undefined,
+                });
+              } catch (err) {
+                console.error("failed to unfavorite user");
+              }
+              setFavoriteBtnLoading(false);
             }}
           >
             ★
           </button>
-        ) : user.marker === "blocked" ? (
+        ) : user.markedAs === "blocked" ? (
           "blocked (todo: make it a button to unblock)"
         ) : (
           <button
@@ -60,14 +69,17 @@ export default function UserCard({
             className="badge bg-transparent text-black-700 text-xl"
             onClick={async () => {
               setFavoriteBtnLoading(true);
-              await on.favorite(user.id);
-              setUser({
-                ...user,
-                marker: "favorite",
-              });
-              setTimeout(() => {
-                setFavoriteBtnLoading(false);
-              }, DEV_EXTRA_QUERY_WAIT);
+              try {
+                if (!on.favorite) throw new Error("method `favorite` not given");
+                await on.favorite(user.id);
+                setUser({
+                  ...user,
+                  markedAs: "favorite",
+                });
+              } catch (err) {
+                console.error("failed to favorite user");
+              }
+              setFavoriteBtnLoading(false);
             }}
           >
             ★

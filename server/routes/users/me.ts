@@ -20,18 +20,16 @@ const route = new Hono()
           id: userId,
         },
         data: {
-          guid: body.guid,
-          imageUrl: body.imageUrl,
-          name: body.name,
-          gender: body.gender,
-          isForeignStudent: body.isForeignStudent,
-          displayLanguage: body.displayLanguage,
-          grade: body.grade,
-          divisionId: body.divisionId,
-          campusId: body.campusId,
-          hobby: body.hobby,
-          introduction: body.introduction,
-          motherLanguageId: body.motherLanguageId,
+          imageUrl: body.imageUrl ?? undefined,
+          name: body.name ?? undefined,
+          gender: body.gender ?? undefined,
+          isForeignStudent: body.isForeignStudent ?? undefined,
+          grade: body.grade ?? undefined,
+          divisionId: body.divisionId ?? undefined,
+          campusId: body.campusId ?? undefined,
+          hobby: body.hobby ?? undefined,
+          introduction: body.introduction ?? undefined,
+          motherLanguageId: body.motherLanguageId ?? undefined,
 
           // 既存データがある場合のみ削除して新規追加 (fluentLanguages)
           ...(body.fluentLanguageIds?.length

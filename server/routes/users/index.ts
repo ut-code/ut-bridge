@@ -1,9 +1,9 @@
 import { zValidator } from "@hono/zod-validator";
-import { CreateUserSchema } from "common/zod/schema.ts";
+import { CreateUserSchema, type StructuredUser } from "common/zod/schema.ts";
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
 import { z } from "zod";
-import { getUserID } from "../../auth/func.ts";
+import { getGUID, getUserID } from "../../auth/func.ts";
 import { prisma } from "../../config/prisma.ts";
 import markers from "./markers.ts";
 import me from "./me.ts";
@@ -28,9 +28,27 @@ const router = new Hono()
           id,
           guid,
         },
-        include: {
+        select: {
+          id: true,
+          name: true,
+          gender: true,
+          imageUrl: true,
+          isForeignStudent: true,
+          grade: true,
+
+          hobby: true,
+          introduction: true,
+
+          campus: {
+            select: {
+              id: true,
+              jaName: true,
+              enName: true,
+              university: true,
+            },
+          },
           division: true,
-          campus: true,
+
           motherLanguage: true,
           fluentLanguages: {
             select: { language: true },
@@ -38,6 +56,7 @@ const router = new Hono()
           learningLanguages: {
             select: { language: true },
           },
+
           markedAs: {
             select: {
               kind: true,
@@ -45,7 +64,7 @@ const router = new Hono()
           },
         },
       });
-      return c.json(users);
+      return c.json(users satisfies StructuredUser[]);
     },
   )
 
@@ -73,36 +92,42 @@ const router = new Hono()
     },
   )
 
-  .post("/", zValidator("json", CreateUserSchema), async (c) => {
-    const body = c.req.valid("json");
-    const newUser = await prisma.user.create({
-      data: {
-        id: body.id,
-        guid: body.guid,
-        imageUrl: body.imageUrl,
-        name: body.name,
-        gender: body.gender,
-        isForeignStudent: body.isForeignStudent,
-        displayLanguage: body.displayLanguage,
-        grade: body.grade,
-        divisionId: body.divisionId,
-        campusId: body.campusId,
-        hobby: body.hobby,
-        introduction: body.introduction,
-        motherLanguageId: body.motherLanguageId,
-        fluentLanguages: {
-          create: body.fluentLanguageIds.map((langId) => ({
-            languageId: langId,
-          })),
+  .post(
+    "/",
+    zValidator("json", CreateUserSchema),
+    zValidator("header", z.object({ Authorization: z.string().jwt() })),
+    async (c) => {
+      const guid = await getGUID(c);
+      const body = c.req.valid("json");
+      const id = crypto.randomUUID();
+      const newUser = await prisma.user.create({
+        data: {
+          id,
+          guid,
+          imageUrl: body.imageUrl,
+          name: body.name,
+          gender: body.gender,
+          isForeignStudent: body.isForeignStudent,
+          grade: body.grade,
+          divisionId: body.divisionId,
+          campusId: body.campusId,
+          hobby: body.hobby,
+          introduction: body.introduction,
+          motherLanguageId: body.motherLanguageId,
+          fluentLanguages: {
+            create: body.fluentLanguageIds.map((langId) => ({
+              languageId: langId,
+            })),
+          },
+          learningLanguages: {
+            create: body.learningLanguageIds.map((langId) => ({
+              languageId: langId,
+            })),
+          },
         },
-        learningLanguages: {
-          create: body.learningLanguageIds.map((langId) => ({
-            languageId: langId,
-          })),
-        },
-      },
-    });
-    return c.json(newUser);
-  });
+      });
+      return c.json(newUser);
+    },
+  );
 
 export default router;

@@ -3,6 +3,7 @@ import "../../tailwind.css";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
+export const runtime = "edge";
 export default async function RootLayout({
   children,
   params,

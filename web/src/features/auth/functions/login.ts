@@ -1,15 +1,18 @@
 import { client } from "@/client.ts";
 import { signInWithPopup } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { auth, provider } from "../config.ts";
 
 async function login() {
   try {
     const result = await signInWithPopup(auth, provider);
     if (!result.user) throw new Error("Login Failed");
+
     const idToken = await result.user.getIdToken();
+    console.log("your guid is", result.user.uid);
     console.log("got idToken of", idToken);
+
     const res = await client.users.exist.$get({
       query: { guid: result.user.uid },
     });
@@ -24,9 +27,12 @@ async function login() {
 
 export function useGoogleSignIn() {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const signInWithGoogle = useCallback(async () => {
+    setIsLoading(true);
     const response = await login();
+    setIsLoading(false);
 
     switch (response.status) {
       case "hasData":
@@ -41,5 +47,5 @@ export function useGoogleSignIn() {
     }
   }, [router]);
 
-  return { signInWithGoogle };
+  return { signInWithGoogle, isLoading };
 }
