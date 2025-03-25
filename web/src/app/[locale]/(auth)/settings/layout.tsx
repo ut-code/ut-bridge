@@ -3,9 +3,9 @@
 import SideNav from "@/features/setting/SideNav";
 import { UserFormProvider } from "@/features/setting/UserFormController.tsx";
 import { Link } from "@/i18n/navigation";
-import { ChevronLeft } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
+import { AiOutlineLeft } from "react-icons/ai";
 
 function getTransition(pathname: string) {
   switch (pathname) {
@@ -51,7 +51,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           {pathname !== "" && (
             <div className="flex items-center justify-between border-gray-300 border-b p-4 text-xl sm:hidden">
               <Link href={"/settings"}>
-                <ChevronLeft />
+                <AiOutlineLeft />
               </Link>
               {title}
               <div className="w-6" />

@@ -2,9 +2,9 @@
 import LanguageSwitcher from "@/components/LanguageSelectar.tsx";
 import { useGoogleLogout } from "@/features/auth/functions/logout.ts";
 import { Link } from "@/i18n/navigation.ts";
-import { ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
+import { AiOutlineRight } from "react-icons/ai";
 import { blocks } from "./path-blocks.ts";
 
 export default function SideNav() {
@@ -28,7 +28,7 @@ export default function SideNav() {
                 className={`flex items-center justify-between bg-transparent px-8 py-2 text-gray-800 text-md text-xl xl:ml-10 ${pathname === item.href ? "underline" : ""}`}
               >
                 {t(item.title)}
-                <ChevronRight className="sm:hidden" />
+                <AiOutlineRight className="sm:hidden" />
               </Link>
             ))}
           </section>
