@@ -16,7 +16,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   let headerTitle = "";
   if (pathname.startsWith("/chat")) headerTitle = t("chat.title");
-  else if (pathname.startsWith("/settings")) headerTitle = t("settings.title");
+  else if (pathname.startsWith("/settings")) headerTitle = t("setting.title");
+  else if (pathname.startsWith("/community") || pathname.startsWith("/user")) headerTitle = t("community.title");
   else {
     console.log("unmatched path:", pathname);
   }
