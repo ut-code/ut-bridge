@@ -72,7 +72,6 @@ export default function UserCard({
             onClick={async () => {
               setFavoriteBtnLoading(true);
               try {
-                console.log(on.unblock);
                 if (!on.unblock) throw new Error("method `unblock` not given");
                 await on.unblock(user.id);
                 setUser({
