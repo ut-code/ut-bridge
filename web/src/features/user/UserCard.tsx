@@ -65,7 +65,28 @@ export default function UserCard({
             ★
           </button>
         ) : user.markedAs === "blocked" ? (
-          "blocked (todo: make it a button to unblock)"
+          <button
+            type="button"
+            aria-label="block"
+            className="badge border-none bg-transparent text-xl text-yellow-400"
+            onClick={async () => {
+              setFavoriteBtnLoading(true);
+              try {
+                console.log(on.unblock);
+                if (!on.unblock) throw new Error("method `unblock` not given");
+                await on.unblock(user.id);
+                setUser({
+                  ...user,
+                  markedAs: undefined,
+                });
+              } catch (err) {
+                console.error("failed to unblock user");
+              }
+              setFavoriteBtnLoading(false);
+            }}
+          >
+            🚫
+          </button>
         ) : (
           <button
             type="button"

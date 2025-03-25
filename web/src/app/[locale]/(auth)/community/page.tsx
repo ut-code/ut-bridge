@@ -237,6 +237,13 @@ export default function Page() {
                     });
                     if (!resp.ok) throw new Error(`Bad status: got ${resp.status} with text "${await resp.text()}"`);
                   },
+                  async unblock(id) {
+                    const resp = await client.users.markers.blocked[":targetId"].$delete({
+                      header: { Authorization },
+                      param: { targetId: id },
+                    });
+                    if (!resp.ok) throw new Error(`Bad status: got ${resp.status} with text "${await resp.text()}"`);
+                  },
                 }}
               />
             </li>
