@@ -40,7 +40,7 @@ const BaseUserSchema = z.object({
   name: z.string(),
   gender: GenderEnum,
   imageUrl: z.string().optional(),
-  isForeignStudent: z.boolean(),
+  isForeignStudent: z.boolean().default(false),
   grade: GradeSchema,
 
   hobby: HobbySchema,
