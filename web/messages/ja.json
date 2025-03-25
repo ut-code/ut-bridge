@@ -23,6 +23,28 @@
     "nextButton": "次へ",
     "previousButton": "前へ"
   },
+  "users": {
+    "male": "男性",
+    "female": "女性",
+    "other": "その他",
+    "foreignStudent": "留学生",
+    "chatButton": "チャット",
+    "favoriteButton": "お気に入り",
+    "removeFavoriteButton": "お気に入りを解除",
+    "universityInformation": "大学情報",
+    "campus": "キャンパス",
+    "divisions": "学部",
+    "grade": "学年",
+    "language": "言語",
+    "motherLanguage": "母国語",
+    "fluentLanguage": "流暢に話せる言語",
+    "learningLanguage": "学びたい言語",
+    "topic": "トピック",
+    "hobby": "趣味",
+    "introduction": "自己紹介",
+    "blockButton": "ブロックする",
+    "removeBlockButton": "ブロックを解除する"
+  },
   "chat": { "title": "チャット" },
   "setting": {
     "title": "設定",

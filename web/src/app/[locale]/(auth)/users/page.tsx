@@ -5,7 +5,7 @@ import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { formatUser } from "@/features/format";
 import { useUserContext } from "@/features/user/userProvider.tsx";
 import type { FlatUser } from "common/zod/schema";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 // import {Link} from "@/i18n/navigation.ts";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -20,6 +20,7 @@ export default function Page() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const locale = useLocale();
+  const t = useTranslations();
 
   useEffect(() => {
     async function fetchUser() {
@@ -116,8 +117,8 @@ export default function Page() {
         <div className="w-full sm:w-auto">
           <div className="flex flex-col items-center sm:items-start">
             <p className="mb-4 font-bold text-5xl">{user.name}</p>
-            <p className="my-4 text-2xl">{user.gender}</p>
-            <p className="my-4 text-2xl">{user.isForeignStudent ? "留学生" : " "}</p>
+            <p className="my-4 text-2xl">{t(`users.${user.gender}`)}</p>
+            <p className="my-4 text-2xl">{user.isForeignStudent ? t("users.foreignStudent") : " "}</p>
           </div>
           <div className="flex w-full justify-around sm:w-auto sm:justify-normal sm:gap-10 ">
             <span className="absolute w-15">
@@ -169,71 +170,71 @@ export default function Page() {
               }}
               className="btn flex h-10 w-30 items-center justify-center bg-blue-500 text-white"
             >
-              チャット
+              {t("users.chatButton")}
             </button>
             <MarkerButton
               if={user.markedAs !== "favorite"}
               class={"btn h-10 w-30 border-yellow-500 text-yellow-500"}
               action="favorite"
             >
-              お気に入り
+              {t("users.favoriteButton")}
             </MarkerButton>
             <MarkerButton
               if={user.markedAs === "favorite"}
               class={"btn h-10 w-30 w-30 bg-yellow-500 text-white"}
               action="unfavorite"
             >
-              お気に入りを解除
+              {t("users.removeFavoriteButton")}
             </MarkerButton>
           </div>
         </div>
       </div>
       <div className="sm:mx-24">
         <div className="mt-24 mb-12">
-          <h2 className="my-3 font-bold text-3xl underline decoration-2">大学情報</h2>
+          <h2 className="my-3 font-bold text-3xl underline decoration-2">{t("users.universityInformation")}</h2>
           <p className="my-3 text-lg">
-            <strong>所属キャンパス </strong> {user.campus}
+            <strong>{t("users.campus")} </strong> {user.campus}
           </p>
           <p className="my-3 text-lg">
-            <strong>学部・大学院 </strong> {user.division}
+            <strong>{t("users.divisions")} </strong> {user.division}
           </p>
           <p className="my-3 text-lg">
-            <strong>学年 </strong> {user.grade}
+            <strong>{t("users.grade")} </strong> {user.grade}
           </p>
         </div>
         <div className="my-12">
-          <h2 className="my-3 font-bold text-3xl underline decoration-2">言語 </h2>
+          <h2 className="my-3 font-bold text-3xl underline decoration-2">{t("users.language")} </h2>
           <p className="my-3 text-lg">
-            <strong>母国語 </strong> {user.motherLanguage}
+            <strong>{t("users.motherLanguage")} </strong> {user.motherLanguage}
           </p>
           <p className="my-3 text-lg">
-            <strong>流暢に話すことのできる言語 </strong> <br />
+            <strong>{t("users.fluentLanguage")} </strong> <br />
             {user.fluentLanguages.join(", ")}
           </p>
           <p className="my-3 text-lg">
-            <strong>学びたい言語 </strong> <br />
+            <strong>{t("users.learningLanguage")} </strong> <br />
             {user.learningLanguages.join(", ")}
           </p>
         </div>
         <div className="my-12">
-          <h2 className="my-3 font-bold text-3xl underline decoration-2">トピック</h2>
+          <h2 className="my-3 font-bold text-3xl underline decoration-2">{t("users.topic")}</h2>
           <p className="my-3 text-lg">
-            <strong>趣味・好きなこと </strong>
+            <strong>{t("users.hobby")} </strong>
             <br />
             {user.hobby}
           </p>
           <p className="my-3 text-lg">
-            <strong>自己紹介 </strong>
+            <strong>{t("users.introduction")} </strong>
             <br />
             {user.introduction}
           </p>
         </div>
         <div>
           <MarkerButton if={user.markedAs !== "blocked"} class="btn btn-error" action="block">
-            ブロックする
+            {t("users.blockButton")}
           </MarkerButton>
           <MarkerButton if={user.markedAs === "blocked"} class="btn btn-neutral btn-soft" action="unblock">
-            ブロックを解除する
+            {t("users.removeBlockButton")}
           </MarkerButton>
         </div>
       </div>
