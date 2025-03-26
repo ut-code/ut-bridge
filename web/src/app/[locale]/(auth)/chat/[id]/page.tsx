@@ -166,7 +166,7 @@ function MessageList({
   }
 
   return (
-    <ul className="m-3 grow pb-[80px] sm:pb-0" id="scroll-bottom">
+    <ul className="m-3 mt-[44px] mb-[76px] grow overflow-y-scroll sm:pb-0" id="scroll-bottom">
       {messages.map((m) => (
         // TODO: handle pictures
         <li key={m.id}>
