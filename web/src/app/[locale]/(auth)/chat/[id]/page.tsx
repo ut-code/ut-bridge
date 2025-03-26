@@ -5,11 +5,12 @@ import Loading from "@/components/Loading";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { handlers } from "@/features/chat/state";
 import { useUserContext } from "@/features/user/userProvider";
+import { Link } from "@/i18n/navigation";
 import { assert } from "@/lib";
 import { use } from "@/react/useData";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { AiOutlineSend } from "react-icons/ai";
+import { AiOutlineLeft, AiOutlineSend } from "react-icons/ai";
 
 export default function Page() {
   const roomId = useParams().id as string;
@@ -72,6 +73,7 @@ function MessageInput({ room }: { room: string }) {
 }
 function Load({ room }: { room: string }) {
   const { idToken: Authorization } = useAuthContext();
+  const { me } = useUserContext();
   const m = use(async () => {
     const res = await client.chat.rooms[":room"].$get({
       header: { Authorization },
@@ -89,13 +91,26 @@ function Load({ room }: { room: string }) {
     return <span className="text-error">something went wrong</span>;
   }
   return (
-    <MessageList
-      data={m.data.messages.map((m) => ({
-        ...m,
-        createdAt: new Date(m.createdAt),
-      }))}
-      room={room}
-    />
+    <>
+      <div className="fixed flex w-full items-center bg-stone-200 py-2">
+        <Link href={"/chat"} className="mx-2">
+          <AiOutlineLeft size={25} />
+        </Link>
+        <div className="mr-[33px] w-full text-center text-xl">
+          {m.data.members
+            .filter((member) => member.user.id !== me.id)
+            .map((member) => member.user.name)
+            .join(", ")}
+        </div>
+      </div>
+      <MessageList
+        data={m.data.messages.map((m) => ({
+          ...m,
+          createdAt: new Date(m.createdAt),
+        }))}
+        room={room}
+      />
+    </>
   );
 }
 
@@ -156,7 +171,7 @@ function MessageList({
   }
 
   return (
-    <ul className="m-3 grow pb-[80px] sm:pb-0" id="scroll-bottom">
+    <ul className="m-3 mt-[44px] mb-[76px] grow overflow-y-scroll sm:pb-0" id="scroll-bottom">
       {messages.map((m) => (
         // TODO: handle pictures
         <li key={m.id}>
