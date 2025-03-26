@@ -5,11 +5,12 @@ import Loading from "@/components/Loading";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { handlers } from "@/features/chat/state";
 import { useUserContext } from "@/features/user/userProvider";
+import { Link } from "@/i18n/navigation";
 import { assert } from "@/lib";
 import { use } from "@/react/useData";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { AiOutlineSend } from "react-icons/ai";
+import { AiOutlineLeft, AiOutlineSend } from "react-icons/ai";
 
 export default function Page() {
   const roomId = useParams().id as string;
@@ -88,13 +89,23 @@ function Load({ room }: { room: string }) {
     return <span className="text-error">something went wrong</span>;
   }
   return (
-    <MessageList
-      data={m.data.messages.map((m) => ({
-        ...m,
-        createdAt: new Date(m.createdAt),
-      }))}
-      room={room}
-    />
+    <>
+      <div className="flex items-center bg-stone-200 py-2">
+        <Link href={"/chat"} className="mx-2">
+          <AiOutlineLeft size={25} />
+        </Link>
+        <div className="mr-[33px] w-full text-center text-xl">
+          {m.data.members.map((member) => member.user.name).join(", ")}
+        </div>
+      </div>
+      <MessageList
+        data={m.data.messages.map((m) => ({
+          ...m,
+          createdAt: new Date(m.createdAt),
+        }))}
+        room={room}
+      />
+    </>
   );
 }
 
