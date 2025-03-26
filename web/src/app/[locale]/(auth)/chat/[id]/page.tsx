@@ -72,6 +72,7 @@ function MessageInput({ room }: { room: string }) {
 }
 function Load({ room }: { room: string }) {
   const { idToken: Authorization } = useAuthContext();
+  const { me } = useUserContext();
   const m = use(async () => {
     const res = await client.chat.rooms[":room"].$get({
       header: { Authorization },
@@ -95,7 +96,10 @@ function Load({ room }: { room: string }) {
           <AiOutlineLeft size={25} />
         </Link>
         <div className="mr-[33px] w-full text-center text-xl">
-          {m.data.members.map((member) => member.user.name).join(", ")}
+          {m.data.members
+            .filter((member) => member.user.id !== me.id)
+            .map((member) => member.user.name)
+            .join(", ")}
         </div>
       </div>
       <MessageList
