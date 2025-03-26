@@ -46,7 +46,10 @@
     "blockButton": "ブロックする",
     "removeBlockButton": "ブロックを解除する"
   },
-  "chat": { "title": "チャット" },
+  "chat": {
+    "title": "チャット",
+    "noRoom": "ユーザーページからチャットを始めましょう！"
+  },
   "setting": {
     "title": "設定",
     "headers": {

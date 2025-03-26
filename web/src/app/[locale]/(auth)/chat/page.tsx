@@ -5,13 +5,14 @@ import Loading from "@/components/Loading";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { useUserContext } from "@/features/user/userProvider";
 import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function Page() {
   return (
     <>
-      <div className="w-full">
+      <div className="h-full w-full">
         <Rooms />
       </div>
     </>
@@ -23,6 +24,7 @@ function Rooms() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { idToken } = useAuthContext();
+  const t = useTranslations();
 
   useEffect(() => {
     async function fetchRooms() {
@@ -44,7 +46,12 @@ function Rooms() {
 
   if (loading) return <Loading stage="room.info" />;
   if (error) return <span className="text-error">{error}</span>;
-  if (rooms.length === 0) return <p>ユーザーページから、チャットを始めましょう！</p>;
+  if (rooms.length === 0)
+    return (
+      <div className="flex h-full items-center justify-center">
+        <p className="font-bold text-xl">{t("chat.noRoom")}</p>
+      </div>
+    );
 
   return (
     <ul>

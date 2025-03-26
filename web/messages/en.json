@@ -46,7 +46,10 @@
     "previousButton": "Previous",
     "noUser": "No Users Found"
   },
-  "chat": { "title": "Chat" },
+  "chat": {
+    "title": "Chat",
+    "noRoom": "Let's start chatting from the user page!"
+  },
   "setting": {
     "title": "Settings",
     "headers": {

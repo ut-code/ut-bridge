@@ -13,7 +13,6 @@ export default function Page() {
   const ctx = useUserFormContext();
   const t = useTranslations();
   const locale = useLocale();
-  console.log(ctx);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   return (

@@ -30,6 +30,7 @@ function MessageInput({ room }: { room: string }) {
   const { idToken: Authorization } = useAuthContext();
   const [input, setInput] = useState<string>("");
   const [submitting, setSubmitting] = useState<boolean>(false);
+  const isSendButtonDisabled = submitting || input === "";
   return (
     <div className="">
       <form
@@ -61,8 +62,8 @@ function MessageInput({ room }: { room: string }) {
               setInput(ev.target.value);
             }}
           />
-          <button type="submit" className="" disabled={submitting}>
-            <AiOutlineSend size={30} color="#0b8bee" />
+          <button type="submit" className="" disabled={isSendButtonDisabled}>
+            <AiOutlineSend size={30} color={isSendButtonDisabled ? "gray" : "#0b8bee"} />
           </button>
         </div>
       </form>
