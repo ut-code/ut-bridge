@@ -31,15 +31,7 @@ export default function Header({ title }: { title: string }) {
       </Link>
       {pathname === "/login" || pathname === "/registration" || pathname === "" ? (
         <>
-          <p className="absolute right-1/2 translate-x-1/2 font-bold text-white text-xl sm:hidden">
-            {pathname === "/registration"
-              ? "初期登録"
-              : pathname === "/login"
-                ? "ログイン"
-                : pathname === ""
-                  ? "UT-Bridge"
-                  : ""}
-          </p>
+          <p className="absolute right-1/2 translate-x-1/2 font-bold text-white text-xl sm:hidden">{title}</p>
         </>
       ) : (
         <>
