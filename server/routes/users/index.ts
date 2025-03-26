@@ -61,6 +61,9 @@ const router = new Hono()
             select: {
               kind: true,
             },
+            where: {
+              actorId: userId,
+            },
           },
         },
       });
