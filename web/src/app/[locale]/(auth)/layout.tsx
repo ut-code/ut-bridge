@@ -5,14 +5,12 @@ import Header from "@/components/Header";
 import { AuthProvider } from "@/features/auth/providers/AuthProvider";
 import { ChatNotificationProvider } from "@/features/chat/NotificationProvider";
 import { UserProvider } from "@/features/user/userProvider";
+import { useNormalizedPathname } from "@/hooks/useNormalizedPath";
 import { useTranslations } from "next-intl";
-import { usePathname } from "next/navigation";
 
-const localePattern = /^\/(ja|en)/;
 export default function Layout({ children }: { children: React.ReactNode }) {
   const t = useTranslations();
-  // ロケールを考慮してパスを正規化する（/ja/login, /en/login → /login）
-  const pathname = usePathname().replace(localePattern, "");
+  const pathname = useNormalizedPathname();
 
   let headerTitle = "";
   if (pathname.startsWith("/chat")) headerTitle = t("chat.title");

@@ -1,8 +1,9 @@
 "use client";
-import { Link, usePathname } from "@/i18n/navigation";
+import { useNormalizedPathname } from "@/hooks/useNormalizedPath";
+import { Link } from "@/i18n/navigation";
 import { AiFillMessage, AiFillSetting, AiOutlineMessage, AiOutlineSetting, AiOutlineTeam } from "react-icons/ai";
 export default function Footer() {
-  const path = usePathname().replace(/^\/(ja|en)/, "");
+  const path = useNormalizedPathname();
   return (
     <footer className="flex h-16 w-full items-center justify-around bg-tBlue sm:hidden">
       <Link href={"/community"}>

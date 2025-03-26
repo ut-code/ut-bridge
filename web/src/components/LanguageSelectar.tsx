@@ -1,5 +1,6 @@
 "use client";
 
+import { PATHNAME_LANG_PREFIX_PATTERN } from "@/consts";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 
@@ -16,7 +17,7 @@ export default function LanguageSwitcher({ className }: { className?: string }) 
     if (locale === currentLocale) return;
 
     // 言語プレフィックスを変更
-    const newPath = pathname.replace(/^\/(en|ja)/, `/${locale}`);
+    const newPath = pathname.replace(PATHNAME_LANG_PREFIX_PATTERN, `/${locale}`);
     router.push(newPath, { locale });
   };
 

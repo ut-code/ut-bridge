@@ -1,19 +1,17 @@
 "use client";
 import { useUserContext } from "@/features/user/userProvider.tsx";
+import { useNormalizedPathname } from "@/hooks/useNormalizedPath.ts";
 import { Link } from "@/i18n/navigation.ts";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { usePathname } from "next/navigation";
 import { AppIcon } from "./AppIcon.tsx";
 import Avatar from "./Avatar.tsx";
 
 export default function Header({ title }: { title: string }) {
   const router = useRouter();
   const t = useTranslations();
-  const path = usePathname();
 
-  // ロケールを考慮してパスを正規化する（/ja/login, /en/login → /login）
-  const pathname = path.replace(/^\/(ja|en)/, "");
+  const pathname = useNormalizedPathname();
   const { me } =
     pathname.startsWith("/registration") || pathname === "/login" || pathname === ""
       ? { me: null }

@@ -1,18 +1,16 @@
 "use client";
 import LanguageSwitcher from "@/components/LanguageSelectar.tsx";
 import { useGoogleLogout } from "@/features/auth/functions/logout.ts";
+import { useNormalizedPathname } from "@/hooks/useNormalizedPath.ts";
 import { Link } from "@/i18n/navigation.ts";
 import { useTranslations } from "next-intl";
-import { usePathname } from "next/navigation";
 import { AiOutlineRight } from "react-icons/ai";
 import { blocks } from "./path-blocks.ts";
 
 export default function SideNav() {
   const { logout } = useGoogleLogout();
-  const path = usePathname();
   const t = useTranslations("setting");
-  // ロケールを考慮してパスを正規化する（/ja/login, /en/login → /login）
-  const pathname = path.replace(/^\/(en|ja)\//, "/");
+  const pathname = useNormalizedPathname();
 
   return (
     <aside className="w-40 py-20 lg:w-70 xl:mx-10 xl:w-90">

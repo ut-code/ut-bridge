@@ -2,9 +2,9 @@
 
 import SideNav from "@/features/setting/SideNav";
 import { UserFormProvider } from "@/features/setting/UserFormController.tsx";
+import { useNormalizedPathname } from "@/hooks/useNormalizedPath";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
-import { usePathname } from "next/navigation";
 import { AiOutlineLeft } from "react-icons/ai";
 
 function getTransition(pathname: string) {
@@ -37,11 +37,9 @@ function getTransition(pathname: string) {
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const t = useTranslations("setting");
-  // ロケールを考慮してパスを正規化する（/ja/login, /en/login → /login）
-  const _path = usePathname();
-  const pathname = _path.replace(/^\/(ja|en)\/settings/, "");
+  const pathnameAfterSettings = useNormalizedPathname().replace("/settings", "");
 
-  const title = t(getTransition(pathname));
+  const title = t(getTransition(pathnameAfterSettings));
 
   return (
     <>
@@ -50,7 +48,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div className="hidden sm:block">
             <SideNav />
           </div>
-          {pathname !== "" && (
+          {pathnameAfterSettings !== "" && (
             <div className="flex items-center justify-between border-gray-300 border-b p-4 text-xl sm:hidden">
               <Link href={"/settings"}>
                 <AiOutlineLeft />

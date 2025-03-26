@@ -1,6 +1,7 @@
 "use client";
 import { client } from "@/client";
 import Loading from "@/components/Loading.tsx";
+import { PATHNAME_LANG_PREFIX_PATTERN } from "@/consts";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { formatCardUser } from "@/features/format";
 import UserCard from "@/features/user/UserCard.tsx";
@@ -60,12 +61,11 @@ function createQueriedURL(params: {
   }
 
   const str = current.toString();
-  const pathname = window.location.pathname.replace(PATHNAME_LANG_PREFIX_PATTERN, "/");
+  const pathname = window.location.pathname.replace(PATHNAME_LANG_PREFIX_PATTERN, "");
   if (str === "") return pathname;
   // isn't there better way to handle this?
   return `${pathname}?${str}`;
 }
-const PATHNAME_LANG_PREFIX_PATTERN = /^\/(en|ja)\//;
 
 export default function Page() {
   const router = useRouter();
