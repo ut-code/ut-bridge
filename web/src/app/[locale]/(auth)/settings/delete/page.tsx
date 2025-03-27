@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-function Page() {
+export default function Page() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const router = useRouter();
@@ -32,11 +32,7 @@ function Page() {
       <h1 className="text-2xl">{t("title")}</h1>
       <p className="mt-5">{t("content")}</p>
 
-      <button
-        type="button"
-        onClick={() => setShowConfirmModal(true)}
-        className="btn mt-5 h-15 w-full rounded-lg border bg-red-500 p-2 text-white "
-      >
+      <button type="button" onClick={() => setShowConfirmModal(true)} className="btn btn-error btn-block mt-5">
         {t("button")}
       </button>
       {showConfirmModal && (
@@ -49,19 +45,10 @@ function Page() {
           <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg" onClick={(e) => e.stopPropagation()}>
             <p className="mb-6">{t("modal")}</p>
             <div className="flex justify-end gap-4">
-              <button
-                type="button"
-                onClick={() => setShowConfirmModal(false)}
-                className="cursor-pointer rounded border px-4 py-2"
-              >
+              <button type="button" onClick={() => setShowConfirmModal(false)} className="btn btn-outline">
                 {t("cancel")}
               </button>
-              <button
-                type="button"
-                onClick={handleDelete}
-                disabled={isSubmitting}
-                className="flex cursor-pointer items-center gap-2 rounded bg-red-500 px-4 py-2 text-white disabled:opacity-50"
-              >
+              <button type="button" onClick={handleDelete} disabled={isSubmitting} className="btn btn-error">
                 {isSubmitting ? (
                   <span className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
                 ) : (
@@ -75,5 +62,3 @@ function Page() {
     </div>
   );
 }
-
-export default Page;
