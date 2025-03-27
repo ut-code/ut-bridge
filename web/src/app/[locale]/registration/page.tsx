@@ -14,6 +14,7 @@ export default function Page() {
   const t = useTranslations();
   const locale = useLocale();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<string | null>(null);
 
   return (
     <>
@@ -29,7 +30,7 @@ export default function Page() {
               router.push("./registration/step2");
               setIsSubmitting(false);
             } else {
-              console.error("failed to parse part1", result.error);
+              setErrors(result.error.toString());
               setIsSubmitting(false);
             }
           }}
@@ -205,6 +206,7 @@ export default function Page() {
                 )}
               </button>
             </div>
+            {errors && <div className="alert alert-error">{errors}</div>}
           </div>
         </form>
       </div>

@@ -16,17 +16,25 @@ export default function Page() {
   const ctx = useUserFormContext();
   const router = useRouter();
   const locale = useLocale();
+  const [errors, setErrors] = useState<null | string>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormStatus("loading");
     try {
       if (!fbUser) throw new Error("Oops! you are not logged in!");
-      const body = CreateUserSchema.parse(ctx.formData);
+      const body = CreateUserSchema.safeParse(ctx.formData);
+      if (!body.success) {
+        setFormStatus("error");
+
+        // FIXME: how do I get human-readable errors?
+        setErrors(body.error.message);
+        return;
+      }
 
       const idToken = await fbUser.getIdToken(true);
       const res = await client.users.$post({
-        json: body,
+        json: body.data,
         header: { Authorization: idToken },
       });
       if (!res.ok) {
@@ -37,8 +45,12 @@ export default function Page() {
       setFormStatus("success");
       router.push("/community");
     } catch (error) {
-      console.error("ユーザー登録に失敗しました", error);
+      setErrors(`ユーザー登録に失敗しました: ${error instanceof Error ? error.message : error}`);
       setFormStatus("error");
+    } finally {
+      setTimeout(() => {
+        setFormStatus("ready");
+      }, 2000);
     }
   };
 
@@ -177,6 +189,7 @@ export default function Page() {
                 <></>
               )}
             </div>
+            {errors && <div className="alert alert-error">{errors}</div>}
           </div>
         </form>
       </div>
