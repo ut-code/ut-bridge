@@ -104,7 +104,7 @@ export default function Page() {
                         value={language.id}
                         checked={ctx.formData.fluentLanguageIds?.includes(language.id) ?? false}
                         onChange={ctx.handleChange}
-                        className="accent-blue-500"
+                        className="checkbox bg-white"
                       />
                       <span>{locale === "ja" ? language.jaName : language.enName}</span>
                     </label>
@@ -123,7 +123,7 @@ export default function Page() {
                         value={language.id}
                         checked={ctx.formData.learningLanguageIds?.includes(language.id) ?? false}
                         onChange={ctx.handleChange}
-                        className="accent-blue-500"
+                        className="checkbox bg-white "
                       />
                       <span>{locale === "ja" ? language.jaName : language.enName}</span>
                     </label>
