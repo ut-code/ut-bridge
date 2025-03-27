@@ -18,7 +18,7 @@ export default function Page() {
 
   return (
     <>
-      <div className="my-5 p-4 sm:mx-60 sm:my-20">
+      <div className="my-5 p-4 sm:my-20 md:mx-10 2xl:mx-60">
         <h1 className="mx-5 mb-8 font-bold text-3xl sm:mx-0">{t("registration.title")}</h1>
         <form
           onSubmit={async (ev) => {
