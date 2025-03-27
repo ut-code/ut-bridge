@@ -111,10 +111,10 @@ export default function Page() {
         </select>
       </label>
       <div className={styles.label}>
-        <span className={styles.labelSpan}> {t("language.fluentLanguage")}</span>
+        <span className={`py-4 ${styles.labelSpan}`}>{t("language.fluentLanguage")}</span>
         <div className={styles.multiSelectCheckboxWrapper}>
           {languages.map((language) => (
-            <label key={language.id} className="flex items-center space-x-2">
+            <label key={language.id} className="items-center space-x-2">
               <input
                 type="checkbox"
                 name="fluentLanguageIds"
@@ -127,23 +127,23 @@ export default function Page() {
             </label>
           ))}
         </div>
-        <div className={styles.label}>
-          <span className={styles.labelSpan}> {t("language.learningLanguage")}</span>
-          <div className={styles.multiSelectCheckboxWrapper}>
-            {languages.map((language) => (
-              <label key={language.id} className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  name="learningLanguageIds"
-                  value={language.id}
-                  checked={formData.learningLanguageIds?.includes(language.id) ?? false}
-                  onChange={handleChange}
-                  className="checkbox"
-                />
-                <span>{locale === "ja" ? language.jaName : language.enName}</span>
-              </label>
-            ))}
-          </div>
+      </div>
+      <div className={styles.label}>
+        <span className={`py-4 ${styles.labelSpan}`}>{t("language.learningLanguage")}</span>
+        <div className={styles.multiSelectCheckboxWrapper}>
+          {languages.map((language) => (
+            <label key={language.id} className="items-center space-x-2">
+              <input
+                type="checkbox"
+                name="learningLanguageIds"
+                value={language.id}
+                checked={formData.learningLanguageIds?.includes(language.id) ?? false}
+                onChange={handleChange}
+                className="checkbox"
+              />
+              <span>{locale === "ja" ? language.jaName : language.enName}</span>
+            </label>
+          ))}
         </div>
       </div>
       <div className={styles.submitButtonWrapperDiv}>
