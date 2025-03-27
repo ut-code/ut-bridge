@@ -50,7 +50,7 @@
     "title": "Chat",
     "noRoom": "Let's start chatting from the user page!"
   },
-  "setting": {
+  "settings": {
     "title": "Settings",
     "headers": {
       "info": "Information",

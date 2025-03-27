@@ -9,7 +9,7 @@ function Page() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const router = useRouter();
-  const t = useTranslations("setting.delete");
+  const t = useTranslations("settings.delete");
   const { idToken: Authorization } = useAuthContext();
 
   const handleDelete = async () => {

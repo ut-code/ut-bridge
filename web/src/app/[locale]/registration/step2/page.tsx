@@ -2,7 +2,7 @@
 
 import { client } from "@/client";
 import { auth } from "@/features/auth/config";
-import { useUserFormContext } from "@/features/setting/UserFormController";
+import { useUserFormContext } from "@/features/settings/UserFormController";
 import { Link, useRouter } from "@/i18n/navigation";
 import { CreateUserSchema } from "common/zod/schema";
 import { useTranslations } from "next-intl";
@@ -49,9 +49,9 @@ export default function Page() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <div>
             <div className="px-15 sm:my-10">
-              <h2 className="font-bold text-xl">{t("setting.language.title")}</h2>
+              <h2 className="font-bold text-xl">{t("settings.language.title")}</h2>
               <label className="mt-5 flex flex-row justify-between sm:relative sm:my-4 sm:block sm:flex-none">
-                {t("setting.language.isForeign")}
+                {t("settings.language.isForeign")}
 
                 <input
                   type="checkbox"
@@ -63,7 +63,7 @@ export default function Page() {
               </label>
 
               <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
-                {t("setting.language.motherLanguage")}
+                {t("settings.language.motherLanguage")}
                 <select
                   name="motherLanguageId"
                   value={ctx.formData.motherLanguageId}
@@ -82,7 +82,7 @@ export default function Page() {
                 </select>
               </label>
               <div className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
-                <p> {t("setting.language.fluentLanguage")}</p>
+                <p> {t("settings.language.fluentLanguage")}</p>
                 <div className="flex w-1/2 flex-wrap gap-2">
                   {ctx.languages.map((language) => (
                     <label key={language.id} className="flex items-center space-x-2">
@@ -101,7 +101,7 @@ export default function Page() {
               </div>
 
               <div className="mt-5 flex flex-col sm:mt-10 sm:flex-row sm:items-center sm:justify-between">
-                <p> {t("setting.language.learningLanguage")}</p>
+                <p> {t("settings.language.learningLanguage")}</p>
                 <div className=" flex w-1/2 flex-wrap gap-2">
                   {ctx.languages.map((language) => (
                     <label key={language.id} className="flex items-center space-x-2">
@@ -121,12 +121,12 @@ export default function Page() {
             </div>
 
             <div className="my-10 px-15">
-              <h2 className="font-bold text-xl">{t("setting.topic.title")}</h2>
+              <h2 className="font-bold text-xl">{t("settings.topic.title")}</h2>
               <label
                 htmlFor="hobby"
                 className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between"
               >
-                {t("setting.topic.hobby")}
+                {t("settings.topic.hobby")}
 
                 <textarea
                   id="hobby"
@@ -143,7 +143,7 @@ export default function Page() {
                 htmlFor="introduction"
                 className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between"
               >
-                {t("setting.topic.introduction")}
+                {t("settings.topic.introduction")}
                 <textarea
                   id="introduction"
                   name="introduction"
@@ -161,16 +161,16 @@ export default function Page() {
               </Link>
               {formStatus === "ready" ? (
                 <button type="submit" className="btn h-10 w-25 rounded-lg bg-tBlue p-2 text-white">
-                  {t("setting.register")}
+                  {t("settings.register")}
                 </button>
               ) : formStatus === "loading" ? (
                 <button type="submit" className="btn btn-disabled h-10 rounded p-2 text-white" disabled>
-                  {t("setting.isRegister")}
+                  {t("settings.isRegister")}
                 </button>
               ) : formStatus === "success" ? (
-                <span className="btn btn-accent h-10 rounded p-2 text-white">{t("setting.success")}</span>
+                <span className="btn btn-accent h-10 rounded p-2 text-white">{t("settings.success")}</span>
               ) : formStatus === "error" ? (
-                <span className="btn btn-error h-10 rounded p-2 text-white">{t("setting.failed")}</span>
+                <span className="btn btn-error h-10 rounded p-2 text-white">{t("settings.failed")}</span>
               ) : (
                 <></>
               )}

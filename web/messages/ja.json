@@ -50,7 +50,7 @@
     "title": "チャット",
     "noRoom": "ユーザーページからチャットを始めましょう！"
   },
-  "setting": {
+  "settings": {
     "title": "設定",
     "headers": {
       "info": "情報",
