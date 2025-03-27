@@ -8,8 +8,10 @@ export const ExchangeSchema = z.enum(["all", "exchange", "japanese"]);
 export const MarkerSchema = z.enum(["blocked", "favorite"]);
 
 // Common Schemas
-export const HobbySchema = z.string().max(25, { message: "趣味は25文字以下です" });
-export const IntroductionSchema = z.string().max(225, { message: "コメントは225文字以下です" });
+export const HOBBY_MAX_LENGTH = 225;
+export const INTRO_MAX_LENGTH = 225;
+export const HobbySchema = z.string().max(HOBBY_MAX_LENGTH, { message: "趣味は225文字以下です" });
+export const IntroductionSchema = z.string().max(INTRO_MAX_LENGTH, { message: "コメントは225文字以下です" });
 const LanguageSchema = z.object({
   id: z.string().uuid(),
   jaName: z.string(),

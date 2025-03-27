@@ -4,7 +4,7 @@ import { client } from "@/client";
 import { auth } from "@/features/auth/config";
 import { useUserFormContext } from "@/features/settings/UserFormController";
 import { Link, useRouter } from "@/i18n/navigation";
-import { CreateUserSchema } from "common/zod/schema";
+import { CreateUserSchema, HOBBY_MAX_LENGTH, INTRO_MAX_LENGTH } from "common/zod/schema";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
 import { useState } from "react";
@@ -135,6 +135,7 @@ export default function Page() {
                   value={ctx.formData.hobby ?? ""}
                   onChange={ctx.handleChange}
                   required
+                  maxLength={HOBBY_MAX_LENGTH}
                   className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                 />
               </label>
@@ -151,6 +152,7 @@ export default function Page() {
                   value={ctx.formData.introduction ?? ""}
                   onChange={ctx.handleChange}
                   required
+                  maxLength={INTRO_MAX_LENGTH}
                   className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                 />
               </label>
