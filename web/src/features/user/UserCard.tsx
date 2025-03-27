@@ -23,7 +23,7 @@ export default function UserCard({
 }) {
   const [user, setUser] = useState(init);
   const [favoriteBtnLoading, setFavoriteBtnLoading] = useState(false);
-  const t = useTranslations("setting.language");
+  const t = useTranslations("settings.language");
 
   return (
     <div

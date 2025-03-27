@@ -9,7 +9,7 @@ import { blocks } from "./path-blocks.ts";
 
 export default function SideNav() {
   const { logout } = useGoogleLogout();
-  const t = useTranslations("setting");
+  const t = useTranslations("settings");
   const pathname = useNormalizedPathname();
 
   return (

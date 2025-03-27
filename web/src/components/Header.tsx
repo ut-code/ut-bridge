@@ -64,7 +64,7 @@ export default function Header({ title }: { title: string }) {
               router.push("/settings");
             }}
           >
-            {t("setting.title")}
+            {t("settings.title")}
           </button>
           <p className="absolute right-1/2 translate-x-1/2 font-bold text-white text-xl sm:hidden">{title}</p>
           <div className="absolute right-4 flex items-center gap-4">

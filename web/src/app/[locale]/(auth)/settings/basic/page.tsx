@@ -4,7 +4,7 @@ import { client } from "@/client";
 import Avatar from "@/components/Avatar";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { upload } from "@/features/image/ImageUpload";
-import { useUserFormContext } from "@/features/setting/UserFormController.tsx";
+import { useUserFormContext } from "@/features/settings/UserFormController.tsx";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -12,7 +12,7 @@ import { styles } from "../shared-class.ts";
 
 export default function Page() {
   const router = useRouter();
-  const t = useTranslations("setting");
+  const t = useTranslations("settings");
 
   const ctx = useUserFormContext();
   const { idToken: Authorization } = useAuthContext();
