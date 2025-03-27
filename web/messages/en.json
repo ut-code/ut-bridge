@@ -119,6 +119,9 @@
       },
       "terms": {
         "title": "Terms and Conditions"
+      },
+      "contact": {
+        "title": "Contact"
       }
     },
     "logout": "Logout",

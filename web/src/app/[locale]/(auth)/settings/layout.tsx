@@ -27,6 +27,8 @@ function getTransition(pathname: string) {
       return "other.privacy.title";
     case "/terms":
       return "other.terms.title";
+    case "/contact":
+      return "other.contact.title";
     case "/delete":
       return "delete.title";
     default:
