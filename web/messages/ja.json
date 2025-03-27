@@ -121,7 +121,8 @@
         "title": "利用規約"
       },
       "contact": {
-        "title": "お問い合わせ"
+        "title": "お問い合わせ",
+        "contactForm": "お問い合わせフォーム"
       }
     },
     "logout": "ログアウト",
