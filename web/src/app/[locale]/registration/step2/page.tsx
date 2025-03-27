@@ -56,21 +56,21 @@ export default function Page() {
 
   return (
     <>
-      <div className="my-5 p-4 sm:mx-60 sm:my-20">
+      <div className="my-5 p-4 sm:my-20 md:mx-10 2xl:mx-60 ">
         <h1 className="mx-5 mb-8 font-bold text-3xl sm:mx-0">{t("registration.title")}</h1>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <div>
             <div className="px-15 sm:my-10">
               <h2 className="font-bold text-xl">{t("settings.language.title")}</h2>
-              <label className="mt-5 flex flex-row justify-between sm:relative sm:my-4 sm:block sm:flex-none">
-                {t("settings.language.isForeign")}
+              <label className="mt-5 flex flex-row justify-between sm:relative sm:my-4 sm:block ">
+                <span className="relative">{t("settings.language.isForeign")}</span>
 
                 <input
                   type="checkbox"
                   name="isForeignStudent"
                   checked={ctx.formData.isForeignStudent}
                   onChange={ctx.handleChange}
-                  className="checkbox checkbox-lg bg-white sm:absolute sm:right-[47%]"
+                  className="checkbox checkbox-lg bg-white sm:absolute sm:left-[50%]"
                 />
               </label>
 
