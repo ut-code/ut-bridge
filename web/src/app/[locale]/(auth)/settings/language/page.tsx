@@ -73,7 +73,7 @@ export default function Page() {
       }
 
       setStatus("success");
-      ctx.feedbackSuccess();
+      ctx.onSuccess(await res.json());
     } catch (error) {
       console.error("ユーザー登録に失敗しました", error);
       setStatus("error");

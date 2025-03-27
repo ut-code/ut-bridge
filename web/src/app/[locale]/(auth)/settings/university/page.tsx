@@ -50,7 +50,7 @@ export default function Page() {
       if (!res.ok) throw new Error(`レスポンスステータス: ${res.status} - ${await res.text()}`);
 
       setStatus("success");
-      ctx.feedbackSuccess();
+      ctx.onSuccess(await res.json());
     } catch (error) {
       console.error("ユーザー登録に失敗しました", error);
       setStatus("error");
