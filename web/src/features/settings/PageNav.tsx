@@ -8,7 +8,7 @@ import { blocks } from "./path-blocks.ts";
 
 export default function PageNav() {
   const { logout } = useGoogleLogout();
-  const t = useTranslations("setting");
+  const t = useTranslations("settings");
 
   return (
     <>

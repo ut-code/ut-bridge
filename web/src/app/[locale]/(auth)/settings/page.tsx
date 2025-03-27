@@ -1,6 +1,6 @@
 "use client";
 
-import PageNav from "@/features/setting/PageNav";
+import PageNav from "@/features/settings/PageNav";
 
 export default function Page() {
   return (

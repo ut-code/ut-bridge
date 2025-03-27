@@ -11,7 +11,7 @@ function Page() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const router = useRouter();
   const { logout } = useGoogleLogout();
-  const t = useTranslations("setting.delete");
+  const t = useTranslations("settings.delete");
   const { idToken: Authorization } = useAuthContext();
 
   const handleDelete = async () => {

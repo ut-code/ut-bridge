@@ -2,7 +2,7 @@
 
 import { client } from "@/client";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
-import { useUserFormContext } from "@/features/setting/UserFormController.tsx";
+import { useUserFormContext } from "@/features/settings/UserFormController.tsx";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -12,7 +12,7 @@ export default function Page() {
   const ctx = useUserFormContext();
   const { idToken: Authorization } = useAuthContext();
   const router = useRouter();
-  const t = useTranslations("setting");
+  const t = useTranslations("settings");
 
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 

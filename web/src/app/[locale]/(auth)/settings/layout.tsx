@@ -1,7 +1,7 @@
 "use client";
 
-import SideNav from "@/features/setting/SideNav";
-import { UserFormProvider } from "@/features/setting/UserFormController.tsx";
+import SideNav from "@/features/settings/SideNav";
+import { UserFormProvider } from "@/features/settings/UserFormController.tsx";
 import { useNormalizedPathname } from "@/hooks/useNormalizedPath";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
@@ -38,7 +38,7 @@ function getTransition(pathname: string) {
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const t = useTranslations("setting");
+  const t = useTranslations("settings");
   const pathnameAfterSettings = useNormalizedPathname().replace("/settings", "");
 
   const title = t(getTransition(pathnameAfterSettings));

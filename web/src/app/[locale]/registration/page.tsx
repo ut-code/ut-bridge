@@ -1,7 +1,7 @@
 "use client";
 
 import Avatar from "@/components/Avatar";
-import { useUserFormContext } from "@/features/setting/UserFormController";
+import { useUserFormContext } from "@/features/settings/UserFormController";
 import { Part1RegistrationSchema } from "common/zod/schema";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
@@ -37,12 +37,12 @@ export default function Page() {
         >
           <div>
             <div className="px-15 sm:my-10">
-              <h2 className="font-bold text-xl"> {t("setting.basic.title")}</h2>
+              <h2 className="font-bold text-xl"> {t("settings.basic.title")}</h2>
               <label
                 htmlFor="name"
                 className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between"
               >
-                {t("setting.basic.name")}
+                {t("settings.basic.name")}
 
                 <input
                   id="name"
@@ -59,7 +59,7 @@ export default function Page() {
                 htmlFor="gender"
                 className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between"
               >
-                {t("setting.basic.sex")}
+                {t("settings.basic.sex")}
 
                 <select
                   id="gender"
@@ -71,13 +71,13 @@ export default function Page() {
                   className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                 >
                   <option value="" disabled />
-                  <option value="male"> {t("setting.basic.male")}</option>
-                  <option value="female"> {t("setting.basic.female")}</option>
-                  <option value="other"> {t("setting.basic.other")}</option>
+                  <option value="male"> {t("settings.basic.male")}</option>
+                  <option value="female"> {t("settings.basic.female")}</option>
+                  <option value="other"> {t("settings.basic.other")}</option>
                 </select>
               </label>
               <div className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
-                <span className="mb-5 sm:mb-0">{t("setting.basic.photo")}</span>
+                <span className="mb-5 sm:mb-0">{t("settings.basic.photo")}</span>
                 <input
                   type="file"
                   accept="image/*"
@@ -100,15 +100,15 @@ export default function Page() {
                   htmlFor="image-upload"
                   className="mt-5 flex h-10 cursor-pointer justify-center rounded bg-blue-400 px-4 py-2 text-white sm:mt-0 sm:flex-none"
                 >
-                  {t("setting.basic.photoUpload")}
+                  {t("settings.basic.photoUpload")}
                 </label>
               </div>
             </div>
 
             <div className="my-10 px-15">
-              <h2 className="font-bold text-xl">{t("setting.university.title")}</h2>
+              <h2 className="font-bold text-xl">{t("settings.university.title")}</h2>
               <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
-                {t("setting.university.univ")}
+                {t("settings.university.univ")}
                 <select
                   name="universityId"
                   onChange={ctx.handleChange}
@@ -126,7 +126,7 @@ export default function Page() {
                 </select>
               </label>
               <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
-                {t("setting.university.divisions")}
+                {t("settings.university.divisions")}
                 <select
                   name="divisionId"
                   value={ctx.formData.divisionId}
@@ -148,7 +148,7 @@ export default function Page() {
               </label>
 
               <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
-                {t("setting.university.campus")}
+                {t("settings.university.campus")}
                 <select
                   name="campusId"
                   value={ctx.formData.campusId}
@@ -169,7 +169,7 @@ export default function Page() {
               </label>
 
               <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
-                {t("setting.university.grade")}
+                {t("settings.university.grade")}
 
                 <select
                   name="grade"
@@ -180,15 +180,15 @@ export default function Page() {
                   className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                 >
                   <option value="" disabled />
-                  <option value="B1"> {t("setting.university.gradeOptions.B1")}</option>
-                  <option value="B2"> {t("setting.university.gradeOptions.B2")}</option>
-                  <option value="B3"> {t("setting.university.gradeOptions.B3")}</option>
-                  <option value="B4"> {t("setting.university.gradeOptions.B4")}</option>
-                  <option value="M1"> {t("setting.university.gradeOptions.M1")}</option>
-                  <option value="M2"> {t("setting.university.gradeOptions.M2")}</option>
-                  <option value="D1"> {t("setting.university.gradeOptions.D1")}</option>
-                  <option value="D2"> {t("setting.university.gradeOptions.D2")}</option>
-                  <option value="D3"> {t("setting.university.gradeOptions.D3")}</option>
+                  <option value="B1"> {t("settings.university.gradeOptions.B1")}</option>
+                  <option value="B2"> {t("settings.university.gradeOptions.B2")}</option>
+                  <option value="B3"> {t("settings.university.gradeOptions.B3")}</option>
+                  <option value="B4"> {t("settings.university.gradeOptions.B4")}</option>
+                  <option value="M1"> {t("settings.university.gradeOptions.M1")}</option>
+                  <option value="M2"> {t("settings.university.gradeOptions.M2")}</option>
+                  <option value="D1"> {t("settings.university.gradeOptions.D1")}</option>
+                  <option value="D2"> {t("settings.university.gradeOptions.D2")}</option>
+                  <option value="D3"> {t("settings.university.gradeOptions.D3")}</option>
                 </select>
               </label>
             </div>

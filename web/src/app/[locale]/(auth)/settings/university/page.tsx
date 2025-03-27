@@ -2,7 +2,7 @@
 
 import { client } from "@/client";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
-import { useUserFormContext } from "@/features/setting/UserFormController.tsx";
+import { useUserFormContext } from "@/features/settings/UserFormController.tsx";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -14,7 +14,7 @@ export default function Page() {
   const ctx = useUserFormContext();
   const locale = useLocale();
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const t = useTranslations("setting");
+  const t = useTranslations("settings");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type, checked, multiple } = e.target as HTMLInputElement;
