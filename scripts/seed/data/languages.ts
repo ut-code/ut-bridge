@@ -15,4 +15,5 @@ export const languages: Language[] = [
   { in_ja: "ポルトガル語", in_en: "Portuguese" },
   { in_ja: "ベンガル語", in_en: "Bengali" },
   { in_ja: "ドイツ語", in_en: "German" },
+  { in_ja: "韓国語", in_en: "Korean" },
 ];
