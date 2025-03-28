@@ -1,5 +1,6 @@
 "use client";
 import { client } from "@/client";
+import { useGoogleLogout } from "@/features/auth/functions/logout";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -9,6 +10,7 @@ function Page() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const router = useRouter();
+  const { logout } = useGoogleLogout();
   const t = useTranslations("settings.delete");
   const { idToken: Authorization } = useAuthContext();
 
@@ -19,6 +21,7 @@ function Page() {
     });
 
     if (result.ok) {
+      await logout();
       router.push("/");
       setIsSubmitting(false);
     } else {
