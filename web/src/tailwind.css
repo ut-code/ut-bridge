@@ -13,4 +13,7 @@
   /* biome-ignore lint: daisyui */
   name: "light";
   --color-primary: #0b8bee;
+  /* tailwind: red-400 */
+  --color-error: oklch(0.704 0.191 22.216);
+  --color-error-content: white;
 }
