@@ -18,8 +18,31 @@ export default function Page() {
   const locale = useLocale();
   const [errors, setErrors] = useState<null | string>(null);
 
+  const [fieldErrors, setFieldErrors] = useState<{
+    fluentLanguages?: string;
+    learningLanguages?: string;
+  }>({});
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // FIXME: please use zod for this
+    let errors = {};
+    if (!ctx.formData.fluentLanguageIds?.length) {
+      errors = {
+        fluentLanguages: "(required)",
+      };
+    }
+    if (!ctx.formData.learningLanguageIds?.length) {
+      errors = {
+        ...errors,
+        learningLanguages: "(required)",
+      };
+    }
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      return;
+    }
+
     setFormStatus("loading");
     try {
       if (!fbUser) throw new Error("Oops! you are not logged in!");
@@ -94,7 +117,9 @@ export default function Page() {
                 </select>
               </label>
               <div className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
-                <p> {t("settings.language.fluentLanguage")}</p>
+                <p className={`flex-grow ${fieldErrors.learningLanguages ? "text-error" : ""}`}>
+                  {t("settings.language.fluentLanguage")} {fieldErrors.fluentLanguages}
+                </p>
                 <div className="flex w-1/2 flex-wrap gap-2">
                   {ctx.languages.map((language) => (
                     <label key={language.id} className="flex items-center space-x-2">
@@ -111,9 +136,10 @@ export default function Page() {
                   ))}
                 </div>
               </div>
-
               <div className="mt-5 flex flex-col sm:mt-10 sm:flex-row sm:items-center sm:justify-between">
-                <p> {t("settings.language.learningLanguage")}</p>
+                <p className={`flex-grow ${fieldErrors.learningLanguages ? "text-error" : ""}`}>
+                  {t("settings.language.learningLanguage")} {fieldErrors.learningLanguages}
+                </p>
                 <div className=" flex w-1/2 flex-wrap gap-2">
                   {ctx.languages.map((language) => (
                     <label key={language.id} className="flex items-center space-x-2">
