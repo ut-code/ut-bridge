@@ -29,13 +29,13 @@ export default function Page() {
     let errors = {};
     if (!ctx.formData.fluentLanguageIds?.length) {
       errors = {
-        fluentLanguages: "(required)",
+        fluentLanguages: `(${t("required")})`,
       };
     }
     if (!ctx.formData.learningLanguageIds?.length) {
       errors = {
         ...errors,
-        learningLanguages: "(required)",
+        learningLanguages: `(${t("required")})`,
       };
     }
     if (Object.keys(errors).length > 0) {

@@ -57,6 +57,7 @@
       "users": "Users",
       "other": "Other"
     },
+    "required": "Required",
     "register": "Register",
     "isRegister": "Registering...",
     "success": "Success!",

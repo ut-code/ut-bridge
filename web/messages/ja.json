@@ -57,6 +57,7 @@
       "users": "ユーザー",
       "other": "その他"
     },
+    "required": "必須",
     "register": "登録",
     "isRegister": "登録中...",
     "success": "成功しました",
