@@ -4,11 +4,11 @@ import { useGoogleLogout } from "@/features/auth/functions/logout";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
-function Page() {
+export default function Page() {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const modal = useRef<HTMLDialogElement | null>(null);
   const router = useRouter();
   const { logout } = useGoogleLogout();
   const t = useTranslations("settings.delete");
@@ -35,48 +35,31 @@ function Page() {
       <h1 className="text-2xl">{t("title")}</h1>
       <p className="mt-5">{t("content")}</p>
 
-      <button
-        type="button"
-        onClick={() => setShowConfirmModal(true)}
-        className="btn mt-5 h-15 w-full rounded-lg border bg-red-500 p-2 text-white "
-      >
+      <button type="button" onClick={() => modal.current?.showModal()} className="btn btn-error btn-block mt-5">
         {t("button")}
       </button>
-      {showConfirmModal && (
-        // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-[rgba(0,0,0,0.5)] backdrop-blur-sm"
-          onClick={() => setShowConfirmModal(false)}
-        >
-          {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
-          <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg" onClick={(e) => e.stopPropagation()}>
-            <p className="mb-6">{t("modal")}</p>
-            <div className="flex justify-end gap-4">
-              <button
-                type="button"
-                onClick={() => setShowConfirmModal(false)}
-                className="cursor-pointer rounded border px-4 py-2"
-              >
+      <dialog className="modal" ref={modal}>
+        <form method="dialog" className="modal-backdrop">
+          <button type="submit" className="backdrop-blur-sm " />
+        </form>
+        <div className="modal-box duration-0">
+          <p className="mb-6">{t("modal")}</p>
+          <div className="flex justify-end gap-4">
+            <form method="dialog">
+              <button type="submit" className="btn btn-outline">
                 {t("cancel")}
               </button>
-              <button
-                type="button"
-                onClick={handleDelete}
-                disabled={isSubmitting}
-                className="flex cursor-pointer items-center gap-2 rounded bg-red-500 px-4 py-2 text-white disabled:opacity-50"
-              >
-                {isSubmitting ? (
-                  <span className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                ) : (
-                  t("delete")
-                )}
-              </button>
-            </div>
+            </form>
+            <button type="button" onClick={handleDelete} disabled={isSubmitting} className="btn btn-error">
+              {isSubmitting ? (
+                <span className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+              ) : (
+                t("delete")
+              )}
+            </button>
           </div>
         </div>
-      )}
+      </dialog>
     </div>
   );
 }
-
-export default Page;

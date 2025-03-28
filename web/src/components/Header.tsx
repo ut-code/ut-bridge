@@ -67,10 +67,10 @@ export default function Header({ title }: { title: string }) {
             {t("settings.title")}
           </button>
           <p className="absolute right-1/2 translate-x-1/2 font-bold text-white text-xl sm:hidden">{title}</p>
-          <div className="absolute right-4 flex items-center gap-4">
+          <Link href="/settings/basic" className="absolute right-4 flex cursor-pointer items-center gap-4">
             <Avatar size={40} src={me?.imageUrl} />
             {me?.name && <p className="hidden text-white text-xl sm:block">{me.name}</p>}
-          </div>
+          </Link>
         </>
       )}
     </header>

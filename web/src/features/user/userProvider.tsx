@@ -9,8 +9,12 @@ import { useAuthContext } from "../auth/providers/AuthProvider.tsx";
 
 export type MYDATA = Omit<StructuredUser, "university">;
 
-const UserContext = createContext<{ me: MYDATA } | null>(null);
-export function useUserContext(): { me: MYDATA } {
+type ContextProps = {
+  me: MYDATA;
+  updateMyData: (callback: (prev: MYDATA) => MYDATA) => void;
+};
+const UserContext = createContext<ContextProps | null>(null);
+export function useUserContext() {
   const ctx = useContext(UserContext);
   if (!ctx) throw new Error("useUserContext: please use this within UserProvider. aborting...");
   return ctx;
@@ -44,5 +48,9 @@ export function UserProvider({ children }: { children: ReactNode }) {
   }, [router, guid, Authorization]);
 
   if (!myData) return <Loading stage="my info" />;
-  return <UserContext.Provider value={{ me: myData }}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={{ me: myData, updateMyData: (cb) => setMyData(cb(myData)) }}>
+      {children}
+    </UserContext.Provider>
+  );
 }

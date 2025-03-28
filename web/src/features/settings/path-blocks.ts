@@ -51,7 +51,7 @@ export const blocks: PathBlock[] = [
         href: "/settings/contact",
         title: "other.contact.title",
       },
-      { href: "/settings/delete", title: "delete.title" },
+      { href: "/settings/delete", title: "delete.title", variant: "danger" },
     ],
   },
 ];
@@ -61,5 +61,6 @@ export type PathBlock = {
   items: {
     href: string;
     title: string;
+    variant?: "danger";
   }[];
 };
