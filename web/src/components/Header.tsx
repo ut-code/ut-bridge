@@ -21,9 +21,9 @@ export default function Header({ title }: { title: string }) {
 
   return (
     <header className="flex h-16 w-full items-center bg-tBlue">
-      <Link href="/" passHref className="px-4">
+      <Link href="/" passHref className="flex flex-row px-4">
         <AppIcon width={36} height={36} />
-        <span className="hidden cursor-pointer px-4 text-2xl text-white sm:block">UT-Bridge</span>
+        <span className="hidden cursor-pointer px-4 text-2xl text-white sm:inline-block">UT-Bridge</span>
       </Link>
       {pathname === "/login" || pathname.startsWith("/registration") || pathname === "" ? (
         <>
