@@ -4,7 +4,7 @@ import { client } from "@/client";
 import { auth } from "@/features/auth/config";
 import { useUserFormContext } from "@/features/settings/UserFormController";
 import { Link, useRouter } from "@/i18n/navigation";
-import { CreateUserSchema } from "common/zod/schema";
+import { CreateUserSchema, HOBBY_MAX_LENGTH, INTRO_MAX_LENGTH } from "common/zod/schema";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
 import { useState } from "react";
@@ -16,17 +16,48 @@ export default function Page() {
   const ctx = useUserFormContext();
   const router = useRouter();
   const locale = useLocale();
+  const [errors, setErrors] = useState<null | string>(null);
+
+  const [fieldErrors, setFieldErrors] = useState<{
+    fluentLanguages?: string;
+    learningLanguages?: string;
+  }>({});
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // FIXME: please use zod for this
+    let errors = {};
+    if (!ctx.formData.fluentLanguageIds?.length) {
+      errors = {
+        fluentLanguages: `(${t("required")})`,
+      };
+    }
+    if (!ctx.formData.learningLanguageIds?.length) {
+      errors = {
+        ...errors,
+        learningLanguages: `(${t("required")})`,
+      };
+    }
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      return;
+    }
+
     setFormStatus("loading");
     try {
       if (!fbUser) throw new Error("Oops! you are not logged in!");
-      const body = CreateUserSchema.parse(ctx.formData);
+      const body = CreateUserSchema.safeParse(ctx.formData);
+      if (!body.success) {
+        setFormStatus("error");
+
+        // FIXME: how do I get human-readable errors?
+        setErrors(body.error.message);
+        return;
+      }
 
       const idToken = await fbUser.getIdToken(true);
       const res = await client.users.$post({
-        json: body,
+        json: body.data,
         header: { Authorization: idToken },
       });
       if (!res.ok) {
@@ -37,28 +68,32 @@ export default function Page() {
       setFormStatus("success");
       router.push("/community");
     } catch (error) {
-      console.error("ユーザー登録に失敗しました", error);
+      setErrors(`ユーザー登録に失敗しました: ${error instanceof Error ? error.message : error}`);
       setFormStatus("error");
+    } finally {
+      setTimeout(() => {
+        setFormStatus("ready");
+      }, 2000);
     }
   };
 
   return (
     <>
-      <div className="my-5 p-4 sm:mx-60 sm:my-20">
+      <div className="my-5 p-4 sm:my-20 md:mx-10 2xl:mx-60 ">
         <h1 className="mx-5 mb-8 font-bold text-3xl sm:mx-0">{t("registration.title")}</h1>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <div>
             <div className="px-15 sm:my-10">
               <h2 className="font-bold text-xl">{t("settings.language.title")}</h2>
-              <label className="mt-5 flex flex-row justify-between sm:relative sm:my-4 sm:block sm:flex-none">
-                {t("settings.language.isForeign")}
+              <label className="mt-5 flex flex-row justify-between sm:relative sm:my-4 sm:block ">
+                <span className="relative">{t("settings.language.isForeign")}</span>
 
                 <input
                   type="checkbox"
                   name="isForeignStudent"
                   checked={ctx.formData.isForeignStudent}
                   onChange={ctx.handleChange}
-                  className="checkbox checkbox-lg bg-white sm:absolute sm:right-[47%]"
+                  className="checkbox checkbox-lg bg-white sm:absolute sm:left-[50%]"
                 />
               </label>
 
@@ -82,7 +117,9 @@ export default function Page() {
                 </select>
               </label>
               <div className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
-                <p> {t("settings.language.fluentLanguage")}</p>
+                <p className={`flex-grow ${fieldErrors.learningLanguages ? "text-error" : ""}`}>
+                  {t("settings.language.fluentLanguage")} {fieldErrors.fluentLanguages}
+                </p>
                 <div className="flex w-1/2 flex-wrap gap-2">
                   {ctx.languages.map((language) => (
                     <label key={language.id} className="flex items-center space-x-2">
@@ -92,16 +129,17 @@ export default function Page() {
                         value={language.id}
                         checked={ctx.formData.fluentLanguageIds?.includes(language.id) ?? false}
                         onChange={ctx.handleChange}
-                        className="accent-blue-500"
+                        className="checkbox bg-white"
                       />
                       <span>{locale === "ja" ? language.jaName : language.enName}</span>
                     </label>
                   ))}
                 </div>
               </div>
-
               <div className="mt-5 flex flex-col sm:mt-10 sm:flex-row sm:items-center sm:justify-between">
-                <p> {t("settings.language.learningLanguage")}</p>
+                <p className={`flex-grow ${fieldErrors.learningLanguages ? "text-error" : ""}`}>
+                  {t("settings.language.learningLanguage")} {fieldErrors.learningLanguages}
+                </p>
                 <div className=" flex w-1/2 flex-wrap gap-2">
                   {ctx.languages.map((language) => (
                     <label key={language.id} className="flex items-center space-x-2">
@@ -111,7 +149,7 @@ export default function Page() {
                         value={language.id}
                         checked={ctx.formData.learningLanguageIds?.includes(language.id) ?? false}
                         onChange={ctx.handleChange}
-                        className="accent-blue-500"
+                        className="checkbox bg-white "
                       />
                       <span>{locale === "ja" ? language.jaName : language.enName}</span>
                     </label>
@@ -135,6 +173,7 @@ export default function Page() {
                   value={ctx.formData.hobby ?? ""}
                   onChange={ctx.handleChange}
                   required
+                  maxLength={HOBBY_MAX_LENGTH}
                   className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                 />
               </label>
@@ -151,6 +190,7 @@ export default function Page() {
                   value={ctx.formData.introduction ?? ""}
                   onChange={ctx.handleChange}
                   required
+                  maxLength={INTRO_MAX_LENGTH}
                   className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                 />
               </label>
@@ -175,6 +215,7 @@ export default function Page() {
                 <></>
               )}
             </div>
+            {errors && <div className="alert alert-error">{errors}</div>}
           </div>
         </form>
       </div>

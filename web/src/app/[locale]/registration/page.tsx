@@ -14,10 +14,11 @@ export default function Page() {
   const t = useTranslations();
   const locale = useLocale();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<string | null>(null);
 
   return (
     <>
-      <div className="my-5 p-4 sm:mx-60 sm:my-20">
+      <div className="my-5 p-4 sm:my-20 md:mx-10 2xl:mx-60">
         <h1 className="mx-5 mb-8 font-bold text-3xl sm:mx-0">{t("registration.title")}</h1>
         <form
           onSubmit={async (ev) => {
@@ -29,7 +30,7 @@ export default function Page() {
               router.push("./registration/step2");
               setIsSubmitting(false);
             } else {
-              console.error("failed to parse part1", result.error);
+              setErrors(result.error.toString());
               setIsSubmitting(false);
             }
           }}
@@ -205,6 +206,7 @@ export default function Page() {
                 )}
               </button>
             </div>
+            {errors && <div className="alert alert-error">{errors}</div>}
           </div>
         </form>
       </div>
