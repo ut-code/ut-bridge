@@ -11,7 +11,7 @@ export default function Page() {
       <iframe
         src="https://docs.google.com/forms/d/e/1FAIpQLScioyR0gN9-UUgsPaePP-EO8oVryRYmdOqqb2aULkc2RZmUkA/viewform?embedded=true"
         width="640"
-        height="666"
+        height="1500"
         className="max-w-full"
         title="contact form"
       >
