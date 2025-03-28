@@ -7,6 +7,7 @@ import type { CreateUser, FlatCardUser } from "common/zod/schema";
 import { useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { useRef } from "react";
 import { useAuthContext } from "../auth/providers/AuthProvider.tsx";
 import { upload } from "../image/ImageUpload.tsx";
 
@@ -18,7 +19,7 @@ type UserFormContextType = {
   handleImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   imagePreviewURL: string | null;
   uploadImage: () => Promise<void>;
-  feedbackSuccess: () => void;
+  onSuccess: (data: Partial<MYDATA>) => void;
   universities: { id: string; jaName: string; enName: string }[];
   campuses: { id: string; jaName: string; enName: string }[];
   divisions: { id: string; jaName: string; enName: string }[];
@@ -49,9 +50,12 @@ export const UserFormProvider = ({
   const router = useRouter();
   const locale = useLocale();
   let me: MYDATA | null = null;
+  const setMyData = useRef<((data: Partial<MYDATA>) => void) | null>(null);
   // HELP: how do I optionally use another context? loadPreviousData will never change
   if (loadPreviousData) {
-    me = useUserContext().me;
+    const usercx = useUserContext();
+    me = usercx.me;
+    setMyData.current = (data) => usercx.updateMyData((prev) => ({ ...prev, ...data }));
   }
   const { idToken: Authorization } = useAuthContext();
 
@@ -208,9 +212,10 @@ export const UserFormProvider = ({
     refetchBlockedUsers();
   }, [refetchFavoriteUsers, refetchBlockedUsers]);
 
-  const feedbackSuccess = useCallback(() => {
+  const onSuccess = useCallback((data: Partial<MYDATA>) => {
     console.log("TODO: make it into the UI");
     console.log("SUCCESSFULLY SUBMITTED!!!");
+    setMyData.current?.(data);
   }, []);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -289,7 +294,7 @@ export const UserFormProvider = ({
         imagePreviewURL,
         uploadImage,
         loadingUniversitySpecificData,
-        feedbackSuccess,
+        onSuccess,
         universities,
         campuses,
         divisions,

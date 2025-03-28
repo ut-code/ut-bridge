@@ -23,7 +23,7 @@ export default function SideNav() {
               <Link
                 href={item.href}
                 key={item.href}
-                className={`flex items-center justify-between bg-transparent px-8 py-2 text-gray-800 text-md text-xl xl:ml-10 ${pathname === item.href ? "underline" : ""}`}
+                className={`flex items-center justify-between bg-transparent px-8 py-2 text-md text-xl xl:ml-10 ${pathname === item.href ? "underline" : ""} ${item.variant === "danger" ? "text-error" : "text-gray-800"}`}
               >
                 {t(item.title)}
                 <AiOutlineRight className="sm:hidden" />
