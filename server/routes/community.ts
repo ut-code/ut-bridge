@@ -59,22 +59,28 @@ const router = new Hono().get(
         { name: { contains: searchQuery, mode: "insensitive" } },
         {
           campus: {
-            jaName: { contains: searchQuery, mode: "insensitive" },
-            enName: { contains: searchQuery, mode: "insensitive" },
+            OR: [
+              { jaName: { contains: searchQuery, mode: "insensitive" } },
+              { enName: { contains: searchQuery, mode: "insensitive" } },
+            ],
           },
         },
         {
           motherLanguage: {
-            jaName: { contains: searchQuery, mode: "insensitive" },
-            enName: { contains: searchQuery, mode: "insensitive" },
+            OR: [
+              { jaName: { contains: searchQuery, mode: "insensitive" } },
+              { enName: { contains: searchQuery, mode: "insensitive" } },
+            ],
           },
         },
         {
           fluentLanguages: {
             some: {
               language: {
-                jaName: { contains: searchQuery, mode: "insensitive" },
-                enName: { contains: searchQuery, mode: "insensitive" },
+                OR: [
+                  { jaName: { contains: searchQuery, mode: "insensitive" } },
+                  { enName: { contains: searchQuery, mode: "insensitive" } },
+                ],
               },
             },
           },
@@ -83,8 +89,10 @@ const router = new Hono().get(
           learningLanguages: {
             some: {
               language: {
-                jaName: { contains: searchQuery, mode: "insensitive" },
-                enName: { contains: searchQuery, mode: "insensitive" },
+                OR: [
+                  { jaName: { contains: searchQuery, mode: "insensitive" } },
+                  { enName: { contains: searchQuery, mode: "insensitive" } },
+                ],
               },
             },
           },
