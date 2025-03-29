@@ -24,7 +24,6 @@ export default function Page() {
     const { options } = e.target as HTMLSelectElement;
 
     ctx.setFormData((prev) => {
-      // 複数選択の処理（言語選択）
       if (multiple) {
         const selectedValues = Array.from(options)
           .filter((option) => option.selected)
@@ -36,7 +35,6 @@ export default function Page() {
         };
       }
 
-      // 言語の選択（チェックボックス）
       if (name === "fluentLanguageIds" || name === "learningLanguageIds") {
         const updatedLanguages = checked
           ? [...(prev[name] ?? []), value] // 追加
@@ -48,7 +46,6 @@ export default function Page() {
         };
       }
 
-      // 通常の入力フォーム（チェックボックス含む）
       return {
         ...prev,
         [name]: type === "checkbox" ? checked : value,
