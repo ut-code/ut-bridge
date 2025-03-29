@@ -39,8 +39,10 @@ export default function Avatar({
       alt={alt ?? "Avatar"}
       src={url}
       style={{
-        width: size,
-        height: size,
+        width: "100vw",
+        maxWidth: size,
+        height: "100vw",
+        maxHeight: size,
       }}
     />
   );
