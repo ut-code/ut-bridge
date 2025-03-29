@@ -96,7 +96,7 @@ function Room({ room }: { room: RoomPreview }) {
         </div>
         <div className=" list-col-grow pl-4">
           <div>{firstMember?.name || "Unknown User"}</div>
-          <div className="font-semibold text-xs uppercase opacity-60">{room.messages[0]?.content || "No messages"}</div>
+          <div className="font-semibold text-xs opacity-60">{room.messages[0]?.content || "No messages"}</div>
         </div>
       </Link>
     </div>
