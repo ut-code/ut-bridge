@@ -145,6 +145,20 @@ const router = new Hono()
             userId: requester,
           },
         },
+        NOT: {
+          members: {
+            some: {
+              user: {
+                markedAs: {
+                  some: {
+                    actorId: requester,
+                    kind: "blocked",
+                  },
+                },
+              },
+            },
+          },
+        },
       },
       select: {
         id: true,
@@ -188,6 +202,20 @@ const router = new Hono()
               OR: [{ userId: user }, { userId: meId }],
             },
           },
+          NOT: {
+            members: {
+              some: {
+                user: {
+                  markedAs: {
+                    some: {
+                      actorId: user,
+                      kind: "blocked",
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
         select: {
           id: true,
@@ -214,6 +242,20 @@ const router = new Hono()
           members: {
             some: {
               userId: requester,
+            },
+          },
+          NOT: {
+            members: {
+              some: {
+                user: {
+                  markedAs: {
+                    some: {
+                      actorId: requester,
+                      kind: "blocked",
+                    },
+                  },
+                },
+              },
             },
           },
         },
