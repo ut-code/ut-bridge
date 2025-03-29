@@ -195,6 +195,7 @@ const router = new Hono()
     async (c) => {
       const meId = await getUserID(c);
       const { user } = c.req.valid("param");
+      m;
       const rooms = await prisma.room.findMany({
         where: {
           members: {
