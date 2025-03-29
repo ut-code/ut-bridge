@@ -1,70 +1,22 @@
 "use client";
 
-import { client } from "@/client";
-import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { useUserFormContext } from "@/features/settings/UserFormController.tsx";
 import { useLocale, useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { SubmitButtonBlock } from "../components/SubmitButton.tsx";
 import { styles } from "../shared-class.ts";
 
 export default function Page() {
-  const router = useRouter();
-  const { idToken: Authorization } = useAuthContext();
   const ctx = useUserFormContext();
-  const locale = useLocale();
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const t = useTranslations("settings");
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value, type, checked, multiple } = e.target as HTMLInputElement;
-    const { options } = e.target as HTMLSelectElement;
-
-    ctx.setFormData((prev) => {
-      if (name === "universityId") {
-        return { ...prev, universityId: value, campusId: "", divisionId: "" };
-      }
-
-      if (multiple) {
-        const selectedValues = Array.from(options)
-          .filter((option) => option.selected)
-          .map((option) => option.value);
-        return { ...prev, [name]: selectedValues };
-      }
-
-      return { ...prev, [name]: type === "checkbox" ? checked : value };
-    });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setStatus("loading");
-
-    try {
-      const body = { ...ctx.formData };
-      const res = await client.users.me.$patch({
-        header: { Authorization },
-        json: body,
-      });
-
-      if (!res.ok) throw new Error(`レスポンスステータス: ${res.status} - ${await res.text()}`);
-
-      setStatus("success");
-      ctx.onSuccess(await res.json());
-    } catch (error) {
-      console.error("ユーザー登録に失敗しました", error);
-      setStatus("error");
-      router.push("/login");
-    }
-  };
+  const locale = useLocale();
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
+    <form onSubmit={ctx.submitPatch} className={styles.form}>
       <label className={styles.label}>
         <span className={styles.labelSpan}>{t("university.univ")}</span>
         <select
           name="universityId"
-          onChange={handleChange}
+          onChange={ctx.handleChange}
           value={ctx.formData.universityId}
           className={styles.inputSelect}
         >
@@ -82,7 +34,7 @@ export default function Page() {
         <select
           name="divisionId"
           value={ctx.formData.divisionId}
-          onChange={handleChange}
+          onChange={ctx.handleChange}
           className={styles.inputSelect}
           disabled={!ctx.divisions.length}
         >
@@ -100,7 +52,7 @@ export default function Page() {
         <select
           name="campusId"
           value={ctx.formData.campusId}
-          onChange={handleChange}
+          onChange={ctx.handleChange}
           className={styles.inputSelect}
           disabled={!ctx.campuses.length}
         >
@@ -115,7 +67,7 @@ export default function Page() {
       {/* Grade Selection */}
       <label className={styles.label}>
         <span className={styles.labelSpan}>{t("university.grade")}</span>
-        <select name="grade" value={ctx.formData.grade} onChange={handleChange} className={styles.inputSelect}>
+        <select name="grade" value={ctx.formData.grade} onChange={ctx.handleChange} className={styles.inputSelect}>
           <option value="B1">{t("university.gradeOptions.B1")}</option>
           <option value="B2">{t("university.gradeOptions.B2")}</option>
           <option value="B3">{t("university.gradeOptions.B3")}</option>
@@ -127,12 +79,7 @@ export default function Page() {
           <option value="D3">{t("university.gradeOptions.D3")}</option>
         </select>
       </label>
-
-      <div className={styles.submitButtonWrapperDiv}>
-        <button type="submit" className={styles.submitButton} disabled={status === "loading"}>
-          {status === "loading" ? t("isRegister") : t("register")}
-        </button>
-      </div>
+      <SubmitButtonBlock />
     </form>
   );
 }
