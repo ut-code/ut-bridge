@@ -197,11 +197,25 @@ const router = new Hono()
       const { user } = c.req.valid("param");
       const rooms = await prisma.room.findMany({
         where: {
-          members: {
-            every: {
-              OR: [{ userId: user }, { userId: meId }],
+          AND: [
+            {
+              members: {
+                every: {
+                  OR: [{ userId: user }, { userId: meId }],
+                },
+              },
             },
-          },
+            {
+              members: {
+                some: { userId: user },
+              },
+            },
+            {
+              members: {
+                some: { userId: meId },
+              },
+            },
+          ],
           NOT: {
             members: {
               some: {
