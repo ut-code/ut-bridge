@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 export default function Avatar({
   src,
   className: classN,
@@ -13,27 +13,25 @@ export default function Avatar({
   className?: string;
 }) {
   let className = "skeleton rounded-full object-cover object-center";
+  const [url, setUrl] = useState(src ?? "/fallback-avatar.svg");
   className += classN;
 
   const imageRef = useRef<HTMLImageElement | null>(null);
 
-  if (!src)
-    return (
-      <div className="rounded-full bg-gray-300" style={{ width: size, height: size }}>
-        No Image
-      </div>
-    );
   return (
     <Image
       ref={imageRef}
       onLoad={() => {
         imageRef.current?.classList.remove("skeleton");
       }}
+      onError={() => {
+        setUrl("/fallback-avatar.svg");
+      }}
       width={size}
       height={size}
       className={className}
       alt={alt ?? "Avatar"}
-      src={src}
+      src={url}
       style={{
         width: size,
         height: size,
