@@ -113,21 +113,6 @@ export default function Page() {
             <p className="my-4 text-2xl">{user.isForeignStudent ? t("users.foreignStudent") : " "}</p>
           </div>
           <div className="flex w-full flex-wrap justify-around sm:w-auto sm:justify-normal sm:gap-10 ">
-            <span className="absolute w-15">
-              {chatButtonState === "creating" ? (
-                <span>
-                  <span className="loading loading-spinner absolute" />
-                  {/* 作成中... */}
-                </span>
-              ) : (
-                chatButtonState === "searching" && (
-                  <span>
-                    <span className="loading loading-spinner " />
-                    {/* 探し中... */}
-                  </span>
-                )
-              )}
-            </span>
             <button
               type="button"
               disabled={chatButtonState !== "idle"}
@@ -162,7 +147,19 @@ export default function Page() {
               }}
               className="btn flex h-10 w-30 items-center justify-center bg-tBlue text-white"
             >
-              {t("users.chatButton")}
+              {chatButtonState === "creating" ? (
+                <span>
+                  <span className="loading loading-spinner" />
+                  {/* 作成中... */}
+                </span>
+              ) : chatButtonState === "searching" ? (
+                <span>
+                  <span className="loading loading-spinner " />
+                  {/* 探し中... */}
+                </span>
+              ) : (
+                t("users.chatButton")
+              )}
             </button>
             <MarkerButton
               if={user.markedAs !== "favorite"}
