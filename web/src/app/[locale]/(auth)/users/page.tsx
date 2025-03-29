@@ -112,70 +112,72 @@ export default function Page() {
             <p className="my-4 text-2xl">{t(`users.${user.gender}`)}</p>
             <p className="my-4 text-2xl">{user.isForeignStudent ? t("users.foreignStudent") : " "}</p>
           </div>
-          <div className="flex w-full flex-wrap justify-around sm:w-auto sm:justify-normal sm:gap-10 ">
-            <button
-              type="button"
-              disabled={chatButtonState !== "idle"}
-              onClick={async () => {
-                setChatButtonState("searching");
-                // find previous room
-                const prevs = await (
-                  await client.chat.rooms.dmwith[":user"].$get({
-                    param: {
-                      user: user.id,
+          {user.markedAs !== "blocked" && (
+            <div className="flex w-full flex-wrap justify-around sm:w-auto sm:justify-normal sm:gap-10 ">
+              <button
+                type="button"
+                disabled={chatButtonState !== "idle"}
+                onClick={async () => {
+                  setChatButtonState("searching");
+                  // find previous room
+                  const prevs = await (
+                    await client.chat.rooms.dmwith[":user"].$get({
+                      param: {
+                        user: user.id,
+                      },
+                      header: { Authorization },
+                    })
+                  ).json();
+                  console.log("previous chat rooms:", prevs);
+                  const prev = prevs[0];
+                  if (prev) {
+                    router.push(`/chat/${prev.id}`);
+                    return;
+                  }
+                  setChatButtonState("creating");
+                  // create new if it doesn't exist
+                  const res = await client.chat.rooms.$post({
+                    json: {
+                      members: [me.id, user.id],
                     },
                     header: { Authorization },
-                  })
-                ).json();
-                console.log("previous chat rooms:", prevs);
-                const prev = prevs[0];
-                if (prev) {
-                  router.push(`/chat/${prev.id}`);
-                  return;
-                }
-                setChatButtonState("creating");
-                // create new if it doesn't exist
-                const res = await client.chat.rooms.$post({
-                  json: {
-                    members: [me.id, user.id],
-                  },
-                  header: { Authorization },
-                });
-                const room = await res.json();
-                setChatButtonState("created");
-                router.push(`/chat/${room.id}`);
-              }}
-              className="btn flex h-10 w-30 items-center justify-center bg-tBlue text-white"
-            >
-              {chatButtonState === "creating" ? (
-                <span>
-                  <span className="loading loading-spinner" />
-                  {/* 作成中... */}
-                </span>
-              ) : chatButtonState === "searching" ? (
-                <span>
-                  <span className="loading loading-spinner " />
-                  {/* 探し中... */}
-                </span>
-              ) : (
-                t("users.chatButton")
-              )}
-            </button>
-            <MarkerButton
-              if={user.markedAs !== "favorite"}
-              class={"btn h-10 w-30 border-tYellow bg-white text-tYellow"}
-              action="favorite"
-            >
-              {t("users.favoriteButton")}
-            </MarkerButton>
-            <MarkerButton
-              if={user.markedAs === "favorite"}
-              class={"btn h-10 w-30 bg-tYellow text-white"}
-              action="unfavorite"
-            >
-              {t("users.removeFavoriteButton")}
-            </MarkerButton>
-          </div>
+                  });
+                  const room = await res.json();
+                  setChatButtonState("created");
+                  router.push(`/chat/${room.id}`);
+                }}
+                className="btn flex h-10 w-30 items-center justify-center bg-tBlue text-white"
+              >
+                {chatButtonState === "creating" ? (
+                  <span>
+                    <span className="loading loading-spinner" />
+                    {/* 作成中... */}
+                  </span>
+                ) : chatButtonState === "searching" ? (
+                  <span>
+                    <span className="loading loading-spinner " />
+                    {/* 探し中... */}
+                  </span>
+                ) : (
+                  t("users.chatButton")
+                )}
+              </button>
+              <MarkerButton
+                if={user.markedAs !== "favorite"}
+                class={"btn h-10 w-30 border-tYellow bg-white text-tYellow"}
+                action="favorite"
+              >
+                {t("users.favoriteButton")}
+              </MarkerButton>
+              <MarkerButton
+                if={user.markedAs === "favorite"}
+                class={"btn h-10 w-30 bg-tYellow text-white"}
+                action="unfavorite"
+              >
+                {t("users.removeFavoriteButton")}
+              </MarkerButton>
+            </div>
+          )}
         </div>
       </div>
       <div className="sm:mx-24">
