@@ -59,6 +59,14 @@ const route = new Hono()
               }
             : {}),
         },
+        include: {
+          fluentLanguages: {
+            select: { language: true },
+          },
+          learningLanguages: {
+            select: { language: true },
+          },
+        },
       });
 
       return c.json(updatedUser);

@@ -19,27 +19,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [idToken, setIDToken] = useState<string | undefined>(undefined);
   const [guid, setGUID] = useState<string | undefined>(undefined);
   const [displayName, setDisplayName] = useState<string | undefined>(undefined);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const currentUser = auth.currentUser;
-    if (currentUser) {
-      setDisplayName(currentUser.displayName ?? undefined);
-      setGUID(currentUser.uid);
-      currentUser.getIdToken(true).then((id) => {
-        setIDToken(id);
-      });
-    } else {
-      router.push("/");
-    }
-
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         setGUID(user.uid);
         setDisplayName(user.displayName ?? undefined);
-        user.getIdToken().then((idToken) => {
-          setIDToken(idToken);
-        });
+        const token = await user.getIdToken();
+        setIDToken(token);
+      } else {
+        router.push("/");
       }
+      setLoading(false);
     });
 
     return () => {
@@ -47,10 +39,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
   }, [router]);
 
-  // ユーザーが取得されるまでローディングを表示
-  // TODO: 無限にスタックすることはない？要検証
-  if (guid === undefined) return <Loading stage="guid" />;
-  if (idToken === undefined) return <Loading stage="idToken" />;
+  if (loading || guid === undefined || idToken === undefined) {
+    return <Loading stage="auth" />;
+  }
 
   return <AuthContext.Provider value={{ idToken, guid, displayName }}>{children}</AuthContext.Provider>;
 }

@@ -145,6 +145,20 @@ const router = new Hono()
             userId: requester,
           },
         },
+        NOT: {
+          members: {
+            some: {
+              user: {
+                markedAs: {
+                  some: {
+                    actorId: requester,
+                    kind: "blocked",
+                  },
+                },
+              },
+            },
+          },
+        },
       },
       select: {
         id: true,
@@ -183,9 +197,37 @@ const router = new Hono()
       const { user } = c.req.valid("param");
       const rooms = await prisma.room.findMany({
         where: {
-          members: {
-            every: {
-              OR: [{ userId: user }, { userId: meId }],
+          AND: [
+            {
+              members: {
+                every: {
+                  OR: [{ userId: user }, { userId: meId }],
+                },
+              },
+            },
+            {
+              members: {
+                some: { userId: user },
+              },
+            },
+            {
+              members: {
+                some: { userId: meId },
+              },
+            },
+          ],
+          NOT: {
+            members: {
+              some: {
+                user: {
+                  markedAs: {
+                    some: {
+                      actorId: user,
+                      kind: "blocked",
+                    },
+                  },
+                },
+              },
             },
           },
         },
@@ -214,6 +256,20 @@ const router = new Hono()
           members: {
             some: {
               userId: requester,
+            },
+          },
+          NOT: {
+            members: {
+              some: {
+                user: {
+                  markedAs: {
+                    some: {
+                      actorId: requester,
+                      kind: "blocked",
+                    },
+                  },
+                },
+              },
             },
           },
         },
