@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 export default function Avatar({
   src,
   className: classN,
@@ -17,6 +17,12 @@ export default function Avatar({
   className += classN;
 
   const imageRef = useRef<HTMLImageElement | null>(null);
+
+  useEffect(() => {
+    if (src) {
+      setUrl(src);
+    }
+  }, [src]);
 
   return (
     <Image
