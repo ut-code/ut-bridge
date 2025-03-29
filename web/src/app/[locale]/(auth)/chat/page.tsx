@@ -1,12 +1,12 @@
 "use client";
 
 import { client } from "@/client";
+import Avatar from "@/components/Avatar";
 import Loading from "@/components/Loading";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { useUserContext } from "@/features/user/userProvider";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function Page() {
@@ -86,13 +86,7 @@ function Room({ room }: { room: RoomPreview }) {
     <div className="border-gray-300 border-b">
       <Link href={`/chat/${room.id}`} className="flex h-full w-full items-center p-5">
         <div className="flex items-center justify-center">
-          <Image
-            alt={firstMember?.name || "User"}
-            className="rounded-full object-cover"
-            src={firstMember?.imageUrl || "/default-profile.png"}
-            width={40}
-            height={40}
-          />
+          <Avatar alt={firstMember?.name || "User"} src={firstMember?.imageUrl} size={40} />
         </div>
         <div className=" list-col-grow pl-4">
           <div>{firstMember?.name || "Unknown User"}</div>

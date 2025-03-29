@@ -86,7 +86,13 @@ export default function Page() {
           </select>
         </label>
         <div className={styles.label}>
-          <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" id="image-upload" />
+          <input
+            type="file"
+            accept=".png,.jpg,.jpeg,.webp,.avif,.heif"
+            onChange={handleImageChange}
+            className="hidden"
+            id="image-upload"
+          />
           <span className={styles.labelSpan}>{t("basic.photo")}</span>
           <label htmlFor="image-upload" className={styles.imageUploadButton}>
             {t("basic.photoUpload")}

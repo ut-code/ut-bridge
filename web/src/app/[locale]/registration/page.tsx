@@ -81,7 +81,7 @@ export default function Page() {
                 <span className="mb-5 sm:mb-0">{t("settings.basic.photo")}</span>
                 <input
                   type="file"
-                  accept="image/*"
+                  accept=".png,.jpg,.jpeg,.webp,.avif,.heif"
                   onChange={ctx.handleImageChange}
                   className="hidden"
                   id="image-upload"
