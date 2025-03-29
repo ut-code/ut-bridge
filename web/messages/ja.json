@@ -93,6 +93,8 @@
     "language": {
       "title": "言語情報",
       "isForeign": "留学生ですか？",
+      "localStudent": "日本人 (現地学生)",
+      "foreignStudent": "留学生",
       "motherLanguage": "母国語",
       "fluentLanguage": "流暢に話せる言語",
       "learningLanguage": "学びたい言語",
