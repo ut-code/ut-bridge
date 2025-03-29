@@ -21,10 +21,10 @@ export default function Header({ title }: { title: string }) {
 
   return (
     <header className="flex h-16 w-full items-center bg-tBlue">
-      <Link href="/community" passHref className="px-4">
+      <Link href={me ? "/community" : "/"} passHref className="px-4">
         <AppIcon width={36} height={36} />
       </Link>
-      <Link href="/community" className="hidden cursor-pointer px-4 text-2xl text-white sm:block">
+      <Link href={me ? "/community" : "/"} className="hidden cursor-pointer px-4 text-2xl text-white sm:block">
         UT-Bridge
       </Link>
       {pathname === "/login" || pathname === "/registration" || pathname === "" ? (
