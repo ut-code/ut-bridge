@@ -40,7 +40,9 @@ export default function Avatar({
       src={url}
       style={{
         width: size,
-        height: size,
+        maxWidth: "100%",
+        height: "auto",
+        maxHeight: size,
       }}
     />
   );
