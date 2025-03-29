@@ -83,15 +83,18 @@ export default function Page() {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-      <label className={styles.label}>
-        <span className={styles.labelSpan}>{t("language.isForeign")}</span>
-        <input
-          type="checkbox"
+      <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
+        {t("language.isForeign")}
+        <select
           name="isForeignStudent"
-          checked={formData.isForeignStudent}
-          onChange={handleChange}
-          className={styles.inputCheckbox}
-        />
+          value={ctx.formData.isForeignStudent ? "true" : "false"}
+          onChange={ctx.handleChange}
+          className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
+          required
+        >
+          <option value="false">{t("language.localStudent")}</option>
+          <option value="true">{t("language.foreignStudent")}</option>
+        </select>
       </label>
 
       <label className={styles.label}>
