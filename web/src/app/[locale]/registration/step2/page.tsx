@@ -46,6 +46,7 @@ export default function Page() {
     setFormStatus("loading");
     try {
       if (!fbUser) throw new Error("Oops! you are not logged in!");
+      console.log("🤩", ctx.formData);
       const body = CreateUserSchema.safeParse(ctx.formData);
       if (!body.success) {
         setFormStatus("error");
@@ -85,16 +86,18 @@ export default function Page() {
           <div>
             <div className="px-15 sm:my-10">
               <h2 className="font-bold text-xl">{t("settings.language.title")}</h2>
-              <label className="mt-5 flex flex-row justify-between sm:relative sm:my-4 sm:block ">
-                <span className="relative">{t("settings.language.isForeign")}</span>
-
-                <input
-                  type="checkbox"
+              <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
+                {t("settings.language.isForeign")}
+                <select
                   name="isForeignStudent"
-                  checked={ctx.formData.isForeignStudent}
+                  value={ctx.formData.isForeignStudent ? "true" : "false"}
                   onChange={ctx.handleChange}
-                  className="checkbox checkbox-lg bg-white sm:absolute sm:left-[50%]"
-                />
+                  className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
+                  required
+                >
+                  <option value="false">{t("settings.language.localStudent")}</option>
+                  <option value="true">{t("settings.language.foreignStudent")}</option>
+                </select>
               </label>
 
               <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
@@ -116,6 +119,7 @@ export default function Page() {
                   ))}
                 </select>
               </label>
+
               <div className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
                 <p className={`flex-grow ${fieldErrors.learningLanguages ? "text-error" : ""}`}>
                   {t("settings.language.fluentLanguage")} {fieldErrors.fluentLanguages}

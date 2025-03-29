@@ -252,6 +252,12 @@ export const UserFormProvider = ({
           divisionId: "",
         };
       }
+      if (name === "isForeignStudent") {
+        return {
+          ...prev,
+          isForeignStudent: value === "true",
+        };
+      }
       if (multiple) {
         const selectedValues = Array.from(options)
           .filter((option) => option.selected)

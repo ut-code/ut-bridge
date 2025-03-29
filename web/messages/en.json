@@ -90,9 +90,12 @@
         "D3": "D3"
       }
     },
+
     "language": {
       "title": "Language",
       "isForeign": "Are you an international student?",
+      "localStudent": "Local Student",
+      "foreignStudent": "Foreign Student",
       "motherLanguage": "Native Language",
       "fluentLanguage": "Fluent Languages",
       "learningLanguage": "Learning Language",
