@@ -1,6 +1,7 @@
 "use client";
 
 import Avatar from "@/components/Avatar";
+import { STEP_1_DATA_SESSION_STORAGE_KEY } from "@/consts";
 import { useUserFormContext } from "@/features/settings/UserFormController";
 import { Part1RegistrationSchema } from "common/zod/schema";
 import { useTranslations } from "next-intl";
@@ -27,7 +28,7 @@ export default function Page() {
             const result = Part1RegistrationSchema.safeParse(ctx.formData);
             if (result.success) {
               await ctx.uploadImage();
-              sessionStorage.setItem("utBridgeStep1Data", JSON.stringify(ctx.formData));
+              sessionStorage.setItem(STEP_1_DATA_SESSION_STORAGE_KEY, JSON.stringify(ctx.formData));
               router.push("./registration/step2");
               setIsSubmitting(false);
             } else {
