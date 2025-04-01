@@ -33,6 +33,26 @@ function MessageInput({ room }: { room: string }) {
   const [input, setInput] = useState<string>("");
   const [submitting, setSubmitting] = useState<boolean>(false);
   const isSendButtonDisabled = submitting || input === "";
+
+  const handleKeyDown = async (ev: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if ((ev.ctrlKey || ev.metaKey) && ev.key === "Enter") {
+      ev.preventDefault();
+      if (submitting) return;
+      setSubmitting(true);
+      setInput("");
+      await client.chat.rooms[":room"].messages.$post({
+        header: { Authorization },
+        param: {
+          room: room,
+        },
+        json: {
+          content: input,
+          isPhoto: false,
+        },
+      });
+      setSubmitting(false);
+    }
+  };
   return (
     <div className="">
       <form
@@ -63,6 +83,7 @@ function MessageInput({ room }: { room: string }) {
             onChange={(ev) => {
               setInput(ev.target.value);
             }}
+            onKeyDown={handleKeyDown}
           />
           <button type="submit" className="" disabled={isSendButtonDisabled}>
             <AiOutlineSend size={30} color={isSendButtonDisabled ? "gray" : "#0b8bee"} />
