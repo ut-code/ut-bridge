@@ -1,7 +1,7 @@
 "use client";
 
 import Avatar from "@/components/Avatar";
-import { STEP_1_DATA_SESSION_STORAGE_KEY } from "@/consts";
+import { IMAGE_PREVIEW_URL_SESSION_STORAGE_KEY, STEP_1_DATA_SESSION_STORAGE_KEY } from "@/consts";
 import { useUserFormContext } from "@/features/settings/UserFormController";
 import { Part1RegistrationSchema } from "common/zod/schema";
 import { useTranslations } from "next-intl";
@@ -27,8 +27,11 @@ export default function Page() {
             setIsSubmitting(true);
             const result = Part1RegistrationSchema.safeParse(ctx.formData);
             if (result.success) {
-              await ctx.uploadImage();
+              if (ctx.formData.imageUrl === undefined) {
+                await ctx.uploadImage();
+              }
               sessionStorage.setItem(STEP_1_DATA_SESSION_STORAGE_KEY, JSON.stringify(ctx.formData));
+              sessionStorage.setItem(IMAGE_PREVIEW_URL_SESSION_STORAGE_KEY, ctx.imagePreviewURL ?? "");
               router.push("./registration/step2");
               setIsSubmitting(false);
             } else {

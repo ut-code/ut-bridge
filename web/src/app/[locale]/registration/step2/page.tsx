@@ -1,7 +1,7 @@
 "use client";
 
 import { client } from "@/client";
-import { STEP_1_DATA_SESSION_STORAGE_KEY } from "@/consts";
+import { IMAGE_PREVIEW_URL_SESSION_STORAGE_KEY, STEP_1_DATA_SESSION_STORAGE_KEY } from "@/consts";
 import { auth } from "@/features/auth/config";
 import { useUserFormContext } from "@/features/settings/UserFormController";
 import { Link, useRouter } from "@/i18n/navigation";
@@ -26,10 +26,12 @@ export default function Page() {
 
   useEffect(() => {
     const savedData = sessionStorage.getItem(STEP_1_DATA_SESSION_STORAGE_KEY);
+    const savedImageURL = sessionStorage.getItem(IMAGE_PREVIEW_URL_SESSION_STORAGE_KEY);
     if (savedData) {
       ctx.setFormData(JSON.parse(savedData));
+      ctx.setImagePreviewURL(savedImageURL);
     }
-  }, [ctx.setFormData]);
+  }, [ctx.setFormData, ctx.setImagePreviewURL]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
