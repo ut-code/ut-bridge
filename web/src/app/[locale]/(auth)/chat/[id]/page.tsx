@@ -185,7 +185,14 @@ function MessageList({
             <div className="chat-header">
               <time className="text-xs opacity-50">{m.createdAt.toLocaleString()}</time>
             </div>
-            <div className={`chat-bubble ${m.senderId === me.id ? "bg-blue-200" : "chat-start"}`}>{m.content.split("\n").map((line, index) => (<React.Fragment key={index}>{line}<br /></React.Fragment>))}</div>
+            <div className={`chat-bubble ${m.senderId === me.id ? "bg-blue-200" : "chat-start"}`}>
+              {m.content.split("\n").map((line, index) => (
+                <React.Fragment key={index}>
+                  {line}
+                  <br />
+                </React.Fragment>
+              ))}
+            </div>
             {/* <div className="chat-footer opacity-50">Seen</div> */}
           </div>
         </li>
