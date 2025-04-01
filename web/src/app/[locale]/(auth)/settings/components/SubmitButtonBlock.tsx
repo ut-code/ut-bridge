@@ -1,14 +1,11 @@
+import { useUserFormContext } from "@/features/settings/UserFormController.tsx";
 import clsx from "clsx";
 import { useTranslations } from "next-intl";
 import { styles } from "../shared-class.ts";
-import type { Status } from "./SubmitButton.tsx";
 
-export function SubmitButtonBlock({
-  status,
-}: {
-  status: Status;
-}) {
+export function SubmitButtonBlock() {
   const t = useTranslations();
+  const status = useUserFormContext().status;
   return (
     <div className={styles.submitButtonWrapperDiv}>
       <button

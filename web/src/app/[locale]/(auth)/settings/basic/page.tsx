@@ -46,7 +46,7 @@ export default function Page() {
         </label>
       </div>
       <Avatar src={ctx.imagePreviewURL} size={160} />
-      <SubmitButtonBlock />
+      <SubmitButtonBlock status={ctx.status} />
     </form>
   );
 }

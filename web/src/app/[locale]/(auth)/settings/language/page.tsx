@@ -78,7 +78,7 @@ export default function Page() {
           ))}
         </div>
       </div>
-      <SubmitButtonBlock />
+      <SubmitButtonBlock status={ctx.status} />
     </form>
   );
 }

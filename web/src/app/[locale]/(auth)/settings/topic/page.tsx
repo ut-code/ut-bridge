@@ -37,7 +37,7 @@ export default function Page() {
         />
       </label>
 
-      <SubmitButtonBlock />
+      <SubmitButtonBlock status={ctx.status} />
     </form>
   );
 }

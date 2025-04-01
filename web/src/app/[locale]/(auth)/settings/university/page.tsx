@@ -79,7 +79,7 @@ export default function Page() {
           <option value="D3">{t("university.gradeOptions.D3")}</option>
         </select>
       </label>
-      <SubmitButtonBlock />
+      <SubmitButtonBlock status={ctx.status} />
     </form>
   );
 }
