@@ -1,6 +1,7 @@
 "use client";
 
 import { client } from "@/client";
+import Avatar from "@/components/Avatar";
 import Loading from "@/components/Loading";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { handlers } from "@/features/chat/state";
@@ -99,8 +100,12 @@ function Load({ room }: { room: string }) {
         <div className="mr-[33px] w-full text-center text-xl">
           {m.data.members
             .filter((member) => member.user.id !== me.id)
-            .map((member) => member.user.name)
-            .join(", ")}
+            .map((member) => (
+              <div key={member.user.id} className=" ml-2 flex items-center gap-2">
+                <Avatar alt={member.user.name || "User"} src={member.user.imageUrl} size={40} />
+                <div>{member.user.name}</div>
+              </div>
+            ))}
         </div>
       </div>
       <MessageList
@@ -171,7 +176,7 @@ function MessageList({
   }
 
   return (
-    <ul className="m-3 mt-[44px] mb-[76px] grow overflow-y-scroll sm:pb-0" id="scroll-bottom">
+    <ul className="mx-3 mt-[56px] mb-[76px] grow overflow-y-scroll sm:pb-0" id="scroll-bottom">
       {messages.map((m) => (
         // TODO: handle pictures
         <li key={m.id}>
