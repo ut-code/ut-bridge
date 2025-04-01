@@ -40,13 +40,13 @@ export default function Page() {
     let errors = {};
     if (!ctx.formData.fluentLanguageIds?.length) {
       errors = {
-        fluentLanguages: `(${t("required")})`,
+        fluentLanguages: `(${t("settings.required")})`,
       };
     }
     if (!ctx.formData.learningLanguageIds?.length) {
       errors = {
         ...errors,
-        learningLanguages: `(${t("required")})`,
+        learningLanguages: `(${t("settings.required")})`,
       };
     }
     if (Object.keys(errors).length > 0) {
