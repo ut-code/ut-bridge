@@ -1,13 +1,14 @@
 "use client";
 
 import { client } from "@/client";
+import { STEP_1_DATA_SESSION_STORAGE_KEY } from "@/consts";
 import { auth } from "@/features/auth/config";
 import { useUserFormContext } from "@/features/settings/UserFormController";
 import { Link, useRouter } from "@/i18n/navigation";
 import { CreateUserSchema, HOBBY_MAX_LENGTH, INTRO_MAX_LENGTH } from "common/zod/schema";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Page() {
   const t = useTranslations();
@@ -22,6 +23,13 @@ export default function Page() {
     fluentLanguages?: string;
     learningLanguages?: string;
   }>({});
+
+  useEffect(() => {
+    const savedData = sessionStorage.getItem(STEP_1_DATA_SESSION_STORAGE_KEY);
+    if (savedData) {
+      ctx.setFormData(JSON.parse(savedData));
+    }
+  }, [ctx.setFormData]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
