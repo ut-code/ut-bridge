@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { useTranslations } from "next-intl";
 import { styles } from "../shared-class.ts";
 
-export function SubmitButtonBlock({ status }: { status: Status }) {
+export function SubmitButton({ status }: { status: Status }) {
   const t = useTranslations("settings");
   return (
     <div className={styles.submitButtonWrapperDiv}>
@@ -21,8 +21,8 @@ export function SubmitButtonBlock({ status }: { status: Status }) {
           : status === "processing"
             ? t("isRegister")
             : status === "success"
-              ? t("settings.success")
-              : t("settings.failed")}
+              ? t("success")
+              : t("failed")}
       </button>
     </div>
   );
