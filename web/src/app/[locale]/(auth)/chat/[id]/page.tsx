@@ -184,7 +184,14 @@ function MessageList({
             <div className="chat-header">
               <time className="text-xs opacity-50">{m.createdAt.toLocaleString()}</time>
             </div>
-            <div className={`chat-bubble ${m.senderId === me.id ? "bg-blue-200" : "chat-start"}`}>{m.content}</div>
+            <div className={`chat-bubble ${m.senderId === me.id ? "bg-blue-200" : "chat-start"}`}>
+              {m.content.split("\n").map((line, index) => (
+                <div key={`${m.id}-${index}`}>
+                  {line}
+                  <br />
+                </div>
+              ))}
+            </div>
             {/* <div className="chat-footer opacity-50">Seen</div> */}
           </div>
         </li>
