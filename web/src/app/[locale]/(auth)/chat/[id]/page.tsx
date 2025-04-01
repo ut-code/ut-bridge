@@ -187,7 +187,7 @@ function MessageList({
             </div>
             <div className={`chat-bubble ${m.senderId === me.id ? "bg-blue-200" : "chat-start"}`}>
               {m.content.split("\n").map((line, index) => (
-                <React.Fragment key={index}>
+                <React.Fragment key={`${m.id}-${index}`}>
                   {line}
                   <br />
                 </React.Fragment>
