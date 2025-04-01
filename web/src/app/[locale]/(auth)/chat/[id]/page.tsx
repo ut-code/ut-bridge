@@ -93,7 +93,7 @@ function Load({ room }: { room: string }) {
   }
   return (
     <>
-      <div className="fixed flex w-full items-center bg-stone-200 py-2">
+      <div className="fixed z-10 flex w-full items-center bg-stone-200 py-2">
         <Link href={"/chat"} className="mx-2">
           <AiOutlineLeft size={25} />
         </Link>
