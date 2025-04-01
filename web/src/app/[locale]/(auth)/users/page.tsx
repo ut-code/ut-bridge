@@ -120,14 +120,14 @@ export default function Page() {
                 onClick={async () => {
                   setChatButtonState("searching");
                   // find previous room
-                  const prevs = await (
-                    await client.chat.rooms.dmwith[":user"].$get({
-                      param: {
-                        user: user.id,
-                      },
-                      header: { Authorization },
-                    })
-                  ).json();
+                  const resp = await client.chat.rooms.dmwith[":user"].$get({
+                    param: {
+                      user: user.id,
+                    },
+                    header: { Authorization },
+                  });
+                  if (!resp.ok) throw new Error("failed to find room");
+                  const prevs = await resp.json();
                   console.log("previous chat rooms:", prevs);
                   const prev = prevs[0];
                   if (prev) {
@@ -142,6 +142,7 @@ export default function Page() {
                     },
                     header: { Authorization },
                   });
+                  if (!res.ok) throw new Error(`res is not ok; text: ${await res.text()}`);
                   const room = await res.json();
                   setChatButtonState("created");
                   router.push(`/chat/${room.id}`);

@@ -75,6 +75,15 @@ const route = new Hono()
 
   .delete("/", zValidator("header", z.object({ Authorization: z.string() })), async (c) => {
     const userId = await getUserID(c);
+    await prisma.room.deleteMany({
+      where: {
+        members: {
+          some: {
+            userId,
+          },
+        },
+      },
+    });
     const deletedUser = await prisma.user.delete({
       where: { id: userId },
     });
