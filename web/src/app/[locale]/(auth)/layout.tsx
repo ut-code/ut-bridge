@@ -14,7 +14,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <ChatNotificationProvider>
           <Header />
           <ToastProvider>
-            <div className="h-fit w-full pb-16">{children}</div>
+            <div className="w-full pb-16">{children}</div>
             <Footer />
           </ToastProvider>
         </ChatNotificationProvider>

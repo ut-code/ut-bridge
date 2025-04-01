@@ -10,7 +10,7 @@ export default function Login() {
 
   return (
     <>
-      <div className="flex justify-center sm:items-center">
+      <div className="flex flex-grow justify-center sm:items-center">
         <div className="p-6 text-center sm:rounded-lg sm:border sm:shadow-md">
           <p className="mt-10 sm:hidden">UT-Bridge</p>
           <p className="mt-10 mb-20 font-bold text-3xl">{t("title")}</p>

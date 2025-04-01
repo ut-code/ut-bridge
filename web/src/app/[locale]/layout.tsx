@@ -25,7 +25,7 @@ export default async function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>ut-bridge</title>
       </head>
-      <body className="h-screen overflow-y-auto">
+      <body className="flex h-screen flex-col overflow-y-auto">
         <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
       </body>
     </html>
