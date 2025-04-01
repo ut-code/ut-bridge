@@ -10,6 +10,7 @@ import { Link } from "@/i18n/navigation";
 import { assert } from "@/lib";
 import { use } from "@/react/useData";
 import { useParams } from "next/navigation";
+import React from "react";
 import { useEffect, useState } from "react";
 import { AiOutlineLeft, AiOutlineSend } from "react-icons/ai";
 
@@ -184,7 +185,7 @@ function MessageList({
             <div className="chat-header">
               <time className="text-xs opacity-50">{m.createdAt.toLocaleString()}</time>
             </div>
-            <div className={`chat-bubble ${m.senderId === me.id ? "bg-blue-200" : "chat-start"}`}>{m.content}</div>
+            <div className={`chat-bubble ${m.senderId === me.id ? "bg-blue-200" : "chat-start"}`}>{m.content.split("\n").map((line, index) => (<React.Fragment key={index}>{line}<br /></React.Fragment>))}</div>
             {/* <div className="chat-footer opacity-50">Seen</div> */}
           </div>
         </li>
