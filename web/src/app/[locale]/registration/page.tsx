@@ -27,6 +27,7 @@ export default function Page() {
             const result = Part1RegistrationSchema.safeParse(ctx.formData);
             if (result.success) {
               await ctx.uploadImage();
+              sessionStorage.setItem("utBridgeStep1Data", JSON.stringify(ctx.formData));
               router.push("./registration/step2");
               setIsSubmitting(false);
             } else {
