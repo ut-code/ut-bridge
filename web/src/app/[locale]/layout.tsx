@@ -1,6 +1,5 @@
 import { routing } from "@/i18n/routing";
 import "../../tailwind.css";
-import { ToastProvider } from "@/features/toast/ToastProvider";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -27,9 +26,7 @@ export default async function RootLayout({
         <title>ut-bridge</title>
       </head>
       <body className="h-full">
-        <ToastProvider>
-          <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
-        </ToastProvider>
+        <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
       </body>
     </html>
   );

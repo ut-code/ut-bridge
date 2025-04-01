@@ -3,7 +3,6 @@ import clsx from "clsx";
 import { useTranslations } from "next-intl";
 import { styles } from "../shared-class.ts";
 
-export type Status = "ready" | "error" | "success" | "processing";
 export function SubmitButtonBlock() {
   const t = useTranslations("settings");
   const ctx = useUserFormContext();
@@ -18,7 +17,7 @@ export function SubmitButtonBlock() {
         })}
         disabled={ctx.status !== "ready"}
       >
-        {ctx.status === "ready" ? t("isRegister") : t("register")}
+        {ctx.status === "ready" ? t("register") : t("isRegister")}
       </button>
     </div>
   );

@@ -1,5 +1,4 @@
 "use client";
-import type { Status } from "@/app/[locale]/(auth)/settings/components/SubmitButton.tsx";
 import { client } from "@/client";
 import Loading from "@/components/Loading.tsx";
 import { formatCardUser } from "@/features/format";
@@ -12,6 +11,8 @@ import { useRef } from "react";
 import { useAuthContext } from "../auth/providers/AuthProvider.tsx";
 import { upload } from "../image/ImageUpload.tsx";
 import { useToast } from "../toast/ToastProvider.tsx";
+
+export type Status = "ready" | "error" | "success" | "processing";
 
 type UserFormContextType = {
   loadingUniversitySpecificData: boolean;
@@ -134,8 +135,8 @@ export const UserFormProvider = ({
 
   // 学部 & キャンパス データを取得
   useEffect(() => {
-    console.log(`fetching university-specific data for university ${formData.universityId} ...`);
     if (!formData.universityId) return;
+    console.log(`fetching university-specific data for university ${formData.universityId} ...`);
 
     const fetchCampusAndDivisions = async () => {
       setLoadingUniversitySpecificData(true);
@@ -153,13 +154,12 @@ export const UserFormProvider = ({
         setDivisions(await divisionRes.json());
       } catch (error) {
         console.error(error);
-        router.push("/login"); // ???
       }
       setLoadingUniversitySpecificData(false);
     };
 
     fetchCampusAndDivisions();
-  }, [formData.universityId, router]);
+  }, [formData.universityId]);
 
   // ユーザー情報を取得
   useEffect(() => {

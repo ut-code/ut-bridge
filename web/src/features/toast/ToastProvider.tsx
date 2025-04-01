@@ -24,7 +24,7 @@ export function useToast() {
   return ctx;
 }
 
-const DEFAULT_TIMEOUT = 2000;
+const DEFAULT_TIMEOUT = 3000;
 const ALIGN = "toast-top toast-end";
 
 const ColorToClass = {
@@ -42,7 +42,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     <ToastContext.Provider
       value={{
         push(toast: ToastItem) {
-          const className = `alert ${ColorToClass[toast.color]} ${ALIGN}"}`;
+          const className = `alert ${ColorToClass[toast.color]}`;
           const id = Math.random();
           setToasts((prev) => [
             ...prev,
@@ -58,7 +58,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         },
       }}
     >
-      <ul className="toast">
+      <ul className={`toast ${ALIGN}`}>
         {toasts.map((toast) => (
           <li key={toast.id} className={toast.className}>
             {toast.item.message}
