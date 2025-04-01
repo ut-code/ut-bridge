@@ -1,6 +1,5 @@
 "use client";
 import { AppIcon } from "@/components/AppIcon";
-import Header from "@/components/Header";
 import GoogleLoginButton from "@/features/auth/components/GoogleLoginButton";
 import { useGoogleSignIn } from "@/features/auth/functions/login";
 import { useTranslations } from "next-intl";
@@ -11,7 +10,6 @@ export default function Login() {
 
   return (
     <>
-      <Header title={t("header")} />
       <div className="flex h-screen justify-center sm:items-center">
         <div className="p-6 text-center sm:rounded-lg sm:border sm:shadow-md">
           <p className="mt-10 sm:hidden">UT-Bridge</p>
