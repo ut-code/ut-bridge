@@ -21,6 +21,7 @@ type UserFormContextType = {
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void;
   handleImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   imagePreviewURL: string | null;
+  setImagePreviewURL: React.Dispatch<React.SetStateAction<string | null>>;
   uploadImage: () => Promise<void>;
   onSuccess: (data: Partial<MYDATA>) => void;
   onFailure: () => void;
@@ -344,6 +345,7 @@ export const UserFormProvider = ({
         handleChange,
         handleImageChange,
         imagePreviewURL,
+        setImagePreviewURL,
         uploadImage,
         loadingUniversitySpecificData,
         onSuccess,
