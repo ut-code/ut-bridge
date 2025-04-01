@@ -4,12 +4,15 @@ import Loading from "@/components/Loading.tsx";
 import { formatCardUser } from "@/features/format";
 import { type MYDATA, useUserContext } from "@/features/user/userProvider";
 import type { CreateUser, FlatCardUser } from "common/zod/schema";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { useRef } from "react";
 import { useAuthContext } from "../auth/providers/AuthProvider.tsx";
 import { upload } from "../image/ImageUpload.tsx";
+import { useToast } from "../toast/ToastProvider.tsx";
+
+export type Status = "ready" | "error" | "success" | "processing";
 
 type UserFormContextType = {
   loadingUniversitySpecificData: boolean;
@@ -20,6 +23,9 @@ type UserFormContextType = {
   imagePreviewURL: string | null;
   uploadImage: () => Promise<void>;
   onSuccess: (data: Partial<MYDATA>) => void;
+  onFailure: () => void;
+  submitPatch: (e: React.FormEvent) => void;
+  status: Status;
   universities: { id: string; jaName: string; enName: string }[];
   campuses: { id: string; jaName: string; enName: string }[];
   divisions: { id: string; jaName: string; enName: string }[];
@@ -47,10 +53,13 @@ export const UserFormProvider = ({
   children: React.ReactNode;
   loadPreviousData: boolean;
 }) => {
+  const t = useTranslations();
+  const toast = useToast();
   const router = useRouter();
   const locale = useLocale();
   let me: MYDATA | null = null;
   const setMyData = useRef<((data: Partial<MYDATA>) => void) | null>(null);
+  const [status, setStatus] = useState<Status>("ready");
   // HELP: how do I optionally use another context? loadPreviousData will never change
   if (loadPreviousData) {
     const usercx = useUserContext();
@@ -98,10 +107,36 @@ export const UserFormProvider = ({
     fetchData();
   }, []);
 
+  const submitPatch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("processing");
+    uploadImage();
+
+    try {
+      const res = await client.users.me.$patch({
+        header: { Authorization },
+        json: formData,
+      });
+      if (!res.ok) {
+        throw new Error(`レスポンスステータス: ${res.status}, response: ${await res.text()}`);
+      }
+      setStatus("success");
+      onSuccess(await res.json());
+    } catch (error) {
+      console.error("ユーザー情報の更新に失敗しました", error);
+      setStatus("error");
+      onFailure();
+    } finally {
+      setTimeout(() => {
+        setStatus("ready");
+      }, 1000);
+    }
+  };
+
   // 学部 & キャンパス データを取得
   useEffect(() => {
-    console.log(`fetching university-specific data for university ${formData.universityId} ...`);
     if (!formData.universityId) return;
+    console.log(`fetching university-specific data for university ${formData.universityId} ...`);
 
     const fetchCampusAndDivisions = async () => {
       setLoadingUniversitySpecificData(true);
@@ -119,13 +154,12 @@ export const UserFormProvider = ({
         setDivisions(await divisionRes.json());
       } catch (error) {
         console.error(error);
-        router.push("/login"); // ???
       }
       setLoadingUniversitySpecificData(false);
     };
 
     fetchCampusAndDivisions();
-  }, [formData.universityId, router]);
+  }, [formData.universityId]);
 
   // ユーザー情報を取得
   useEffect(() => {
@@ -212,11 +246,23 @@ export const UserFormProvider = ({
     refetchBlockedUsers();
   }, [refetchFavoriteUsers, refetchBlockedUsers]);
 
-  const onSuccess = useCallback((data: Partial<MYDATA>) => {
-    console.log("TODO: make it into the UI");
-    console.log("SUCCESSFULLY SUBMITTED!!!");
-    setMyData.current?.(data);
-  }, []);
+  const onSuccess = useCallback(
+    (data: Partial<MYDATA>) => {
+      console.log("ok 1");
+      toast.push({
+        color: "success",
+        message: t("settings.success"),
+      });
+      setMyData.current?.(data);
+    },
+    [toast, t],
+  );
+  const onFailure = useCallback(() => {
+    toast.push({
+      color: "error",
+      message: t("settings.failure"),
+    });
+  }, [toast, t]);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -301,6 +347,9 @@ export const UserFormProvider = ({
         uploadImage,
         loadingUniversitySpecificData,
         onSuccess,
+        onFailure,
+        status,
+        submitPatch,
         universities,
         campuses,
         divisions,
