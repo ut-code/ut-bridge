@@ -9,7 +9,7 @@ export default function Page() {
     <div>
       <h1 className={styles.usersH1}>{t("settings.other.contact.title")}</h1>
       <iframe
-        src="https://docs.google.com/forms/d/e/1FAIpQLScioyR0gN9-UUgsPaePP-EO8oVryRYmdOqqb2aULkc2RZmUkA/viewform?embedded=true"
+        src="https://docs.google.com/forms/d/e/1FAIpQLSf46l42X6ywpoIfR5Y7P5Fu6tFvnlTBP1kfcOOGEqzuu2Nx3A/viewform?usp=header"
         width="640"
         height="1500"
         className="max-w-full"
