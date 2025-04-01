@@ -3,17 +3,17 @@
 import { client } from "@/client";
 import { IMAGE_PREVIEW_URL_SESSION_STORAGE_KEY, STEP_1_DATA_SESSION_STORAGE_KEY } from "@/consts";
 import { auth } from "@/features/auth/config";
-import { useUserFormContext } from "@/features/settings/UserFormController";
+import { type Status, useUserFormContext } from "@/features/settings/UserFormController";
 import { Link, useRouter } from "@/i18n/navigation";
 import { CreateUserSchema, HOBBY_MAX_LENGTH, INTRO_MAX_LENGTH } from "common/zod/schema";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
 import { useEffect, useState } from "react";
+import { SubmitButton } from "../../(auth)/settings/components/SubmitButton.tsx";
 
 export default function Page() {
   const t = useTranslations();
   const fbUser = auth.currentUser;
-  const [formStatus, setFormStatus] = useState<"ready" | "loading" | "success" | "error">("ready");
   const ctx = useUserFormContext();
   const router = useRouter();
   const locale = useLocale();
@@ -32,6 +32,7 @@ export default function Page() {
       ctx.setImagePreviewURL(savedImageURL);
     }
   }, [ctx.setFormData, ctx.setImagePreviewURL]);
+  const [formStatus, setFormStatus] = useState<Status>("ready");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,7 +54,7 @@ export default function Page() {
       return;
     }
 
-    setFormStatus("loading");
+    setFormStatus("processing");
     try {
       if (!fbUser) throw new Error("Oops! you are not logged in!");
       console.log("🤩", ctx.formData);
@@ -213,21 +214,7 @@ export default function Page() {
               <Link href="/registration" className="btn h-10 w-25 rounded-lg border border-tBlue p-2 text-tBlue">
                 {t("community.previousButton")}
               </Link>
-              {formStatus === "ready" ? (
-                <button type="submit" className="btn h-10 w-25 rounded-lg bg-tBlue p-2 text-white">
-                  {t("settings.register")}
-                </button>
-              ) : formStatus === "loading" ? (
-                <button type="submit" className="btn btn-disabled h-10 rounded p-2 text-white" disabled>
-                  {t("settings.isRegister")}
-                </button>
-              ) : formStatus === "success" ? (
-                <span className="btn btn-accent h-10 rounded p-2 text-white">{t("settings.success")}</span>
-              ) : formStatus === "error" ? (
-                <span className="btn btn-error h-10 rounded p-2 text-white">{t("settings.failed")}</span>
-              ) : (
-                <></>
-              )}
+              <SubmitButton status={formStatus} />
             </div>
             {errors && <div className="alert alert-error">{errors}</div>}
           </div>
