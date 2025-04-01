@@ -8,7 +8,7 @@ import { CreateUserSchema, HOBBY_MAX_LENGTH, INTRO_MAX_LENGTH } from "common/zod
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
 import { useState } from "react";
-import { SubmitButtonBlock } from "../../(auth)/settings/components/SubmitButton.tsx";
+import { SubmitButton } from "../../(auth)/settings/components/SubmitButton.tsx";
 
 export default function Page() {
   const t = useTranslations();
@@ -205,7 +205,7 @@ export default function Page() {
               <Link href="/registration" className="btn h-10 w-25 rounded-lg border border-tBlue p-2 text-tBlue">
                 {t("community.previousButton")}
               </Link>
-              <SubmitButtonBlock status={formStatus} />
+              <SubmitButton status={formStatus} />
             </div>
             {errors && <div className="alert alert-error">{errors}</div>}
           </div>

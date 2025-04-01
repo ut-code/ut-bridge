@@ -2,7 +2,7 @@
 
 import { useUserFormContext } from "@/features/settings/UserFormController.tsx";
 import { useLocale, useTranslations } from "next-intl";
-import { SubmitButtonBlock } from "../components/SubmitButton.tsx";
+import { SubmitButton } from "../components/SubmitButton.tsx";
 import { styles } from "../shared-class.ts";
 
 export default function Page() {
@@ -79,7 +79,7 @@ export default function Page() {
           <option value="D3">{t("university.gradeOptions.D3")}</option>
         </select>
       </label>
-      <SubmitButtonBlock status={ctx.status} />
+      <SubmitButton status={ctx.status} />
     </form>
   );
 }

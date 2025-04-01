@@ -3,7 +3,7 @@
 import Avatar from "@/components/Avatar";
 import { useUserFormContext } from "@/features/settings/UserFormController.tsx";
 import { useTranslations } from "next-intl";
-import { SubmitButtonBlock } from "../components/SubmitButton.tsx";
+import { SubmitButton } from "../components/SubmitButton.tsx";
 import { styles } from "../shared-class.ts";
 
 export default function Page() {
@@ -46,7 +46,7 @@ export default function Page() {
         </label>
       </div>
       <Avatar src={ctx.imagePreviewURL} size={160} />
-      <SubmitButtonBlock status={ctx.status} />
+      <SubmitButton status={ctx.status} />
     </form>
   );
 }
