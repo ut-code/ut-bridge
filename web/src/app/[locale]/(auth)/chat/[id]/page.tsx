@@ -34,46 +34,29 @@ function MessageInput({ room }: { room: string }) {
   const [submitting, setSubmitting] = useState<boolean>(false);
   const isSendButtonDisabled = submitting || input === "";
 
-  const handleKeyDown = async (ev: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if ((ev.ctrlKey || ev.metaKey) && ev.key === "Enter") {
-      ev.preventDefault();
-      if (submitting) return;
-      setSubmitting(true);
-      setInput("");
-      await client.chat.rooms[":room"].messages.$post({
-        header: { Authorization },
-        param: {
-          room: room,
-        },
-        json: {
-          content: input,
-          isPhoto: false,
-        },
-      });
-      setSubmitting(false);
-    }
-  };
+  const handleSubmit = async (ev: React.FormEvent<HTMLFormElement>) => {
+    ev.preventDefault();
+    if (submitting) return;
+    setSubmitting(true);
+    setInput("");
+    await client.chat.rooms[":room"].messages.$post({
+      header: { Authorization },
+      param: {
+        room: room,
+      },
+      json: {
+        content: input,
+        isPhoto: false,
+      },
+    });
+    setSubmitting(false);
+  }
+
   return (
     <div className="">
       <form
         className="inline"
-        onSubmit={async (ev) => {
-          ev.preventDefault();
-          if (submitting) return;
-          setSubmitting(true);
-          setInput("");
-          await client.chat.rooms[":room"].messages.$post({
-            header: { Authorization },
-            param: {
-              room: room,
-            },
-            json: {
-              content: input,
-              isPhoto: false,
-            },
-          });
-          setSubmitting(false);
-        }}
+        onSubmit={handleSubmit}
       >
         <div className="fixed bottom-[64px] flex w-full flex-row justify-around gap-2 border-gray-300 border-t bg-white p-4 sm:bottom-0">
           <textarea
@@ -83,7 +66,12 @@ function MessageInput({ room }: { room: string }) {
             onChange={(ev) => {
               setInput(ev.target.value);
             }}
-            onKeyDown={handleKeyDown}
+            onKeyDown={(ev) => {
+              if ((ev.ctrlKey || ev.metaKey) && ev.key === "Enter") {
+                ev.preventDefault();
+                ev.currentTarget.form?.requestSubmit();
+              }
+            }}
           />
           <button type="submit" className="" disabled={isSendButtonDisabled}>
             <AiOutlineSend size={30} color={isSendButtonDisabled ? "gray" : "#0b8bee"} />
