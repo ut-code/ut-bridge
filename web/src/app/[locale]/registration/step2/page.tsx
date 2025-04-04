@@ -1,13 +1,14 @@
 "use client";
 
 import { client } from "@/client";
+import { IMAGE_PREVIEW_URL_SESSION_STORAGE_KEY, STEP_1_DATA_SESSION_STORAGE_KEY } from "@/consts";
 import { auth } from "@/features/auth/config";
 import { type Status, useUserFormContext } from "@/features/settings/UserFormController";
 import { Link, useRouter } from "@/i18n/navigation";
 import { CreateUserSchema, HOBBY_MAX_LENGTH, INTRO_MAX_LENGTH } from "common/zod/schema";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SubmitButton } from "../../(auth)/settings/components/SubmitButton.tsx";
 
 export default function Page() {
@@ -23,6 +24,14 @@ export default function Page() {
     learningLanguages?: string;
   }>({});
 
+  useEffect(() => {
+    const savedData = sessionStorage.getItem(STEP_1_DATA_SESSION_STORAGE_KEY);
+    const savedImageURL = sessionStorage.getItem(IMAGE_PREVIEW_URL_SESSION_STORAGE_KEY);
+    if (savedData) {
+      ctx.setFormData(JSON.parse(savedData));
+      ctx.setImagePreviewURL(savedImageURL);
+    }
+  }, [ctx.setFormData, ctx.setImagePreviewURL]);
   const [formStatus, setFormStatus] = useState<Status>("ready");
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -31,13 +40,13 @@ export default function Page() {
     let errors = {};
     if (!ctx.formData.fluentLanguageIds?.length) {
       errors = {
-        fluentLanguages: `(${t("required")})`,
+        fluentLanguages: `(${t("settings.required")})`,
       };
     }
     if (!ctx.formData.learningLanguageIds?.length) {
       errors = {
         ...errors,
-        learningLanguages: `(${t("required")})`,
+        learningLanguages: `(${t("settings.required")})`,
       };
     }
     if (Object.keys(errors).length > 0) {
