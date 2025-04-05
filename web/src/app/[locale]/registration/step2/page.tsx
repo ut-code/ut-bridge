@@ -214,8 +214,8 @@ export default function Page() {
               <Link href="/registration" className="btn h-10 w-25 rounded-lg border border-tBlue p-2 text-tBlue">
                 {t("community.previousButton")}
               </Link>
-              <SubmitButton status={formStatus} />
             </div>
+            <SubmitButton status={formStatus} />
             {errors && <div className="alert alert-error">{errors}</div>}
           </div>
         </form>
