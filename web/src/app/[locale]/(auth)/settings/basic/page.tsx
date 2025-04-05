@@ -2,6 +2,7 @@
 
 import Avatar from "@/components/Avatar";
 import { useUserFormContext } from "@/features/settings/UserFormController.tsx";
+import { useUserContext } from "@/features/user/userProvider.tsx";
 import { useTranslations } from "next-intl";
 import { SubmitButton } from "../components/SubmitButton.tsx";
 import { styles } from "../shared-class.ts";
@@ -9,6 +10,7 @@ import { styles } from "../shared-class.ts";
 export default function Page() {
   const t = useTranslations("settings");
   const ctx = useUserFormContext();
+  const { me } = useUserContext();
 
   return (
     <form onSubmit={ctx.submitPatch} className={styles.form}>
@@ -45,7 +47,7 @@ export default function Page() {
           {t("basic.photoUpload")}
         </label>
       </div>
-      <Avatar src={ctx.imagePreviewURL} size={160} />
+      <Avatar src={ctx.imagePreviewURL ?? me.imageUrl} size={160} />
       <SubmitButton status={ctx.status} />
     </form>
   );
