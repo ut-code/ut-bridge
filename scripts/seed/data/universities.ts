@@ -21,6 +21,7 @@ export const universities: University[] = [
     in_en: "The University of Tokyo",
     campuses: [
       { in_ja: "本郷キャンパス", in_en: "Hongo Campus" },
+      { in_ja: "弥生キャンパス", in_en: "Yayoi Campus" },
       { in_ja: "駒場キャンパス", in_en: "Komaba Campus" },
       { in_ja: "柏キャンパス", in_en: "Kashiwa Campus" },
       { in_ja: "白金台キャンパス", in_en: "Shirokanedai Campus" },
