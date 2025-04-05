@@ -111,7 +111,7 @@ export const UserFormProvider = ({
   const submitPatch = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("processing");
-    uploadImage();
+    await uploadImage();
 
     try {
       const res = await client.users.me.$patch({
@@ -281,7 +281,7 @@ export const UserFormProvider = ({
     formData.imageUrl = url; // don't delete this line, or you'll start to hate react like me
     setFormData((prev) => ({
       ...prev,
-      imageURL: url,
+      imageUrl: url,
     }));
   };
 
