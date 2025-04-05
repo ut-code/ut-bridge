@@ -33,28 +33,28 @@ function MessageInput({ room }: { room: string }) {
   const [input, setInput] = useState<string>("");
   const [submitting, setSubmitting] = useState<boolean>(false);
   const isSendButtonDisabled = submitting || input === "";
+
+  const handleSubmit = async (ev: React.FormEvent<HTMLFormElement>) => {
+    ev.preventDefault();
+    if (submitting) return;
+    setSubmitting(true);
+    setInput("");
+    await client.chat.rooms[":room"].messages.$post({
+      header: { Authorization },
+      param: {
+        room: room,
+      },
+      json: {
+        content: input,
+        isPhoto: false,
+      },
+    });
+    setSubmitting(false);
+  };
+
   return (
     <div className="">
-      <form
-        className="inline"
-        onSubmit={async (ev) => {
-          ev.preventDefault();
-          if (submitting) return;
-          setSubmitting(true);
-          setInput("");
-          await client.chat.rooms[":room"].messages.$post({
-            header: { Authorization },
-            param: {
-              room: room,
-            },
-            json: {
-              content: input,
-              isPhoto: false,
-            },
-          });
-          setSubmitting(false);
-        }}
-      >
+      <form className="inline" onSubmit={handleSubmit}>
         <div className="fixed bottom-[64px] flex w-full flex-row justify-around gap-2 border-gray-300 border-t bg-white p-4 sm:bottom-0">
           <textarea
             className="field-sizing-content h-auto max-h-[200px] min-h-[40px] w-full resize-none rounded-xl border border-gray-300 p-2 leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -62,6 +62,12 @@ function MessageInput({ room }: { room: string }) {
             value={input}
             onChange={(ev) => {
               setInput(ev.target.value);
+            }}
+            onKeyDown={(ev) => {
+              if ((ev.ctrlKey || ev.metaKey) && ev.key === "Enter") {
+                ev.preventDefault();
+                ev.currentTarget.form?.requestSubmit();
+              }
             }}
           />
           <button type="submit" className="" disabled={isSendButtonDisabled}>
