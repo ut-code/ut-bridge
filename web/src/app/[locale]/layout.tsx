@@ -19,7 +19,7 @@ export default async function RootLayout({
   // side is the easiest way to get started
   const messages = await getMessages();
   return (
-    <html lang={locale} className="h-screen" data-theme="light">
+    <html lang={locale} className="h-screen bg-tGray" data-theme="light">
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />

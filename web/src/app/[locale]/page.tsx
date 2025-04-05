@@ -11,7 +11,7 @@ export default function LandingPage() {
   return (
     <>
       <Header />
-      <div className="mt-10 flex w-full flex-col-reverse justify-center xl:flex-row">
+      <main className="flex w-full flex-col-reverse justify-center bg-white pt-10 xl:flex-row">
         <Image src="/app_sample_ja.png" alt="app sample image" width={500} height={100} className="m-auto xl:m-0" />
         <div className="my-10 mr-5 flex flex-col items-center justify-center xl:my-0 xl:mr-20">
           <div className="flex flex-col items-start">
@@ -31,7 +31,7 @@ export default function LandingPage() {
           </Link>
           <LanguageSwitcher />
         </div>
-      </div>
+      </main>
     </>
   );
 }
