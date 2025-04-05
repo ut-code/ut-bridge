@@ -34,7 +34,7 @@ export default function UserCard({
       {/* FIXME */}
       <div className={"absolute top-0 left-0 h-[1px] w-full bg-gray-300 sm:hidden"} />
       {/* お気に入りボタン（右上に配置） */}
-      <div className="absolute top-2 right-2 z-10">
+      <div className="absolute top-2 right-2 ">
         {favoriteBtnLoading ? (
           <span className="loading loading-ring" />
         ) : user.markedAs === "favorite" ? (

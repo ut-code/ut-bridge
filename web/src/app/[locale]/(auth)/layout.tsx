@@ -12,10 +12,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <AuthProvider>
       <UserProvider>
         <ChatNotificationProvider>
-          <div className="flex h-full flex-col">
+          <div className="min-h-full bg-tGray">
             <Header />
             <ToastProvider>
-              <main className="flex-1 overflow-y-auto bg-tGray ">{children}</main>
+              <div className="pb-16">{children}</div>
               <Footer />
             </ToastProvider>
           </div>
