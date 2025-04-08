@@ -32,6 +32,16 @@ export default function Page() {
           <option value="other"> {t("basic.other")}</option>
         </select>
       </label>
+      <label className={styles.label}>
+        <span className={styles.labelSpan}>{t("basic.want-to-match")}</span>
+        <input
+          type="checkbox"
+          name="wanttomatch"
+          className={styles.inputToggle}
+          value={ctx.formData.name}
+          onChange={ctx.handleChange}
+        />
+      </label>
       <div className={styles.label}>
         <input
           type="file"

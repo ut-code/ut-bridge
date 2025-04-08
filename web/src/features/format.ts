@@ -35,6 +35,7 @@ export function formatCardUser(user: StructuredCardUser, locale: string): FlatCa
     imageUrl: user.imageUrl ?? undefined,
     grade: user.grade,
     isForeignStudent: user.isForeignStudent,
+    wantToMatch: user.wantToMatch,
 
     campus: getName(user.campus),
 

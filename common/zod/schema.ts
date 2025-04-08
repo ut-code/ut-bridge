@@ -47,6 +47,8 @@ const BaseUserSchema = z.object({
   isForeignStudent: z.boolean().default(false),
   grade: GradeSchema,
 
+  wantToMatch: z.boolean(),
+
   hobby: HobbySchema,
   introduction: IntroductionSchema,
 });

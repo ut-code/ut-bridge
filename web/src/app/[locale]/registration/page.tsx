@@ -7,7 +7,7 @@ import { Part1RegistrationSchema } from "common/zod/schema";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Page() {
   const router = useRouter();
@@ -16,6 +16,13 @@ export default function Page() {
   const locale = useLocale();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<string | null>(null);
+  // biome-ignore lint: we don't need it
+  useEffect(() => {
+    ctx.setFormData((prev) => ({
+      ...prev,
+      wantToMatch: true,
+    }));
+  }, []);
 
   return (
     <>
