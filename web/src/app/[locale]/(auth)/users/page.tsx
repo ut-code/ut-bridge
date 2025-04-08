@@ -108,7 +108,7 @@ export default function Page() {
         </div>
         <div className="w-full sm:w-auto">
           <div className="flex flex-col items-center sm:items-start">
-            <p className="mb-4 font-bold text-5xl">{user.name}</p>
+            <p className="mb-4 break-all font-bold text-5xl">{user.name}</p>
             <p className="my-4 text-2xl">{t(`users.${user.gender}`)}</p>
             <p className="my-4 text-2xl">{user.isForeignStudent ? t("users.foreignStudent") : " "}</p>
           </div>
