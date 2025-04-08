@@ -1,6 +1,7 @@
 "use client";
 
 import Avatar from "@/components/Avatar";
+import LanguageSwitcher from "@/components/LanguageSelectar";
 import { IMAGE_PREVIEW_URL_SESSION_STORAGE_KEY, STEP_1_DATA_SESSION_STORAGE_KEY } from "@/consts";
 import { useUserFormContext } from "@/features/settings/UserFormController";
 import { useToast } from "@/features/toast/ToastProvider";
@@ -22,7 +23,11 @@ export default function Page() {
   return (
     <>
       <div className="my-5 p-4 sm:my-20 md:mx-10 2xl:mx-60">
-        <h1 className="mx-5 mb-8 font-bold text-3xl sm:mx-0">{t("registration.title")}</h1>
+        <div className="flex justify-between">
+          <h1 className="mx-5 mb-8 font-bold text-3xl sm:mx-0">{t("registration.title")}</h1>
+          <LanguageSwitcher />
+        </div>
+
         <form
           onSubmit={async (ev) => {
             ev.preventDefault();
