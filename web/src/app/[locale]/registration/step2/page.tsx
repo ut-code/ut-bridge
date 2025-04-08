@@ -1,6 +1,7 @@
 "use client";
 
 import { client } from "@/client";
+import LanguageSwitcher from "@/components/LanguageSelectar.tsx";
 import { IMAGE_PREVIEW_URL_SESSION_STORAGE_KEY, STEP_1_DATA_SESSION_STORAGE_KEY } from "@/consts";
 import { auth } from "@/features/auth/config";
 import { type Status, useUserFormContext } from "@/features/settings/UserFormController";
@@ -87,7 +88,10 @@ export default function Page() {
   return (
     <>
       <div className="my-5 p-4 sm:my-20 md:mx-10 2xl:mx-60 ">
-        <h1 className="mx-5 mb-8 font-bold text-3xl sm:mx-0">{t("registration.title")}</h1>
+        <div className="flex justify-between">
+          <h1 className="mx-5 mb-8 font-bold text-3xl sm:mx-0">{t("registration.title")}</h1>
+          <LanguageSwitcher />
+        </div>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <div>
             <div className="px-15 sm:my-10">
