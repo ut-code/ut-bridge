@@ -1,9 +1,11 @@
 "use client";
 
 import { client } from "@/client";
+import LanguageSwitcher from "@/components/LanguageSelectar.tsx";
 import { IMAGE_PREVIEW_URL_SESSION_STORAGE_KEY, STEP_1_DATA_SESSION_STORAGE_KEY } from "@/consts";
 import { auth } from "@/features/auth/config";
 import { type Status, useUserFormContext } from "@/features/settings/UserFormController";
+import { useToast } from "@/features/toast/ToastProvider.tsx";
 import { Link, useRouter } from "@/i18n/navigation";
 import { CreateUserSchema, HOBBY_MAX_LENGTH, INTRO_MAX_LENGTH } from "common/zod/schema";
 import { useTranslations } from "next-intl";
@@ -18,11 +20,7 @@ export default function Page() {
   const router = useRouter();
   const locale = useLocale();
   const [errors, setErrors] = useState<null | string>(null);
-
-  const [fieldErrors, setFieldErrors] = useState<{
-    fluentLanguages?: string;
-    learningLanguages?: string;
-  }>({});
+  const toast = useToast();
 
   useEffect(() => {
     const savedData = sessionStorage.getItem(STEP_1_DATA_SESSION_STORAGE_KEY);
@@ -37,20 +35,18 @@ export default function Page() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // FIXME: please use zod for this
-    let errors = {};
     if (!ctx.formData.fluentLanguageIds?.length) {
-      errors = {
-        fluentLanguages: `(${t("settings.required")})`,
-      };
+      toast.push({
+        color: "error",
+        message: t("settings.error.fluentLanguageIds"),
+      });
+      return;
     }
     if (!ctx.formData.learningLanguageIds?.length) {
-      errors = {
-        ...errors,
-        learningLanguages: `(${t("settings.required")})`,
-      };
-    }
-    if (Object.keys(errors).length > 0) {
-      setFieldErrors(errors);
+      toast.push({
+        color: "error",
+        message: t("settings.error.learningLanguageIds"),
+      });
       return;
     }
 
@@ -92,7 +88,10 @@ export default function Page() {
   return (
     <>
       <div className="my-5 p-4 sm:my-20 md:mx-10 2xl:mx-60 ">
-        <h1 className="mx-5 mb-8 font-bold text-3xl sm:mx-0">{t("registration.title")}</h1>
+        <div className="flex justify-between">
+          <h1 className="mx-5 mb-8 font-bold text-3xl sm:mx-0">{t("registration.title")}</h1>
+          <LanguageSwitcher />
+        </div>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <div>
             <div className="px-15 sm:my-10">
@@ -132,9 +131,7 @@ export default function Page() {
               </label>
 
               <div className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
-                <p className={`flex-grow ${fieldErrors.learningLanguages ? "text-error" : ""}`}>
-                  {t("settings.language.fluentLanguage")} {fieldErrors.fluentLanguages}
-                </p>
+                <p className={"flex-grow"}>{t("settings.language.fluentLanguage")}</p>
                 <div className="flex w-1/2 flex-wrap gap-2">
                   {ctx.languages.map((language) => (
                     <label key={language.id} className="flex items-center space-x-2">
@@ -152,9 +149,7 @@ export default function Page() {
                 </div>
               </div>
               <div className="mt-5 flex flex-col sm:mt-10 sm:flex-row sm:items-center sm:justify-between">
-                <p className={`flex-grow ${fieldErrors.learningLanguages ? "text-error" : ""}`}>
-                  {t("settings.language.learningLanguage")} {fieldErrors.learningLanguages}
-                </p>
+                <p className={"flex-grow"}>{t("settings.language.learningLanguage")}</p>
                 <div className=" flex w-1/2 flex-wrap gap-2">
                   {ctx.languages.map((language) => (
                     <label key={language.id} className="flex items-center space-x-2">
@@ -214,8 +209,8 @@ export default function Page() {
               <Link href="/registration" className="btn h-10 w-25 rounded-lg border border-tBlue p-2 text-tBlue">
                 {t("community.previousButton")}
               </Link>
-              <SubmitButton status={formStatus} />
             </div>
+            <SubmitButton status={formStatus} />
             {errors && <div className="alert alert-error">{errors}</div>}
           </div>
         </form>

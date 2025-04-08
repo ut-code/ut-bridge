@@ -110,8 +110,29 @@ export const UserFormProvider = ({
 
   const submitPatch = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (formData.name && formData.name.length > 30) {
+      toast.push({
+        color: "error",
+        message: t("settings.error.name"),
+      });
+      return;
+    }
+    if (!formData.fluentLanguageIds?.length) {
+      toast.push({
+        color: "error",
+        message: t("settings.error.fluentLanguageIds"),
+      });
+      return;
+    }
+    if (!formData.learningLanguageIds?.length) {
+      toast.push({
+        color: "error",
+        message: t("settings.error.learningLanguageIds"),
+      });
+      return;
+    }
     setStatus("processing");
-    uploadImage();
+    await uploadImage();
 
     try {
       const res = await client.users.me.$patch({
@@ -263,7 +284,7 @@ export const UserFormProvider = ({
   const onFailure = useCallback(() => {
     toast.push({
       color: "error",
-      message: t("settings.failure"),
+      message: t("settings.failed"),
     });
   }, [toast, t]);
 
@@ -283,7 +304,7 @@ export const UserFormProvider = ({
     formData.imageUrl = url; // don't delete this line, or you'll start to hate react like me
     setFormData((prev) => ({
       ...prev,
-      imageURL: url,
+      imageUrl: url,
     }));
   };
 

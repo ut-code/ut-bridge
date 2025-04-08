@@ -62,6 +62,11 @@
     "isRegister": "Registering...",
     "success": "Success!",
     "failed": "Failed...",
+    "error": {
+      "name": "The name exceeds the character limit.",
+      "fluentLanguageIds": "You have to select fluent languages.",
+      "learningLanguageIds": "You have to select learning languages."
+    },
     "basic": {
       "title": "Basic",
       "name": "Name",

@@ -8,8 +8,10 @@ export const ExchangeSchema = z.enum(["all", "exchange", "japanese"]);
 export const MarkerSchema = z.enum(["blocked", "favorite"]);
 
 // Common Schemas
+export const NAME_MAX_LENGTH = 30;
 export const HOBBY_MAX_LENGTH = 2000;
 export const INTRO_MAX_LENGTH = 2000;
+export const NameSchema = z.string().max(NAME_MAX_LENGTH, { message: `名前は${NAME_MAX_LENGTH}文字以下です` });
 export const HobbySchema = z.string().max(HOBBY_MAX_LENGTH, { message: `趣味は${HOBBY_MAX_LENGTH}文字以下です` });
 export const IntroductionSchema = z
   .string()
@@ -41,7 +43,7 @@ const CampusSchema = z.object({
 
 const BaseUserSchema = z.object({
   id: z.string().uuid(),
-  name: z.string(),
+  name: NameSchema,
   gender: GenderEnum,
   imageUrl: z.string().optional(),
   isForeignStudent: z.boolean().default(false),

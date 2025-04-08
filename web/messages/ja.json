@@ -62,6 +62,11 @@
     "isRegister": "登録中...",
     "success": "成功しました",
     "failed": "失敗しました...",
+    "error": {
+      "name": "名前の字数制限を超過しています。",
+      "fluentLanguageIds": "流暢に話せる言語は必須です。",
+      "learningLanguageIds": "学びたい言語は必須です。"
+    },
     "basic": {
       "title": "基本情報",
       "name": "名前",
