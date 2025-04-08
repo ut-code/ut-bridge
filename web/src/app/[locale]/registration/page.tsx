@@ -4,7 +4,7 @@ import Avatar from "@/components/Avatar";
 import { IMAGE_PREVIEW_URL_SESSION_STORAGE_KEY, STEP_1_DATA_SESSION_STORAGE_KEY } from "@/consts";
 import { useUserFormContext } from "@/features/settings/UserFormController";
 import { useToast } from "@/features/toast/ToastProvider";
-import { Part1RegistrationSchema } from "common/zod/schema";
+import { NAME_MAX_LENGTH, Part1RegistrationSchema } from "common/zod/schema";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -66,6 +66,7 @@ export default function Page() {
                   value={ctx.formData.name}
                   onChange={ctx.handleChange}
                   required
+                  maxLength={NAME_MAX_LENGTH}
                   className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                 />
               </label>

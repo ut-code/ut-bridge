@@ -3,6 +3,7 @@
 import Avatar from "@/components/Avatar";
 import { useUserFormContext } from "@/features/settings/UserFormController.tsx";
 import { useUserContext } from "@/features/user/userProvider.tsx";
+import { NAME_MAX_LENGTH } from "common/zod/schema.ts";
 import { useTranslations } from "next-intl";
 import { SubmitButton } from "../components/SubmitButton.tsx";
 import { styles } from "../shared-class.ts";
@@ -23,6 +24,7 @@ export default function Page() {
           onChange={ctx.handleChange}
           required
           className={styles.inputText}
+          maxLength={NAME_MAX_LENGTH}
         />
       </label>
       <label className={styles.label}>
