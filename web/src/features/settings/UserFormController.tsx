@@ -117,6 +117,20 @@ export const UserFormProvider = ({
       });
       return;
     }
+    if (!formData.fluentLanguageIds?.length) {
+      toast.push({
+        color: "error",
+        message: t("settings.error.fluentLanguageIds"),
+      });
+      return;
+    }
+    if (!formData.learningLanguageIds?.length) {
+      toast.push({
+        color: "error",
+        message: t("settings.error.learningLanguageIds"),
+      });
+      return;
+    }
     setStatus("processing");
     await uploadImage();
 
