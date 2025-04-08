@@ -3,7 +3,8 @@
 import Avatar from "@/components/Avatar";
 import { IMAGE_PREVIEW_URL_SESSION_STORAGE_KEY, STEP_1_DATA_SESSION_STORAGE_KEY } from "@/consts";
 import { useUserFormContext } from "@/features/settings/UserFormController";
-import { Part1RegistrationSchema } from "common/zod/schema";
+import { useToast } from "@/features/toast/ToastProvider";
+import { NAME_MAX_LENGTH, Part1RegistrationSchema } from "common/zod/schema";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -16,6 +17,7 @@ export default function Page() {
   const locale = useLocale();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<string | null>(null);
+  const toast = useToast();
 
   return (
     <>
@@ -24,6 +26,13 @@ export default function Page() {
         <form
           onSubmit={async (ev) => {
             ev.preventDefault();
+            if (ctx.formData.name && ctx.formData.name.length > 30) {
+              toast.push({
+                color: "error",
+                message: t("settings.error.name"),
+              });
+              return;
+            }
             setIsSubmitting(true);
             const result = Part1RegistrationSchema.safeParse(ctx.formData);
             if (result.success) {
@@ -57,6 +66,7 @@ export default function Page() {
                   value={ctx.formData.name}
                   onChange={ctx.handleChange}
                   required
+                  maxLength={NAME_MAX_LENGTH}
                   className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                 />
               </label>
