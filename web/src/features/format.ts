@@ -12,6 +12,7 @@ export function formatUser(user: StructuredUser, locale: string): FlatUser {
     hobby: user.hobby,
     introduction: user.introduction,
     isForeignStudent: user.isForeignStudent,
+    wantToMatch: user.wantToMatch,
 
     university: getName(user.campus.university),
     division: getName(user.division),
