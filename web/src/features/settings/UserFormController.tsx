@@ -5,7 +5,6 @@ import { formatCardUser } from "@/features/format";
 import { type MYDATA, useUserContext } from "@/features/user/userProvider";
 import type { CreateUser, FlatCardUser } from "common/zod/schema";
 import { useLocale, useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { useRef } from "react";
 import { useAuthContext } from "../auth/providers/AuthProvider.tsx";
@@ -56,7 +55,6 @@ export const UserFormProvider = ({
 }) => {
   const t = useTranslations();
   const toast = useToast();
-  const router = useRouter();
   const locale = useLocale();
   let me: MYDATA | null = null;
   const setMyData = useRef<((data: Partial<MYDATA>) => void) | null>(null);
@@ -212,12 +210,11 @@ export const UserFormProvider = ({
         }
       } catch (err) {
         console.error("ユーザー情報の取得に失敗しました", err);
-        router.push("/login");
       }
     };
 
     fetchMyData();
-  }, [me, loadPreviousData, router]);
+  }, [me, loadPreviousData]);
 
   const refetchFavoriteUsers = useCallback(async () => {
     try {
@@ -227,7 +224,6 @@ export const UserFormProvider = ({
         query: {
           except: me.id,
           marker: "favorite",
-          wantsToMatch: "ignore",
         },
       });
 
