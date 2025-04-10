@@ -4,12 +4,14 @@ scripts/seed/node_modules
 /.env
 
 # web
+web/node_modules
 web/dist
 web/.next
 web/next-env.d.ts
 web/.vercel
 web/.dev.vars
 # server
+server/node_modules
 server/target
 
 # ?
