@@ -227,7 +227,7 @@ export const UserFormProvider = ({
         query: {
           except: me.id,
           marker: "favorite",
-          select: "all",
+          wantsToMatch: "ignore",
         },
       });
 
@@ -250,7 +250,6 @@ export const UserFormProvider = ({
         query: {
           except: me.id,
           marker: "blocked",
-          select: "all",
         },
       });
 

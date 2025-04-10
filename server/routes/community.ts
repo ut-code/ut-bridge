@@ -16,20 +16,20 @@ const router = new Hono().get(
       exchangeQuery: z.enum(["exchange", "japanese", "all"]).default("all"),
       searchQuery: z.string().default(""),
       marker: z.union([MarkerSchema, z.literal("notBlocked")]).optional(),
-      select: z.enum(["all"]).optional(),
+      wantsToMatch: z.enum(["true"]).optional(),
     }),
   ),
   zValidator("header", z.object({ Authorization: z.string() })),
   async (c) => {
     const requester = await getUserID(c);
-    const { except, page, exchangeQuery, searchQuery, marker: markerQuery, select } = c.req.valid("query");
+    const { except, page, exchangeQuery, searchQuery, marker: markerQuery, wantsToMatch } = c.req.valid("query");
     const take = 15; //TODO: web側で指定できるようにする
     const skip = (page - 1) * take;
 
     const whereCondition: Prisma.UserWhereInput = {};
 
-    if (select !== "all") {
-      whereCondition.wantToMatch = true;
+    if (wantsToMatch) {
+      whereCondition.wantToMatch = wantsToMatch === "true";
     }
 
     // 言語交換フィルター
