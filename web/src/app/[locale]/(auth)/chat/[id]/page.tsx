@@ -10,7 +10,7 @@ import { Link } from "@/i18n/navigation";
 import { assert } from "@/lib";
 import { use } from "@/react/useData";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AiOutlineLeft, AiOutlineSend } from "react-icons/ai";
 
 export default function Page() {
@@ -181,6 +181,13 @@ function MessageList({
     target.scrollIntoView(false);
   }
 
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    messages;
+    bottomRef.current?.scrollIntoView({ behavior: "auto" });
+  }, [messages]);
+
   return (
     <ul className="mx-3 mt-[56px] mb-[76px] grow overflow-y-scroll sm:pb-0" id="scroll-bottom">
       {messages.map((m) => (
@@ -202,6 +209,7 @@ function MessageList({
           </div>
         </li>
       ))}
+      <div ref={bottomRef} />
     </ul>
   );
 }
