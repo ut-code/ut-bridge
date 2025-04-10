@@ -46,7 +46,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <UserFormProvider loadPreviousData>
-        <div className="flex h-screen flex-col sm:flex-row">
+        <div className="flex flex-col sm:flex-row">
           <div className="hidden sm:block">
             <SideNav />
           </div>

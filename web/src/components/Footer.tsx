@@ -5,7 +5,7 @@ import { AiFillMessage, AiFillSetting, AiOutlineMessage, AiOutlineSetting, AiOut
 export default function Footer() {
   const path = useNormalizedPathname();
   return (
-    <footer className="flex h-16 w-full items-center justify-around bg-tBlue sm:hidden">
+    <footer className="fixed bottom-0 flex h-16 w-full items-center justify-around bg-tBlue sm:hidden">
       <Link href={"/community"}>
         <AiOutlineTeam size={30} strokeWidth={path.startsWith("/community") ? 35 : 0} color="white" fill="white" />
       </Link>

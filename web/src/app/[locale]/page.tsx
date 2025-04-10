@@ -13,7 +13,7 @@ export default function LandingPage() {
   return (
     <>
       <Header />
-      <div className="mt-10 flex w-full flex-col-reverse justify-center xl:flex-row">
+      <main className="flex w-full flex-grow flex-col-reverse justify-center bg-white pt-10 xl:flex-row">
         <Image
           src={pathname.startsWith("/ja") ? "/app_sample_ja.png" : "/app_sample_en.png"}
           alt="app sample image"
@@ -39,7 +39,7 @@ export default function LandingPage() {
           </Link>
           <LanguageSwitcher />
         </div>
-      </div>
+      </main>
     </>
   );
 }
