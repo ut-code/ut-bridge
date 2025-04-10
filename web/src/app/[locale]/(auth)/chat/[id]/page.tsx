@@ -298,6 +298,3 @@ function MessageList({
     </ul>
   );
 }
-function $delete(arg0: { header: { Authorization: string }; param: { message: string; room: string } }) {
-  throw new Error("Function not implemented.");
-}
