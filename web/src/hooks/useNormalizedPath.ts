@@ -1,4 +1,4 @@
-import { PATHNAME_LANG_PREFIX_PATTERN } from "@/consts";
+import { PATHNAME_LANG_PREFIX_PATTERN } from "@/consts.ts";
 import { usePathname } from "next/navigation";
 
 /**

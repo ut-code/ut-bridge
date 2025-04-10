@@ -17,6 +17,7 @@ model User {
   grade            Grade
   hobby            String
   introduction     String
+  wantToMatch      Boolean  @default(true)
   // universityId     String
   // university       University @relation(fields: [universityId], references: [university])
   divisionId       String
