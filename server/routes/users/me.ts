@@ -66,6 +66,8 @@ const route = new Hono()
           learningLanguages: {
             select: { language: true },
           },
+          campus: true,
+          division: true,
         },
       });
 
