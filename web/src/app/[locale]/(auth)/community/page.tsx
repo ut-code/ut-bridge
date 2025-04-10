@@ -101,6 +101,7 @@ export default function Page() {
               exchangeQuery: query.exchange,
               searchQuery: query.search,
               marker: query.marker === "favorite" ? "favorite" : "notBlocked",
+              wantsToMatch: "true",
             },
             header: { Authorization },
           },

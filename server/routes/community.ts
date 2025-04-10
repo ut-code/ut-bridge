@@ -16,16 +16,21 @@ const router = new Hono().get(
       exchangeQuery: z.enum(["exchange", "japanese", "all"]).default("all"),
       searchQuery: z.string().default(""),
       marker: z.union([MarkerSchema, z.literal("notBlocked")]).optional(),
+      wantsToMatch: z.enum(["true"]).optional(),
     }),
   ),
   zValidator("header", z.object({ Authorization: z.string() })),
   async (c) => {
     const requester = await getUserID(c);
-    const { except, page, exchangeQuery, searchQuery, marker: markerQuery } = c.req.valid("query");
+    const { except, page, exchangeQuery, searchQuery, marker: markerQuery, wantsToMatch } = c.req.valid("query");
     const take = 15; //TODO: web側で指定できるようにする
     const skip = (page - 1) * take;
 
     const whereCondition: Prisma.UserWhereInput = {};
+
+    if (wantsToMatch) {
+      whereCondition.wantToMatch = wantsToMatch === "true";
+    }
 
     // 言語交換フィルター
     if (exchangeQuery === "exchange") {
@@ -111,6 +116,7 @@ const router = new Hono().get(
           gender: true,
           isForeignStudent: true,
           imageUrl: true,
+          wantToMatch: true,
           campus: {
             select: { university: true, id: true, jaName: true, enName: true },
           },

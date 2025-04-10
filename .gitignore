@@ -21,3 +21,5 @@ tsconfig.tsbuildinfo
 /.direnv
 /.envrc
 /shell.nix
+
+server/node_modules/.cache

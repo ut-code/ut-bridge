@@ -35,6 +35,7 @@ const router = new Hono()
           imageUrl: true,
           isForeignStudent: true,
           grade: true,
+          wantToMatch: true,
 
           hobby: true,
           introduction: true,
