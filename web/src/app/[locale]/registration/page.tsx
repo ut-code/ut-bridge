@@ -114,7 +114,7 @@ export default function Page() {
                   tabIndex={0}
                   onKeyDown={(e) => {
                     console.log(e.key);
-                    if (e.key === "Enter") {
+                    if (e.key === "Enter" || e.key === "Space") {
                       document.getElementById("image-upload")?.click();
                     }
                   }}

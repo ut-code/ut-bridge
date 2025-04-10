@@ -227,6 +227,7 @@ export const UserFormProvider = ({
         query: {
           except: me.id,
           marker: "favorite",
+          wantsToMatch: "ignore",
         },
       });
 

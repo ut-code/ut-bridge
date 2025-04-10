@@ -11,7 +11,7 @@ import { CreateUserSchema, HOBBY_MAX_LENGTH, INTRO_MAX_LENGTH } from "common/zod
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
 import { useEffect, useState } from "react";
-import { SubmitButton } from "../../(auth)/settings/components/SubmitButton.tsx";
+import { SubmitButtonItem } from "../../(auth)/settings/components/SubmitButton.tsx";
 
 export default function Page() {
   const t = useTranslations();
@@ -205,12 +205,12 @@ export default function Page() {
                 />
               </label>
             </div>
-            <div className="flex justify-between px-15">
-              <Link href="/registration" className="btn h-10 w-25 rounded-lg border border-tBlue p-2 text-tBlue">
+            <div className="flex flex-row justify-between px-15 ">
+              <Link href="/registration" className="btn mt-15 h-10 w-25 rounded-lg border border-tBlue p-2 text-tBlue">
                 {t("community.previousButton")}
               </Link>
+              <SubmitButtonItem status={formStatus} />
             </div>
-            <SubmitButton status={formStatus} />
             {errors && <div className="alert alert-error">{errors}</div>}
           </div>
         </form>
