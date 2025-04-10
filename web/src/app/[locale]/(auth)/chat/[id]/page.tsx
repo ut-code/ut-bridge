@@ -10,7 +10,7 @@ import { Link } from "@/i18n/navigation";
 import { assert } from "@/lib";
 import { use } from "@/react/useData";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AiOutlineLeft, AiOutlineSend } from "react-icons/ai";
 
 export default function Page() {
@@ -33,28 +33,28 @@ function MessageInput({ room }: { room: string }) {
   const [input, setInput] = useState<string>("");
   const [submitting, setSubmitting] = useState<boolean>(false);
   const isSendButtonDisabled = submitting || input === "";
+
+  const handleSubmit = async (ev: React.FormEvent<HTMLFormElement>) => {
+    ev.preventDefault();
+    if (submitting) return;
+    setSubmitting(true);
+    setInput("");
+    await client.chat.rooms[":room"].messages.$post({
+      header: { Authorization },
+      param: {
+        room: room,
+      },
+      json: {
+        content: input,
+        isPhoto: false,
+      },
+    });
+    setSubmitting(false);
+  };
+
   return (
     <div className="">
-      <form
-        className="inline"
-        onSubmit={async (ev) => {
-          ev.preventDefault();
-          if (submitting) return;
-          setSubmitting(true);
-          setInput("");
-          await client.chat.rooms[":room"].messages.$post({
-            header: { Authorization },
-            param: {
-              room: room,
-            },
-            json: {
-              content: input,
-              isPhoto: false,
-            },
-          });
-          setSubmitting(false);
-        }}
-      >
+      <form className="inline" onSubmit={handleSubmit}>
         <div className="fixed bottom-[64px] flex w-full flex-row justify-around gap-2 border-gray-300 border-t bg-white p-4 sm:bottom-0">
           <textarea
             className="field-sizing-content h-auto max-h-[200px] min-h-[40px] w-full resize-none rounded-xl border border-gray-300 p-2 leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -62,6 +62,12 @@ function MessageInput({ room }: { room: string }) {
             value={input}
             onChange={(ev) => {
               setInput(ev.target.value);
+            }}
+            onKeyDown={(ev) => {
+              if ((ev.ctrlKey || ev.metaKey) && ev.key === "Enter") {
+                ev.preventDefault();
+                ev.currentTarget.form?.requestSubmit();
+              }
             }}
           />
           <button type="submit" className="" disabled={isSendButtonDisabled}>
@@ -175,6 +181,13 @@ function MessageList({
     target.scrollIntoView(false);
   }
 
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    messages;
+    bottomRef.current?.scrollIntoView({ behavior: "auto" });
+  }, [messages]);
+
   return (
     <ul className="mx-3 mt-[56px] mb-[76px] grow overflow-y-scroll sm:pb-0" id="scroll-bottom">
       {messages.map((m) => (
@@ -184,11 +197,19 @@ function MessageList({
             <div className="chat-header">
               <time className="text-xs opacity-50">{m.createdAt.toLocaleString()}</time>
             </div>
-            <div className={`chat-bubble ${m.senderId === me.id ? "bg-blue-200" : "chat-start"}`}>{m.content}</div>
+            <div className={`chat-bubble ${m.senderId === me.id ? "bg-blue-200" : "chat-start"}`}>
+              {m.content.split("\n").map((line, index) => (
+                <div key={`${m.id}-${index}`}>
+                  {line}
+                  <br />
+                </div>
+              ))}
+            </div>
             {/* <div className="chat-footer opacity-50">Seen</div> */}
           </div>
         </li>
       ))}
+      <div ref={bottomRef} />
     </ul>
   );
 }
