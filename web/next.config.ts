@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
-    domains: ["ut-bridge.c692d351b94b9f1f32c04143499cba82.r2.cloudflarestorage.com"],
+    domains: ["ut-bridge-user-image.utcode.net"],
   },
   /* config options here */
 };
