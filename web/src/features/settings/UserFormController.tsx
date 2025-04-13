@@ -193,16 +193,9 @@ export const UserFormProvider = ({
           }
 
           setFormData({
+            ...me,
             imageUrl: me.imageUrl ?? undefined,
-            name: me.name,
-            gender: me.gender,
-            isForeignStudent: me.isForeignStudent,
-            grade: me.grade,
             universityId: me.campus.university.id,
-            divisionId: me.division.id,
-            campusId: me.campus.id,
-            hobby: me.hobby,
-            introduction: me.introduction,
             motherLanguageId: me.motherLanguage.id,
             fluentLanguageIds: me.fluentLanguages.map((entry) => entry.language.id),
             learningLanguageIds: me.learningLanguages.map((entry) => entry.language.id),
@@ -346,10 +339,16 @@ export const UserFormProvider = ({
         };
       }
 
-      // 通常の入力フォーム（チェックボックス含む）
+      if (type === "checkbox") {
+        return {
+          ...prev,
+          [name]: checked,
+        };
+      }
+      // 通常の入力フォーム
       return {
         ...prev,
-        [name]: type === "checkbox" ? checked : value,
+        [name]: value,
       };
     });
   };

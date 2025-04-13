@@ -40,9 +40,9 @@ export default function Page() {
         <span className={styles.labelSpan}>{t("basic.want-to-match")}</span>
         <input
           type="checkbox"
-          name="wanttomatch"
+          name="wantToMatch"
           className={styles.inputToggle}
-          value={ctx.formData.name}
+          defaultChecked={ctx.formData.wantToMatch}
           onChange={ctx.handleChange}
         />
       </label>
