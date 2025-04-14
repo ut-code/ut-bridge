@@ -30,6 +30,7 @@ const route = new Hono()
           hobby: body.hobby ?? undefined,
           introduction: body.introduction ?? undefined,
           motherLanguageId: body.motherLanguageId ?? undefined,
+          wantToMatch: body.wantToMatch,
 
           // 既存データがある場合のみ削除して新規追加 (fluentLanguages)
           ...(body.fluentLanguageIds?.length
