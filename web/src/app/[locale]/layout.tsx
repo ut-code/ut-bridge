@@ -23,7 +23,7 @@ export default async function RootLayout({
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="manifest" href="/manifest.webmanifest" crossorigin="use-credentials" />
+        <link rel="manifest" href="/manifest.webmanifest" crossOrigin="use-credentials" />
         <title>ut-bridge</title>
       </head>
       <body className="flex h-screen flex-col overflow-y-auto">
