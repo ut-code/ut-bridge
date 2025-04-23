@@ -1,10 +1,13 @@
 import { client } from "@/client.ts";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { ServiceWorkerContext } from "./context-definition.ts";
 
 export function useServiceWorkerRegistration() {
   const sw = useContext(ServiceWorkerContext);
   if (!sw) throw new Error("Please use useServiceWorkerRegistration inside its provider");
+  useEffect(() => {
+    console.log("[service worker] set up to be", sw);
+  }, [sw]);
   return sw;
 }
 
