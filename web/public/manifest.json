@@ -1,7 +1,10 @@
 {
-  "name": "Sample App",
-  "start_url": "/",
+  "name": "UT-Bridge",
+  "short_name": "ut bridge",
+  "start_url": "/en",
   "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
   "icons": [
     {
       "src": "/icon.png",
