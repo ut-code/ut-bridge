@@ -20,6 +20,10 @@ export function usePushControl() {
         applicationServerKey: publicKey,
         userVisibleOnly: true,
       };
+      if (!sw) {
+        console.warn("[push control] sw not found!");
+        return;
+      }
       sw.pushManager.subscribe(options);
     },
   };
