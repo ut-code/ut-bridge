@@ -1,7 +1,7 @@
 {
   "name": "UT-Bridge",
-  "short_name": "ut bridge",
-  "start_url": "/en",
+  "short_name": "UT-Bridge",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
