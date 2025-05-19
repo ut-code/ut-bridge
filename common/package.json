@@ -3,7 +3,7 @@
   "module": "index.ts",
   "type": "module",
   "dependencies": {
-    "zod": "^3.25.0"
+    "zod": "^3.25.1"
   },
   "devDependencies": {
     "@types/bun": "^1.2.13"
