@@ -417,7 +417,7 @@ const router = new Hono()
     },
   )
   .delete(
-    "/messages/:message",
+    "/messages/:message/:room",
     zValidator(
       "param",
       z.object({
