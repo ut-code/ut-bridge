@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@types/bun": "^1.2.13",
+    "@types/nodemailer": "^6.4.17",
     "@types/web-push": "^3.6.4",
     "prisma": "^6.8.2",
     "typescript": "^5.8.3"
