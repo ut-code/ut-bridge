@@ -13,28 +13,28 @@
   "dependencies": {
     "clsx": "^2.1.1",
     "devalue": "^5.1.1",
-    "firebase": "^11.3.1",
-    "hono": "^4.7.1",
-    "jotai": "^2.12.1",
-    "next": "^15.1.7",
+    "firebase": "^11.7.3",
+    "hono": "^4.7.10",
+    "jotai": "^2.12.4",
+    "next": "^15.3.2",
     "next-intl": "^3.26.5",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "react-icons": "^5.5.0",
-    "zod": "^3.24.2"
+    "zod": "^3.25.0"
   },
   "devDependencies": {
-    "@cloudflare/next-on-pages": "^1.13.8",
-    "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4.0.6",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@cloudflare/next-on-pages": "^1.13.12",
+    "@eslint/eslintrc": "^3.3.1",
+    "@tailwindcss/postcss": "^4.1.7",
+    "@types/node": "^20.17.48",
+    "@types/react": "^19.1.4",
+    "@types/react-dom": "^19.1.5",
     "common": "workspace:common",
-    "daisyui": "^5.0.0-beta.8",
-    "postcss": "^8",
+    "daisyui": "^5.0.35",
+    "postcss": "^8.5.3",
     "server": "workspace:server",
-    "tailwindcss": "^4.0.6",
-    "typescript": "^5"
+    "tailwindcss": "^4.1.7",
+    "typescript": "^5.8.3"
   }
 }

@@ -2,7 +2,7 @@
   "name": "ut-bridge",
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "lefthook": "^1.10.10"
+    "lefthook": "^1.11.13"
   },
   "scripts": {
     "postinstall": "echo '[bun] installation complete. running preparation scripts...'",

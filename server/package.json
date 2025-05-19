@@ -12,23 +12,23 @@
     "deploy": "cd ..; flyctl deploy"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.758.0",
-    "@aws-sdk/s3-presigned-post": "^3.758.0",
-    "@aws-sdk/s3-request-presigner": "^3.758.0",
-    "@hono/zod-validator": "^0.4.3",
-    "@prisma/client": "^6.3.1",
+    "@aws-sdk/client-s3": "^3.812.0",
+    "@aws-sdk/s3-presigned-post": "^3.812.0",
+    "@aws-sdk/s3-request-presigner": "^3.812.0",
+    "@hono/zod-validator": "^0.5.0",
+    "@prisma/client": "^6.8.2",
     "common": "workspace:common",
     "devalue": "^5.1.1",
-    "firebase-admin": "^13.1.0",
-    "hono": "^4.7.1",
+    "firebase-admin": "^13.4.0",
+    "hono": "^4.7.10",
     "web-push": "^3.6.7",
-    "zod": "^3.24.2"
+    "zod": "^3.25.0"
   },
   "devDependencies": {
-    "@types/bun": "^1.2.4",
+    "@types/bun": "^1.2.13",
     "@types/web-push": "^3.6.4",
-    "prisma": "^6.3.1",
-    "typescript": "^5.7.3"
+    "prisma": "^6.8.2",
+    "typescript": "^5.8.3"
   },
   "trustedDependencies": ["@prisma/client"]
 }
