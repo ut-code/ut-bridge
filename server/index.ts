@@ -10,6 +10,7 @@ import communityRouter from "./routes/community.ts";
 import divisionRouter from "./routes/division.ts";
 import imageRouter from "./routes/image.ts";
 import languageRouter from "./routes/language.ts";
+import pushRouter from "./routes/push.ts";
 import universityRouter from "./routes/university.ts";
 import usersRouter from "./routes/users/index.ts";
 
@@ -57,6 +58,7 @@ const app = new Hono()
   .route("/language", languageRouter)
   .route("/university", universityRouter)
   .route("/chat", chatRouter)
+  .route("/push", pushRouter)
   .route("/image", imageRouter);
 
 export default app;
