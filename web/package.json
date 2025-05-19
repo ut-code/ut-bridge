@@ -17,17 +17,17 @@
     "hono": "^4.7.10",
     "jotai": "^2.12.4",
     "next": "^15.3.2",
-    "next-intl": "^3.26.5",
+    "next-intl": "^4.1.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-icons": "^5.5.0",
-    "zod": "^3.25.0"
+    "zod": "^3.25.1"
   },
   "devDependencies": {
     "@cloudflare/next-on-pages": "^1.13.12",
     "@eslint/eslintrc": "^3.3.1",
     "@tailwindcss/postcss": "^4.1.7",
-    "@types/node": "^20.17.48",
+    "@types/node": "^22.15.19",
     "@types/react": "^19.1.4",
     "@types/react-dom": "^19.1.5",
     "common": "workspace:common",

@@ -22,7 +22,7 @@
     "firebase-admin": "^13.4.0",
     "hono": "^4.7.10",
     "web-push": "^3.6.7",
-    "zod": "^3.25.0"
+    "zod": "^3.25.1"
   },
   "devDependencies": {
     "@types/bun": "^1.2.13",
