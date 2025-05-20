@@ -156,9 +156,8 @@ export const UserFormProvider = ({
   // 大学固有の static データを取得
   useEffect(() => {
     if (!formData.universityId) return;
-    console.log(`fetching university-specific data for university ${formData.universityId} ...`);
-
     const fetchCampusAndDivisions = async () => {
+      console.log(`fetching university-specific data for university ${formData.universityId} ...`);
       setLoadingUniversitySpecificData(true);
       try {
         const [campusRes, divisionRes] = await Promise.all([

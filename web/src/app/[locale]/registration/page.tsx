@@ -68,7 +68,7 @@ export default function Page() {
                   id="name"
                   type="text"
                   name="name"
-                  value={ctx.formData.name}
+                  defaultValue={ctx.formData.name}
                   onChange={ctx.handleChange}
                   required
                   maxLength={NAME_MAX_LENGTH}
@@ -84,9 +84,9 @@ export default function Page() {
 
                 <select
                   id="gender"
-                  defaultValue=""
                   required
                   name="gender"
+                  defaultValue=""
                   value={ctx.formData.gender}
                   onChange={ctx.handleChange}
                   className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
@@ -133,9 +133,9 @@ export default function Page() {
                 <select
                   name="universityId"
                   onChange={ctx.handleChange}
+                  defaultValue=""
                   value={ctx.formData.universityId}
                   className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
-                  defaultValue=""
                   required
                 >
                   <option value="" disabled className="select" />
@@ -150,9 +150,9 @@ export default function Page() {
                 {t("settings.university.divisions")}
                 <select
                   name="divisionId"
+                  defaultValue=""
                   value={ctx.formData.divisionId}
                   onChange={ctx.handleChange}
-                  defaultValue=""
                   required
                   className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                   disabled={ctx.loadingUniversitySpecificData}
@@ -172,6 +172,7 @@ export default function Page() {
                 {t("settings.university.campus")}
                 <select
                   name="campusId"
+                  defaultValue=""
                   value={ctx.formData.campusId}
                   onChange={ctx.handleChange}
                   className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"

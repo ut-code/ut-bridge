@@ -2,6 +2,7 @@
 import LanguageSwitcher from "@/components/LanguageSelectar.tsx";
 import { useGoogleLogout } from "@/features/auth/functions/logout.ts";
 import { Link } from "@/i18n/navigation.ts";
+import clsx from "clsx";
 import { useTranslations } from "next-intl";
 import { AiOutlineRight } from "react-icons/ai";
 import { blocks } from "./path-blocks.ts";
@@ -21,10 +22,14 @@ export default function PageNav() {
               <Link
                 href={item.href}
                 key={item.href}
-                className={`flex items-center justify-between bg-neutral-50 p-3 px-8 text-gray-800 text-md ${index === 0 ? "rounded-t-xl" : index === self.length - 1 ? "rounded-b-xl" : ""}`}
+                className={clsx([
+                  "flex items-center justify-between bg-neutral-50 p-3 px-8 text-md",
+                  index === 0 ? "rounded-t-xl" : index === self.length - 1 ? "rounded-b-xl" : "",
+                  item.variant === "danger" ? "text-error" : "text-gray-800 ",
+                ])}
               >
                 {t(item.title)}
-                <AiOutlineRight />
+                <AiOutlineRight className="text-gray-800" />
               </Link>
             ))}
           </section>
