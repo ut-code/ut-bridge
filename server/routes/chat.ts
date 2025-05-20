@@ -159,6 +159,11 @@ const router = new Hono()
             },
           },
         },
+        messages: {
+          some: {
+            id: {},
+          },
+        },
       },
       select: {
         id: true,
