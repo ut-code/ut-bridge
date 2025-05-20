@@ -5,6 +5,7 @@ import { HTTPException } from "hono/http-exception";
 import { z } from "zod";
 import { getGUID, getUserID } from "../../auth/func.ts";
 import { prisma } from "../../config/prisma.ts";
+import * as verification from "../../email/verification/func.ts";
 import markers from "./markers.ts";
 import me from "./me.ts";
 
@@ -104,6 +105,7 @@ const router = new Hono()
       const guid = await getGUID(c);
       const body = c.req.valid("json");
       const id = crypto.randomUUID();
+      await verification.register(id, body.email);
       const newUser = await prisma.user.create({
         data: {
           id,
@@ -128,6 +130,7 @@ const router = new Hono()
               languageId: langId,
             })),
           },
+          email: null,
         },
       });
       return c.json(newUser);

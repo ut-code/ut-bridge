@@ -1,5 +1,5 @@
 import type { Context } from "hono";
-import { env } from "../lib/env.ts";
+import { env } from "../../lib/env.ts";
 
 type APIStructure = {
   subject: string;

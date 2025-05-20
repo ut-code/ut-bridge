@@ -60,6 +60,22 @@ export default function Page() {
         </label>
       </div>
       <Avatar src={ctx.imagePreviewURL ?? me.imageUrl} size={160} />
+      <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
+        {t("settings.basic.email")}
+        <input
+          type="email"
+          name="email"
+          placeholder="you@example.com"
+          required
+          className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
+        />
+      </label>
+      <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
+        {t("settings.basic.allowPeriodicNotification")}
+        <span className="flex w-1/2 flex-row justify-center">
+          <input type="checkbox" name="allowNotifications" className="checkbox checkbox-primary" />
+        </span>
+      </label>
       <SubmitButton status={ctx.status} />
     </form>
   );

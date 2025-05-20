@@ -17,6 +17,7 @@ export type Message = PrismaMessage & {
 
 import { HTTPException } from "hono/http-exception";
 import { getUserID } from "../auth/func.ts";
+import { onMessageSend } from "../email/hooks.ts";
 const router = new Hono()
   // # general paths
   // ## about room
@@ -352,6 +353,8 @@ const router = new Hono()
           select: { name: true },
         });
         if (!sender) throw new HTTPException(404, { message: "you don't seem to exist" });
+
+        // broadcast SSE
         broadcast(await receivers, {
           event: "Create",
           data: devalue({
@@ -361,6 +364,11 @@ const router = new Hono()
             },
           }),
         });
+
+        // broadcast mails
+        for (const receiver of await receivers) {
+          await onMessageSend(c, sender.name, receiver, message);
+        }
       })();
       const resp = await prisma.message.create({
         data: message,

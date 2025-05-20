@@ -6,8 +6,7 @@ import { IMAGE_PREVIEW_URL_SESSION_STORAGE_KEY, STEP_1_DATA_SESSION_STORAGE_KEY 
 import { useUserFormContext } from "@/features/settings/UserFormController";
 import { useToast } from "@/features/toast/ToastProvider";
 import { NAME_MAX_LENGTH, Part1RegistrationSchema } from "common/zod/schema";
-import { useTranslations } from "next-intl";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -124,6 +123,21 @@ export default function Page() {
                   {t("settings.basic.photoUpload")}
                 </label>
               </div>
+              <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
+                {t("settings.basic.email")}
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
+                />
+              </label>
+              <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
+                {t("settings.basic.allowPeriodicNotification")}
+                <span className="flex w-1/2 flex-row justify-center">
+                  <input type="checkbox" name="allowNotifications" className="checkbox checkbox-primary" />
+                </span>
+              </label>
             </div>
 
             <div className="my-10 px-15">

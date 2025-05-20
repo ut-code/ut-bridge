@@ -76,7 +76,9 @@
       "other": "その他",
       "want-to-match": "新規にマッチングしたいですか？",
       "photo": "写真",
-      "photoUpload": "アップロード"
+      "photoUpload": "アップロード",
+      "email": "メールアドレス",
+      "allowPeriodicNotification": "定期通知を許可しますか？"
     },
     "university": {
       "title": "大学情報",

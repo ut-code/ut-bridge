@@ -35,6 +35,16 @@ model User {
 
   joinedRooms Belongs[]
   messages    Message[]
+
+  email                  String?
+  lastNotificationSentAt DateTime?
+}
+
+model EmailVerification {
+  id        String   @id @default(uuid(7))
+  userId    String   @unique
+  email     String
+  createdAt DateTime @default(now())
 }
 
 model Marker {
