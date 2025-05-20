@@ -79,7 +79,7 @@ export const UserFormProvider = ({
   const [blockedUsers, setBlockedUsers] = useState<FlatCardUser[]>([]);
   const [loadingUniversitySpecificData, setLoadingUniversitySpecificData] = useState(false);
 
-  // 一括データ取得（大学 & 言語）
+  // static データ取得（大学 & 言語）
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -153,7 +153,7 @@ export const UserFormProvider = ({
     }
   };
 
-  // 学部 & キャンパス データを取得
+  // 大学固有の static データを取得
   useEffect(() => {
     if (!formData.universityId) return;
     console.log(`fetching university-specific data for university ${formData.universityId} ...`);
@@ -199,6 +199,8 @@ export const UserFormProvider = ({
             motherLanguageId: me.motherLanguage.id,
             fluentLanguageIds: me.fluentLanguages.map((entry) => entry.language.id),
             learningLanguageIds: me.learningLanguages.map((entry) => entry.language.id),
+            campusId: me.campus.id,
+            divisionId: me.division.id,
           });
         }
       } catch (err) {
