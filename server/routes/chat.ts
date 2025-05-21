@@ -18,6 +18,7 @@ export type Message = PrismaMessage & {
 import { MESSAGE_MAX_LENGTH } from "common/zod/schema.ts";
 import { HTTPException } from "hono/http-exception";
 import { getUserID } from "../auth/func.ts";
+import { onMessageSend } from "../email/hooks/onMessageSend.ts";
 const router = new Hono()
   // # general paths
   // ## about room
@@ -353,6 +354,8 @@ const router = new Hono()
           select: { name: true },
         });
         if (!sender) throw new HTTPException(404, { message: "you don't seem to exist" });
+
+        // broadcast SSE
         broadcast(await receivers, {
           event: "Create",
           data: devalue({
@@ -362,6 +365,13 @@ const router = new Hono()
             },
           }),
         });
+
+        // broadcast mails
+        for (const receiverId of await receivers) {
+          if (receiverId !== requester) {
+            await onMessageSend(c, sender.name, receiverId, message);
+          }
+        }
       })();
       const resp = await prisma.message.create({
         data: message,

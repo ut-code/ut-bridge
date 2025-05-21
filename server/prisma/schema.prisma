@@ -35,6 +35,17 @@ model User {
 
   joinedRooms Belongs[]
   messages    Message[]
+
+  email                      String?
+  lastNotificationSentAt     DateTime?
+  allowPeriodicNotifications Boolean
+}
+
+model EmailVerification {
+  id        String   @id @default(uuid(7))
+  userId    String   @unique
+  email     String
+  createdAt DateTime @default(now())
 }
 
 model Marker {

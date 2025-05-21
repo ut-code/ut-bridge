@@ -8,6 +8,7 @@ import campusRouter from "./routes/campus.ts";
 import chatRouter from "./routes/chat.ts";
 import communityRouter from "./routes/community.ts";
 import divisionRouter from "./routes/division.ts";
+import emailRouter from "./routes/email.ts";
 import imageRouter from "./routes/image.ts";
 import languageRouter from "./routes/language.ts";
 import pushRouter from "./routes/push.ts";
@@ -59,7 +60,8 @@ const app = new Hono()
   .route("/university", universityRouter)
   .route("/chat", chatRouter)
   .route("/push", pushRouter)
-  .route("/image", imageRouter);
+  .route("/image", imageRouter)
+  .route("/email", emailRouter);
 
 export default app;
 export type App = typeof app;

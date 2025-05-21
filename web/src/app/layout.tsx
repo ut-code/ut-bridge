@@ -6,5 +6,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return children;
+  return (
+    <html lang="en">
+      <head>
+        <title>UT-Bridge</title>
+      </head>
+      <body>{children}</body>
+    </html>
+  );
 }

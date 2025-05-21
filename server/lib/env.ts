@@ -12,8 +12,8 @@ export function env_int(c: Context, name: string, options?: { fallback?: string 
   return parsed;
 }
 
-export function env_bool(c: Context, name: string, options?: { fallback?: string }): boolean {
-  const val = env(c, name, options);
+export function env_bool(c: Context, name: string, fallback: boolean): boolean {
+  const val = env(c, name, { fallback: "" });
   switch (val.toLowerCase()) {
     case "1":
     case "true":
@@ -28,7 +28,7 @@ export function env_bool(c: Context, name: string, options?: { fallback?: string
     case "n":
       return false;
     default:
-      throw new Error(`[env_bool] expected bool-castable value, got "${val}"`);
+      return fallback;
   }
 }
 
