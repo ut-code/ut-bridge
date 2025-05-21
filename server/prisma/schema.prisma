@@ -36,8 +36,9 @@ model User {
   joinedRooms Belongs[]
   messages    Message[]
 
-  email                  String?
-  lastNotificationSentAt DateTime?
+  email                      String?
+  lastNotificationSentAt     DateTime?
+  allowPeriodicNotifications Boolean
 }
 
 model EmailVerification {

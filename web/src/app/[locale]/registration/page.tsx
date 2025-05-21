@@ -128,13 +128,14 @@ export default function Page() {
                 <input
                   type="email"
                   name="email"
+                  placeholder="you@example.com"
                   className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                 />
               </label>
               <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
                 {t("settings.basic.allowPeriodicNotification")}
                 <span className="flex w-1/2 flex-row justify-center">
-                  <input type="checkbox" name="allowNotifications" className="checkbox checkbox-primary" />
+                  <input type="checkbox" name="allowPeriodicNotifications" className="checkbox checkbox-primary" />
                 </span>
               </label>
             </div>

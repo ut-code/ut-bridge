@@ -66,7 +66,6 @@ export default function Page() {
           type="email"
           name="email"
           placeholder="you@example.com"
-          required
           className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
         />
       </label>

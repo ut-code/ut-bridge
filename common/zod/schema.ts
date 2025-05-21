@@ -85,6 +85,7 @@ export const CreateUserSchema = BaseUserSchema.omit({ id: true }).extend({
   fluentLanguageIds: z.array(z.string().uuid()),
   learningLanguageIds: z.array(z.string().uuid()),
   email: z.string().email().optional(),
+  allowPeriodicNotifications: z.boolean().default(false),
 });
 export const Part1RegistrationSchema = CreateUserSchema.omit({
   hobby: true,
