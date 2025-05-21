@@ -5,10 +5,12 @@ import Avatar from "@/components/Avatar";
 import Loading from "@/components/Loading";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { handlers } from "@/features/chat/state";
-import { useUserContext } from "@/features/user/userProvider";
+import { type MYDATA, useUserContext } from "@/features/user/userProvider";
 import { Link } from "@/i18n/navigation";
 import { assert } from "@/lib";
 import { use } from "@/react/useData";
+import clsx from "clsx";
+import { MESSAGE_MAX_LENGTH } from "common/zod/schema.ts";
 import { useParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { AiOutlineLeft, AiOutlineSend } from "react-icons/ai";
@@ -21,14 +23,15 @@ export default function Page() {
     <div className="flex h-full">
       <div className="flex-1">
         <div className="flex h-full flex-col">
-          <Load room={roomId} />
-          <MessageInput room={roomId} />
+          <Load roomId={roomId} />
+          <MessageInput roomId={roomId} />
         </div>
       </div>
     </div>
   );
 }
-function MessageInput({ room }: { room: string }) {
+
+function MessageInput({ roomId }: { roomId: string }) {
   const { idToken: Authorization } = useAuthContext();
   const [input, setInput] = useState<string>("");
   const [submitting, setSubmitting] = useState<boolean>(false);
@@ -42,7 +45,7 @@ function MessageInput({ room }: { room: string }) {
     await client.chat.rooms[":room"].messages.$post({
       header: { Authorization },
       param: {
-        room: room,
+        room: roomId,
       },
       json: {
         content: input,
@@ -57,8 +60,12 @@ function MessageInput({ room }: { room: string }) {
       <form className="inline" onSubmit={handleSubmit}>
         <div className="fixed bottom-[64px] flex w-full flex-row justify-around gap-2 border-gray-300 border-t bg-white p-4 sm:bottom-0">
           <textarea
-            className="field-sizing-content h-auto max-h-[200px] min-h-[40px] w-full resize-none rounded-xl border border-gray-300 p-2 leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={clsx(
+              "field-sizing-content h-auto max-h-[200px] min-h-[40px] w-full resize-none rounded-xl border border-gray-300 p-2 leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-500",
+              input.length >= MESSAGE_MAX_LENGTH && "bg-red-200",
+            )}
             rows={1}
+            maxLength={MESSAGE_MAX_LENGTH}
             value={input}
             onChange={(ev) => {
               setInput(ev.target.value);
@@ -78,14 +85,14 @@ function MessageInput({ room }: { room: string }) {
     </div>
   );
 }
-function Load({ room }: { room: string }) {
+function Load({ roomId }: { roomId: string }) {
   const { idToken: Authorization } = useAuthContext();
   const { me } = useUserContext();
   const m = use(async () => {
     const res = await client.chat.rooms[":room"].$get({
       header: { Authorization },
       param: {
-        room: room,
+        room: roomId,
       },
     });
     const json = await res.json();
@@ -99,27 +106,13 @@ function Load({ room }: { room: string }) {
   }
   return (
     <>
-      <div className="fixed z-10 flex w-full items-center bg-stone-200 py-2">
-        <Link href={"/chat"} className="mx-2">
-          <AiOutlineLeft size={25} />
-        </Link>
-        <div className="mr-[33px] w-full text-center text-xl">
-          {m.data.members
-            .filter((member) => member.user.id !== me.id)
-            .map((member) => (
-              <div key={member.user.id} className=" ml-2 flex items-center gap-2">
-                <Avatar alt={member.user.name || "User"} src={member.user.imageUrl} size={40} />
-                <div>{member.user.name}</div>
-              </div>
-            ))}
-        </div>
-      </div>
+      <Header room={m.data} me={me} />
       <MessageList
         data={m.data.messages.map((m) => ({
           ...m,
           createdAt: new Date(m.createdAt),
         }))}
-        room={room}
+        roomId={roomId}
       />
     </>
   );
@@ -127,7 +120,7 @@ function Load({ room }: { room: string }) {
 
 function MessageList({
   data,
-  room,
+  roomId,
 }: {
   data: {
     id: string;
@@ -136,7 +129,7 @@ function MessageList({
     content: string;
     sender: { name: string };
   }[];
-  room: string;
+  roomId: string;
 }) {
   const [messages, setMessages] = useState(data);
   const { idToken: Authorization } = useAuthContext();
@@ -144,7 +137,7 @@ function MessageList({
   useEffect(() => {
     handlers.onCreate = (message) => {
       console.log("onCreate: updating messages...");
-      if (room === message.roomId) {
+      if (roomId === message.roomId) {
         setMessages((prev) => {
           // avoid react from automatically optimizing the update away
           return [...prev, message];
@@ -174,7 +167,7 @@ function MessageList({
       handlers.onUpdate = undefined;
       handlers.onDelete = undefined;
     };
-  }, [room]);
+  }, [roomId]);
   const { me } = useUserContext();
 
   const target = document.getElementById("scroll-bottom");
@@ -205,7 +198,7 @@ function MessageList({
     try {
       await client.chat.messages[":message"][":room"].$delete({
         header: { Authorization },
-        param: { message: deletingMessageId, room: room },
+        param: { message: deletingMessageId, room: roomId },
       });
 
       setMessages((prev) => prev.filter((m) => m.id !== deletingMessageId));
@@ -233,7 +226,7 @@ function MessageList({
   };
 
   return (
-    <ul className="mx-3 mt-[56px] mb-[76px] grow overflow-y-scroll sm:pb-0" id="scroll-bottom">
+    <ul className="mx-3 mb-[76px] grow overflow-y-scroll sm:pb-0" id="scroll-bottom">
       {messages.map((m) => (
         // TODO: handle pictures
         <li key={m.id}>
@@ -248,7 +241,9 @@ function MessageList({
             <div className="chat-header">
               <time className="text-xs opacity-50">{m.createdAt.toLocaleString()}</time>
             </div>
-            <div className={`chat-bubble ${m.senderId === me.id ? "bg-blue-200" : "chat-start"}`}>
+            <div
+              className={`chat-bubble max-w-[80vw] break-words ${m.senderId === me.id ? "bg-blue-200" : "chat-start"}`}
+            >
               {m.content.split("\n").map((line, index) => (
                 <div key={`${m.id}-${index}`}>
                   {line}
@@ -296,5 +291,40 @@ function MessageList({
       ))}
       <div ref={bottomRef} />
     </ul>
+  );
+}
+
+type Room = {
+  id: string;
+  name: string | null;
+  members: {
+    user: {
+      id: string;
+      name: string;
+      imageUrl: string | null;
+    };
+  }[];
+};
+
+function Header({ room, me }: { room: Room; me: MYDATA }) {
+  return (
+    <>
+      <div className="invisible h-[56px]" />
+      <div className="fixed top-[56px] z-10 flex w-full items-center bg-stone-200 py-2">
+        <Link href={"/chat"} className="mx-2">
+          <AiOutlineLeft size={25} />
+        </Link>
+        <div className="mr-[33px] w-full text-center text-xl">
+          {room.members
+            .filter((member) => member.user.id !== me.id)
+            .map((member) => (
+              <div key={member.user.id} className=" ml-2 flex items-center gap-2">
+                <Avatar alt={member.user.name || "User"} src={member.user.imageUrl} size={40} />
+                <div>{member.user.name}</div>
+              </div>
+            ))}
+        </div>
+      </div>
+    </>
   );
 }

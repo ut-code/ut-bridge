@@ -5,7 +5,7 @@
   "scripts": {
     "pages:build": "bunx @cloudflare/next-on-pages",
     "deploy": "bun run pages:build && wrangler pages deploy",
-    "dev": "bun --env-file=../.env run next dev --port 5173",
+    "dev": "bun --env-file=../.env run next dev --port 5173 --turbopack",
     "build": "bun --env-file=../.env run next build",
     "start": "next start --port $PORT",
     "lint": "next lint"

@@ -12,13 +12,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <AuthProvider>
       <UserProvider>
         <ChatNotificationProvider>
-          <div className="flex min-h-fit flex-col bg-tGray">
-            <Header />
-            <ToastProvider>
-              <div className="flex-grow pb-16">{children}</div>
+          <ToastProvider>
+            <div className="flex min-h-fit flex-col bg-tGray">
+              <div className="flex-grow pb-16">
+                <Header />
+                {children}
+              </div>
               <Footer />
-            </ToastProvider>
-          </div>
+            </div>
+          </ToastProvider>
         </ChatNotificationProvider>
       </UserProvider>
     </AuthProvider>
