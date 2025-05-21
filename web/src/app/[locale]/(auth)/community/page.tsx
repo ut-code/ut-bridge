@@ -89,6 +89,13 @@ export default function Page() {
   const { idToken: Authorization } = useAuthContext();
 
   useEffect(() => {
+    const SESSION_SEED_KEY = "ut-bridge:community:session-seed";
+    let sessionSeed = sessionStorage.getItem(SESSION_SEED_KEY);
+    if (!sessionSeed) {
+      sessionSeed = crypto.randomUUID();
+      sessionStorage.setItem(SESSION_SEED_KEY, sessionSeed);
+    }
+
     const ctl = new AbortController();
     setUsers(null);
     (async () => {
@@ -103,7 +110,7 @@ export default function Page() {
               marker: query.marker === "favorite" ? "favorite" : "notBlocked",
               wantsToMatch: "true",
             },
-            header: { Authorization },
+            header: { Authorization, sessionSeed },
           },
           {
             init: {
