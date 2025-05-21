@@ -90,7 +90,9 @@ function Room({ room }: { room: RoomPreview }) {
         </div>
         <div className=" list-col-grow pl-4">
           <div>{firstMember?.name || "Unknown User"}</div>
-          <div className="font-semibold text-xs opacity-60">{room.messages[0]?.content ?? ""}</div>
+          <div className="max-w-[80vw] truncate font-semibold text-xs opacity-60">
+            {room.messages[0]?.content ?? ""}
+          </div>
         </div>
       </Link>
     </div>

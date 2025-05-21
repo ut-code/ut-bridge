@@ -11,6 +11,7 @@ export const MarkerSchema = z.enum(["blocked", "favorite"]);
 export const NAME_MAX_LENGTH = 30;
 export const HOBBY_MAX_LENGTH = 2000;
 export const INTRO_MAX_LENGTH = 2000;
+export const MESSAGE_MAX_LENGTH = 42000;
 export const NameSchema = z.string().max(NAME_MAX_LENGTH, { message: `名前は${NAME_MAX_LENGTH}文字以下です` });
 export const HobbySchema = z.string().max(HOBBY_MAX_LENGTH, { message: `趣味は${HOBBY_MAX_LENGTH}文字以下です` });
 export const IntroductionSchema = z

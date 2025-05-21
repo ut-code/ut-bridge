@@ -15,6 +15,7 @@ export type Message = PrismaMessage & {
   };
 };
 
+import { MESSAGE_MAX_LENGTH } from "common/zod/schema.ts";
 import { HTTPException } from "hono/http-exception";
 import { getUserID } from "../auth/func.ts";
 const router = new Hono()
@@ -321,7 +322,7 @@ const router = new Hono()
       "json",
       z.object({
         isPhoto: z.boolean(),
-        content: z.string(),
+        content: z.string().max(MESSAGE_MAX_LENGTH, { message: `メッセージは${MESSAGE_MAX_LENGTH}文字以下です` }),
       }),
     ),
     async (c) => {
@@ -379,7 +380,7 @@ const router = new Hono()
     zValidator(
       "json",
       z.object({
-        content: z.string(),
+        content: z.string().max(MESSAGE_MAX_LENGTH, { message: `メッセージは${MESSAGE_MAX_LENGTH}文字以下です` }),
       }),
     ),
     zValidator("header", z.object({ Authorization: z.string() })),
@@ -426,8 +427,8 @@ const router = new Hono()
     zValidator(
       "param",
       z.object({
-        message: z.string(), // Message ID
-        room: z.string(),
+        message: z.string().uuid(), // Message ID
+        room: z.string().uuid(),
       }),
     ),
     zValidator("header", z.object({ Authorization: z.string() })),
