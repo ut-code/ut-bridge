@@ -39,7 +39,7 @@ body: "${body}"`);
     data: { lastNotificationSentAt: new Date() },
   });
 
-  if (!receiver.email || env_bool(c, "ZERO_EMAIL")) {
+  if (!receiver.email || env_bool(c, "ZERO_EMAIL", false)) {
     console.log(
       `
 [email engine] skipped sending email to ${receiver.name} <${receiver.email ?? "no address registered"}>:

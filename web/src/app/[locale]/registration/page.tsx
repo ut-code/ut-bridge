@@ -128,6 +128,7 @@ export default function Page() {
                 <input
                   type="email"
                   name="email"
+                  onChange={ctx.handleChange}
                   placeholder="you@example.com"
                   className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                 />
@@ -135,7 +136,12 @@ export default function Page() {
               <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
                 {t("settings.basic.allowPeriodicNotification")}
                 <span className="flex w-1/2 flex-row justify-center">
-                  <input type="checkbox" name="allowPeriodicNotifications" className="checkbox checkbox-primary" />
+                  <input
+                    type="checkbox"
+                    onChange={ctx.handleChange}
+                    name="allowPeriodicNotifications"
+                    className="checkbox checkbox-primary"
+                  />
                 </span>
               </label>
             </div>

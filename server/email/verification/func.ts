@@ -40,6 +40,7 @@ export async function verify(id: string) {
       message: `verification ${id} not found`,
     });
   }
+  console.log("[verification] verified email", verification.email);
   await prisma.user.update({
     where: {
       id: verification.userId,

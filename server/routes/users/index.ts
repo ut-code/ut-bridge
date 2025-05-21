@@ -127,6 +127,7 @@ const router = new Hono()
               languageId: langId,
             })),
           },
+          allowPeriodicNotifications: body.allowPeriodicNotifications,
           learningLanguages: {
             create: body.learningLanguageIds.map((langId) => ({
               languageId: langId,

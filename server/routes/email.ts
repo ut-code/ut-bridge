@@ -6,13 +6,13 @@ import { verify } from "../email/verification/func.ts";
 const route = new Hono().put(
   "/verify",
   zValidator(
-    "param",
+    "query",
     z.object({
       id: z.string(),
     }),
   ),
   async (c) => {
-    const params = c.req.valid("param");
+    const params = c.req.valid("query");
     await verify(params.id);
     return c.json({ ok: true });
   },

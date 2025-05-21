@@ -16,7 +16,11 @@ export default function Page() {
           Email verified successfully!
         </a>
       )}
-      {status === "error" && <p className={className}>Email verification failed!</p>}
+      {status === "error" && (
+        <button type="button" className={className} onClick={() => setStatus("ready")}>
+          Email verification failed! try again
+        </button>
+      )}
       {status === "processing" && <p className={className}>Processing...</p>}
       {status === "ready" && <VerifyButton setStatus={setStatus} />}
     </div>
@@ -27,17 +31,20 @@ function VerifyButton({
   setStatus,
 }: { setStatus: React.Dispatch<React.SetStateAction<"ready" | "processing" | "error" | "success">> }) {
   const params = useSearchParams();
-  const id = params.get("id");
   return (
     <button
       type="button"
       className={className}
       onClick={async () => {
-        if (!id) return;
+        const id = params.get("id");
+        if (!id) {
+          console.error("id is not provided");
+          return null;
+        }
         try {
           setStatus("processing");
           const res = await client.email.verify.$put({
-            param: {
+            query: {
               id,
             },
           });

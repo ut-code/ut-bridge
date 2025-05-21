@@ -1,6 +1,6 @@
 import type { Context } from "hono";
 import { env } from "../../lib/env.ts";
-import { sendEmail } from "../internal/mailer.ts";
+import { type MailOptions, sendEmail } from "../internal/mailer.ts";
 
 export async function sendVerificationEmail(
   c: Context,
@@ -11,11 +11,14 @@ export async function sendVerificationEmail(
   verificationId: string,
 ) {
   const WEB_ORIGIN = env(c, "WEB_ORIGIN");
-  const url = `${WEB_ORIGIN}/verify/${verificationId}`;
+  const url = `${WEB_ORIGIN}/verify?id=${verificationId}`;
 
-  await sendEmail(c, {
+  const options: MailOptions = {
     to: [user],
     subject: "Verify your email",
     body: `Click the link to verify your email: <a href="${url}">${url}</a>`,
-  });
+  };
+
+  console.log("[verification] sent verification email", options);
+  await sendEmail(c, options);
 }
