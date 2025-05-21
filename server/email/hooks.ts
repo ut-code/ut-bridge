@@ -21,16 +21,23 @@ export async function onMessageSend(c: Context, fromName: string, toId: string, 
     return;
   }
 
+  const subject = `New message from ${fromName}`;
+  const body = message.content; // TODO: escape HTML
+
   if (
     receiver.lastNotificationSentAt &&
     Date.now() - receiver.lastNotificationSentAt.getTime() < EMAIL_THROTTLE_INTERVAL_MS
   ) {
     // email throttled
+    console.log(`[email engine] email throttled:
+subject: "${subject}"
+body: "${body}"`);
     return;
   }
-
-  const subject = `New message from ${fromName}`;
-  const body = message.content; // TODO: escape HTML
+  await prisma.user.update({
+    where: { id: toId },
+    data: { lastNotificationSentAt: new Date() },
+  });
 
   if (!receiver.email || env_bool(c, "ZERO_EMAIL")) {
     console.log(
@@ -42,10 +49,6 @@ body: "${body}"`,
     return;
   }
 
-  await prisma.user.update({
-    where: { id: toId },
-    data: { lastNotificationSentAt: new Date() },
-  });
   await sendEmail(c, {
     to: [{ name: receiver.name, email: receiver.email }],
     subject,

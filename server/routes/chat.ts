@@ -366,8 +366,10 @@ const router = new Hono()
         });
 
         // broadcast mails
-        for (const receiver of await receivers) {
-          await onMessageSend(c, sender.name, receiver, message);
+        for (const receiverId of await receivers) {
+          if (receiverId !== requester) {
+            await onMessageSend(c, sender.name, receiverId, message);
+          }
         }
       })();
       const resp = await prisma.message.create({
