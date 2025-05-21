@@ -1,11 +1,22 @@
 import type { Context } from "hono";
 import { HTTPException } from "hono/http-exception";
 import { prisma } from "../../config/prisma.ts";
+import { env_bool } from "../../lib/env.ts";
 import { sendVerificationEmail } from "./utils.ts";
 
 const VERIFY_EMAIL_AGE = 60 * 60 * 1000; // 60 minutes
 
 export async function register(c: Context, userId: string, userName: string, email: string) {
+  if (env_bool(c, "ZERO_EMAIL")) {
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        email,
+      },
+    });
+    return;
+  }
+
   const verification = await prisma.emailVerification.upsert({
     where: { userId },
     create: {

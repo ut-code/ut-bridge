@@ -105,7 +105,9 @@ const router = new Hono()
       const guid = await getGUID(c);
       const body = c.req.valid("json");
       const id = crypto.randomUUID();
-      await verification.register(id, body.email);
+      if (body.email) {
+        await verification.register(c, id, body.name, body.email);
+      }
       const newUser = await prisma.user.create({
         data: {
           id,

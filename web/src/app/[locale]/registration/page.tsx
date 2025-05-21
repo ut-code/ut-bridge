@@ -128,7 +128,6 @@ export default function Page() {
                 <input
                   type="email"
                   name="email"
-                  required
                   className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
                 />
               </label>
