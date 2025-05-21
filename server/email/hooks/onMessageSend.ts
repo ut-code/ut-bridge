@@ -1,8 +1,8 @@
 import type { Message } from "@prisma/client";
 import type { Context } from "hono";
-import { prisma } from "../config/prisma.ts";
-import { env_bool } from "../lib/env.ts";
-import { sendEmail } from "./internal/mailer.ts";
+import { prisma } from "../../config/prisma.ts";
+import { env_bool } from "../../lib/env.ts";
+import { sendEmail } from "../internal/mailer.ts";
 
 const EMAIL_THROTTLE_INTERVAL_MS = 10 * 60 * 1000; // 10 minutes
 

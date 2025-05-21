@@ -17,7 +17,7 @@ export type Message = PrismaMessage & {
 
 import { HTTPException } from "hono/http-exception";
 import { getUserID } from "../auth/func.ts";
-import { onMessageSend } from "../email/hooks.ts";
+import { onMessageSend } from "../email/hooks/onMessageSend.ts";
 const router = new Hono()
   // # general paths
   // ## about room
