@@ -7,7 +7,7 @@ import { sendVerificationEmail } from "./utils.ts";
 const VERIFY_EMAIL_AGE = 60 * 60 * 1000; // 60 minutes
 
 export async function register(c: Context, userId: string, userName: string, email: string) {
-  if (env_bool(c, "ZERO_EMAIL")) {
+  if (env_bool(c, "ZERO_EMAIL", false)) {
     await prisma.user.update({
       where: { id: userId },
       data: {
