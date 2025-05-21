@@ -1,10 +1,9 @@
 import { zValidator } from "@hono/zod-validator";
-import type { Prisma } from "@prisma/client";
 import { MarkerSchema, type StructuredCardUser } from "common/zod/schema.ts";
 import { Hono } from "hono";
 import { getUserID } from "server/auth/func.ts";
 import z from "zod";
-import { prisma } from "../config/prisma.ts";
+import { getCommunityUsers } from "../query/community.ts";
 
 const router = new Hono().get(
   "/",
@@ -19,127 +18,13 @@ const router = new Hono().get(
       wantsToMatch: z.enum(["true"]).optional(),
     }),
   ),
-  zValidator("header", z.object({ Authorization: z.string() })),
+  zValidator("header", z.object({ Authorization: z.string(), sessionSeed: z.string() })),
   async (c) => {
     const requester = await getUserID(c);
-    const { except, page, exchangeQuery, searchQuery, marker: markerQuery, wantsToMatch } = c.req.valid("query");
-    const take = 15; //TODO: web側で指定できるようにする
-    const skip = (page - 1) * take;
+    const header = c.req.valid("header");
+    const query = c.req.valid("query");
 
-    const whereCondition: Prisma.UserWhereInput = {};
-
-    if (wantsToMatch) {
-      whereCondition.wantToMatch = wantsToMatch === "true";
-    }
-
-    // 言語交換フィルター
-    if (exchangeQuery === "exchange") {
-      whereCondition.isForeignStudent = true;
-    } else if (exchangeQuery === "japanese") {
-      whereCondition.isForeignStudent = false;
-    }
-    if (except) {
-      whereCondition.id = { not: except };
-    }
-
-    if (markerQuery === "favorite" || markerQuery === "blocked") {
-      whereCondition.markedAs = {
-        some: {
-          actorId: requester,
-          kind: markerQuery,
-        },
-      };
-    } else if (markerQuery === "notBlocked") {
-      whereCondition.markedAs = {
-        none: {
-          actorId: requester,
-          kind: "blocked",
-        },
-      };
-    }
-
-    // 検索フィルター
-    if (searchQuery) {
-      whereCondition.OR = [
-        { name: { contains: searchQuery, mode: "insensitive" } },
-        {
-          campus: {
-            OR: [
-              { jaName: { contains: searchQuery, mode: "insensitive" } },
-              { enName: { contains: searchQuery, mode: "insensitive" } },
-            ],
-          },
-        },
-        {
-          motherLanguage: {
-            OR: [
-              { jaName: { contains: searchQuery, mode: "insensitive" } },
-              { enName: { contains: searchQuery, mode: "insensitive" } },
-            ],
-          },
-        },
-        {
-          fluentLanguages: {
-            some: {
-              language: {
-                OR: [
-                  { jaName: { contains: searchQuery, mode: "insensitive" } },
-                  { enName: { contains: searchQuery, mode: "insensitive" } },
-                ],
-              },
-            },
-          },
-        },
-        {
-          learningLanguages: {
-            some: {
-              language: {
-                OR: [
-                  { jaName: { contains: searchQuery, mode: "insensitive" } },
-                  { enName: { contains: searchQuery, mode: "insensitive" } },
-                ],
-              },
-            },
-          },
-        },
-      ];
-    }
-
-    const [users, totalUsers] = await Promise.all([
-      prisma.user.findMany({
-        where: whereCondition,
-        skip,
-        take,
-        select: {
-          id: true,
-          name: true,
-          gender: true,
-          isForeignStudent: true,
-          imageUrl: true,
-          wantToMatch: true,
-          campus: {
-            select: { university: true, id: true, jaName: true, enName: true },
-          },
-          grade: true,
-          motherLanguage: { select: { id: true, jaName: true, enName: true } },
-          fluentLanguages: {
-            select: { language: true },
-          },
-          learningLanguages: {
-            select: { language: true },
-          },
-          markedAs: {
-            select: {
-              kind: true,
-            },
-            where: {
-              actorId: requester,
-            },
-          },
-        },
-      }),
-      prisma.user.count({ where: whereCondition }),
-    ]);
+    const { users, totalUsers } = await getCommunityUsers(requester, query, header.sessionSeed);
 
     return c.json({ users: users satisfies StructuredCardUser[], totalUsers });
   },

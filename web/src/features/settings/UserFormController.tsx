@@ -214,7 +214,7 @@ export const UserFormProvider = ({
     try {
       if (!me) return;
       const res = await client.community.$get({
-        header: { Authorization },
+        header: { Authorization, sessionSeed: "" }, // we don't care about the order of users here
         query: {
           except: me.id,
           marker: "favorite",
@@ -236,7 +236,7 @@ export const UserFormProvider = ({
     try {
       if (!me) return;
       const res = await client.community.$get({
-        header: { Authorization },
+        header: { Authorization, sessionSeed: "" }, // we don't care about how users are ordered here
         query: {
           except: me.id,
           marker: "blocked",
