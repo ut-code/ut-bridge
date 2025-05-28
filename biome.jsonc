@@ -26,7 +26,10 @@
         "useImportExtensions": "error"
       },
       "nursery": {
-        "useSortedClasses": "error"
+        "useSortedClasses": {
+          "level": "error",
+          "fix": "safe"
+        }
       }
     }
   },

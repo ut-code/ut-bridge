@@ -10,9 +10,10 @@ export async function sendVerificationEmail(
     email: string;
   },
   verificationId: string,
+  token: string,
 ) {
   const WEB_ORIGIN = env(c, "WEB_ORIGIN");
-  const url = `${WEB_ORIGIN}/verify?id=${verificationId}`;
+  const url = `${WEB_ORIGIN}/verify?id=${verificationId}&token=${token}`;
 
   const body = `
 Visit this page to verify your email: <a href="${url}">${url}</a>

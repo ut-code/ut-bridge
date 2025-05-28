@@ -105,8 +105,8 @@ const router = new Hono()
       const guid = await getGUID(c);
       const body = c.req.valid("json");
       const id = crypto.randomUUID();
-      if (body.email) {
-        await verification.register(c, id, body.name, body.email);
+      if (body.customEmail) {
+        await verification.register(c, id, body.name, body.customEmail);
       }
       const newUser = await prisma.user.create({
         data: {
@@ -133,7 +133,8 @@ const router = new Hono()
               languageId: langId,
             })),
           },
-          email: null,
+          defaultEmail: null, // TODO: get default email from firebase auth
+          customEmail: body.customEmail,
         },
       });
       return c.json(newUser);

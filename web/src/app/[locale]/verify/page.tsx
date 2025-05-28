@@ -12,9 +12,12 @@ export default function Page() {
     <div>
       <h1>Verify Your Email</h1>
       {status === "success" && (
-        <a href="/community" className={className}>
+        <p>
           Email verified successfully!
-        </a>
+          <a href="/community" className={className}>
+            Go to community
+          </a>
+        </p>
       )}
       {status === "error" && (
         <button type="button" className={className} onClick={() => setStatus("ready")}>
@@ -37,8 +40,9 @@ function VerifyButton({
       className={className}
       onClick={async () => {
         const id = params.get("id");
-        if (!id) {
-          console.error("id is not provided");
+        const token = params.get("token");
+        if (!id || !token) {
+          console.error("id or token is not provided");
           return null;
         }
         try {
@@ -46,6 +50,7 @@ function VerifyButton({
           const res = await client.email.verify.$put({
             query: {
               id,
+              token,
             },
           });
           if (!res.ok) throw new Error(`verification failed with status ${res.status}`);

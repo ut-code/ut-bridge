@@ -7,11 +7,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ja" data-theme="light" className="h-screen bg-tGray">
       <head>
         <title>UT-Bridge</title>
       </head>
-      <body>{children}</body>
+      <body className="flex h-screen flex-col overflow-y-auto">{children}</body>
     </html>
   );
 }

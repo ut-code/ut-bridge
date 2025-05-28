@@ -1,5 +1,5 @@
 import { zValidator } from "@hono/zod-validator";
-import { CreateUserSchema } from "common/zod/schema.ts";
+import { CreateUserSchema, type MYDATA } from "common/zod/schema.ts";
 import { Hono } from "hono";
 import { z } from "zod";
 import { getUserID } from "../../auth/func.ts";
@@ -31,6 +31,10 @@ const route = new Hono()
           introduction: body.introduction ?? undefined,
           motherLanguageId: body.motherLanguageId ?? undefined,
           wantToMatch: body.wantToMatch,
+          // do NOT update customEmail here. use /email/register instead.
+          customEmail: undefined,
+          allowNotifications: body.allowNotifications,
+          allowPeriodicNotifications: body.allowPeriodicNotifications,
 
           // 既存データがある場合のみ削除して新規追加 (fluentLanguages)
           ...(body.fluentLanguageIds?.length
@@ -95,5 +99,35 @@ const route = new Hono()
       where: { id: userId },
     });
     return c.json(deletedUser);
+  })
+
+  .get("/", zValidator("header", z.object({ Authorization: z.string() })), async (c) => {
+    const userId = await getUserID(c);
+    const user: MYDATA | null = await prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        campus: {
+          include: {
+            university: true,
+          },
+        },
+        division: true,
+        motherLanguage: true,
+        fluentLanguages: {
+          include: {
+            language: true,
+          },
+        },
+        learningLanguages: {
+          include: {
+            language: true,
+          },
+        },
+        marking: true,
+        markedAs: true,
+      },
+    });
+    return c.json(user);
   });
+
 export default route;

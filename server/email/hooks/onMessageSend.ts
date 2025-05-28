@@ -13,10 +13,12 @@ export async function onMessageSend(c: Context, fromName: string, toId: string, 
     select: {
       id: true,
       name: true,
-      email: true,
+      defaultEmail: true,
+      customEmail: true,
       lastNotificationSentAt: true,
     },
   });
+  const email = receiver?.defaultEmail ?? receiver?.customEmail;
   if (!receiver) {
     console.error(`user ${toId} not found`);
     return;
@@ -48,10 +50,10 @@ body: "${body}"`);
     data: { lastNotificationSentAt: new Date() },
   });
 
-  if (!receiver.email || env_bool(c, "ZERO_EMAIL", false)) {
+  if (!email || env_bool(c, "ZERO_EMAIL", false)) {
     console.log(
       `
-[email engine] skipped sending email to ${receiver.name} <${receiver.email ?? "no address registered"}>:
+[email engine] skipped sending email to ${receiver.name} <${email ?? "no address registered"}>:
 subject: "${subject}"
 body: "${body}"`,
     );
@@ -59,7 +61,7 @@ body: "${body}"`,
   }
 
   await sendEmail(c, {
-    to: [{ name: receiver.name, email: receiver.email }],
+    to: [{ name: receiver.name, email }],
     subject,
     body,
   });

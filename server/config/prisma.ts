@@ -1,10 +1,9 @@
 import type { Prisma } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
 
-const config: Prisma.PrismaClientOptions = {};
-
+let log: Prisma.LogDefinition[] = [];
 if (process.env.SQL_LOGS === "true") {
-  config.log = [
+  log = [
     {
       emit: "event",
       level: "query",
@@ -24,4 +23,16 @@ if (process.env.SQL_LOGS === "true") {
   ];
 }
 
-export const prisma = new PrismaClient(config);
+const omit: Prisma.PrismaClientOptions["omit"] = {
+  user: {
+    defaultEmail: true,
+    customEmail: true,
+    allowNotifications: true,
+    allowPeriodicNotifications: true,
+  },
+};
+
+export const prisma = new PrismaClient({
+  log,
+  omit,
+});

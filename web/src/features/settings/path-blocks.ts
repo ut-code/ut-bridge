@@ -8,6 +8,10 @@ export const blocks: PathBlock[] = [
         title: "basic.title",
       },
       {
+        href: "/settings/email",
+        title: "email.title",
+      },
+      {
         href: "/settings/university",
         title: "university.title",
       },

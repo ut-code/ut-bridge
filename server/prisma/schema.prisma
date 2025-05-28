@@ -36,13 +36,24 @@ model User {
   joinedRooms Belongs[]
   messages    Message[]
 
-  email                      String?
+  // defaultEmail: Google アカウントでログインしたときのメールアドレス
+  // customEmail が設定されていないときはこっちに送る
+  // it's not allowed to delete or mutate this
+  defaultEmail               String?
+  // customEmail: ユーザーが設定したメールアドレス、これが設定されているときはこっちに送る
+  customEmail                String?
   lastNotificationSentAt     DateTime?
-  allowPeriodicNotifications Boolean
+  // メッセージ通知
+  allowNotifications         Boolean   @default(true)
+  // 定期通知 (未実装)
+  allowPeriodicNotifications Boolean   @default(true)
 }
 
 model EmailVerification {
+  // public id
   id        String   @id @default(uuid(7))
+  // private token
+  token     String   @unique @default(uuid(7))
   userId    String   @unique
   email     String
   createdAt DateTime @default(now())

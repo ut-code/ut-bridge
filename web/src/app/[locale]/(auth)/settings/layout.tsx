@@ -31,6 +31,8 @@ function getTransition(pathname: string) {
       return "other.contact.title";
     case "/delete":
       return "delete.title";
+    case "/email":
+      return "email.title";
     default:
       console.error("got unexpected pathname:", pathname);
       return "basic.title";

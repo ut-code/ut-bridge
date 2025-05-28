@@ -136,6 +136,26 @@
         "contactForm": "お問い合わせフォーム"
       }
     },
+    "email": {
+      "title": "メール設定",
+      "currentEmail": "現在のメールアドレス",
+      "customEmail": "カスタムメールアドレス",
+      "defaultEmail": "デフォルトメールアドレス（ECCSアカウント）",
+      "updateEmail": "メールアドレスを更新",
+      "verifyEmail": "メールアドレスを確認",
+      "resendVerification": "確認メールを再送信",
+      "notVerified": "未確認",
+      "verified": "確認済み",
+      "verificationSent": "確認メールを送信しました",
+      "verificationFailed": "確認メールの送信に失敗しました",
+      "updateSuccess": "メールアドレスを更新しました",
+      "updateFailed": "メールアドレスの更新に失敗しました",
+      "notifications": {
+        "title": "メール通知",
+        "allowMessages": "メッセージ通知を許可",
+        "allowPeriodic": "定期通知を許可"
+      }
+    },
     "logout": "ログアウト",
     "delete": {
       "title": "アカウント削除",
