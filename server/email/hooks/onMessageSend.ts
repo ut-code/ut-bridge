@@ -16,11 +16,16 @@ export async function onMessageSend(c: Context, fromName: string, toId: string, 
       defaultEmail: true,
       customEmail: true,
       lastNotificationSentAt: true,
+      allowNotifications: true,
     },
   });
   const email = receiver?.defaultEmail ?? receiver?.customEmail;
   if (!receiver) {
     console.error(`user ${toId} not found`);
+    return;
+  }
+  if (!receiver.allowNotifications) {
+    console.log(`[email engine] user ${toId} has notifications disabled`);
     return;
   }
 
