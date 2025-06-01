@@ -1,6 +1,6 @@
 "use client";
 
-import { API_ENDPOINT, client } from "@/client";
+import { client } from "@/client";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider.tsx";
 import { waitForVerification } from "@/features/email/wait-for-verification.tsx";
 import { useUserFormContext } from "@/features/settings/UserFormController.tsx";
