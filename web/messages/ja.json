@@ -154,7 +154,12 @@
         "title": "メール通知",
         "allowMessages": "メッセージ通知を許可",
         "allowPeriodic": "定期通知を許可"
-      }
+      },
+      "placeholders": {
+        "defaultEmail": "eccs@example.com",
+        "customEmail": "you@example.com"
+      },
+      "verificationSpinner": "確認メールをご確認ください"
     },
     "logout": "ログアウト",
     "delete": {

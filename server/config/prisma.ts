@@ -23,16 +23,6 @@ if (process.env.SQL_LOGS === "true") {
   ];
 }
 
-const omit: Prisma.PrismaClientOptions["omit"] = {
-  user: {
-    defaultEmail: true,
-    customEmail: true,
-    allowNotifications: true,
-    allowPeriodicNotifications: true,
-  },
-};
-
 export const prisma = new PrismaClient({
   log,
-  omit,
 });

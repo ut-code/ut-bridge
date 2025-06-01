@@ -2,6 +2,7 @@
 
 import { API_ENDPOINT, client } from "@/client";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider.tsx";
+import { waitForVerification } from "@/features/email/wait-for-verification.tsx";
 import { useUserFormContext } from "@/features/settings/UserFormController.tsx";
 import { useToast } from "@/features/toast/ToastProvider.tsx";
 import { useUserContext } from "@/features/user/userProvider.tsx";
@@ -19,9 +20,9 @@ export default function Page() {
   const toast = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
-  const [customEmail, setCustomEmail] = useState(me.customEmail ?? "");
+  const [customEmail, setCustomEmail] = useState(ctx.formData.customEmail ?? "");
 
-  const onsubmit = async () => {
+  const onemailsubmit = async () => {
     setIsSubmitting(true);
     const resp = await client.email.register.$put({
       header: { Authorization },
@@ -37,16 +38,15 @@ export default function Page() {
     const { verificationId } = await resp.json();
     setIsSubmitting(false);
     setIsVerifying(true);
-    const sse = new EventSource(`${API_ENDPOINT}/email/wait-for-verification?verificationId=${verificationId}`);
-    sse.addEventListener("verify", (event) => {
-      console.log(event);
+    waitForVerification(verificationId, () => {
+      console.log("Verification successful");
       setIsVerifying(false);
     });
   };
 
-  return (
-    <>
-      <div className="mb-8">
+  function Body() {
+    return (
+      <>
         <h2 className="mb-4 font-bold text-xl">{t("currentEmail")}</h2>
         <div className="rounded-lg border border-gray-200 p-4">
           <div className="mb-4">
@@ -57,7 +57,7 @@ export default function Page() {
               <input
                 id="defaultEmail"
                 type="email"
-                value={me.defaultEmail ?? "eccs@example.com"}
+                value={ctx.formData.defaultEmail ?? t("placeholders.defaultEmail")}
                 disabled
                 className="input input-bordered grow"
               />
@@ -67,7 +67,7 @@ export default function Page() {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              onsubmit();
+              onemailsubmit();
             }}
           >
             <div>
@@ -80,8 +80,10 @@ export default function Page() {
                   type="email"
                   name="customEmail"
                   value={customEmail}
-                  onChange={(e) => setCustomEmail(e.target.value)}
-                  placeholder="you@example.com"
+                  onChange={(e) => {
+                    setCustomEmail(e.target.value);
+                  }}
+                  placeholder={t("placeholders.customEmail")}
                   className={clsx("input input-bordered grow", isVerifying ? "text-gray-500" : "")}
                 />
                 <button type="submit" disabled={isSubmitting || !customEmail} className="btn btn-primary">
@@ -98,7 +100,13 @@ export default function Page() {
             </div>
           </form>
         </div>
-      </div>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <div className="mb-8">{isVerifying ? <VerifyingSpinner /> : <Body />}</div>
       <form onSubmit={ctx.submitPatch} className={styles.form}>
         <div className="mb-8">
           <h2 className="mb-4 font-bold text-xl">{t("notifications.title")}</h2>
@@ -130,5 +138,15 @@ export default function Page() {
         <SubmitButton status={ctx.status} />
       </form>
     </>
+  );
+}
+
+function VerifyingSpinner() {
+  const t = useTranslations("settings.email");
+  return (
+    <div className="flex items-center justify-center gap-4">
+      <span className="loading loading-bars" />
+      <span className="text-gray-500 text-sm">{t("verificationSpinner")}</span>
+    </div>
   );
 }

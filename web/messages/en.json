@@ -163,7 +163,12 @@
         "title": "Email Notifications",
         "allowMessages": "Allow message notifications",
         "allowPeriodic": "Allow periodic notifications"
-      }
+      },
+      "placeholders": {
+        "defaultEmail": "eccs@example.com",
+        "customEmail": "you@example.com"
+      },
+      "verificationSpinner": "Please check your email for a verification link."
     }
   }
 }

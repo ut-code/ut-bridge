@@ -45,6 +45,11 @@ export type MailOptions = {
   body: string;
 };
 export async function sendEmail(c: Context, options: MailOptions) {
+  const ZERO_EMAIL = env(c, "ZERO_EMAIL");
+  if (ZERO_EMAIL) {
+    console.log("[email] skipped sending email to", options.to, "with body", options.body);
+    return;
+  }
   return await send(options.to, options.subject, options.body, {
     apiKey: env(c, "MAILING_BREVO_API_KEY"),
   });
