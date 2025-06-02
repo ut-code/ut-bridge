@@ -1,5 +1,5 @@
 import type { Context } from "hono";
-import { env } from "../../lib/env.ts";
+import { env, env_bool } from "../../lib/env.ts";
 
 type APIStructure = {
   subject: string;
@@ -45,7 +45,7 @@ export type MailOptions = {
   body: string;
 };
 export async function sendEmail(c: Context, options: MailOptions) {
-  const ZERO_EMAIL = env(c, "ZERO_EMAIL");
+  const ZERO_EMAIL = env_bool(c, "ZERO_EMAIL", false);
   if (ZERO_EMAIL) {
     console.log("[email] skipped sending email to", options.to, "with body", options.body);
     return;
