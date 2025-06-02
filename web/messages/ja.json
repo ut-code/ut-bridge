@@ -76,7 +76,9 @@
       "other": "その他",
       "want-to-match": "新規にマッチングしたいですか？",
       "photo": "写真",
-      "photoUpload": "アップロード"
+      "photoUpload": "アップロード",
+      "email": "メールアドレス",
+      "allowPeriodicNotification": "定期通知を許可しますか？"
     },
     "university": {
       "title": "大学情報",
@@ -133,6 +135,31 @@
         "title": "お問い合わせ",
         "contactForm": "お問い合わせフォーム"
       }
+    },
+    "email": {
+      "title": "メール設定",
+      "currentEmail": "現在のメールアドレス",
+      "customEmail": "カスタムメールアドレス",
+      "defaultEmail": "デフォルトメールアドレス（ECCSアカウント）",
+      "updateEmail": "メールアドレスを更新",
+      "verifyEmail": "メールアドレスを確認",
+      "resendVerification": "確認メールを再送信",
+      "notVerified": "未確認",
+      "verified": "確認済み",
+      "verificationSent": "確認メールを送信しました",
+      "verificationFailed": "確認メールの送信に失敗しました",
+      "updateSuccess": "メールアドレスを更新しました",
+      "updateFailed": "メールアドレスの更新に失敗しました",
+      "notifications": {
+        "title": "メール通知",
+        "allowMessages": "メッセージ通知を許可",
+        "allowPeriodic": "定期通知を許可"
+      },
+      "placeholders": {
+        "defaultEmail": "eccs@example.com",
+        "customEmail": "you@example.com"
+      },
+      "verificationSpinner": "確認メールをご確認ください"
     },
     "logout": "ログアウト",
     "delete": {

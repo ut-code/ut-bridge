@@ -1,56 +1,58 @@
 "use client";
 import { client } from "@/client";
 import Loading from "@/components/Loading.tsx";
-import { ensure } from "@/lib.ts";
-import type { StructuredUser } from "common/zod/schema";
+import type { MYDATA } from "common/zod/schema";
 import { useRouter } from "next/navigation";
-import { type ReactNode, createContext, useContext, useEffect, useState } from "react";
+import { type ReactNode, createContext, useCallback, useContext, useEffect, useState } from "react";
 import { useAuthContext } from "../auth/providers/AuthProvider.tsx";
-
-export type MYDATA = Omit<StructuredUser, "university">;
 
 type ContextProps = {
   me: MYDATA;
   updateMyData: (callback: (prev: MYDATA) => MYDATA) => void;
 };
-const UserContext = createContext<ContextProps | null>(null);
-export function useUserContext() {
-  const ctx = useContext(UserContext);
-  if (!ctx) throw new Error("useUserContext: please use this within UserProvider. aborting...");
-  return ctx;
-}
+
+const UserContext = createContext<ContextProps | undefined>(undefined);
 
 export function UserProvider({ children }: { children: ReactNode }) {
-  const router = useRouter();
-  const { guid } = useAuthContext();
-  const [myData, setMyData] = useState<MYDATA | null>(null);
+  const [me, setMe] = useState<MYDATA | null>(null);
   const { idToken: Authorization } = useAuthContext();
+  const router = useRouter();
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const res = await client.users.$get({
-          header: { Authorization },
-          query: { guid },
-        });
-        ensure(res.ok, "User is not found in Database!");
+    if (!Authorization) {
+      router.push("/login");
+      return;
+    }
+    client.users.me
+      .$get({
+        header: { Authorization },
+      })
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error(await res.text());
+        }
         const data = await res.json();
-        const me = data[0];
-        if (!me) throw new Error("User is not found in Database!");
-        setMyData(me);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-        router.push("/login");
-      }
-    };
+        setMe(data);
+      })
+      .catch((err) => {
+        console.error(err);
+        router.push("/registration");
+      });
+  }, [Authorization, router]);
 
-    fetchUserData();
-  }, [router, guid, Authorization]);
+  const updateMyData = useCallback((callback: (prev: MYDATA) => MYDATA) => {
+    setMe((prev) => (prev ? callback(prev) : prev));
+  }, []);
 
-  if (!myData) return <Loading stage="my info" />;
-  return (
-    <UserContext.Provider value={{ me: myData, updateMyData: (cb) => setMyData(cb(myData)) }}>
-      {children}
-    </UserContext.Provider>
-  );
+  if (!me) return <Loading stage="user data" />;
+
+  return <UserContext.Provider value={{ me, updateMyData }}>{children}</UserContext.Provider>;
 }
+
+export const useUserContext = () => {
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error("useUserContext must be used within a UserProvider");
+  }
+  return context;
+};

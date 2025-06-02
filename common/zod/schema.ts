@@ -85,6 +85,12 @@ export const CreateUserSchema = BaseUserSchema.omit({ id: true }).extend({
   motherLanguageId: z.string().uuid(),
   fluentLanguageIds: z.array(z.string().uuid()),
   learningLanguageIds: z.array(z.string().uuid()),
+
+  // Email fields
+  defaultEmail: z.string().email().optional(),
+  customEmail: z.string().email().optional(),
+  allowNotifications: z.boolean().default(true),
+  allowPeriodicNotifications: z.boolean().default(true),
 });
 export const Part1RegistrationSchema = CreateUserSchema.omit({
   hobby: true,
@@ -123,3 +129,11 @@ export type Exchange = z.infer<typeof ExchangeSchema>;
 
 // only user in seed
 export type SeedUser = z.infer<typeof SeedUserSchema>;
+
+export type MYDATA = Omit<StructuredUser, "university"> & {
+  // because these are unsafe to share across users
+  defaultEmail: string | null;
+  customEmail: string | null;
+  allowNotifications: boolean;
+  allowPeriodicNotifications: boolean;
+};

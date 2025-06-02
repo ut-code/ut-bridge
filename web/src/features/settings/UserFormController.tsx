@@ -2,8 +2,8 @@
 import { client } from "@/client";
 import Loading from "@/components/Loading.tsx";
 import { formatCardUser } from "@/features/format";
-import { type MYDATA, useUserContext } from "@/features/user/userProvider";
-import type { CreateUser, FlatCardUser } from "common/zod/schema";
+import { useUserContext } from "@/features/user/userProvider";
+import type { CreateUser, FlatCardUser, MYDATA } from "common/zod/schema.ts";
 import { useLocale, useTranslations } from "next-intl";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { useRef } from "react";
@@ -187,12 +187,27 @@ export const UserFormProvider = ({
         if (!loadPreviousData) {
           setFormData({});
         } else {
+          const meRes = await client.users.me.$get({ header: { Authorization } });
+          if (!meRes.ok) {
+            throw new Error("Failed to fetch user data!");
+          }
+          const me = await meRes.json();
           if (!me) {
             throw new Error("User Not Found in Database!");
           }
 
+          console.log(
+            `
+            [useFormData] me = 
+            defaultEmail: ${me.defaultEmail}
+            customEmail: ${me.customEmail}
+          `,
+          );
+
           setFormData({
             ...me,
+            defaultEmail: me.defaultEmail ?? undefined,
+            customEmail: me.customEmail ?? undefined,
             imageUrl: me.imageUrl ?? undefined,
             universityId: me.campus.university.id,
             motherLanguageId: me.motherLanguage.id,
@@ -208,7 +223,7 @@ export const UserFormProvider = ({
     };
 
     fetchMyData();
-  }, [me, loadPreviousData]);
+  }, [loadPreviousData, Authorization]);
 
   const refetchFavoriteUsers = useCallback(async () => {
     try {
