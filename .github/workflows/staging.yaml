@@ -5,11 +5,12 @@ on:
       - main
 
 env:
-  FLY_TOKEN: ${{ secrets.FLY_ACCESS_TOKEN }}
+  FLY_STAGING_TOKEN: ${{ secrets.FLY_STAGING_TOKEN }}
 jobs:
   deploy:
+    name: Staging
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --access-token "$FLY_TOKEN" --config ./fly/staging.toml
+      - run: flyctl deploy --access-token "$FLY_STAGING_TOKEN" --config ./fly/staging.toml
