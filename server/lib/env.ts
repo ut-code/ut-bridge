@@ -13,22 +13,27 @@ export function env_int(c: Context, name: string, options?: { fallback?: string 
 }
 
 export function env_bool(c: Context, name: string, fallback: boolean): boolean {
-  const val = env(c, name, { fallback: "" });
-  switch (val.toLowerCase()) {
-    case "1":
-    case "true":
-    case "t":
-    case "yes":
-    case "y":
-      return true;
-    case "0":
-    case "false":
-    case "f":
-    case "no":
-    case "n":
-      return false;
-    default:
-      return fallback;
+  try {
+    const val = env(c, name, { fallback: "" });
+    switch (val.toLowerCase()) {
+      case "1":
+      case "true":
+      case "t":
+      case "yes":
+      case "y":
+        return true;
+      case "0":
+      case "false":
+      case "f":
+      case "no":
+      case "n":
+        return false;
+      default:
+        return fallback;
+    }
+    // env var not found
+  } catch (_err) {
+    return fallback;
   }
 }
 
