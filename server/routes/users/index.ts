@@ -3,8 +3,9 @@ import { CreateUserSchema, type StructuredUser } from "common/zod/schema.ts";
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
 import { z } from "zod";
-import { getGUID, getUserID } from "../../auth/func.ts";
+import { getEmailFromIDToken, getGUID, getUserID } from "../../auth/func.ts";
 import { prisma } from "../../config/prisma.ts";
+import * as verification from "../../email/verification/func.ts";
 import markers from "./markers.ts";
 import me from "./me.ts";
 
@@ -86,13 +87,11 @@ const router = new Hono()
         select: { guid: true, id: true, name: true },
       });
 
-      let resp: { exists: false } | { exists: true; guid: string; id: string };
+      type Resp = { exists: false } | { exists: true; guid: string; id: string };
       if (!user || !user.name) {
-        resp = { exists: false };
-        return c.json(resp, 404);
+        return c.json<Resp>({ exists: false }, 404);
       }
-      resp = { exists: true, guid: user.guid, id: user.id };
-      return c.json(resp, 200);
+      return c.json<Resp>({ exists: true, guid: user.guid, id: user.id }, 200);
     },
   )
 
@@ -103,7 +102,15 @@ const router = new Hono()
     async (c) => {
       const guid = await getGUID(c);
       const body = c.req.valid("json");
+      const header = c.req.valid("header");
+
       const id = crypto.randomUUID();
+
+      const defaultEmail = await getEmailFromIDToken(header.Authorization);
+      if (body.customEmail) {
+        await verification.register(c, id, body.name, body.customEmail);
+      }
+
       const newUser = await prisma.user.create({
         data: {
           id,
@@ -123,11 +130,14 @@ const router = new Hono()
               languageId: langId,
             })),
           },
+          allowPeriodicNotifications: body.allowPeriodicNotifications,
           learningLanguages: {
             create: body.learningLanguageIds.map((langId) => ({
               languageId: langId,
             })),
           },
+          defaultEmail,
+          customEmail: body.customEmail,
         },
       });
       return c.json(newUser);

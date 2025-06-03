@@ -32,6 +32,7 @@ export async function main() {
             language: { connect: { id: lang.id } },
           })),
         },
+        allowPeriodicNotifications: true,
         learningLanguages: {
           create: seedLanguages.map((lang) => ({
             language: { connect: { id: lang.id } },

@@ -18,12 +18,10 @@
 
 ### デプロイ
 
-web: (CF Pages)
-```sh
-cd web; bun run deploy
-```
+web とサーバーどちらも CI で自動デプロイされます。
 
 server: (Fly.io)
+
 ```sh
-cd server; bun run deploy
+fly deploy --config ./fly/staging.toml # or prod.toml
 ```

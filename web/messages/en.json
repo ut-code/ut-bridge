@@ -78,7 +78,9 @@
       "photo": "Photo",
       "photoUpload": "Upload",
       "cropImage": "Crop",
-      "finishCropImage": "Done"
+      "finishCropImage": "Done",
+      "email": "Email",
+      "allowPeriodicNotification": "Allow periodic notifications"
     },
     "university": {
       "title": "University",
@@ -98,7 +100,6 @@
         "D3": "D3"
       }
     },
-
     "language": {
       "title": "Language",
       "isForeign": "Are you an international student?",
@@ -145,6 +146,31 @@
       "delete": "Delete",
       "cancel": "Cancel",
       "modal": "Are you sure you want to delete your account?"
+    },
+    "email": {
+      "title": "Email Settings",
+      "currentEmail": "Current Email",
+      "customEmail": "Custom Email",
+      "defaultEmail": "Default Email (ECCS Account)",
+      "updateEmail": "Update Email",
+      "verifyEmail": "Verify Email",
+      "resendVerification": "Resend Verification Email",
+      "notVerified": "Not Verified",
+      "verified": "Verified",
+      "verificationSent": "Verification email sent",
+      "verificationFailed": "Failed to send verification email",
+      "updateSuccess": "Email updated successfully",
+      "updateFailed": "Failed to update email",
+      "notifications": {
+        "title": "Email Notifications",
+        "allowMessages": "Allow message notifications",
+        "allowPeriodic": "Allow periodic notifications"
+      },
+      "placeholders": {
+        "defaultEmail": "eccs@example.com",
+        "customEmail": "you@example.com"
+      },
+      "verificationSpinner": "Please check your email for a verification link."
     }
   }
 }

@@ -1,0 +1,24 @@
+# fly.toml app configuration file generated for ut-bridge-api-staging on 2025-06-02T21:27:25+09:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'ut-bridge-api-staging'
+primary_region = 'nrt'
+
+[build]
+
+[deploy]
+
+[http_service]
+internal_port = 3000
+force_https = true
+auto_stop_machines = 'stop'
+auto_start_machines = true
+min_machines_running = 0
+processes = ['app']
+
+[[vm]]
+memory = '256mb'
+cpu_kind = 'shared'
+cpus = 1

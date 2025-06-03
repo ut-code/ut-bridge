@@ -19,7 +19,5 @@ tsconfig.tsbuildinfo
 
 # Nix + Direnv
 /.direnv
-/.envrc
-/shell.nix
 
 server/node_modules/.cache
