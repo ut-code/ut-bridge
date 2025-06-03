@@ -70,6 +70,7 @@ type UserFormContextType = {
   handleImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   imagePreviewURL: string | null;
   setImagePreviewURL: React.Dispatch<React.SetStateAction<string | null>>;
+  handleImageFileChange: (file: File) => void;
   uploadImage: () => Promise<void>;
   onSuccess: (data: Partial<MYDATA>) => void;
   onFailure: () => void;
@@ -329,13 +330,16 @@ export const UserFormProvider = ({
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setImage(file);
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setImagePreviewURL(e.target?.result as string);
-      };
-      reader.readAsDataURL(file);
+      handleImageFileChange(file);
     }
+  };
+  const handleImageFileChange = (file: File) => {
+    setImage(file);
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setImagePreviewURL(e.target?.result as string);
+    };
+    reader.readAsDataURL(file);
   };
   const uploadImage = async () => {
     let resizedImage = image;
@@ -421,6 +425,7 @@ export const UserFormProvider = ({
         handleImageChange,
         imagePreviewURL,
         setImagePreviewURL,
+        handleImageFileChange,
         uploadImage,
         loadingUniversitySpecificData,
         onSuccess,

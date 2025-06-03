@@ -5,6 +5,8 @@ import { useUserFormContext } from "@/features/settings/UserFormController.tsx";
 import { useUserContext } from "@/features/user/userProvider.tsx";
 import { NAME_MAX_LENGTH } from "common/zod/schema.ts";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
+import PhotoCropModal from "../components/PhotoCropModal.tsx";
 import { SubmitButton } from "../components/SubmitButton.tsx";
 import { styles } from "../shared-class.ts";
 
@@ -12,6 +14,7 @@ export default function Page() {
   const t = useTranslations("settings");
   const ctx = useUserFormContext();
   const { me } = useUserContext();
+  const [isPhotoCropModalOpen, setIsPhotoCropModalOpen] = useState(false);
 
   return (
     <form onSubmit={ctx.submitPatch} className={styles.form}>
@@ -51,6 +54,7 @@ export default function Page() {
           type="file"
           accept=".png,.jpg,.jpeg,.webp,.avif,.heif"
           onChange={ctx.handleImageChange}
+          onClick={() => setIsPhotoCropModalOpen(true)}
           className="hidden"
           id="image-upload"
         />
@@ -60,6 +64,13 @@ export default function Page() {
         </label>
       </div>
       <Avatar src={ctx.imagePreviewURL ?? me.imageUrl} size={160} />
+      {ctx.imagePreviewURL && (
+        <PhotoCropModal
+          imageUrl={ctx.imagePreviewURL}
+          isPhotoCropModalOpen={isPhotoCropModalOpen}
+          setIsPhotoCropModalOpen={setIsPhotoCropModalOpen}
+        />
+      )}
       <SubmitButton status={ctx.status} />
     </form>
   );
