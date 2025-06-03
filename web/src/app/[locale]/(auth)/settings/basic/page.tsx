@@ -6,7 +6,7 @@ import { useUserContext } from "@/features/user/userProvider.tsx";
 import { NAME_MAX_LENGTH } from "common/zod/schema.ts";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import PhotoCropModal from "../components/PhotoCropModal.tsx";
+import PhotoCropModal from "../../../../../components/PhotoCropModal.tsx";
 import { SubmitButton } from "../components/SubmitButton.tsx";
 import { styles } from "../shared-class.ts";
 

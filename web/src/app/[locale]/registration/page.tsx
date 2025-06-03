@@ -9,7 +9,7 @@ import { NAME_MAX_LENGTH, Part1RegistrationSchema } from "common/zod/schema";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import PhotoCropModal from "../(auth)/settings/components/PhotoCropModal.tsx";
+import PhotoCropModal from "../../../components/PhotoCropModal.tsx";
 
 export default function Page() {
   const router = useRouter();
