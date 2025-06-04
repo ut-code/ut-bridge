@@ -77,6 +77,8 @@
       "want-to-match": "新規にマッチングしたいですか？",
       "photo": "写真",
       "photoUpload": "アップロード",
+      "cropImage": "画像をトリミング",
+      "finishCropImage": "完了",
       "email": "メールアドレス",
       "allowPeriodicNotification": "定期通知を許可しますか？"
     },

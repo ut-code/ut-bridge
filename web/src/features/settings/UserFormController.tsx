@@ -13,6 +13,55 @@ import { useToast } from "../toast/ToastProvider.tsx";
 
 export type Status = "ready" | "error" | "success" | "processing";
 
+const resizeImage = (file: File, maxWidth = 800, maxHeight = 800): Promise<File> => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const canvas = document.createElement("canvas");
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      img.onload = () => {
+        let { width, height } = img;
+
+        // 比率を保ってリサイズ
+        if (width > maxWidth || height > maxHeight) {
+          const scale = Math.min(maxWidth / width, maxHeight / height);
+          width *= scale;
+          height *= scale;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          reject(new Error("Canvas 2D context is not supported"));
+          return;
+        }
+        ctx.drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob((blob) => {
+          if (blob) {
+            resolve(new File([blob], file.name, { type: file.type }));
+          } else {
+            reject(new Error("Blob conversion failed"));
+          }
+        }, file.type);
+      };
+      img.onerror = reject;
+      const result = e.target?.result;
+      if (typeof result === "string") {
+        img.src = result;
+      } else {
+        reject(new Error("FileReader result is not a string"));
+      }
+    };
+
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+};
+
 type UserFormContextType = {
   loadingUniversitySpecificData: boolean;
   formData: Partial<CreateUser>;
@@ -21,6 +70,7 @@ type UserFormContextType = {
   handleImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   imagePreviewURL: string | null;
   setImagePreviewURL: React.Dispatch<React.SetStateAction<string | null>>;
+  handleImageFileChange: (file: File) => void;
   uploadImage: () => Promise<void>;
   onSuccess: (data: Partial<MYDATA>) => void;
   onFailure: () => void;
@@ -295,16 +345,27 @@ export const UserFormProvider = ({
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setImage(file);
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setImagePreviewURL(e.target?.result as string);
-      };
-      reader.readAsDataURL(file);
+      handleImageFileChange(file);
     }
   };
+  const handleImageFileChange = (file: File) => {
+    setImage(file);
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setImagePreviewURL(e.target?.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
   const uploadImage = async () => {
-    const url = image ? await upload(image) : undefined;
+    let resizedImage = image;
+    if (image) {
+      try {
+        resizedImage = await resizeImage(image, 800, 800); // ← 好きなサイズに変更可
+      } catch (e) {
+        console.error("Image resize failed:", e);
+      }
+    }
+    const url = resizedImage ? await upload(resizedImage) : undefined;
     formData.imageUrl = url; // don't delete this line, or you'll start to hate react like me
     setFormData((prev) => ({
       ...prev,
@@ -379,6 +440,7 @@ export const UserFormProvider = ({
         handleImageChange,
         imagePreviewURL,
         setImagePreviewURL,
+        handleImageFileChange,
         uploadImage,
         loadingUniversitySpecificData,
         onSuccess,

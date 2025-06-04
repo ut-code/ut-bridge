@@ -9,6 +9,7 @@ import { NAME_MAX_LENGTH, Part1RegistrationSchema } from "common/zod/schema";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import PhotoCropModal from "../../../components/PhotoCropModal.tsx";
 
 export default function Page() {
   const router = useRouter();
@@ -16,6 +17,7 @@ export default function Page() {
   const t = useTranslations();
   const locale = useLocale();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isPhotoCropModalOpen, setIsPhotoCropModalOpen] = useState(false);
   const [errors, setErrors] = useState<string | null>(null);
   const toast = useToast();
 
@@ -102,9 +104,17 @@ export default function Page() {
                   type="file"
                   accept=".png,.jpg,.jpeg,.webp,.avif,.heif"
                   onChange={ctx.handleImageChange}
+                  onClick={() => setIsPhotoCropModalOpen(true)}
                   className="hidden"
                   id="image-upload"
                 />
+                {ctx.imagePreviewURL && (
+                  <PhotoCropModal
+                    imageUrl={ctx.imagePreviewURL}
+                    isPhotoCropModalOpen={isPhotoCropModalOpen}
+                    setIsPhotoCropModalOpen={setIsPhotoCropModalOpen}
+                  />
+                )}
 
                 <Avatar size={160} src={ctx.imagePreviewURL} alt="プレビュー" />
 
