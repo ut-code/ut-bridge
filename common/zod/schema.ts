@@ -87,7 +87,6 @@ export const CreateUserSchema = BaseUserSchema.omit({ id: true }).extend({
   learningLanguageIds: z.array(z.string().uuid()),
 
   // Email fields
-  defaultEmail: z.string().email().optional(),
   customEmail: z.string().email().optional(),
   allowNotifications: z.boolean().default(true),
   allowPeriodicNotifications: z.boolean().default(true),

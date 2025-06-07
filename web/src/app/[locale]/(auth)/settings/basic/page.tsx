@@ -71,12 +71,6 @@ export default function Page() {
           setIsPhotoCropModalOpen={setIsPhotoCropModalOpen}
         />
       )}
-      <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
-        {t("basic.allowPeriodicNotification")}
-        <span className="flex w-1/2 flex-row justify-center">
-          <input type="checkbox" name="allowNotifications" className="checkbox checkbox-primary" />
-        </span>
-      </label>
       <SubmitButton status={ctx.status} />
     </form>
   );

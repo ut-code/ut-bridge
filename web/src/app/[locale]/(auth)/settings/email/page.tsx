@@ -57,7 +57,7 @@ export default function Page() {
               <input
                 id="defaultEmail"
                 type="email"
-                value={ctx.formData.defaultEmail ?? t("placeholders.defaultEmail")}
+                value={me.defaultEmail ?? t("placeholders.defaultEmail")}
                 disabled
                 className="input input-bordered grow"
               />
@@ -122,6 +122,7 @@ export default function Page() {
                 className={styles.inputToggle}
               />
             </label>
+            {/*
             <label htmlFor="allowPeriodicNotifications" className="flex items-center justify-between">
               <span>{t("notifications.allowPeriodic")}</span>
               <input
@@ -133,6 +134,7 @@ export default function Page() {
                 className={styles.inputToggle}
               />
             </label>
+          */}
           </div>
         </div>
         <SubmitButton status={ctx.status} />
