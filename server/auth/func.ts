@@ -4,11 +4,13 @@ import { prisma } from "../config/prisma.ts";
 import { auth } from "./config.ts";
 
 export async function getGUIDFromIDToken(token: string) {
-  return (await auth.verifyIdToken(token)).uid;
+  const decodedToken = await auth.verifyIdToken(token);
+  return decodedToken.uid;
 }
 
 export async function getEmailFromIDToken(token: string) {
   const decodedToken = await auth.verifyIdToken(token);
+  void updateEmail(decodedToken.uid, decodedToken.email); // no need to await
   return decodedToken.email;
 }
 
@@ -52,4 +54,12 @@ export async function getUserID(c: AuthenticatedContext) {
   });
   if (!user) throw new HTTPException(404, { message: "User not found" });
   return user.id;
+}
+
+async function updateEmail(guid: string, email: string | undefined) {
+  if (!email) return;
+  await prisma.user.update({
+    where: { guid },
+    data: { defaultEmail: email },
+  });
 }
