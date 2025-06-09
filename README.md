@@ -18,10 +18,15 @@
 
 ### デプロイ
 
-web とサーバーどちらも CI で自動デプロイされます。
+毎週のミーティングでデプロイします。
 
-server: (Fly.io)
-
-```sh
-fly deploy --config ./fly/staging.toml # or prod.toml
-```
+0. ステージング環境が動いていることを確認する
+1. Fly.io や Cloudflare の環境変数を更新する
+2. データベースのスキーマを更新する
+  - `DATABASE_URL=[production database url] bunx prisma db push`
+3. release <- main にリベースする
+  - `git checkout release; git rebase main`
+4. release にプッシュする
+  - `git push`
+5. Fly.io、cloudflare のダッシュボードで、ちゃんと更新されていることを確認する
+6. プロダクションの動作確認をする
