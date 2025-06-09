@@ -5,13 +5,8 @@ import { auth } from "./config.ts";
 
 export async function getGUIDFromIDToken(token: string) {
   const decodedToken = await auth.verifyIdToken(token);
-  return decodedToken.uid;
-}
-
-export async function getEmailFromIDToken(token: string) {
-  const decodedToken = await auth.verifyIdToken(token);
   void updateEmail(decodedToken.uid, decodedToken.email); // no need to await
-  return decodedToken.email;
+  return decodedToken.uid;
 }
 
 export type AuthenticatedContext = Context<
