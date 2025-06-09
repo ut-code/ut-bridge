@@ -256,7 +256,6 @@ export const UserFormProvider = ({
 
           setFormData({
             ...me,
-            defaultEmail: me.defaultEmail ?? undefined,
             customEmail: me.customEmail ?? undefined,
             imageUrl: me.imageUrl ?? undefined,
             universityId: me.campus.university.id,
