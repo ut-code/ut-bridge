@@ -10,3 +10,5 @@ pre-commit:
       glob: "*.prisma"
       root: server
       stage_fixed: true
+    - name: Build check
+      run: if [ $(git branch --show-current) == "main" ]; then bun run build; fi
