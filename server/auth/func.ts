@@ -9,6 +9,11 @@ export async function getGUIDFromIDToken(token: string) {
   return decodedToken.uid;
 }
 
+export async function getEmailFromIDToken(token: string) {
+  const decodedToken = await auth.verifyIdToken(token);
+  return decodedToken.email;
+}
+
 export type AuthenticatedContext = Context<
   // biome-ignore lint: it defaults to any
   any,
