@@ -2,8 +2,8 @@ import { client } from "@/client";
 import { formatCardUser } from "@/features/format.ts";
 import type { FlatCardUser, MYDATA } from "common/zod/schema";
 import { getLocale } from "next-intl/server";
-import { getIdToken } from "./_cookie.ts";
 import { getBlockedUsers, getFavoriteUsers } from "./fetchers/fetch-relational-users.ts";
+import { getIdToken } from "./utils.ts";
 
 export async function getUserData(): Promise<MYDATA> {
   const idToken = await getIdToken();
