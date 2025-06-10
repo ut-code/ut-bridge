@@ -3,21 +3,8 @@ import { formatCardUser } from "@/features/format.ts";
 import type { FlatCardUser, MYDATA } from "common/zod/schema";
 import { getLocale } from "next-intl/server";
 import { getBlockedUsers, getFavoriteUsers } from "./fetchers/fetch-relational-users.ts";
+import { getUserData } from "./user.server.ts";
 import { getIdToken } from "./utils.ts";
-
-export async function getUserData(): Promise<MYDATA> {
-  const idToken = await getIdToken();
-
-  const res = await client.users.me.$get({
-    header: {
-      Authorization: idToken,
-    },
-  });
-  if (!res.ok) throw new Error("Failed to fetch user");
-  const data = await res.json();
-  if (!data) throw new Error("User not found");
-  return data;
-}
 
 export async function getGlobalData(): Promise<{
   universities: { id: string; jaName: string; enName: string }[];
