@@ -14,7 +14,7 @@ export default function LandingPage() {
   const pathname = usePathname();
   return (
     <>
-      <Header />
+      <Header user={null} />
       <main className="flex w-full flex-grow flex-col-reverse justify-center bg-white pt-10 xl:flex-row">
         <div className="m-auto flex max-w-[500px] flex-col items-center justify-center xl:m-0">
           <Image src={pathname.startsWith("/ja") ? samplePicJa : samplePicEn} alt="app sample image" />

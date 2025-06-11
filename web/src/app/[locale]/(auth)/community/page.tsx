@@ -1,7 +1,7 @@
 "use client";
 import { client } from "@/client";
 import Loading from "@/components/Loading.tsx";
-import { PATHNAME_LANG_PREFIX_PATTERN } from "@/consts";
+import { PATHNAME_LANG_PREFIX_PATTERN, sessionStorageKeys } from "@/consts";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import { formatCardUser } from "@/features/format";
 import UserCard from "@/features/user/UserCard.tsx";
@@ -89,11 +89,10 @@ export default function Page() {
   const { idToken: Authorization } = useAuthContext();
 
   useEffect(() => {
-    const SESSION_SEED_KEY = "ut-bridge:community:session-seed";
-    let sessionSeed = sessionStorage.getItem(SESSION_SEED_KEY);
+    let sessionSeed = sessionStorage.getItem(sessionStorageKeys.communitySessionSeed);
     if (!sessionSeed) {
       sessionSeed = crypto.randomUUID();
-      sessionStorage.setItem(SESSION_SEED_KEY, sessionSeed);
+      sessionStorage.setItem(sessionStorageKeys.communitySessionSeed, sessionSeed);
     }
 
     const ctl = new AbortController();

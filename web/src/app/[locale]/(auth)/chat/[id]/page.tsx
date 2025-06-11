@@ -4,7 +4,7 @@ import { getRoomData } from "@/data/room.server.ts";
 import { getUserData } from "@/data/user.server.ts";
 import { Link } from "@/i18n/navigation";
 import type { SearchParams } from "@/next/types";
-import type { MYDATA, RoomPreview } from "common/zod/schema.ts";
+import type { ContentfulRoom, MYDATA } from "common/zod/schema.ts";
 import { Suspense } from "react";
 import { AiOutlineLeft } from "react-icons/ai";
 import z from "zod";
@@ -42,7 +42,7 @@ async function Load({ roomId }: { roomId: string }) {
   );
 }
 
-function ChatHeader({ room, me }: { room: RoomPreview; me: MYDATA }) {
+function ChatHeader({ room, me }: { room: ContentfulRoom; me: MYDATA }) {
   return (
     <>
       <div className="invisible h-[56px]" />

@@ -9,3 +9,6 @@ export const IMAGE_PREVIEW_URL_SESSION_STORAGE_KEY = "ut_bridge_image_preview_ur
 export const cookieNames = {
   idToken: "ut-bridge::id-token",
 };
+export const sessionStorageKeys = {
+  communitySessionSeed: "ut-bridge::community-session-seed",
+};

@@ -1,10 +1,7 @@
 "use client";
-import { client } from "@/client";
 import Loading from "@/components/Loading.tsx";
 import type { MYDATA } from "common/zod/schema";
-import { useRouter } from "next/navigation";
-import { type ReactNode, createContext, useCallback, useContext, useEffect, useState } from "react";
-import { useAuthContext } from "../auth/providers/AuthProvider.tsx";
+import { type ReactNode, createContext, useCallback, useContext, useState } from "react";
 
 type ContextProps = {
   me: MYDATA;
@@ -13,32 +10,8 @@ type ContextProps = {
 
 const UserContext = createContext<ContextProps | undefined>(undefined);
 
-export function UserProvider({ children }: { children: ReactNode }) {
-  const [me, setMe] = useState<MYDATA | null>(null);
-  const { idToken: Authorization } = useAuthContext();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!Authorization) {
-      router.push("/login");
-      return;
-    }
-    client.users.me
-      .$get({
-        header: { Authorization },
-      })
-      .then(async (res) => {
-        if (!res.ok) {
-          throw new Error(await res.text());
-        }
-        const data = await res.json();
-        setMe(data);
-      })
-      .catch((err) => {
-        console.error(err);
-        router.push("/registration");
-      });
-  }, [Authorization, router]);
+export function UserProvider({ children, data }: { children: ReactNode; data: MYDATA }) {
+  const [me, setMe] = useState<MYDATA>(data);
 
   const updateMyData = useCallback((callback: (prev: MYDATA) => MYDATA) => {
     setMe((prev) => (prev ? callback(prev) : prev));

@@ -9,7 +9,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
 
   return (
     <div className="flex h-full flex-col">
-      <Header />
+      <Header user={null} />
       <AuthProvider>
         <ToastProvider>
           <UserFormProvider globalData={globalData} personalData={null}>
