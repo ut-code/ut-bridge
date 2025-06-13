@@ -369,7 +369,12 @@ const router = new Hono()
         // broadcast mails
         for (const receiverId of await receivers) {
           if (receiverId !== requester) {
-            await onMessageSend(c, sender.name, receiverId, message);
+            await onMessageSend(c, {
+              fromName: sender.name,
+              inRoomId: roomId,
+              toId: receiverId,
+              message,
+            });
           }
         }
       })();

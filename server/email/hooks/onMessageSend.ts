@@ -7,7 +7,20 @@ import { EMAIL_SUFFIX_CONTACT } from "../internal/prefixes.ts";
 
 const EMAIL_THROTTLE_INTERVAL_MS = 10 * 60 * 1000; // 10 minutes
 
-export async function onMessageSend(c: Context, fromName: string, toId: string, message: Message) {
+export async function onMessageSend(
+  c: Context,
+  {
+    fromName,
+    inRoomId,
+    toId,
+    message,
+  }: {
+    fromName: string;
+    inRoomId: string;
+    toId: string;
+    message: Message;
+  },
+) {
   const receiver = await prisma.user.findUnique({
     where: { id: toId },
     select: {
@@ -34,8 +47,14 @@ export async function onMessageSend(c: Context, fromName: string, toId: string, 
   // - if it's first message or not
   // - user's selected language
   const body = `
-New message arrived from ${fromName}:
+<p>
+  New message arrived from ${fromName}:
+</p>
+<p>
 ${escapeHTML(message.content)}
+</p>
+
+<a href="https://ut-bridge.utcode.net/chat/${inRoomId}">See this on ut-bridge</a>
 
 ${EMAIL_SUFFIX_CONTACT}
 `;
@@ -79,6 +98,9 @@ const suspiciousChars = [
   ['"', "&quot;"],
   ["<", "&lt;"],
   [">", "&gt;"],
+
+  // postprocess: make newlines into <br> because html doesn't support \n
+  ["\n", "<br>"],
 ] as const;
 
 function escapeHTML(input: string) {
