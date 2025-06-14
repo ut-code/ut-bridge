@@ -1,4 +1,4 @@
-const debug_mode = true;
+const DEBUG_MODE = false;
 
 export default function Loading(_props: { stage: string }) {
   const server = typeof window === "undefined" ? "Server" : "Client";
@@ -7,7 +7,7 @@ export default function Loading(_props: { stage: string }) {
     <>
       <div className="fixed top-[50vh] left-0 flex w-full flex-row justify-center">
         <span className="loading loading-xl loading-spinner" />
-        {debug_mode && (
+        {DEBUG_MODE && (
           <div className="text-gray-500">
             [{server}] loading stage: {_props.stage}
           </div>
