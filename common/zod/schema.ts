@@ -136,3 +136,33 @@ export type MYDATA = Omit<StructuredUser, "university"> & {
   allowNotifications: boolean;
   allowPeriodicNotifications: boolean;
 };
+
+// chat types, maybe consider creating schemas for this?
+type Room = {
+  id: string;
+  members: {
+    user: {
+      id: string;
+      name: string;
+      imageUrl: string | null;
+    };
+  }[];
+};
+export type RoomPreview = Room & {
+  lastMessage: string | null;
+};
+export type Message = {
+  id: string;
+  roomId: string;
+  senderId: string;
+  content: string;
+  createdAt: Date;
+  isPhoto: boolean;
+  isEdited: boolean;
+  sender: {
+    name: string;
+  };
+};
+export type ContentfulRoom = Room & {
+  messages: Message[];
+};

@@ -65,18 +65,25 @@ const route = new Hono()
             : {}),
         },
         include: {
-          fluentLanguages: {
-            select: { language: true },
-          },
-          learningLanguages: {
-            select: { language: true },
-          },
           campus: {
             include: {
               university: true,
             },
           },
           division: true,
+          motherLanguage: true,
+          fluentLanguages: {
+            include: {
+              language: true,
+            },
+          },
+          learningLanguages: {
+            include: {
+              language: true,
+            },
+          },
+          marking: true,
+          markedAs: true,
         },
       });
 

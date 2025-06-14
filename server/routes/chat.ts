@@ -6,16 +6,7 @@ import { streamSSE } from "hono/streaming";
 import z from "zod";
 import { prisma } from "../config/prisma.ts";
 
-// TODO: use types from schema
-import type { Message as PrismaMessage } from "@prisma/client";
-export type { Room } from "@prisma/client";
-export type Message = PrismaMessage & {
-  sender: {
-    name: string;
-  };
-};
-
-import { MESSAGE_MAX_LENGTH } from "common/zod/schema.ts";
+import { MESSAGE_MAX_LENGTH, type Message } from "common/zod/schema.ts";
 import { HTTPException } from "hono/http-exception";
 import { getUserID } from "../auth/func.ts";
 import { onMessageSend } from "../email/hooks/onMessageSend.ts";
@@ -192,7 +183,14 @@ const router = new Hono()
       },
     });
 
-    return c.json(resp, 200);
+    return c.json(
+      resp.map((it) => ({
+        ...it,
+        lastMessage: it.messages[0]?.content ?? null,
+        messages: undefined,
+      })),
+      200,
+    );
   })
   // ## room data
   .get(
@@ -305,7 +303,7 @@ const router = new Hono()
           },
         },
       });
-      if (!resp) return c.json({ error: "room not found" }, 404);
+      if (!resp) throw new HTTPException(404, { message: "room not found" });
       return c.json(resp, 200);
     },
   )
@@ -332,7 +330,7 @@ const router = new Hono()
       const { room: roomId } = c.req.valid("param");
       const json = c.req.valid("json");
 
-      const message: PrismaMessage = {
+      const message = {
         ...json,
         roomId,
         id: randomUUIDv7(),
@@ -379,7 +377,9 @@ const router = new Hono()
         }
       })();
       const resp = await prisma.message.create({
-        data: message,
+        data: {
+          ...message,
+        },
       });
       return c.json(resp, 201);
     },

@@ -1,4 +1,4 @@
-import type { Message } from "server/routes/chat";
+import type { Message } from "common/zod/schema.ts";
 
 export type Handlers = {
   // retval: prevent default if true
