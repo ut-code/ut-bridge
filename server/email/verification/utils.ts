@@ -16,7 +16,9 @@ export async function sendVerificationEmail(
   const url = `${WEB_ORIGIN}/verify?id=${verificationId}&token=${token}`;
 
   const body = `
-Visit this page to verify your email: <a href="${url}">${url}</a>
+  <p>
+    Visit this page to verify your email: <a href="${url}">${url}</a>
+  </p>
 
 ${EMAIL_SUFFIX_CONTACT}
 `;
