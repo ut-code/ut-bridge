@@ -1,7 +1,7 @@
 import Avatar from "@/components/Avatar";
 import Loading from "@/components/Loading.tsx";
 import { getRoomData } from "@/data/room.server.ts";
-import { getUserData } from "@/data/user.server.ts";
+import { getMyData } from "@/data/user.server.ts";
 import { Link } from "@/i18n/navigation";
 import type { SearchParams } from "@/next/types";
 import type { ContentfulRoom, MYDATA } from "common/zod/schema.ts";
@@ -32,7 +32,7 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
 }
 
 async function Load({ roomId }: { roomId: string }) {
-  const me = await getUserData();
+  const me = await getMyData();
   const room = await getRoomData(roomId);
   return (
     <>

@@ -3,7 +3,7 @@ import { formatCardUser } from "@/features/format.ts";
 import type { FlatCardUser, MYDATA } from "common/zod/schema";
 import { getLocale } from "next-intl/server";
 import { getBlockedUsers, getFavoriteUsers } from "./fetchers/fetch-relational-users.ts";
-import { getUserData } from "./user.server.ts";
+import { getMyData } from "./user.server.ts";
 import { getIdToken } from "./utils.ts";
 
 export async function getGlobalData(): Promise<{
@@ -39,7 +39,7 @@ export async function getPersonalData(): Promise<{
   const [blockedUsers, favoriteUsers, user] = await Promise.all([
     getBlockedUsers(idToken),
     getFavoriteUsers(idToken),
-    getUserData(),
+    getMyData(),
   ]);
 
   return {

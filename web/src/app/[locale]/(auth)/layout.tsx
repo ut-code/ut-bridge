@@ -1,7 +1,7 @@
 import Footer from "@/components/Footer";
 import HeaderComponent from "@/components/Header";
 import Loading from "@/components/Loading.tsx";
-import { getUserData } from "@/data/user.server";
+import { getMyData } from "@/data/user.server";
 import { AuthProvider } from "@/features/auth/providers/AuthProvider";
 import { ChatNotificationProvider } from "@/features/chat/NotificationProvider";
 import { ToastProvider } from "@/features/toast/ToastProvider";
@@ -9,7 +9,7 @@ import { UserProvider } from "@/features/user/userProvider";
 import { Suspense } from "react";
 
 async function LazyHeader() {
-  const user = await getUserData();
+  const user = await getMyData();
   return <HeaderComponent user={user} />;
 }
 function Header() {
@@ -35,7 +35,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 }
 
 async function LazyLayout({ children }: { children: React.ReactNode }) {
-  const user = await getUserData();
+  const user = await getMyData();
 
   return (
     <AuthProvider>
