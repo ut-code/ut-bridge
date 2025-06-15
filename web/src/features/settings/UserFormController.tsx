@@ -1,66 +1,18 @@
 "use client";
+
 import { client } from "@/client";
-import Loading from "@/components/Loading.tsx";
+import { getBlockedUsers, getFavoriteUsers } from "@/data/fetchers/fetch-relational-users.ts";
+import { useUniversitySpecificData } from "@/data/formData.client.ts";
 import { formatCardUser } from "@/features/format";
-import { useUserContext } from "@/features/user/userProvider";
 import type { CreateUser, FlatCardUser, MYDATA } from "common/zod/schema.ts";
 import { useLocale, useTranslations } from "next-intl";
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
-import { useRef } from "react";
+import { createContext, useCallback, useContext, useState } from "react";
 import { useAuthContext } from "../auth/providers/AuthProvider.tsx";
 import { upload } from "../image/ImageUpload.tsx";
+import { resizeImage } from "../image/resize.ts";
 import { useToast } from "../toast/ToastProvider.tsx";
 
 export type Status = "ready" | "error" | "success" | "processing";
-
-const resizeImage = (file: File, maxWidth = 800, maxHeight = 800): Promise<File> => {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    const canvas = document.createElement("canvas");
-    const reader = new FileReader();
-
-    reader.onload = (e) => {
-      img.onload = () => {
-        let { width, height } = img;
-
-        // 比率を保ってリサイズ
-        if (width > maxWidth || height > maxHeight) {
-          const scale = Math.min(maxWidth / width, maxHeight / height);
-          width *= scale;
-          height *= scale;
-        }
-
-        canvas.width = width;
-        canvas.height = height;
-
-        const ctx = canvas.getContext("2d");
-        if (!ctx) {
-          reject(new Error("Canvas 2D context is not supported"));
-          return;
-        }
-        ctx.drawImage(img, 0, 0, width, height);
-
-        canvas.toBlob((blob) => {
-          if (blob) {
-            resolve(new File([blob], file.name, { type: file.type }));
-          } else {
-            reject(new Error("Blob conversion failed"));
-          }
-        }, file.type);
-      };
-      img.onerror = reject;
-      const result = e.target?.result;
-      if (typeof result === "string") {
-        img.src = result;
-      } else {
-        reject(new Error("FileReader result is not a string"));
-      }
-    };
-
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-};
 
 type UserFormContextType = {
   loadingUniversitySpecificData: boolean;
@@ -72,7 +24,7 @@ type UserFormContextType = {
   setImagePreviewURL: React.Dispatch<React.SetStateAction<string | null>>;
   handleImageFileChange: (file: File) => void;
   uploadImage: () => Promise<void>;
-  onSuccess: (data: Partial<MYDATA>) => void;
+  onSuccess: (data: MYDATA) => void;
   onFailure: () => void;
   submitPatch: (e: React.FormEvent) => void;
   status: Status;
@@ -98,63 +50,51 @@ export const useUserFormContext = () => {
 
 export const UserFormProvider = ({
   children,
-  loadPreviousData,
+  globalData: { universities, languages },
+  personalData,
 }: {
   children: React.ReactNode;
-  loadPreviousData: boolean;
+  globalData: {
+    universities: { id: string; jaName: string; enName: string }[];
+    languages: { id: string; jaName: string; enName: string }[];
+  };
+  personalData: {
+    savedData: MYDATA | null;
+    blockedUsers: FlatCardUser[];
+    favoriteUsers: FlatCardUser[];
+  } | null;
 }) => {
   const t = useTranslations();
   const toast = useToast();
   const locale = useLocale();
-  let me: MYDATA | null = null;
-  const setMyData = useRef<((data: Partial<MYDATA>) => void) | null>(null);
   const [status, setStatus] = useState<Status>("ready");
-  // HELP: how do I optionally use another context? loadPreviousData will never change
-  if (loadPreviousData) {
-    const usercx = useUserContext();
-    me = usercx.me;
-    setMyData.current = (data) => usercx.updateMyData((prev) => ({ ...prev, ...data }));
-  }
+
   const { idToken: Authorization } = useAuthContext();
 
-  const [formData, setFormData] = useState<Partial<CreateUser & { loading: true }>>({ loading: true });
   const [image, setImage] = useState<File | null>(null);
   const [imagePreviewURL, setImagePreviewURL] = useState<string | null>(null);
 
-  const [universities, setUniversities] = useState<{ id: string; jaName: string; enName: string }[]>([]);
-  const [campuses, setCampuses] = useState<{ id: string; jaName: string; enName: string }[]>([]);
-  const [divisions, setDivisions] = useState<{ id: string; jaName: string; enName: string }[]>([]);
-  const [languages, setLanguages] = useState<{ id: string; jaName: string; enName: string }[]>([]);
-  const [favoriteUsers, setFavoriteUsers] = useState<FlatCardUser[]>([]);
-  const [blockedUsers, setBlockedUsers] = useState<FlatCardUser[]>([]);
-  const [loadingUniversitySpecificData, setLoadingUniversitySpecificData] = useState(false);
-
-  // static データ取得（大学 & 言語）
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [universityRes, languageRes] = await Promise.all([client.university.$get(), client.language.$get()]);
-
-        if (!universityRes.ok || !languageRes.ok) {
-          throw new Error(
-            `データ取得に失敗しました: {
-              university: ${await universityRes.text()}
-              language: ${await languageRes.text()}
-            }`,
-          );
-        }
-
-        const [universitiesData, languagesData] = await Promise.all([universityRes.json(), languageRes.json()]);
-
-        setUniversities(universitiesData);
-        setLanguages(languagesData);
-      } catch (error) {
-        console.error("大学・言語データの取得に失敗しました", error);
-      }
+  // need help: what the heck
+  const [_userData, setUserData] = useState<MYDATA | null>(personalData?.savedData ?? null);
+  const [formData, setFormData] = useState<Partial<CreateUser>>(() => {
+    return {
+      ...personalData?.savedData,
+      imageUrl: personalData?.savedData?.imageUrl ?? undefined,
+      customEmail: personalData?.savedData?.customEmail ?? undefined,
+      universityId: personalData?.savedData?.campus.university.id ?? undefined,
+      campusId: personalData?.savedData?.campus.id ?? undefined,
+      divisionId: personalData?.savedData?.division.id ?? undefined,
+      motherLanguageId: personalData?.savedData?.motherLanguage.id ?? undefined,
+      fluentLanguageIds: personalData?.savedData?.fluentLanguages.map((lang) => lang.language.id) ?? [],
+      learningLanguageIds: personalData?.savedData?.learningLanguages.map((lang) => lang.language.id) ?? [],
     };
+  });
 
-    fetchData();
-  }, []);
+  const {
+    campuses,
+    divisions,
+    loading: loadingUniversitySpecificData,
+  } = useUniversitySpecificData(formData.universityId);
 
   const submitPatch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -191,7 +131,9 @@ export const UserFormProvider = ({
         throw new Error(`レスポンスステータス: ${res.status}, response: ${await res.text()}`);
       }
       setStatus("success");
-      onSuccess(await res.json());
+      const data = await res.json();
+      onSuccess(data);
+      setUserData(data);
     } catch (error) {
       console.error("ユーザー情報の更新に失敗しました", error);
       setStatus("error");
@@ -203,134 +145,34 @@ export const UserFormProvider = ({
     }
   };
 
-  // 大学固有の static データを取得
-  useEffect(() => {
-    if (!formData.universityId) return;
-    const fetchCampusAndDivisions = async () => {
-      console.log(`fetching university-specific data for university ${formData.universityId} ...`);
-      setLoadingUniversitySpecificData(true);
-      try {
-        const [campusRes, divisionRes] = await Promise.all([
-          client.campus.$get({ query: { id: formData.universityId } }),
-          client.division.$get({ query: { id: formData.universityId } }),
-        ]);
-
-        if (!campusRes.ok || !divisionRes.ok) {
-          throw new Error("キャンパスまたは学部データの取得に失敗しました");
-        }
-
-        setCampuses(await campusRes.json());
-        setDivisions(await divisionRes.json());
-      } catch (error) {
-        console.error(error);
-      }
-      setLoadingUniversitySpecificData(false);
-    };
-
-    fetchCampusAndDivisions();
-  }, [formData.universityId]);
-
-  // ユーザー情報を取得
-  useEffect(() => {
-    const fetchMyData = async () => {
-      try {
-        if (!loadPreviousData) {
-          setFormData({});
-        } else {
-          const meRes = await client.users.me.$get({ header: { Authorization } });
-          if (!meRes.ok) {
-            throw new Error("Failed to fetch user data!");
-          }
-          const me = await meRes.json();
-          if (!me) {
-            throw new Error("User Not Found in Database!");
-          }
-
-          console.log(
-            `
-            [useFormData] me = 
-            defaultEmail: ${me.defaultEmail}
-            customEmail: ${me.customEmail}
-          `,
-          );
-
-          setFormData({
-            ...me,
-            customEmail: me.customEmail ?? undefined,
-            imageUrl: me.imageUrl ?? undefined,
-            universityId: me.campus.university.id,
-            motherLanguageId: me.motherLanguage.id,
-            fluentLanguageIds: me.fluentLanguages.map((entry) => entry.language.id),
-            learningLanguageIds: me.learningLanguages.map((entry) => entry.language.id),
-            campusId: me.campus.id,
-            divisionId: me.division.id,
-          });
-        }
-      } catch (err) {
-        console.error("ユーザー情報の取得に失敗しました", err);
-      }
-    };
-
-    fetchMyData();
-  }, [loadPreviousData, Authorization]);
+  const [favoriteUsers, setFavoriteUsers] = useState<FlatCardUser[]>(personalData?.favoriteUsers ?? []);
+  const [blockedUsers, setBlockedUsers] = useState<FlatCardUser[]>(personalData?.blockedUsers ?? []);
 
   const refetchFavoriteUsers = useCallback(async () => {
     try {
-      if (!me) return;
-      const res = await client.community.$get({
-        header: { Authorization, sessionSeed: "" }, // we don't care about the order of users here
-        query: {
-          except: me.id,
-          marker: "favorite",
-        },
-      });
-
-      if (!res.ok) {
-        throw new Error(await res.text());
-      }
-
-      const data = await res.json();
+      const data = await getFavoriteUsers(Authorization);
       setFavoriteUsers(data.users.map((user) => formatCardUser(user, locale)));
     } catch (error) {
       console.error("お気に入りユーザーの取得に失敗しました", error);
     }
-  }, [me, Authorization, locale]);
+  }, [Authorization, locale]);
 
   const refetchBlockedUsers = useCallback(async () => {
     try {
-      if (!me) return;
-      const res = await client.community.$get({
-        header: { Authorization, sessionSeed: "" }, // we don't care about how users are ordered here
-        query: {
-          except: me.id,
-          marker: "blocked",
-        },
-      });
-
-      if (!res.ok) {
-        throw new Error(`ブロックユーザーの取得失敗: ${await res.text()}`);
-      }
-
-      const data = await res.json();
+      const data = await getBlockedUsers(Authorization);
       setBlockedUsers(data.users.map((user) => formatCardUser(user, locale)));
     } catch (error) {
       console.error("ブロックユーザーの取得に失敗しました", error);
     }
-  }, [me, Authorization, locale]);
-
-  useEffect(() => {
-    refetchFavoriteUsers();
-    refetchBlockedUsers();
-  }, [refetchFavoriteUsers, refetchBlockedUsers]);
+  }, [Authorization, locale]);
 
   const onSuccess = useCallback(
-    (data: Partial<MYDATA>) => {
-      console.log("ok 1");
+    (data: MYDATA) => {
       toast.push({
         color: "success",
         message: t("settings.success"),
       });
-      setMyData.current?.(data);
+      setUserData(data);
     },
     [toast, t],
   );
@@ -429,7 +271,6 @@ export const UserFormProvider = ({
     });
   };
 
-  if (formData.loading) return <Loading stage="formdata" />;
   return (
     <UserFormContext.Provider
       value={{
@@ -447,8 +288,8 @@ export const UserFormProvider = ({
         status,
         submitPatch,
         universities,
-        campuses,
-        divisions,
+        campuses: campuses || [],
+        divisions: divisions || [],
         languages,
         favoriteUsers,
         blockedUsers,

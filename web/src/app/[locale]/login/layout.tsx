@@ -4,7 +4,7 @@ import { ToastProvider } from "@/features/toast/ToastProvider";
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <Header />
+      <Header user={null} />
       <ToastProvider>{children}</ToastProvider>
     </>
   );

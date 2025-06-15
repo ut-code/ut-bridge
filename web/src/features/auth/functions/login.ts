@@ -3,6 +3,7 @@ import { signInWithPopup } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import { auth, provider } from "../config.ts";
+import { setAuthCookies } from "./cookies.ts";
 
 async function login() {
   try {
@@ -17,6 +18,8 @@ async function login() {
       query: { guid: result.user.uid },
     });
     const { exists } = await res.json();
+
+    setAuthCookies({ idToken });
 
     return exists ? { status: "hasData", user: result.user } : { status: "auth-nodata", user: result.user };
   } catch (error) {
@@ -41,8 +44,15 @@ export function useGoogleSignIn() {
       case "auth-nodata":
         router.push("/registration");
         break;
-      default:
+      case "noAuth":
         router.push("/login");
+        break;
+      case "error":
+        console.error("Login Error:", response.error);
+        router.push("/login");
+        break;
+      default:
+        console.error("Login Error: unknown status", response);
         break;
     }
   }, [router]);

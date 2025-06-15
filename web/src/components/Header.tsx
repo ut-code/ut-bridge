@@ -1,20 +1,16 @@
 "use client";
+
 import { useUserContext } from "@/features/user/userProvider.tsx";
 import { useNormalizedPathname } from "@/hooks/useNormalizedPath.ts";
 import { Link } from "@/i18n/navigation.ts";
+import type { MYDATA } from "common/zod/schema";
 import { useTranslations } from "next-intl";
 import { AppIcon } from "./AppIcon.tsx";
 import Avatar from "./Avatar.tsx";
 
-export default function Header() {
+export default function Header({ user }: { user: MYDATA | null }) {
   const t = useTranslations();
   const pathname = useNormalizedPathname();
-
-  const { me } =
-    pathname.startsWith("/registration") || pathname === "/login" || pathname === ""
-      ? { me: null }
-      : // eslint-disable-next-line react-hooks/rules-of-hooks
-        useUserContext();
 
   let title = "";
   if (pathname === "") title = "UT-Bridge";
@@ -31,10 +27,10 @@ export default function Header() {
     <>
       <header className="fixed top-0 z-10 h-16 w-full bg-tBlue">
         <div className="flex h-16 items-center">
-          <Link href={me ? "/community" : "/"} passHref className="px-4">
+          <Link href={user ? "/community" : "/"} passHref className="px-4">
             <AppIcon width={36} height={36} />
           </Link>
-          <Link href={me ? "/community" : "/"} className="hidden cursor-pointer px-4 text-2xl text-white sm:block">
+          <Link href={user ? "/community" : "/"} className="hidden cursor-pointer px-4 text-2xl text-white sm:block">
             UT-Bridge
           </Link>
           {pathname === "/login" || pathname === "/registration" || pathname === "" ? (
@@ -68,10 +64,12 @@ export default function Header() {
                 {t("settings.title")}
               </Link>
               <p className="absolute right-1/2 translate-x-1/2 font-bold text-white text-xl sm:hidden">{title}</p>
-              <Link href="/settings/basic" className="absolute right-4 flex cursor-pointer items-center gap-4">
-                <Avatar size={40} src={me?.imageUrl} />
-                {me?.name && <p className="hidden text-white text-xl sm:block">{me.name}</p>}
-              </Link>
+              {user && (
+                <Link href="/settings/basic" className="absolute right-4 flex cursor-pointer items-center gap-4">
+                  <Avatar size={40} src={user.imageUrl} />
+                  {user.name && <p className="hidden text-white text-xl sm:block">{user.name}</p>}
+                </Link>
+              )}
             </>
           )}
         </div>
