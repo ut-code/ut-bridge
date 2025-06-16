@@ -2,11 +2,27 @@ import createMiddleware from "next-intl/middleware";
 import { type NextRequest, NextResponse } from "next/server";
 import { routing } from "./i18n/routing.ts";
 
+let WEB_ORIGIN = process.env.NEXT_PUBLIC_WEB_ORIGIN ?? null;
+if (WEB_ORIGIN === "null") {
+  WEB_ORIGIN = null;
+}
+const WEB_HOST = WEB_ORIGIN ? new URL(WEB_ORIGIN).host : null; // null on staging environment
+
 const middleware = createMiddleware(routing);
 
 export default function handler(req: NextRequest) {
-  const { nextUrl } = req;
+  const { nextUrl, headers } = req;
   const pathname = nextUrl.pathname;
+  const host = headers.get("host") || "";
+
+  // Redirect to WEB_HOST if using another host && it's not staging environment
+  if (WEB_HOST && host !== WEB_HOST) {
+    const targetUrl = new URL(nextUrl);
+    targetUrl.host = WEB_HOST;
+    // Preserve HTTP/HTTPS protocol
+    targetUrl.protocol = nextUrl.protocol;
+    return NextResponse.redirect(targetUrl);
+  }
 
   // 設定したロケール（例: 'en', 'ja'）
   const locales = routing.locales;
