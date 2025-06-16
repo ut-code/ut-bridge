@@ -6,6 +6,7 @@ import z from "zod";
 import { getUserID } from "../auth/func.ts";
 import { prisma } from "../config/prisma.ts";
 import { register, subscribe, verify } from "../email/verification/func.ts";
+
 const route = new Hono()
   .put(
     "/register",
@@ -68,6 +69,16 @@ const route = new Hono()
         }
       });
     },
-  );
+  )
+  .delete("/custom", zValidator("header", z.object({ Authorization: z.string() })), async (c) => {
+    const userId = await getUserID(c);
+
+    await prisma.user.update({
+      where: { id: userId },
+      data: { customEmail: null },
+    });
+
+    return c.json({ ok: true });
+  });
 
 export default route;

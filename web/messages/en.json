@@ -175,6 +175,7 @@
       "defaultEmail": "Default Email (ECCS Account)",
       "updateEmail": "Update Email",
       "verifyEmail": "Verify Email",
+      "deleteEmail": "Delete Email",
       "resendVerification": "Resend Verification Email",
       "notVerified": "Not Verified",
       "verified": "Verified",
@@ -182,6 +183,9 @@
       "verificationFailed": "Failed to send verification email",
       "updateSuccess": "Email updated successfully",
       "updateFailed": "Failed to update email",
+      "deleteSuccess": "Custom email deleted successfully",
+      "deleteError": "Failed to delete custom email",
+      "deleteConfirm": "Are you sure you want to delete your custom email?",
       "notifications": {
         "title": "Email Notifications",
         "allowMessages": "Allow message notifications",
