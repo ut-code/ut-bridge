@@ -50,6 +50,27 @@
     "title": "Chat",
     "noRoom": "Let's start chatting from the user page!"
   },
+  "emailVerification": {
+    "title": "Verify Your Email",
+    "success": {
+      "title": "Email Verified!",
+      "message": "Your email has been successfully verified.",
+      "button": "Go to Community"
+    },
+    "error": {
+      "title": "Verification Failed",
+      "message": "We couldn't verify your email. The link may have expired. Please check your email for the most recent verification link."
+    },
+    "processing": {
+      "title": "Verifying...",
+      "message": "Please wait while we verify your email address..."
+    },
+    "ready": {
+      "title": "Verify Your Email",
+      "message": "Click the button below to verify your email address.",
+      "button": "Verify Email"
+    }
+  },
   "settings": {
     "title": "Settings",
     "headers": {
