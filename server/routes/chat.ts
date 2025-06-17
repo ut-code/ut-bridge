@@ -128,6 +128,65 @@ const router = new Hono()
       }
     },
   )
+  /**
+   * Delete a chat room and all its associated data
+   *
+   * This endpoint allows a room member to delete the entire chat room.
+   * It will:
+   * 1. Verify the requesting user is a member of the room
+   * 2. Delete the room (which cascades to messages and memberships due to foreign key constraints)
+   * 3. Broadcast a DeleteRoom event to all room members
+   *
+   * @route DELETE /rooms/:room
+   * @param room - The ID of the room to delete
+   * @returns {Object} Success status
+   * @throws {HTTPException} 404 - If room not found or user is not a member
+   * @throws {HTTPException} 500 - If room deletion fails
+   */
+  .delete(
+    "/rooms/:room",
+    zValidator("param", z.object({ room: z.string() })),
+    zValidator("header", z.object({ Authorization: z.string() })),
+    async (c) => {
+      const userId = await getUserID(c);
+      const { room: roomId } = c.req.valid("param");
+
+      // Verify user is a member of the room to prevent unauthorized deletion
+      const membership = await prisma.belongs.findUnique({
+        where: { userId_roomId: { userId, roomId } },
+        select: { roomId: true },
+      });
+
+      if (!membership) {
+        throw new HTTPException(404, { message: "Room not found or access denied" });
+      }
+
+      // Get all room members before deletion so we can notify them
+      const roomMembers = await prisma.belongs.findMany({
+        where: { roomId },
+        select: { userId: true },
+      });
+      const memberIds = roomMembers.map((member) => member.userId);
+
+      try {
+        // Delete the room - this will cascade to messages and memberships
+        await prisma.room.delete({
+          where: { id: roomId },
+        });
+
+        // Notify all room members that the room was deleted
+        broadcast(memberIds, {
+          event: "DeleteRoom",
+          data: devalue({ roomId }),
+        });
+
+        return c.json({ ok: true }, 200);
+      } catch (err) {
+        console.error("Failed to delete room:", err);
+        throw new HTTPException(500, { message: "Failed to delete room" });
+      }
+    },
+  )
   // ## room preview
   .get("/rooms/preview", zValidator("header", z.object({ Authorization: z.string() })), async (c) => {
     const requester = await getUserID(c);
@@ -538,6 +597,12 @@ type BroadcastEvents =
       event: "Delete";
       data: Devalue<{
         id: string;
+      }>;
+    }
+  | {
+      event: "DeleteRoom";
+      data: Devalue<{
+        roomId: string;
       }>;
     }
   | {

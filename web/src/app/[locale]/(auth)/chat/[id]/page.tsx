@@ -1,5 +1,7 @@
 import Avatar from "@/components/Avatar";
 import Loading from "@/components/Loading.tsx";
+import DeleteRoomButton from "@/components/chat/DeleteRoomButton";
+import { HEADER_HEIGHT_TW } from "@/consts.ts";
 import { getRoomData } from "@/data/room.server.ts";
 import { getMyData } from "@/data/user.server.ts";
 import { Link } from "@/i18n/navigation";
@@ -45,21 +47,26 @@ async function Load({ roomId }: { roomId: string }) {
 function ChatHeader({ room, me }: { room: ContentfulRoom; me: MYDATA }) {
   return (
     <>
-      <div className="invisible h-[56px]" />
-      <div className="fixed top-[56px] z-10 flex w-full items-center bg-stone-200 py-2">
-        <Link href={"/chat"} className="mx-2">
-          <AiOutlineLeft size={25} />
-        </Link>
-        <div className="mr-[33px] w-full text-center text-xl">
-          {room.members
-            .filter((member) => member.user.id !== me.id)
-            .map((member) => (
-              <div key={member.user.id} className=" ml-2 flex items-center gap-2">
-                <Avatar alt={member.user.name || "User"} src={member.user.imageUrl} size={40} />
-                <div>{member.user.name}</div>
-              </div>
-            ))}
+      <div className={`invisible h-${HEADER_HEIGHT_TW}`} />
+      <div
+        className={`fixed top-${HEADER_HEIGHT_TW} z-10 flex w-full items-center justify-between bg-stone-200 px-4 py-2`}
+      >
+        <div className="flex items-center">
+          <Link href={"/chat"} className="mr-2">
+            <AiOutlineLeft size={25} />
+          </Link>
+          <div className="flex items-center text-xl">
+            {room.members
+              .filter((member) => member.user.id !== me.id)
+              .map((member) => (
+                <div key={member.user.id} className="flex items-center gap-2">
+                  <Avatar alt={member.user.name || "User"} src={member.user.imageUrl} size={40} />
+                  <div>{member.user.name}</div>
+                </div>
+              ))}
+          </div>
         </div>
+        <DeleteRoomButton roomId={room.id} />
       </div>
     </>
   );
