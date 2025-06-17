@@ -5,10 +5,11 @@ import Avatar from "@/components/Avatar";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import type { FlatUser, MYDATA } from "common/zod/schema";
 import { useTranslations } from "next-intl";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export function ClientPage({ me, initUser }: { me: MYDATA; initUser: FlatUser }) {
+  const router = useRouter();
   const [user, setUser] = useState(initUser);
   const { idToken: Authorization } = useAuthContext();
   const t = useTranslations();

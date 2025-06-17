@@ -1,12 +1,14 @@
 "use client";
 
-import { useUserContext } from "@/features/user/userProvider.tsx";
+import { HEADER_HEIGHT_TW } from "@/consts.ts";
 import { useNormalizedPathname } from "@/hooks/useNormalizedPath.ts";
 import { Link } from "@/i18n/navigation.ts";
 import type { MYDATA } from "common/zod/schema";
 import { useTranslations } from "next-intl";
 import { AppIcon } from "./AppIcon.tsx";
 import Avatar from "./Avatar.tsx";
+
+const __HEADER_HEIGHT_CLASSES = `h-${HEADER_HEIGHT_TW} top-${HEADER_HEIGHT_TW}`; // make tailwind compiler happy
 
 export default function Header({ user }: { user: MYDATA | null }) {
   const t = useTranslations();
@@ -25,7 +27,7 @@ export default function Header({ user }: { user: MYDATA | null }) {
 
   return (
     <>
-      <header className="fixed top-0 z-10 h-16 w-full bg-tBlue">
+      <header className={`fixed top-0 z-10 h-${HEADER_HEIGHT_TW} w-full bg-tBlue`}>
         <div className="flex h-16 items-center">
           <Link href={user ? "/community" : "/"} passHref className="px-4">
             <AppIcon width={36} height={36} />
