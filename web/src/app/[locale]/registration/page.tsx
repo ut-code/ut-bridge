@@ -133,30 +133,6 @@ export default function Page() {
                   {t("settings.basic.photoUpload")}
                 </label>
               </div>
-              <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
-                {t("settings.basic.email")}
-                <input
-                  type="email"
-                  name="email"
-                  onChange={ctx.handleChange}
-                  placeholder="you@example.com"
-                  className="my-4 w-full rounded-xl border border-gray-500 bg-white p-2 sm:w-1/2"
-                />
-              </label>
-              {/*
-              定期通知実装まで放置
-              <label className="mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center sm:justify-between">
-                {t("settings.basic.allowPeriodicNotification")}
-                <span className="flex w-1/2 flex-row justify-center">
-                  <input
-                    type="checkbox"
-                    onChange={ctx.handleChange}
-                    name="allowPeriodicNotifications"
-                    className="checkbox checkbox-primary"
-                  />
-                </span>
-              </label>
-              */}
             </div>
 
             <div className="my-10 px-15">
