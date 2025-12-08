@@ -29,5 +29,7 @@
     "prisma": "^6.19.0",
     "typescript": "^5.9.3"
   },
-  "trustedDependencies": ["@prisma/client"]
+  "trustedDependencies": [
+    "@prisma/client"
+  ]
 }

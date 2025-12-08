@@ -1,5 +1,5 @@
-import { client } from "@/client";
 import type { ContentfulRoom, RoomPreview } from "common/zod/schema.ts";
+import { client } from "@/client.ts";
 import { getIdToken } from "./utils.ts";
 
 export async function getRoomsPreview(): Promise<RoomPreview[]> {
@@ -41,7 +41,7 @@ export async function deleteRoom(roomId: string): Promise<void> {
   });
 
   if (!response.ok) {
-    const error = await response.json();
+    const _error = await response.json();
     throw new Error("Failed to delete room");
   }
 

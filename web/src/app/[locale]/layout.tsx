@@ -1,9 +1,9 @@
-import { routing } from "@/i18n/routing";
+import { routing } from "@/i18n/routing.ts";
 import "../../tailwind.css";
-import { ServiceWorkerProvider } from "@/features/push/provider";
+import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
-import { notFound } from "next/navigation";
+import { ServiceWorkerProvider } from "@/features/push/provider.tsx";
 
 export const runtime = "edge";
 

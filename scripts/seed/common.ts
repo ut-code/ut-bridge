@@ -1,7 +1,6 @@
+import { prisma } from "../../server/config/prisma.ts";
 import { languages } from "./data/languages.ts";
 import { universities } from "./data/universities.ts";
-
-import { prisma } from "../../server/config/prisma.ts";
 
 export async function main() {
   const firstUniversity = universities[0];

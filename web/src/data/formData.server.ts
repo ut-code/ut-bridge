@@ -1,7 +1,7 @@
-import { client } from "@/client";
-import { formatCardUser } from "@/features/format.ts";
 import type { FlatCardUser, MYDATA } from "common/zod/schema";
 import { getLocale } from "next-intl/server";
+import { client } from "@/client.ts";
+import { formatCardUser } from "@/features/format.ts";
 import { getBlockedUsers, getFavoriteUsers } from "./fetchers/fetch-relational-users.ts";
 import { getMyData } from "./user.server.ts";
 import { getIdToken } from "./utils.ts";

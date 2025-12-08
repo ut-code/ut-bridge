@@ -1,17 +1,17 @@
-import Avatar from "@/components/Avatar";
-import Loading from "@/components/Loading.tsx";
-import DeleteRoomButton from "@/components/chat/DeleteRoomButton";
-import { HEADER_HEIGHT_TW } from "@/consts.ts";
-import { getRoomData } from "@/data/room.server.ts";
-import { getMyData } from "@/data/user.server.ts";
-import { Link } from "@/i18n/navigation";
-import type { SearchParams } from "@/next/types";
 import type { ContentfulRoom, MYDATA } from "common/zod/schema.ts";
 import { Suspense } from "react";
 import { AiOutlineLeft } from "react-icons/ai";
 import z from "zod";
-import { MessageInput } from "./MessageInput.tsx";
+import Avatar from "@/components/Avatar.tsx";
+import DeleteRoomButton from "@/components/chat/DeleteRoomButton.tsx";
+import Loading from "@/components/Loading.tsx";
+import { HEADER_HEIGHT_TW } from "@/consts.ts";
+import { getRoomData } from "@/data/room.server.ts";
+import { getMyData } from "@/data/user.server.ts";
+import { Link } from "@/i18n/navigation.ts";
+import type { SearchParams } from "@/next/types.ts";
 import { MessageList } from "./client.tsx";
+import { MessageInput } from "./MessageInput.tsx";
 
 const SearchParamsSchema = z.object({
   id: z.string(),

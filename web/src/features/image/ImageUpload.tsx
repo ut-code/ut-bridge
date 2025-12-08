@@ -1,5 +1,5 @@
-import { client } from "@/client";
 import { useState } from "react";
+import { client } from "@/client.ts";
 
 export function Upload({ onUpdate }: { onUpdate: (url: string) => void }) {
   const [file, setFile] = useState<File | null>(null);

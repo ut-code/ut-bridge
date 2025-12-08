@@ -1,7 +1,7 @@
 "use client";
-import Loading from "@/components/Loading.tsx";
 import type { MYDATA } from "common/zod/schema";
-import { type ReactNode, createContext, useCallback, useContext, useState } from "react";
+import { createContext, type ReactNode, useCallback, useContext, useState } from "react";
+import Loading from "@/components/Loading.tsx";
 
 type ContextProps = {
   me: MYDATA;

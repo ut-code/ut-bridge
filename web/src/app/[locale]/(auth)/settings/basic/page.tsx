@@ -1,11 +1,11 @@
 "use client";
 
-import Avatar from "@/components/Avatar";
-import { useUserFormContext } from "@/features/settings/UserFormController.tsx";
-import { useUserContext } from "@/features/user/userProvider.tsx";
 import { NAME_MAX_LENGTH } from "common/zod/schema.ts";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+import Avatar from "@/components/Avatar.tsx";
+import { useUserFormContext } from "@/features/settings/UserFormController.tsx";
+import { useUserContext } from "@/features/user/userProvider.tsx";
 import PhotoCropModal from "../../../../../components/PhotoCropModal.tsx";
 import { SubmitButton } from "../components/SubmitButton.tsx";
 import { styles } from "../shared-class.ts";

@@ -1,12 +1,12 @@
-import Footer from "@/components/Footer";
-import HeaderComponent from "@/components/Header";
-import Loading from "@/components/Loading.tsx";
-import { getMyData } from "@/data/user.server";
-import { AuthProvider } from "@/features/auth/providers/AuthProvider";
-import { ChatNotificationProvider } from "@/features/chat/NotificationProvider";
-import { ToastProvider } from "@/features/toast/ToastProvider";
-import { UserProvider } from "@/features/user/userProvider";
 import { Suspense } from "react";
+import Footer from "@/components/Footer.tsx";
+import HeaderComponent from "@/components/Header.tsx";
+import Loading from "@/components/Loading.tsx";
+import { getMyData } from "@/data/user.server.ts";
+import { AuthProvider } from "@/features/auth/providers/AuthProvider.tsx";
+import { ChatNotificationProvider } from "@/features/chat/NotificationProvider.tsx";
+import { ToastProvider } from "@/features/toast/ToastProvider.tsx";
+import { UserProvider } from "@/features/user/userProvider.tsx";
 
 async function LazyHeader() {
   const user = await getMyData();

@@ -1,8 +1,8 @@
 "use client";
 
-import { PATHNAME_LANG_PREFIX_PATTERN } from "@/consts";
-import { usePathname, useRouter } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
+import { PATHNAME_LANG_PREFIX_PATTERN } from "@/consts.ts";
+import { usePathname, useRouter } from "@/i18n/navigation.ts";
 
 export default function LanguageSwitcher({ className }: { className?: string }) {
   const router = useRouter();

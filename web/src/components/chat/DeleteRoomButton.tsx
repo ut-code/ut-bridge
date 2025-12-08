@@ -1,8 +1,8 @@
 "use client";
 
-import { deleteRoom } from "@/actions/room";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { deleteRoom } from "@/actions/room.ts";
 
 export default function DeleteRoomButton({ roomId }: { roomId: string }) {
   const router = useRouter();

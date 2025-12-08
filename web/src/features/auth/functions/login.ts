@@ -1,7 +1,7 @@
-import { client } from "@/client.ts";
 import { signInWithPopup } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
+import { client } from "@/client.ts";
 import { auth, provider } from "../config.ts";
 import { setAuthCookies } from "./cookies.ts";
 

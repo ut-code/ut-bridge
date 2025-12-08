@@ -1,4 +1,4 @@
-import { API_ENDPOINT } from "@/client";
+import { API_ENDPOINT } from "@/client.ts";
 
 export function waitForVerification(verificationId: string, then: () => void) {
   const sse = new EventSource(`${API_ENDPOINT}/email/wait-for-verification?verificationId=${verificationId}`);

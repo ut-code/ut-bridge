@@ -1,4 +1,4 @@
-import { client } from "@/client";
+import { client } from "@/client.ts";
 
 export async function verify(id: string, token: string) {
   const res = await client.email.verify.$put({

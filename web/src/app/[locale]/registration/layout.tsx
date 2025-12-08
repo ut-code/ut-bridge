@@ -1,8 +1,8 @@
-import Header from "@/components/Header";
-import { getGlobalData } from "@/data/formData.server";
-import { AuthProvider } from "@/features/auth/providers/AuthProvider";
-import { UserFormProvider } from "@/features/settings/UserFormController";
-import { ToastProvider } from "@/features/toast/ToastProvider";
+import Header from "@/components/Header.tsx";
+import { getGlobalData } from "@/data/formData.server.ts";
+import { AuthProvider } from "@/features/auth/providers/AuthProvider.tsx";
+import { UserFormProvider } from "@/features/settings/UserFormController.tsx";
+import { ToastProvider } from "@/features/toast/ToastProvider.tsx";
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
   const globalData = await getGlobalData();

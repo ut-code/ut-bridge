@@ -1,9 +1,9 @@
-import Avatar from "@/components/Avatar";
-import { Link } from "@/i18n/navigation.ts";
 import type { FlatCardUser } from "common/zod/schema";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { AiFillEyeInvisible, AiFillStar, AiOutlineStar } from "react-icons/ai";
+import Avatar from "@/components/Avatar.tsx";
+import { Link } from "@/i18n/navigation.ts";
 
 type UserCardEvent = {
   favorite?: (id: string) => Promise<void>;
@@ -12,15 +12,7 @@ type UserCardEvent = {
   unblock?: (id: string) => Promise<void>;
 };
 
-export default function UserCard({
-  user: init,
-  on,
-  link,
-}: {
-  user: FlatCardUser;
-  on: UserCardEvent;
-  link: string;
-}) {
+export default function UserCard({ user: init, on, link }: { user: FlatCardUser; on: UserCardEvent; link: string }) {
   const [user, setUser] = useState(init);
   const [favoriteBtnLoading, setFavoriteBtnLoading] = useState(false);
   const t = useTranslations("settings.language");
@@ -34,7 +26,7 @@ export default function UserCard({
       {/* FIXME */}
       <div className={"absolute top-0 left-0 h-[1px] w-full bg-gray-300 sm:hidden"} />
       {/* お気に入りボタン（右上に配置） */}
-      <div className="absolute top-2 right-2 ">
+      <div className="absolute top-2 right-2">
         {favoriteBtnLoading ? (
           <span className="loading loading-ring" />
         ) : user.markedAs === "favorite" ? (
@@ -51,7 +43,7 @@ export default function UserCard({
                   ...user,
                   markedAs: undefined,
                 });
-              } catch (err) {
+              } catch (_err) {
                 console.error("failed to unfavorite user");
               }
               setFavoriteBtnLoading(false);
@@ -73,7 +65,7 @@ export default function UserCard({
                   ...user,
                   markedAs: undefined,
                 });
-              } catch (err) {
+              } catch (_err) {
                 console.error("failed to unblock user");
               }
               setFavoriteBtnLoading(false);
@@ -95,7 +87,7 @@ export default function UserCard({
                   ...user,
                   markedAs: "favorite",
                 });
-              } catch (err) {
+              } catch (_err) {
                 console.error("failed to favorite user");
               }
               setFavoriteBtnLoading(false);

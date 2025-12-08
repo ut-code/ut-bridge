@@ -1,17 +1,13 @@
 "use client";
 
-import { client } from "@/client";
-import { useAuthContext } from "@/features/auth/providers/AuthProvider";
-import { handlers } from "@/features/chat/state";
-import { useUserContext } from "@/features/user/userProvider";
 import type { ContentfulRoom } from "common/zod/schema.ts";
 import { useEffect, useRef, useState } from "react";
+import { client } from "@/client.ts";
+import { useAuthContext } from "@/features/auth/providers/AuthProvider.tsx";
+import { handlers } from "@/features/chat/state.ts";
+import { useUserContext } from "@/features/user/userProvider.tsx";
 
-export function MessageList({
-  data,
-}: {
-  data: ContentfulRoom;
-}) {
+export function MessageList({ data }: { data: ContentfulRoom }) {
   const [messages, setMessages] = useState(data.messages);
   const { idToken: Authorization } = useAuthContext();
 
@@ -86,7 +82,7 @@ export function MessageList({
 
       setDeletingMessageId(null);
       setShowConfirmModal(false);
-    } catch (error) {
+    } catch (_error) {
       alert("削除に失敗しました");
     }
   };
@@ -111,6 +107,7 @@ export function MessageList({
       {messages.map((m) => (
         // TODO: handle pictures
         <li key={m.id}>
+          {/* biome-ignore lint/a11y/noStaticElementInteractions: long press for message actions */}
           <div
             className={`chat ${m.senderId === me.id ? "chat-end" : "chat-start"}`}
             onTouchStart={() => handleLongPressStart(m.id)}

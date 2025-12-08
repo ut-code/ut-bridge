@@ -1,11 +1,11 @@
 "use client";
 
-import { client } from "@/client";
-import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import clsx from "clsx";
 import { MESSAGE_MAX_LENGTH } from "common/zod/schema";
 import { useState } from "react";
 import { AiOutlineSend } from "react-icons/ai";
+import { client } from "@/client.ts";
+import { useAuthContext } from "@/features/auth/providers/AuthProvider.tsx";
 
 export function MessageInput({ roomId }: { roomId: string }) {
   const { idToken: Authorization } = useAuthContext();

@@ -31,7 +31,7 @@ const app = new Hono()
   .use(cors())
   // TODO(PERF):: delete this in production
   .use(async (c, next) => {
-    const latency = Number.parseInt(env(c, "ARTIFICIAL_NETWORK_LATENCY", { fallback: "0" }));
+    const latency = Number.parseInt(env(c, "ARTIFICIAL_NETWORK_LATENCY", { fallback: "0" }), 10);
     await Bun.sleep(latency);
     await next();
   })

@@ -1,7 +1,7 @@
 "use client";
 
-import { client } from "@/client.ts";
 import { useEffect, useState } from "react";
+import { client } from "@/client.ts";
 
 export function useUniversitySpecificData(universityId: string | undefined) {
   const [loading, setLoading] = useState(false);

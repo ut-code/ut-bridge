@@ -1,5 +1,5 @@
-import { PATHNAME_LANG_PREFIX_PATTERN } from "@/consts.ts";
 import { usePathname } from "next/navigation";
+import { PATHNAME_LANG_PREFIX_PATTERN } from "@/consts.ts";
 
 /**
  * ロケールを考慮してパスを正規化する（/ja/login, /en/login → /login）

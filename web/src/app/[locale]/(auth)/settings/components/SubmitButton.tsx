@@ -1,6 +1,6 @@
-import type { Status } from "@/features/settings/UserFormController.tsx";
 import clsx from "clsx";
 import { useTranslations } from "next-intl";
+import type { Status } from "@/features/settings/UserFormController.tsx";
 import { styles } from "../shared-class.ts";
 
 export function SubmitButton({ status }: { status: Status }) {

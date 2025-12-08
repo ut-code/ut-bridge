@@ -1,22 +1,22 @@
 "use client";
-import { client } from "@/client";
+import { type Exchange, ExchangeSchema, type FlatCardUser, MarkerSchema } from "common/zod/schema";
+import { useSearchParams } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
+import { useCallback, useEffect, useState } from "react";
+import { AiOutlineSearch } from "react-icons/ai";
+import { client } from "@/client.ts";
 import Loading from "@/components/Loading.tsx";
-import { PATHNAME_LANG_PREFIX_PATTERN, sessionStorageKeys } from "@/consts";
-import { useAuthContext } from "@/features/auth/providers/AuthProvider";
-import { formatCardUser } from "@/features/format";
+import { PATHNAME_LANG_PREFIX_PATTERN, sessionStorageKeys } from "@/consts.ts";
+import { useAuthContext } from "@/features/auth/providers/AuthProvider.tsx";
+import { formatCardUser } from "@/features/format.ts";
 import UserCard from "@/features/user/UserCard.tsx";
 import { useUserContext } from "@/features/user/userProvider.tsx";
 import { Link, useRouter } from "@/i18n/navigation.ts";
-import { type Exchange, ExchangeSchema, type FlatCardUser, MarkerSchema } from "common/zod/schema";
-import { useLocale, useTranslations } from "next-intl";
-import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
-import { AiOutlineSearch } from "react-icons/ai";
 
 function useQuery() {
   const query = useSearchParams();
   const pageQuery = query.get("page");
-  const page = Number.parseInt(pageQuery ?? "") || 1; // don't use `??`. it won't filter out NaN (and page won't be 0)
+  const page = Number.parseInt(pageQuery ?? "", 10) || 1; // don't use `??`. it won't filter out NaN (and page won't be 0)
 
   const exchange = ExchangeSchema.safeParse(query.get("exchange")).data ?? "all";
   const search = query.get("search") ?? "";
@@ -157,9 +157,7 @@ export default function Page() {
           <div>
             <button
               type="button"
-              className={`btn mx-4 rounded-xl ${
-                isFavoriteChecked ? " bg-tYellow text-white " : "bg-white text-tYellow"
-              }`}
+              className={`btn mx-4 rounded-xl ${isFavoriteChecked ? "bg-tYellow text-white" : "bg-white text-tYellow"}`}
               onClick={() => {
                 const newChecked = !isFavoriteChecked;
                 setIsFavoriteChecked(newChecked);
@@ -177,7 +175,7 @@ export default function Page() {
           <div>
             <button
               type="button"
-              className={`btn rounded-xl border ${isExchangeChecked ? " bg-tBlue text-white " : "bg-white text-tBlue"}`}
+              className={`btn rounded-xl border ${isExchangeChecked ? "bg-tBlue text-white" : "bg-white text-tBlue"}`}
               onClick={() => {
                 const newChecked = !isExchangeChecked;
                 setIsExchangeChecked(newChecked);

@@ -7,7 +7,7 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": ["**"]
+    "includes": ["**", "!**/tailwind.css"]
   },
   "formatter": {
     "enabled": true,
@@ -35,5 +35,17 @@
     "formatter": {
       "quoteStyle": "double"
     }
-  }
+  },
+  "css": {
+    "parser": {
+      "cssModules": true
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["**/tailwind.css"],
+      "linter": { "enabled": false },
+      "formatter": { "enabled": false }
+    }
+  ]
 }

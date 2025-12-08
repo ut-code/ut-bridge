@@ -1,10 +1,10 @@
 "use client";
 
+import type { MYDATA } from "common/zod/schema";
+import { useTranslations } from "next-intl";
 import { HEADER_HEIGHT_TW } from "@/consts.ts";
 import { useNormalizedPathname } from "@/hooks/useNormalizedPath.ts";
 import { Link } from "@/i18n/navigation.ts";
-import type { MYDATA } from "common/zod/schema";
-import { useTranslations } from "next-intl";
 import { AppIcon } from "./AppIcon.tsx";
 import Avatar from "./Avatar.tsx";
 
@@ -36,9 +36,7 @@ export default function Header({ user }: { user: MYDATA | null }) {
             UT-Bridge
           </Link>
           {pathname === "/login" || pathname === "/registration" || pathname === "" ? (
-            <>
-              <p className="absolute right-1/2 translate-x-1/2 font-bold text-white text-xl sm:hidden">{title}</p>
-            </>
+            <p className="absolute right-1/2 translate-x-1/2 font-bold text-white text-xl sm:hidden">{title}</p>
           ) : (
             <>
               <Link

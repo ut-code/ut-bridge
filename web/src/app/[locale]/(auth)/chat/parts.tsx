@@ -1,7 +1,7 @@
-import Avatar from "@/components/Avatar";
-import { Link } from "@/i18n/navigation";
 import type { RoomPreview } from "common/zod/schema";
 import { getTranslations } from "next-intl/server";
+import Avatar from "@/components/Avatar.tsx";
+import { Link } from "@/i18n/navigation.ts";
 
 export async function Rooms({ rooms, userId }: { rooms: RoomPreview[]; userId: string }) {
   const t = await getTranslations();
@@ -33,7 +33,7 @@ function Room({ room, userId }: { room: RoomPreview; userId: string }) {
         <div className="flex items-center justify-center">
           <Avatar alt={firstMember?.name || ""} src={firstMember?.imageUrl} size={40} />
         </div>
-        <div className=" list-col-grow pl-4">
+        <div className="list-col-grow pl-4">
           <div>{firstMember?.name || "Unknown User"}</div>
           <div className="max-w-[80vw] truncate font-semibold text-xs opacity-60">{room.lastMessage ?? ""}</div>
         </div>

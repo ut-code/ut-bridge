@@ -1,14 +1,14 @@
 "use client";
 
-import { client } from "@/client";
+import clsx from "clsx";
+import { useTranslations } from "next-intl";
+import { useState } from "react";
+import { client } from "@/client.ts";
 import { useAuthContext } from "@/features/auth/providers/AuthProvider.tsx";
 import { waitForVerification } from "@/features/email/wait-for-verification.tsx";
 import { useUserFormContext } from "@/features/settings/UserFormController.tsx";
 import { useToast } from "@/features/toast/ToastProvider.tsx";
 import { useUserContext } from "@/features/user/userProvider.tsx";
-import clsx from "clsx";
-import { useTranslations } from "next-intl";
-import { useState } from "react";
 import { SubmitButton } from "../components/SubmitButton.tsx";
 import { styles } from "../shared-class.ts";
 

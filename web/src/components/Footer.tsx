@@ -1,7 +1,7 @@
 "use client";
-import { useNormalizedPathname } from "@/hooks/useNormalizedPath";
-import { Link } from "@/i18n/navigation";
 import { AiFillMessage, AiFillSetting, AiOutlineMessage, AiOutlineSetting, AiOutlineTeam } from "react-icons/ai";
+import { useNormalizedPathname } from "@/hooks/useNormalizedPath.ts";
+import { Link } from "@/i18n/navigation.ts";
 export default function Footer() {
   const path = useNormalizedPathname();
   return (

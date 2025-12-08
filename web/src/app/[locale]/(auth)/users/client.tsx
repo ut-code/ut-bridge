@@ -1,12 +1,12 @@
 "use client";
 
-import { client } from "@/client";
-import Avatar from "@/components/Avatar";
-import { useAuthContext } from "@/features/auth/providers/AuthProvider";
 import type { FlatUser, MYDATA } from "common/zod/schema";
-import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { client } from "@/client.ts";
+import Avatar from "@/components/Avatar.tsx";
+import { useAuthContext } from "@/features/auth/providers/AuthProvider.tsx";
 
 export function ClientPage({ me, initUser }: { me: MYDATA; initUser: FlatUser }) {
   const router = useRouter();
@@ -23,7 +23,7 @@ export function ClientPage({ me, initUser }: { me: MYDATA; initUser: FlatUser })
     class: string;
     action: "favorite" | "block" | "unblock" | "unfavorite";
   }) {
-    if (!props.if) return <></>;
+    if (!props.if) return null;
     if (!user) return;
     return (
       <button
@@ -73,7 +73,7 @@ export function ClientPage({ me, initUser }: { me: MYDATA; initUser: FlatUser })
             <p className="my-4 text-2xl">{user.isForeignStudent ? t("users.foreignStudent") : " "}</p>
           </div>
           {user.markedAs !== "blocked" && (
-            <div className="flex w-full flex-wrap justify-around sm:w-auto sm:justify-normal sm:gap-10 ">
+            <div className="flex w-full flex-wrap justify-around sm:w-auto sm:justify-normal sm:gap-10">
               <button
                 type="button"
                 disabled={chatButtonState !== "idle"}
@@ -116,7 +116,7 @@ export function ClientPage({ me, initUser }: { me: MYDATA; initUser: FlatUser })
                   </span>
                 ) : chatButtonState === "searching" ? (
                   <span>
-                    <span className="loading loading-spinner " />
+                    <span className="loading loading-spinner" />
                     {/* 探し中... */}
                   </span>
                 ) : (

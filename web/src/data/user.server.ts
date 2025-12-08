@@ -1,5 +1,5 @@
-import { client } from "@/client";
 import type { MYDATA, StructuredUser } from "common/zod/schema";
+import { client } from "@/client.ts";
 import { getIdToken } from "./utils.ts";
 
 export async function getMyData(): Promise<MYDATA> {

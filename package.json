@@ -22,5 +22,10 @@
     "prisma": "cd server; bun prisma",
     "test": "jest"
   },
-  "workspaces": ["common", "web", "server", "scripts/*"]
+  "workspaces": [
+    "common",
+    "web",
+    "server",
+    "scripts/*"
+  ]
 }

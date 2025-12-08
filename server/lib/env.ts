@@ -7,7 +7,7 @@ export function env(c: Context, name: string, options?: { fallback?: string }): 
 
 export function env_int(c: Context, name: string, options?: { fallback?: string }): number {
   const val = env(c, name, options);
-  const parsed = Number.parseInt(val);
+  const parsed = Number.parseInt(val, 10);
   if (Number.isNaN(parsed)) throw new Error(`[env_int] expected int-parsable value, got ${val}`);
   return parsed;
 }

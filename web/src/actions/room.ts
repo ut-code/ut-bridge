@@ -1,7 +1,7 @@
 "use server";
 
-import { deleteRoom as deleteRoomApi } from "@/data/room.server";
 import { revalidatePath } from "next/cache";
+import { deleteRoom as deleteRoomApi } from "@/data/room.server.ts";
 
 export async function deleteRoom(roomId: string) {
   try {

@@ -1,5 +1,5 @@
-import { client } from "@/client.ts";
 import { useContext, useEffect } from "react";
+import { client } from "@/client.ts";
 import { ServiceWorkerContext } from "./context-definition.ts";
 
 export function useServiceWorkerRegistration() {

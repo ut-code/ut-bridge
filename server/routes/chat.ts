@@ -1,15 +1,15 @@
 import { zValidator } from "@hono/zod-validator";
 import { randomUUIDv7 } from "bun";
+import { MESSAGE_MAX_LENGTH, type Message } from "common/zod/schema.ts";
 import { stringify } from "devalue";
 import { Hono } from "hono";
+import { HTTPException } from "hono/http-exception";
 import { streamSSE } from "hono/streaming";
 import z from "zod";
-import { prisma } from "../config/prisma.ts";
-
-import { MESSAGE_MAX_LENGTH, type Message } from "common/zod/schema.ts";
-import { HTTPException } from "hono/http-exception";
 import { getUserID } from "../auth/func.ts";
+import { prisma } from "../config/prisma.ts";
 import { onMessageSend } from "../email/hooks/onMessageSend.ts";
+
 const router = new Hono()
   // # general paths
   // ## about room
@@ -62,7 +62,7 @@ const router = new Hono()
           data: c.req.valid("json"),
         });
         return c.json({ ok: true }, 200);
-      } catch (err) {
+      } catch (_err) {
         return c.json({ error: "room not found" }, 404);
       }
     },
@@ -123,7 +123,7 @@ const router = new Hono()
           },
         });
         return c.json({ ok: true }, 200);
-      } catch (err) {
+      } catch (_err) {
         return c.json({ error: "member not found" }, 404);
       }
     },
@@ -471,7 +471,7 @@ const router = new Hono()
           data: { content: json.content, isEdited: true },
           select: { roomId: true },
         });
-      } catch (err) {
+      } catch (_err) {
         return c.json({ error: "previous message not found" }, 404);
       }
 
@@ -516,7 +516,7 @@ const router = new Hono()
           where: { id: messageId, senderId: requester, roomId: room },
           select: { roomId: true },
         });
-      } catch (err) {
+      } catch (_err) {
         return c.json({ error: "previous message not found" }, 404);
       }
 

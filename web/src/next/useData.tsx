@@ -24,7 +24,6 @@ export function use<T>(fetcher: () => Promise<T>): State<T> & {
     data: undefined,
     error: null,
   });
-  // biome-ignore lint:
   const reload = useCallback(async () => {
     try {
       setState({
@@ -48,7 +47,7 @@ export function use<T>(fetcher: () => Promise<T>): State<T> & {
         }),
       });
     }
-  }, []);
+  }, [fetcher]);
 
   useEffect(() => {
     reload();

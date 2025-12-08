@@ -1,7 +1,7 @@
 "use client";
 
-import { useUserFormContext } from "@/features/settings/UserFormController.tsx";
 import { useLocale, useTranslations } from "next-intl";
+import { useUserFormContext } from "@/features/settings/UserFormController.tsx";
 import { SubmitButton } from "../components/SubmitButton.tsx";
 import { styles } from "../shared-class.ts";
 

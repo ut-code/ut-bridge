@@ -1,11 +1,11 @@
 "use client";
 
-import Header from "@/components/Header";
-import LanguageSwitcher from "@/components/LanguageSelectar";
-import { Link } from "@/i18n/navigation.ts";
-import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
+import Header from "@/components/Header.tsx";
+import LanguageSwitcher from "@/components/LanguageSelectar.tsx";
+import { Link } from "@/i18n/navigation.ts";
 import samplePicEn from "../../../public/app_sample_en.png";
 import samplePicJa from "../../../public/app_sample_ja.png";
 

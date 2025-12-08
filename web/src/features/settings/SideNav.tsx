@@ -1,10 +1,10 @@
 "use client";
+import { useTranslations } from "next-intl";
+import { AiOutlineRight } from "react-icons/ai";
 import LanguageSwitcher from "@/components/LanguageSelectar.tsx";
 import { useGoogleLogout } from "@/features/auth/functions/logout.ts";
 import { useNormalizedPathname } from "@/hooks/useNormalizedPath.ts";
 import { Link } from "@/i18n/navigation.ts";
-import { useTranslations } from "next-intl";
-import { AiOutlineRight } from "react-icons/ai";
 import { blocks } from "./path-blocks.ts";
 
 export default function SideNav() {

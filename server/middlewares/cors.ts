@@ -1,5 +1,5 @@
 import { cors as hono_cors } from "hono/cors";
-import { env } from "../lib/env.js";
+import { env } from "../lib/env.ts";
 
 const cors = () =>
   hono_cors({

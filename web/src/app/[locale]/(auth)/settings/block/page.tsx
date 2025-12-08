@@ -1,10 +1,10 @@
 "use client";
 
-import { client } from "@/client";
-import { useAuthContext } from "@/features/auth/providers/AuthProvider";
+import { useTranslations } from "next-intl";
+import { client } from "@/client.ts";
+import { useAuthContext } from "@/features/auth/providers/AuthProvider.tsx";
 import { useUserFormContext } from "@/features/settings/UserFormController.tsx";
 import UserCard from "@/features/user/UserCard.tsx";
-import { useTranslations } from "next-intl";
 import { styles } from "../shared-class.ts";
 
 export default function Page() {

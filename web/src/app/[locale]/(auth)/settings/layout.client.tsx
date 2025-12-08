@@ -1,10 +1,10 @@
 "use client";
 
-import SideNav from "@/features/settings/SideNav";
-import { useNormalizedPathname } from "@/hooks/useNormalizedPath";
-import { useTranslations } from "next-intl";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { AiOutlineLeft } from "react-icons/ai";
+import SideNav from "@/features/settings/SideNav.tsx";
+import { useNormalizedPathname } from "@/hooks/useNormalizedPath.ts";
 
 function useTransition(pathname: string) {
   switch (pathname) {
@@ -45,22 +45,20 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const title = t(useTransition(pathnameAfterSettings));
 
   return (
-    <>
-      <div className="flex flex-col sm:flex-row">
-        <div className="hidden sm:block">
-          <SideNav />
-        </div>
-        {pathnameAfterSettings !== "" && (
-          <div className="flex items-center justify-between border-gray-300 border-b p-4 text-xl sm:hidden">
-            <Link href={"/settings"}>
-              <AiOutlineLeft />
-            </Link>
-            {title}
-            <div className="w-6" />
-          </div>
-        )}
-        <main className="w-full p-8 sm:mt-30 md:mr-8 xl:mr-24">{children}</main>
+    <div className="flex flex-col sm:flex-row">
+      <div className="hidden sm:block">
+        <SideNav />
       </div>
-    </>
+      {pathnameAfterSettings !== "" && (
+        <div className="flex items-center justify-between border-gray-300 border-b p-4 text-xl sm:hidden">
+          <Link href={"/settings"}>
+            <AiOutlineLeft />
+          </Link>
+          {title}
+          <div className="w-6" />
+        </div>
+      )}
+      <main className="w-full p-8 sm:mt-30 md:mr-8 xl:mr-24">{children}</main>
+    </div>
   );
 }

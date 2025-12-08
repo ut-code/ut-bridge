@@ -1,4 +1,4 @@
-import { client } from "@/client";
+import { client } from "@/client.ts";
 
 export async function getBlockedUsers(idToken: string) {
   const blockedRes = await client.community.$get({

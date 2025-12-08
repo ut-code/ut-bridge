@@ -1,5 +1,5 @@
-import createMiddleware from "next-intl/middleware";
 import { type NextRequest, NextResponse } from "next/server";
+import createMiddleware from "next-intl/middleware";
 import { routing } from "./i18n/routing.ts";
 
 let WEB_ORIGIN = process.env.NEXT_PUBLIC_WEB_ORIGIN ?? null;

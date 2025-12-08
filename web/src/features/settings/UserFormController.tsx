@@ -1,12 +1,12 @@
 "use client";
 
-import { client } from "@/client";
-import { getBlockedUsers, getFavoriteUsers } from "@/data/fetchers/fetch-relational-users.ts";
-import { useUniversitySpecificData } from "@/data/formData.client.ts";
-import { formatCardUser } from "@/features/format";
 import type { CreateUser, FlatCardUser, MYDATA } from "common/zod/schema.ts";
 import { useLocale, useTranslations } from "next-intl";
 import { createContext, useCallback, useContext, useState } from "react";
+import { client } from "@/client.ts";
+import { getBlockedUsers, getFavoriteUsers } from "@/data/fetchers/fetch-relational-users.ts";
+import { useUniversitySpecificData } from "@/data/formData.client.ts";
+import { formatCardUser } from "@/features/format.ts";
 import { useAuthContext } from "../auth/providers/AuthProvider.tsx";
 import { upload } from "../image/ImageUpload.tsx";
 import { resizeImage } from "../image/resize.ts";

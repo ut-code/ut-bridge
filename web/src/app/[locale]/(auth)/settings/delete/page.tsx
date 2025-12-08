@@ -1,10 +1,10 @@
 "use client";
-import { client } from "@/client";
-import { useGoogleLogout } from "@/features/auth/functions/logout";
-import { useAuthContext } from "@/features/auth/providers/AuthProvider";
-import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useRef, useState } from "react";
+import { client } from "@/client.ts";
+import { useGoogleLogout } from "@/features/auth/functions/logout.ts";
+import { useAuthContext } from "@/features/auth/providers/AuthProvider.tsx";
 
 export default function Page() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,7 +40,7 @@ export default function Page() {
       </button>
       <dialog className="modal" ref={modal}>
         <form method="dialog" className="modal-backdrop">
-          <button type="submit" className="backdrop-blur-sm " />
+          <button type="submit" className="backdrop-blur-sm" />
         </form>
         <div className="modal-box duration-0">
           <p className="mb-6">{t("modal")}</p>

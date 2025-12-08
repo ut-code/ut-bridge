@@ -1,7 +1,7 @@
 "use client";
+import { createContext, useContext, useEffect, useState } from "react";
 import Loading from "@/components/Loading.tsx";
 import { useRouter } from "@/i18n/navigation.ts";
-import { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "../config.ts";
 
 const AuthContext = createContext<{ idToken: string; guid: string; displayName: string | undefined } | undefined>(

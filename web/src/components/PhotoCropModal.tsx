@@ -1,7 +1,7 @@
-import { useUserFormContext } from "@/features/settings/UserFormController";
 import { useTranslations } from "next-intl";
-import React, { useState, useCallback, type SetStateAction, type Dispatch } from "react";
+import { type Dispatch, type SetStateAction, useCallback, useState } from "react";
 import Cropper, { type Area } from "react-easy-crop";
+import { useUserFormContext } from "@/features/settings/UserFormController.tsx";
 
 function getCroppedImg(imageSrc: string, croppedAreaPixels: Area): Promise<File> {
   return new Promise((resolve, reject) => {

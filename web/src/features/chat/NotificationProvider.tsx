@@ -1,5 +1,4 @@
 "use client";
-import { API_ENDPOINT } from "@/client.ts";
 import { parse } from "devalue";
 /*
 
@@ -18,6 +17,7 @@ DATA FLOW:
 */
 import { useEffect } from "react";
 import type { BroadcastEvent } from "server/routes/chat";
+import { API_ENDPOINT } from "@/client.ts";
 import { useAuthContext } from "../auth/providers/AuthProvider.tsx";
 import { handlers } from "./state.ts";
 
